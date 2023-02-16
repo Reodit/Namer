@@ -54,15 +54,15 @@
         {
             "userID": "111111",
             "nickName": "",
-            "clearLevel": 3,
+            "clearLevel": 1,
             "levelNames": [
                 {
                     "level": 0,
-                    "levelName": "bbb"
+                    "levelName": "안녕하세용"
                 },
                 {
                     "level": 1,
-                    "levelName": "ddd"
+                    "levelName": "오잉오잉"
                 },
                 {
                     "level": 2,

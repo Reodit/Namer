@@ -7,7 +7,6 @@ public class FreezeRose : MonoBehaviour
     public float speed = 2f;
     public float radius = 0.5f;
     public float amplitude = 0.5f;
-    private float time = 0;
 
     public GameObject highLight;
 
