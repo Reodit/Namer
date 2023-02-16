@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         
         #region Init Variable
         rootmotionSpeed = 1f;
-        interactionDelay = 2f;
+        interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
         #endregion
