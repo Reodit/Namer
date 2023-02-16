@@ -12,10 +12,31 @@
             ],
             "cardView": {
                 "nameRead": [
-                    1
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9
                 ],
                 "adjectiveRead": [
-                    1
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14
                 ]
             },
             "gameSetting": {
@@ -33,25 +54,52 @@
         {
             "userID": "111111",
             "nickName": "",
-            "clearLevel": 0,
+            "clearLevel": 3,
             "levelNames": [
                 {
                     "level": 0,
-                    "levelName": "이름이름"
+                    "levelName": "bbb"
+                },
+                {
+                    "level": 1,
+                    "levelName": "ddd"
+                },
+                {
+                    "level": 2,
+                    "levelName": "aaa"
+                },
+                {
+                    "level": 3,
+                    "levelName": "asdhhhhllkl"
                 }
             ],
             "cardView": {
                 "nameRead": [
                     1,
+                    2,
                     3,
                     4,
-                    5
+                    5,
+                    6,
+                    7,
+                    8,
+                    9
                 ],
                 "adjectiveRead": [
                     1,
+                    2,
+                    3,
                     4,
                     5,
-                    8
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14
                 ]
             },
             "gameSetting": {
