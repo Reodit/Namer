@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using UnityEditor.Build.Reporting;
 using System.IO;
-
+using UnityEngine;
 class BuildScript {
 	static string[] SCENES = FindEnabledEditorScenes();
 
@@ -70,8 +70,8 @@ class BuildScript {
 		var res = BuildPipeline.BuildPlayer(scenes, target_dir+target_exec, build_target, build_options);
 		if (res.summary.result == BuildResult.Succeeded)
 		{
-          	   ZipDirectory (target_dir); 
-        }
+			ZipDirectory (Path.GetDirectoryName(Application.dataPath ) + target_dir);
+		}
 		else {
 			throw new Exception("BuildPlayer failure: " + res);
 		}
