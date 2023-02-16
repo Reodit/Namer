@@ -70,29 +70,23 @@ class BuildScript {
 		var res = BuildPipeline.BuildPlayer(scenes, target_dir+target_exec, build_target, build_options);
 		if (res.summary.result == BuildResult.Succeeded)
 		{
-			ZipDirectory (Path.GetDirectoryName(Application.dataPath ) + target_dir);
+			ZipDirectory (Path.GetDirectoryName(Application.dataPath) + "/" + target_dir, build_target);
 		}
 		else {
 			throw new Exception("BuildPlayer failure: " + res);
 		}
 	}
 	
-	static bool ZipDirectory(string directoryPath)
+	static bool ZipDirectory(string directoryPath, BuildTarget build_target)
 	{
-		var outputZipPath = directoryPath + ".zip";	
-    		try
-    		{
-        		if (File.Exists(outputZipPath))
-        		{
-            			File.Delete(outputZipPath);
-        		}
-        		ZipFile.CreateFromDirectory(directoryPath, outputZipPath);
+		var outputZipPath = directoryPath + "../" + build_target.ToString() + ".zip";	
+    		
+        	if (File.Exists(outputZipPath))
+        	{
+            	    File.Delete(outputZipPath);
+        	}
+        	ZipFile.CreateFromDirectory(directoryPath, outputZipPath);
                 
-        		return true;
-    		} 
-    		catch
-    		{
-			throw new Exception("Zip Step failure");
-    		}
+        	return true;
 	}
 }

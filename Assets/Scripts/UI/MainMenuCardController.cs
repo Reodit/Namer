@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMeneCardController : MonoBehaviour
+public class MainMenuCardController : MonoBehaviour
 {
     public PRS originPRS;
     GameObject cardHolder;

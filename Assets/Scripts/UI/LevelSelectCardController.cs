@@ -10,7 +10,7 @@ public class LevelSelectCardController : MonoBehaviour
     [SerializeField] Transform cardHolderPoint;
     [SerializeField] Transform cardHolderLeft;
     [SerializeField] Transform cardHolderRight;
-    public List<MainMeneCardController> mainCards;
+    public List<MainMenuCardController> mainCards;
     [SerializeField] GameObject[] startCards;
     [SerializeField] GameObject[] levelSelectTiles;
 
@@ -61,7 +61,7 @@ public class LevelSelectCardController : MonoBehaviour
     void MainMenuAddCard(GameObject cardPrefab)
     {
         var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Quaternion.identity);
-        var card = cardObject.GetComponent<MainMeneCardController>();
+        var card = cardObject.GetComponent<MainMenuCardController>();
         mainCards.Add(card);
         cardObject.transform.parent = GameObject.Find("LevelSelectCards").transform;
         MainCardAlignment();
