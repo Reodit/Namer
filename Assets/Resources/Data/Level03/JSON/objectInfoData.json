@@ -155,6 +155,12 @@
             "objectID": 25,
             "nameType": 1,
             "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 26,
+            "nameType": 3,
+            "adjectives": []
         }
     ]
 }

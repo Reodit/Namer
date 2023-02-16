@@ -57,9 +57,9 @@
             "gameSetting": {
                 "resolution": 0,
                 "maxFrame": 0,
-                "volume": 0.5,
-                "backgroundVolume": 0.5,
-                "soundEffects": 0.5,
+                "volume": 0.40299153327941897,
+                "backgroundVolume": 0.40299153327941897,
+                "soundEffects": 0.40299153327941897,
                 "isfullScreen": false,
                 "isborderlessFullScreen": false,
                 "isMute": false,

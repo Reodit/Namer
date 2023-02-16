@@ -168,6 +168,9 @@ public class InteractiveObject : MonoBehaviour
                 break;
         }
         //
+        // todo 카드 넣었을 때에 검출 테스트
+        var target = (new[] { this.gameObject }).ToList();
+        DetectManager.GetInstance.StartDetector(target);
     }
     
     private void TestSubtractAdjective(EAdjective subtractAdjective)
@@ -281,6 +284,10 @@ public class InteractiveObject : MonoBehaviour
         // Test
         isCard = false;
         //
+
+        // todo 카드 넣었을 때에 검출 테스트
+        var target = (new[] { this.gameObject }).ToList();
+        DetectManager.GetInstance.StartDetector(target);
     }
 
     private void SubtractName(EName subtractName)
