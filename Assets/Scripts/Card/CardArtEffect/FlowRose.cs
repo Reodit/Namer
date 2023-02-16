@@ -7,7 +7,7 @@ public class FlowRose : MonoBehaviour
 {
     [SerializeField] Image arrow;
     [SerializeField] GameObject highLight;
-    float fadeInTime = 1f;
+    float fadeInTime = 0.5f;
 
     bool isFadIn;
 
