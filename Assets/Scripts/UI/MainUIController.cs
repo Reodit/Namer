@@ -271,9 +271,9 @@ public class MainUIController : MonoBehaviour
     {
         optionPanel.SetActive(false);
         CardManager.GetInstance.ableCardCtr = true;
-        MainMeneCardController card =
+        MainMenuCardController card =
             GameObject.Find("MainMenuCards").transform.Find("OptionCard(Clone)").
-            GetComponent<MainMeneCardController>();
+            GetComponent<MainMenuCardController>();
         card.CardReturn();
     }
 

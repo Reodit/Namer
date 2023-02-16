@@ -56,6 +56,7 @@ public class FlowAdj : IAdjective
     {
         yield return null;
         obj.gameObject.layer = 4;
+
     }
 
     IEnumerator AbandonFlow(InteractiveObject obj)
