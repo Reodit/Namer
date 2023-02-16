@@ -1,4 +1,4 @@
 var files_dup =
 [
-    [ "Namer_Android", "dir_2fb1a4eb4f1b8f67fe59afa595936896.html", "dir_2fb1a4eb4f1b8f67fe59afa595936896" ]
+    [ "Assets", "dir_84bbf7b3c7f28a5a18725745e1505219.html", "dir_84bbf7b3c7f28a5a18725745e1505219" ]
 ];
