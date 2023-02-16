@@ -11,7 +11,7 @@ public class CardManager : Singleton<CardManager>
     [SerializeField] Transform cardHolderLeft;
     [SerializeField] Transform cardHolderRight;
     public List<CardController> myCards;
-    public List<MainMeneCardController> mainCards;
+    public List<MainMenuCardController> mainCards;
     [SerializeField] GameObject[] startCards;
     private Coroutine dealCardCoroutine;
     //타겟 상호작용 오브젝트 
@@ -111,7 +111,7 @@ public class CardManager : Singleton<CardManager>
     void MainMenuAddCard(GameObject cardPrefab)
     {
         var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Quaternion.identity);
-        var card = cardObject.GetComponent<MainMeneCardController>();
+        var card = cardObject.GetComponent<MainMenuCardController>();
         var scene = SceneManager.GetActiveScene();
         cardObject.transform.parent = GameObject.Find("MainMenuCards").transform;
         mainCards.Add(card);
