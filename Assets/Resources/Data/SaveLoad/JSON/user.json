@@ -33,33 +33,22 @@
         {
             "userID": "111111",
             "nickName": "",
-            "clearLevel": 0,
-            "levelNames": [
-                {
-                    "level": 0,
-                    "levelName": "이름이름"
-                }
-            ],
+            "clearLevel": -1,
+            "levelNames": [],
             "cardView": {
                 "nameRead": [
-                    1,
-                    3,
-                    4,
-                    5
+                    1
                 ],
                 "adjectiveRead": [
-                    1,
-                    4,
-                    5,
-                    8
+                    1
                 ]
             },
             "gameSetting": {
                 "resolution": 0,
                 "maxFrame": 0,
-                "volume": 0.40299153327941897,
-                "backgroundVolume": 0.40299153327941897,
-                "soundEffects": 0.40299153327941897,
+                "volume": 0.5,
+                "backgroundVolume": 0.5,
+                "soundEffects": 0.5,
                 "isfullScreen": false,
                 "isborderlessFullScreen": false,
                 "isMute": false,

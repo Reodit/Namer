@@ -76,7 +76,7 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
-        Invoke("LevelSelectPanelOn", 2f);
+        Invoke("LevelSelectPanelOn", 1f);
     }
 
     void Update()
@@ -173,7 +173,7 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
-        Invoke("LevelSelectPanelOn", 2f);
+        Invoke("LevelSelectPanelOn", 1f);
     }
 
     //메인 메뉴 화면으로 넘어감

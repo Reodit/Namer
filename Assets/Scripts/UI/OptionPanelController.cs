@@ -107,7 +107,7 @@ public class OptionPanelController : MonoBehaviour
         GameDataManager.GetInstance.SetGameSetting(sGameSetting);
     }
 
-    public Toggle withOutBorderfullscreenToggle;
+    [SerializeField] Toggle withOutBorderfullscreenToggle;
 
 
      

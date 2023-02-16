@@ -107,7 +107,7 @@ public class StageClearPanelController : MonoBehaviour
         ButtonsCheck();
     }
 
-    public void ButtonsCheck()
+    void ButtonsCheck()
     {
         if (isNamingDone && isRewardDone)
         {
