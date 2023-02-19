@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Cinemachine;
 
 public class CameraController : MonoBehaviour
@@ -14,13 +15,22 @@ public class CameraController : MonoBehaviour
         FrontAtAll
     }
 
-    // 둘 다 게임 매니저에서 관리 필요
+    // values
     bool isTopView = false;
     public bool isFocused = false;
     int normalCamPirority;
     Transform player;
     CinemachineComponentBase normalcamOption;
     CinemachineComponentBase topcamOption;
+
+    // android Values
+    int m_touchCount = 0;
+    float m_touchDis = 0;
+    float m_touchOldDis = 0;
+    float fDis = 0;
+    float zoomDis = 0.5f;
+    [SerializeField] Button cameraBtn;
+    //[SerializeField] Text testText;
 
     // 카메라들 프리팹에서 넣어놓기
     [Header("Cams")]
@@ -45,6 +55,11 @@ public class CameraController : MonoBehaviour
         GameManager.GetInstance.KeyAction += CheckCameraSwitch;
         if (GameManager.GetInstance.cameraController == null)
             GameManager.GetInstance.cameraController = GameObject.Find("Cameras").GetComponent<CameraController>();
+#if UNITY_ANDROID
+        cameraBtn.onClick.AddListener(M_SwitchCam);
+#else
+        cameraBtn.gameObject.SetActive(false);
+#endif
         Init();
     }
 
@@ -117,11 +132,20 @@ public class CameraController : MonoBehaviour
     private void CheckCameraSwitch()
     {
         if (Input.GetKeyDown(GameManager.GetInstance.cameraKey) && GameManager.GetInstance.CurrentState != GameStates.Encyclopedia)
+        //if (Input.GetKeyDown((KeyCode.Q)))
         {
             curCam.Priority = (int)PriorityOrder.BehingByNormal;
             isTopView = !isTopView;
             SetPriority();
         }
+    }
+
+    private void M_SwitchCam()
+    {
+        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia) return;
+        curCam.Priority = (int)PriorityOrder.BehingByNormal;
+        isTopView = !isTopView;
+        SetPriority();
     }
 
     private IEnumerator ZoomInOut()
@@ -137,6 +161,35 @@ public class CameraController : MonoBehaviour
     {
         if (GameManager.GetInstance.CurrentState != GameStates.InGame) return;
 
+#if UNITY_ANDROID
+        int touchCount = Input.touchCount;
+        if (touchCount == 2 && (Input.touches[0].phase == TouchPhase.Began || Input.touches[1].phase == TouchPhase.Began))
+        {
+            m_touchDis = (Input.touches[0].position - Input.touches[1].position).magnitude;
+            m_touchOldDis = m_touchDis;
+            //testText.text = fDis.ToString();
+        }
+        else if (touchCount == 2 && (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved))
+        {
+            m_touchDis = (Input.touches[0].position - Input.touches[1].position).magnitude;
+            fDis = (m_touchDis - m_touchOldDis) * 0.01f;
+            //testText.text = fDis.ToString();
+            if (canZoom && fDis < -zoomDis)
+            {
+                // zoom in
+                zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
+                StartCoroutine(ZoomInOut());
+            }
+            else if (canZoom && fDis > zoomDis)
+            {
+                // zoom out
+                zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
+                StartCoroutine(ZoomInOut());
+            }
+            
+            m_touchOldDis = m_touchDis;
+        }
+#else
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
         if (scroll == 0 || !canZoom) return;
@@ -150,5 +203,6 @@ public class CameraController : MonoBehaviour
             zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
             StartCoroutine(ZoomInOut());
         }
+#endif
     }
 }
