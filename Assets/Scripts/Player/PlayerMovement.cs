@@ -4,6 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Serialization;
 
+public enum InputType
+{
+    Keyboard,
+    Joystick
+}
+
 public class PlayerMovement : MonoBehaviour
 {
     #region components
@@ -20,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private Dir targetDir;
     private int objscale;
     private Rigidbody climbRb;
+    public InputType inputType;
 
     [SerializeField] [Range(0.1f, 5f)] private float rootmotionSpeed;
     [SerializeField] [Range(0.5f, 5f)] private float interactionDelay;
@@ -28,10 +35,13 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        virtualJoystick = this.gameObject.AddComponent<VirtualJoystick>(); 
         playerEntity = GetComponent<PlayerEntity>();
         GameManager.GetInstance.KeyAction += MoveKeyInput;
         GameManager.GetInstance.localPlayerMovement = this;
+        GameObject vrJoystick = GameObject.Find("IngameCanvas").transform.Find("VirtualJoystick").gameObject;
+        vrJoystick.SetActive(true);
+        virtualJoystick = vrJoystick.GetComponent<VirtualJoystick>();
+        inputType = InputType.Joystick;
         
         #region Init Variable
         rootmotionSpeed = 1f;
@@ -126,9 +136,17 @@ public class PlayerMovement : MonoBehaviour
             if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
             {
                 // 이동 함수 + 인터렉션
-                virtualJoystick.InputControlVector();
-                PlayerMove(inputVector);
-                PlayInteraction();
+                switch (inputType)
+                {
+                    case InputType.Keyboard:
+                        PlayerMove(inputVector);
+                        PlayInteraction();
+                        break;
+                    case InputType.Joystick:
+                        virtualJoystick.InputControlVector();
+                        PlayInteraction();
+                        break;
+                }
             }
         }
 

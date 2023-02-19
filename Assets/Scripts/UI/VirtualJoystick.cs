@@ -16,14 +16,14 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         rectTransform = GetComponent<RectTransform>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _player = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
+        _player = GameManager.GetInstance.localPlayerMovement;
     }
 
     public void Update()
     {
-        InputControlVector(); // 변경점
+        Debug.Log(inputVector); // 변경점
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -48,12 +48,12 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         var clampedDir = inputDir.magnitude < leverRange ? inputDir 
             : inputDir.normalized * leverRange;
         lever.anchoredPosition = clampedDir;
-        inputVector = clampedDir / leverRange;
+        inputVector = new Vector3 (clampedDir.x / leverRange, 0f, clampedDir.y / leverRange);
     }
     
     public void OnEndDrag(PointerEventData eventData)
     {        
-        inputVector = Vector2.zero;
+        inputVector = Vector3.zero;
         lever.anchoredPosition = Vector2.zero;
     }
 }
