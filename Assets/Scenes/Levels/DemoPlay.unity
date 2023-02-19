@@ -511,6 +511,8 @@ MonoBehaviour:
   logText: {fileID: 1145747099}
   dialogBox: {fileID: 1145747101}
   dialogText: {fileID: 1145747098}
+  stageClearPanel: {fileID: 0}
+  delayWinUI: 2
 --- !u!114 &860033200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,11 +682,11 @@ PrefabInstance:
       objectReference: {fileID: 953321061}
     - target: {fileID: 6014788414723752968, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.356192
+      value: 9.966301
       objectReference: {fileID: 0}
     - target: {fileID: 6014788414723752968, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.858075
+      value: -5.044673
       objectReference: {fileID: 0}
     - target: {fileID: 8778275761908025208, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
@@ -790,6 +792,10 @@ PrefabInstance:
     - target: {fileID: 3262066694583849350, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
       propertyPath: m_Name
       value: IngameCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533317990385593611, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}

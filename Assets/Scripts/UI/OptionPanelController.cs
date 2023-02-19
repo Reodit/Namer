@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class OptionPanelController : MonoBehaviour
 {
     Resolution[] resolutions;
-    [SerializeField] Dropdown resolutionDropdown;
-    [SerializeField] Dropdown maxFrameDropdown;
-    [SerializeField] Toggle fullscreenToggle;
+    //[SerializeField] Dropdown resolutionDropdown;
+    //[SerializeField] Dropdown maxFrameDropdown;
+    //[SerializeField] Toggle fullscreenToggle;
     [SerializeField] Slider masterSlider;
     [SerializeField] Slider BGMSlider;
     [SerializeField] Slider SFXSlider;
@@ -20,8 +20,8 @@ public class OptionPanelController : MonoBehaviour
 
     void OnEnable()
     {
-        ResolutionInit();
-        MaxFrameInit();
+        //ResolutionInit();
+        //MaxFrameInit();
         Init();
 
     }
@@ -29,8 +29,8 @@ public class OptionPanelController : MonoBehaviour
     void Init()
     {
         string userID = GameManager.GetInstance.userId;
-        fullscreenToggle.isOn = Screen.fullScreen;
-        withOutBorderfullscreenToggle.isOn = Screen.fullScreenMode == FullScreenMode.FullScreenWindow;
+        //fullscreenToggle.isOn = Screen.fullScreen;
+        //withOutBorderfullscreenToggle.isOn = Screen.fullScreenMode == FullScreenMode.FullScreenWindow;
         muteToggle.isOn = GameDataManager.GetInstance.
             UserDataDic[GameManager.GetInstance.userId].
             gameSetting.isMute;
@@ -48,88 +48,87 @@ public class OptionPanelController : MonoBehaviour
             gameSetting.soundEffects;
     }
 
-    private void MaxFrameInit()
-    {
-        maxFrameDropdown.RefreshShownValue();
-        maxFrameDropdown.value =
-            GameDataManager.GetInstance.
-            UserDataDic[GameManager.GetInstance.userId].
-            gameSetting.maxFrame;
-    }
+    //private void MaxFrameInit()
+    //{
+    //    maxFrameDropdown.RefreshShownValue();
+    //    maxFrameDropdown.value =
+    //        GameDataManager.GetInstance.
+    //        UserDataDic[GameManager.GetInstance.userId].
+    //        gameSetting.maxFrame;
+    //}
 
-    private void ResolutionInit()
-    {
-        resolutions = Screen.resolutions;
+    //private void ResolutionInit()
+    //{
+    //    resolutions = Screen.resolutions;
 
-        resolutionDropdown.ClearOptions();
+    //    resolutionDropdown.ClearOptions();
 
-        List<string> options = new List<string>();
+    //    List<string> options = new List<string>();
 
-        int currentResolutionIndex = 0;
-        for (int i = 0; i < resolutions.Length; i++)
-        {
-            string option = resolutions[i].width + " x " + resolutions[i].height;
-            options.Add(option);
+    //    int currentResolutionIndex = 0;
+    //    for (int i = 0; i < resolutions.Length; i++)
+    //    {
+    //        string option = resolutions[i].width + " x " + resolutions[i].height;
+    //        options.Add(option);
 
-            if (resolutions[i].width == Screen.currentResolution.width &&
-                resolutions[i].height == Screen.currentResolution.height)
-            {
-                currentResolutionIndex = i;
-            }
-        }
+    //        if (resolutions[i].width == Screen.currentResolution.width &&
+    //            resolutions[i].height == Screen.currentResolution.height)
+    //        {
+    //            currentResolutionIndex = i;
+    //        }
+    //    }
 
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
-    }
+    //    resolutionDropdown.AddOptions(options);
+    //    resolutionDropdown.value = currentResolutionIndex;
+    //    resolutionDropdown.RefreshShownValue();
+    //}
 
-    public void SetResolution(int resolutionIndex)
-    {
-        Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-        sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
-        sGameSetting.resolution = resolutionIndex;
-        GameDataManager.GetInstance.SetGameSetting(sGameSetting);
-    }
+    //public void SetResolution(int resolutionIndex)
+    //{
+    //    Resolution resolution = resolutions[resolutionIndex];
+    //    Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    //    sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
+    //    sGameSetting.resolution = resolutionIndex;
+    //    GameDataManager.GetInstance.SetGameSetting(sGameSetting);
+    //}
 
-    public void SetMaxFrame(int maxFramIndex)
-    {
-        sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
-        sGameSetting.maxFrame = maxFramIndex;
-        GameDataManager.GetInstance.SetGameSetting(sGameSetting);
-    }
+    //public void SetMaxFrame(int maxFramIndex)
+    //{
+    //    sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
+    //    sGameSetting.maxFrame = maxFramIndex;
+    //    GameDataManager.GetInstance.SetGameSetting(sGameSetting);
+    //}
 
-    public void SetFullscreen(bool isFullscreen)
-    {
-        Screen.fullScreen = isFullscreen;
-        sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
-        sGameSetting.isfullScreen = isFullscreen;
-        GameDataManager.GetInstance.SetGameSetting(sGameSetting);
-    }
+    //public void SetFullscreen(bool isFullscreen)
+    //{
+    //    Screen.fullScreen = isFullscreen;
+    //    sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
+    //    sGameSetting.isfullScreen = isFullscreen;
+    //    GameDataManager.GetInstance.SetGameSetting(sGameSetting);
+    //}
 
-    [SerializeField] Toggle withOutBorderfullscreenToggle;
+    //[SerializeField] Toggle withOutBorderfullscreenToggle;
 
 
      
-    public void SetWithOutBorderFullscreen(bool isFullscreen)
-    {
-        if (isFullscreen)
-        {
-            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
-        }
-        else
-        {
-            Screen.fullScreenMode = FullScreenMode.Windowed;
-        }
+    //public void SetWithOutBorderFullscreen(bool isFullscreen)
+    //{
+    //    if (isFullscreen)
+    //    {
+    //        Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
+    //    }
+    //    else
+    //    {
+    //        Screen.fullScreenMode = FullScreenMode.Windowed;
+    //    }
 
-        sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
-        sGameSetting.isborderlessFullScreen = isFullscreen;
-        GameDataManager.GetInstance.SetGameSetting(sGameSetting);
-    }
+    //    sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
+    //    sGameSetting.isborderlessFullScreen = isFullscreen;
+    //    GameDataManager.GetInstance.SetGameSetting(sGameSetting);
+    //}
 
     public void OptionPanelClose()
     {
-        GameDataManager.GetInstance.UpdateUserData(false);
         this.gameObject.SetActive(false);
     }
 }

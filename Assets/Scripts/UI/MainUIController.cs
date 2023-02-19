@@ -269,12 +269,12 @@ public class MainUIController : MonoBehaviour
 
     public void OptionPanelClose()
     {
-        optionPanel.SetActive(false);
         CardManager.GetInstance.ableCardCtr = true;
         MainMenuCardController card =
             GameObject.Find("MainMenuCards").transform.Find("OptionCard(Clone)").
             GetComponent<MainMenuCardController>();
         card.CardReturn();
+        optionPanel.SetActive(false);
     }
 
     void LevelSelectPanelOn()
