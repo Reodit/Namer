@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,7 +9,9 @@ public class FlameAdj : IAdjective
     private int count = 0;
     
     private GameObject sprayObj;
-    [SerializeField]private GameObject testObj;
+    [SerializeField] private GameObject testObj;
+    private GameObject fireBallEffect;
+    private ParticleSystem[] fireBall;
     
     public EAdjective GetAdjectiveName()
     {
@@ -33,6 +36,8 @@ public class FlameAdj : IAdjective
     public void Execute(InteractiveObject thisObject)
     {
         //Debug.Log("this is Flame");
+        ParticleSetting(thisObject);
+        OnFire();
     }
 
     public void Execute(InteractiveObject thisObject, GameObject player)
@@ -117,14 +122,50 @@ public class FlameAdj : IAdjective
     
     public void Abandon(InteractiveObject thisObject)
     {
-        if(sprayObj!= null)
+        if(sprayObj != null)
             GameObject.Destroy(sprayObj);
+        if (fireBallEffect != null)
+            GameObject.Destroy(fireBallEffect);
     }
     
     public IAdjective DeepCopy()
     {
         return new FlameAdj();
     }
+
+    GameObject FindEffect(String prefabName)
+    {
+        string path = "Prefabs/Interaction/Effect/" + prefabName;
+        GameObject prefab = Resources.Load<GameObject>(path);
+        if (prefab == null)
+        {
+            Debug.LogError("Prefab not found: " + prefabName);
+        }
+
+        return prefab;
+    }
     
-    
+    private void ParticleSetting(InteractiveObject thisObject)
+    {
+        if (thisObject.transform.Find("FireBall")) return;
+
+        GameObject effect = GameObject.Instantiate( FindEffect("FireBall"), thisObject.transform);
+        effect.name = "FireBall";
+        fireBallEffect = effect;
+
+        fireBall = thisObject.gameObject.GetComponentsInChildren<ParticleSystem>();
+
+        for (int i = 0; i < fireBall.Length; i++)
+        {
+            fireBall[i].Stop();
+        }
+    }
+
+    private void OnFire()
+    {
+        for (int i = 0; i < fireBall.Length; i++)
+        {
+            fireBall[i].Play();
+        }
+    }
 }
