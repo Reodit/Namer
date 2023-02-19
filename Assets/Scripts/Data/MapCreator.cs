@@ -10,19 +10,19 @@ public class MapCreator : MonoBehaviour
     private int mapY;
     private int mapZ;
     
-    public GameObject[,,] CreateTileMap(StreamReader tileMapData)
+    public GameObject[,,] CreateTileMap(StringReader tileMapData)
     {
         string[,,] tileMap = ReadMapDataCsv(tileMapData);
         return TileCreator(tileMap);
     }
 
-    public GameObject[,,] CreateObjectMap(StreamReader objectMapData, Dictionary<int, SObjectInfo> objectInfoDic)
+    public GameObject[,,] CreateObjectMap(StringReader objectMapData, Dictionary<int, SObjectInfo> objectInfoDic)
     {
         string[,,] objectMap = ReadMapDataCsv(objectMapData);
         return ObjectCreator(objectMap, objectInfoDic);
     }
 
-    private string[,,] ReadMapDataCsv(StreamReader sr)
+    private string[,,] ReadMapDataCsv(StringReader sr)
     {
         int[] lineGetSize = Array.ConvertAll(sr.ReadLine().Split(','), int.Parse);
         
