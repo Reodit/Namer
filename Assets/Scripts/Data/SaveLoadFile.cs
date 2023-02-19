@@ -19,26 +19,40 @@ public class SaveLoadFile
         {
             Directory.CreateDirectory(filePath + "/JSON/");
         }
-
+        
         DataList<T> dataList = new DataList<T>();
         dataList.dataList = info;
         
         string data = JsonUtility.ToJson(dataList, true);
-        File.WriteAllText(filePath + "/JSON/" + fileName, data, Encoding.UTF8);
+        File.WriteAllText(filePath + "/JSON/" + fileName, data);
     }
     
     public Dictionary<TK, TV> ReadJsonFile<TK,TV> (string filePath, string fileName) where TV : struct
     {
         Dictionary<TK, TV> dataDic = new Dictionary<TK, TV>();
         
+        if (!Directory.Exists(filePath + "/JSON/"))
+        {
+            Directory.CreateDirectory(filePath + "/JSON/");
+        }
+        
         if (!File.Exists(filePath + "/JSON/" + fileName))
         {
-            Debug.Log( filePath + "/JSON/" + fileName + " 파일이 없습니다! 원하는 씬으로 가서 맵 정보 파일을 먼저 생성해주세요.");
-            return null;
+            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
+            string resFileName = fileName.Replace(".json", "");
+            
+            if (!File.Exists("Assets/Resources/" + resFilePath + "/JSON/" + fileName))
+            {
+                Debug.LogError("Assets/Resources/" + resFilePath + "/JSON/" + fileName + "에 파일이 없어요ㅠ");
+            }
+            
+            TextAsset resData = Resources.Load(resFilePath  +  "/JSON/" + resFileName) as TextAsset;
+            File.WriteAllText(filePath + "/JSON/" + fileName, resData.text);
         }
         
         FileStream fileStream = new FileStream(filePath + "/JSON/" + fileName, FileMode.Open);
         StreamReader streamReader = new StreamReader(fileStream);
+
         string data = streamReader.ReadToEnd();
         DataList<TV> infoList = JsonUtility.FromJson<DataList<TV>>(data);
         streamReader.Close();
@@ -106,21 +120,40 @@ public class SaveLoadFile
         {
             Directory.CreateDirectory(filePath + "/CSV/");
         }
-            
+        
         StreamWriter outStream = File.CreateText(filePath + "/CSV/"+ fileName);
         outStream.Write(data);
         outStream.Close();
     }
 
-    public StreamReader ReadCsvFile(string filePath, string fileName)
+    public StringReader ReadCsvFile(string filePath, string fileName)
     {
+        if (!Directory.Exists(filePath + "/CSV/"))
+        {
+            Directory.CreateDirectory(filePath + "/CSV/");
+        }
+        
         if (!File.Exists(filePath + "/CSV/" + fileName))
         {
-            Debug.Log(fileName + " 파일이 없습니다! 원하는 씬으로 가서 맵 정보 파일을 먼저 생성해주세요.");
-            return null;
-        }
+            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
+            string resFileName = fileName.Replace(".csv", "");
             
-        return new StreamReader(filePath + "/CSV/" + fileName);
+            if (!File.Exists("Assets/Resources/" + resFilePath + "/CSV/" + fileName))
+            {
+                Debug.LogError("Assets/Resources/" + resFilePath + "/CSV/" + fileName + " 파일이 없어요ㅠ");
+            }
+            
+            TextAsset resData = Resources.Load(resFilePath + "/CSV/" + resFileName) as TextAsset;
+            CreateCsvFile(new StringBuilder(resData.text), filePath, fileName);
+        }
+
+        FileStream fileStream = new FileStream(filePath + "/CSV/" + fileName, FileMode.Open);
+        StreamReader streamReader = new StreamReader(fileStream);
+        
+        string data = streamReader.ReadToEnd();
+        streamReader.Close();
+        
+        return new StringReader(data);
     }
     
 #endregion
@@ -129,10 +162,32 @@ public class SaveLoadFile
 
     public XmlNodeList ReadXmlFile(string filePath, string xPath)
     {
-        TextAsset textAsset = Resources.Load(filePath) as TextAsset;
-        XmlDocument xmlFile = new XmlDocument();
-        xmlFile.LoadXml(textAsset.text);
+        if (!Directory.Exists(filePath + "/XML/"))
+        {
+            Directory.CreateDirectory(filePath + "/XML/");
+        }
+        
+        if (!File.Exists(filePath + "/XML/CardData.xml"))
+        {
+            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
 
+            if (!File.Exists("Assets/Resources/" + resFilePath + "/XML/CardData.xml"))
+            {
+                Debug.LogError("Assets/Resources/" + resFilePath + "/XML/CardData.xml" + " 파일이 없어요ㅠ");
+            }
+            
+            TextAsset resData = Resources.Load(resFilePath + "/XML/CardData") as TextAsset;
+            File.WriteAllText(filePath + "/XML/CardData.xml", resData.text);
+        }
+        
+        FileStream fileStream = new FileStream(filePath + "/XML/CardData.xml", FileMode.Open);
+        StreamReader streamReader = new StreamReader(fileStream);
+        string data = streamReader.ReadToEnd();
+        streamReader.Close();
+        
+        XmlDocument xmlFile = new XmlDocument();
+        xmlFile.LoadXml(data);
+        
         return xmlFile.SelectNodes(xPath);
     }
     
