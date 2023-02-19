@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject interactObj;
     public GameObject addCardTarget;
+    private VirtualJoystick virtualJoystick;
     public float moveSpeed;
     public int rotateSpeed;
     public Vector3 inputVector;
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        virtualJoystick = this.gameObject.AddComponent<VirtualJoystick>(); 
         playerEntity = GetComponent<PlayerEntity>();
         GameManager.GetInstance.KeyAction += MoveKeyInput;
         GameManager.GetInstance.localPlayerMovement = this;
@@ -39,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
         #endregion
     }
 
-    private void PlayerMove(Vector3 inputVec)
+    public void PlayerMove(Vector3 inputVec)
     {
         float gravity = rb.velocity.y;
 
@@ -124,6 +126,7 @@ public class PlayerMovement : MonoBehaviour
             if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
             {
                 // 이동 함수 + 인터렉션
+                virtualJoystick.InputControlVector();
                 PlayerMove(inputVector);
                 PlayInteraction();
             }
