@@ -205,6 +205,7 @@ public class CardManager : Singleton<CardManager>
         isCardsHide = true;
         for (int i = 0; i< myCards.Count; i++)
         {
+            myCards[i].gameObject.GetComponent<BoxCollider>().enabled = false;
             myCards[i].gameObject.transform.GetChild(0).gameObject.SetActive(false);
         }
     }
@@ -234,6 +235,7 @@ public class CardManager : Singleton<CardManager>
         isCardsHide = false;
         for (int i = 0; i < myCards.Count; i++)
         {
+            myCards[i].gameObject.GetComponent<BoxCollider>().enabled = true;
             myCards[i].gameObject.transform.GetChild(0).gameObject.SetActive(true);
         }
     }

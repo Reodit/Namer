@@ -5362,7 +5362,6 @@ MonoBehaviour:
   isPlayerDoAction: 0
   isPlayerCanInput: 0
   cameraController: {fileID: 0}
-  canSwitchCam: 0
   scenarioController: {fileID: 0}
   restartKey: 114
   interactionKey: 32
