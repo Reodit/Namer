@@ -7,6 +7,13 @@ public class FreezeAdj : IAdjective
     private EAdjective adjectiveName = EAdjective.Freeze;
     private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
     private int count = 0;
+
+    #region Freeze변수
+
+    private GameObject iceEffect;
+    
+
+    #endregion
     
     public EAdjective GetAdjectiveName()
     {
@@ -30,6 +37,7 @@ public class FreezeAdj : IAdjective
     
     public void Execute(InteractiveObject thisObject)
     {
+        FindEffect(thisObject.gameObject);
         //Debug.Log("this is Null");
     }
 
@@ -45,11 +53,19 @@ public class FreezeAdj : IAdjective
     
     public void Abandon(InteractiveObject thisObject)
     {
-        
+        iceEffect.GetComponentInChildren<ParticleSystem>().Stop();        
     }
     
     public IAdjective DeepCopy() 
     { 
            return new FreezeAdj();
+    }
+
+    void FindEffect(GameObject thisObject)
+    {
+        var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceEffects");
+        iceEffect=GameObject.Instantiate(freezeEffect, thisObject.transform);
+        iceEffect.GetComponentInChildren<ParticleSystem>().Play();
+        
     }
 }
