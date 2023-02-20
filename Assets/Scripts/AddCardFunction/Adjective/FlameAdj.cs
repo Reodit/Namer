@@ -62,9 +62,7 @@ public class FlameAdj : IAdjective
              SetSprayDirection(otherObject.gameObject, thisObject.gameObject);
              //
              InteractionSequencer.GetInstance.SequentialQueue.Enqueue(Extinquish(thisObject,otherObject));
-             
          }
-        
     }
 
     #region FlameOut
@@ -148,10 +146,10 @@ public class FlameAdj : IAdjective
     
     private void ParticleSetting(InteractiveObject thisObject)
     {
-        if (thisObject.transform.Find("FireBall3")) return;
+        if (thisObject.transform.Find("FlameEffect")) return;
 
-        GameObject effect = GameObject.Instantiate( FindEffect("FireBall3"), thisObject.transform);
-        effect.name = "FireBall3";
+        GameObject effect = GameObject.Instantiate( FindEffect("FlameEffect"), thisObject.transform);
+        effect.name = "FlameEffect";
         fireBallEffect = effect;
 
         fireBall = thisObject.gameObject.GetComponentsInChildren<ParticleSystem>();
