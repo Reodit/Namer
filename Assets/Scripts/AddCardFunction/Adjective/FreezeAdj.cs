@@ -11,7 +11,13 @@ public class FreezeAdj : IAdjective
     #region Freeze변수
 
     private GameObject iceEffect;
+    private bool isFreezing;
     
+    public float speed = 2.5f;
+    public float rotationSpeed = 10;
+    public float radius = 0.6f;
+    public float amplitude = 0.6f;
+    private float time = 0;
 
     #endregion
     
@@ -37,6 +43,7 @@ public class FreezeAdj : IAdjective
     
     public void Execute(InteractiveObject thisObject)
     {
+        isFreezing = true;
         FindEffect(thisObject.gameObject);
         //Debug.Log("this is Null");
     }
@@ -63,9 +70,47 @@ public class FreezeAdj : IAdjective
 
     void FindEffect(GameObject thisObject)
     {
-        var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceEffects");
-        iceEffect=GameObject.Instantiate(freezeEffect, thisObject.transform);
-        iceEffect.GetComponentInChildren<ParticleSystem>().Play();
+        // var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceEffects");
+        // var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceEffect2");
+        var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/FreezeEffect");
+        // var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        //
+        // sphere.transform.SetParent(thisObject.transform);
+        // sphere.transform.localPosition = new Vector3(0f, .5f, 0f);
+        // sphere.GetComponent<Collider>().isTrigger = true;
+        // sphere.GetComponent<MeshRenderer>().enabled = false;
+        //
         
+        // iceEffect=GameObject.Instantiate(freezeEffect, sphere.transform);
+        iceEffect = GameObject.Instantiate(freezeEffect, thisObject.transform);
+        iceEffect.transform.localPosition = Vector3.zero;
+        // iceEffect.transform.localPosition = new Vector3(.5f, 0f,.5f );   //요넘 
+        iceEffect.GetComponentInChildren<ParticleSystem>().Play();
+        // InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(RotateAroundEffect(thisObject,sphere));
+        
+    }
+
+    IEnumerator RotateAroundEffect(GameObject thisObject, GameObject sphere)
+    {
+        while (isFreezing)
+        {
+            //  time += Time.deltaTime;
+            // // sphere.transform.Rotate(Quaternion.Euler(new Vector3(0f,0f,1f)).eulerAngles,1f);
+            // sphere.transform.rotation = Quaternion.Euler(0,0,time );
+            //
+            // iceEffect.transform.RotateAround(thisObject.transform.position,Vector3.up, 90f*Time.deltaTime); //요건데
+            time += Time.deltaTime;
+            // // Calculate the x and y positions of the circle
+            float x = Mathf.Cos(time * speed) * radius;
+            float y = Mathf.Sin(time * speed) * amplitude;
+            float z = Mathf.Sin(time * speed) * amplitude;
+            // // Update the position of the circle
+            iceEffect.transform.localPosition = new Vector3(x, 0, z);
+            sphere.transform.rotation = Quaternion.Euler(0, 0, time * rotationSpeed);
+            
+            yield return null;
+        }
+
+        yield return null;
     }
 }

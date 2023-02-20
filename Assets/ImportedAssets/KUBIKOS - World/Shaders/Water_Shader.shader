@@ -7,13 +7,18 @@ Shader "Animmal/Water"
 		_TopTexture0("Top Texture 0", 2D) = "white" {}
 		_TextureSample6("Texture Sample 6", 2D) = "white" {}
 		_Cubes("Cubes", 2D) = "white" {}
+		_Alpha("Alpha", Float) = 1
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 		[HideInInspector] __dirty( "", Int ) = 1
 	}
 
 	SubShader
 	{
-		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" }
+//		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" }
+//		Tags{ "RenderType" = "Transparent"  "Queue" = "Geometry+0" }
+		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent" }
+		Blend SrcAlpha OneMinusSrcAlpha
+		zwrite off
 		Cull Back
 		CGINCLUDE
 		#include "UnityShaderVariables.cginc"
@@ -40,7 +45,7 @@ Shader "Animmal/Water"
 		uniform sampler2D _TextureSample6;
 		uniform sampler2D _Cubes;
 		uniform float4 _Cubes_ST;
-
+		uniform float _Alpha;
 
 		inline float4 TriplanarSamplingSF( sampler2D topTexMap, float3 worldPos, float3 worldNormal, float falloff, float tilling, float3 index )
 		{
@@ -66,12 +71,13 @@ Shader "Animmal/Water"
 			float2 panner42 = ( uv_TexCoord43 + 1 * _Time.y * float2( 0,0 ));
 			float2 uv_Cubes = i.uv_texcoord * _Cubes_ST.xy + _Cubes_ST.zw;
 			o.Albedo = ( triplanar2 * ( tex2D( _TextureSample6, panner42 ) + tex2D( _Cubes, uv_Cubes ) ) ).xyz;
-			o.Alpha = 1;
+			o.Alpha = _Alpha;
 		}
 
 		ENDCG
 		CGPROGRAM
-		#pragma surface surf StandardSpecular keepalpha fullforwardshadows 
+		// #pragma surface surf StandardSpecular keepalpha fullforwardshadows
+		#pragma surface surf StandardSpecular alpha fullforwardshadows
 
 		ENDCG
 		Pass
@@ -79,6 +85,7 @@ Shader "Animmal/Water"
 			Name "ShadowCaster"
 			Tags{ "LightMode" = "ShadowCaster" }
 			ZWrite On
+
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
