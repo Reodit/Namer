@@ -56,7 +56,7 @@ public class ObtainableAdj : IAdjective
     private IEnumerator ObtainableObj(InteractiveObject thisObject, GameObject player)
     {
         yield return new WaitForSeconds(0.3f);
-        
+        SoundManager.GetInstance.Play(adjectiveName);
         if (thisObject.GetObjectName() != EName.Null)
         {
             ObtainNameCard(thisObject, thisObject.GetObjectName());
