@@ -55,7 +55,10 @@ public class CameraController : MonoBehaviour
         GameManager.GetInstance.KeyAction += CheckCameraSwitch;
         if (GameManager.GetInstance.cameraController == null)
             GameManager.GetInstance.cameraController = GameObject.Find("Cameras").GetComponent<CameraController>();
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+        if (cameraBtn != null)
+            cameraBtn.onClick.AddListener(M_SwitchCam);
+#elif UNITY_ANDROID
         cameraBtn.onClick.AddListener(M_SwitchCam);
 #else
         cameraBtn.gameObject.SetActive(false);

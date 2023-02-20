@@ -137,8 +137,9 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         KeyAction += Reset;
-
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+        OnAllow();
+#elif UNITY_ANDROID
         CheckPermission();
 #endif
     }
@@ -169,6 +170,7 @@ public class GameManager : Singleton<GameManager>
     void OnAllow()
     {
         // allow -> load data
+        GameObject.Find("UniAndroidPermission").SetActive(false);
     }
 
     void OnDeny()
