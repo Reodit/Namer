@@ -53,9 +53,9 @@ public class SoundManager : Singleton<SoundManager>
         {
             var idx = audioClips[i].name.IndexOf('_');
             var eadjNum = int.Parse(audioClips[i].name.Substring(0, idx));
-            Debug.Log(eadjNum);
+            // Debug.Log(eadjNum);
             effectClips.Add((EAdjective)eadjNum,audioClips[i]);
-            Debug.Log(effectClips[(EAdjective)eadjNum].name);
+            // Debug.Log(effectClips[(EAdjective)eadjNum].name);
         }
     }
 
