@@ -35,6 +35,11 @@ public class FlowAdj : IAdjective
     {
         //Debug.Log("this is Null");
         //thisObject.gameObject.layer = 4;
+        if (thisObject.transform.Find("iceShardEffect"))
+        {
+            GameObject.Destroy(thisObject.transform.Find("iceShardEffect").gameObject);
+        }
+
         InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(FlowObj(thisObject));
     }
 
@@ -47,7 +52,7 @@ public class FlowAdj : IAdjective
     {
         //Debug.Log("Null : this Object -> other Object");
         FindEffect(thisObject.gameObject);
-        InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(OnIce(thisObject));
+        InteractionSequencer.GetInstance.SequentialQueue.Enqueue(FreezeObj(thisObject));
         
     }
     
@@ -69,11 +74,6 @@ public class FlowAdj : IAdjective
         yield return null;
         obj.gameObject.layer = 0;
         //obj.SubtractAdjective(EAdjective.Flow);
-
-        //if (iceShardEffect!=null)
-        //{
-        //    GameObject.Destroy(iceShardEffect);
-        //}
     }
     
     public IAdjective DeepCopy()
@@ -83,8 +83,9 @@ public class FlowAdj : IAdjective
 
     void FindEffect(GameObject thisObject)
     {
-        if (thisObject.transform.Find("iceShardEffect")) return;
         
+        //if (thisObject.transform.Find("iceShardEffect")) return;
+        //Debug.Log("find");
         var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceShardEffect");
         iceShardEffect = GameObject.Instantiate(freezeEffect, thisObject.transform);
         iceShardEffect.name = "iceShardEffect";
@@ -96,7 +97,7 @@ public class FlowAdj : IAdjective
         }
     }
 
-    IEnumerator OnIce(InteractiveObject obj)
+    IEnumerator FreezeObj(InteractiveObject obj)
     {
         obj.gameObject.layer = 0;
         
@@ -118,5 +119,6 @@ public class FlowAdj : IAdjective
         iceShardEffects[0].Pause();
 
         obj.SubtractAdjective(EAdjective.Flow);
+        obj.SubtractAdjective(EAdjective.Extinguisher);
     }
 }
