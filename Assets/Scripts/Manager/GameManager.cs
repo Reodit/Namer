@@ -3,10 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using UnityEditor;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public enum GameStates
 {
@@ -122,6 +120,12 @@ public class GameManager : Singleton<GameManager>
         #endregion
 
         #region Get User, Level and Card Data & Set UserID "111111"
+        // Test
+        if (Directory.Exists(Application.persistentDataPath + "/Data"))
+        {
+            Directory.Delete(Application.persistentDataPath + "/Data", true);
+        }
+        //
         GameDataManager.GetInstance.GetUserAndLevelData();
         GameDataManager.GetInstance.AddUserData("111111");
         GameDataManager.GetInstance.GetCardData();

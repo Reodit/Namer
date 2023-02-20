@@ -31,24 +31,7 @@ public class SaveLoadFile
     {
         Dictionary<TK, TV> dataDic = new Dictionary<TK, TV>();
         
-        if (!Directory.Exists(filePath + "/JSON/"))
-        {
-            Directory.CreateDirectory(filePath + "/JSON/");
-        }
-        
-        if (!File.Exists(filePath + "/JSON/" + fileName))
-        {
-            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
-            string resFileName = fileName.Replace(".json", "");
-            
-            if (!File.Exists("Assets/Resources/" + resFilePath + "/JSON/" + fileName))
-            {
-                Debug.LogError("Assets/Resources/" + resFilePath + "/JSON/" + fileName + "에 파일이 없어요ㅠ");
-            }
-            
-            TextAsset resData = Resources.Load(resFilePath  +  "/JSON/" + resFileName) as TextAsset;
-            File.WriteAllText(filePath + "/JSON/" + fileName, resData.text);
-        }
+        CheckFolderFile(filePath + "/JSON/", fileName);
         
         FileStream fileStream = new FileStream(filePath + "/JSON/" + fileName, FileMode.Open);
         StreamReader streamReader = new StreamReader(fileStream);
@@ -91,7 +74,7 @@ public class SaveLoadFile
         
         return dataDic;
     }
-    
+
     // 업데이트가 필요한 자료가 딕션너리인 경우 사용하는 함수
     // 만약 업데이트가 필요한 자료가 리스트인 경우, CreateJsonFile을 사용할 것!
     public void UpdateDicDataToJsonFile<TK, TV>(Dictionary<TK, TV> dataDic, string filePath, string fileName)
@@ -128,24 +111,7 @@ public class SaveLoadFile
 
     public StringReader ReadCsvFile(string filePath, string fileName)
     {
-        if (!Directory.Exists(filePath + "/CSV/"))
-        {
-            Directory.CreateDirectory(filePath + "/CSV/");
-        }
-        
-        if (!File.Exists(filePath + "/CSV/" + fileName))
-        {
-            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
-            string resFileName = fileName.Replace(".csv", "");
-            
-            if (!File.Exists("Assets/Resources/" + resFilePath + "/CSV/" + fileName))
-            {
-                Debug.LogError("Assets/Resources/" + resFilePath + "/CSV/" + fileName + " 파일이 없어요ㅠ");
-            }
-            
-            TextAsset resData = Resources.Load(resFilePath + "/CSV/" + resFileName) as TextAsset;
-            CreateCsvFile(new StringBuilder(resData.text), filePath, fileName);
-        }
+        CheckFolderFile(filePath + "/CSV/", fileName);
 
         FileStream fileStream = new FileStream(filePath + "/CSV/" + fileName, FileMode.Open);
         StreamReader streamReader = new StreamReader(fileStream);
@@ -162,24 +128,8 @@ public class SaveLoadFile
 
     public XmlNodeList ReadXmlFile(string filePath, string xPath)
     {
-        if (!Directory.Exists(filePath + "/XML/"))
-        {
-            Directory.CreateDirectory(filePath + "/XML/");
-        }
-        
-        if (!File.Exists(filePath + "/XML/CardData.xml"))
-        {
-            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
+        CheckFolderFile(filePath + "/XML/", "CardData.xml");
 
-            if (!File.Exists("Assets/Resources/" + resFilePath + "/XML/CardData.xml"))
-            {
-                Debug.LogError("Assets/Resources/" + resFilePath + "/XML/CardData.xml" + " 파일이 없어요ㅠ");
-            }
-            
-            TextAsset resData = Resources.Load(resFilePath + "/XML/CardData") as TextAsset;
-            File.WriteAllText(filePath + "/XML/CardData.xml", resData.text);
-        }
-        
         FileStream fileStream = new FileStream(filePath + "/XML/CardData.xml", FileMode.Open);
         StreamReader streamReader = new StreamReader(fileStream);
         string data = streamReader.ReadToEnd();
@@ -249,4 +199,26 @@ public class SaveLoadFile
     }
 
 #endregion
+
+    private void CheckFolderFile(string filePath, string fileName)
+    {
+        if (!Directory.Exists(filePath))
+        {
+            Directory.CreateDirectory(filePath);
+        }
+
+        if (!File.Exists(filePath + fileName))
+        {
+            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
+            string[] resFileName = fileName.Split('.').ToArray();
+
+            if (!File.Exists("Assets/Resources/" + resFilePath + fileName))
+            {
+                Debug.LogError("Assets/Resources/" + resFilePath + fileName + "에 파일이 없어요ㅠ");
+            }
+
+            TextAsset resData = Resources.Load(resFilePath + resFileName[0]) as TextAsset;
+            File.WriteAllText(filePath + fileName, resData.text);
+        }
+    }
 }
