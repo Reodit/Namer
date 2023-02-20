@@ -5588,7 +5588,7 @@ RectTransform:
   m_GameObject: {fileID: 4031619593556824720}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2483852737112699660}
@@ -6259,7 +6259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2483852737112699660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6332,7 +6332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lever: {fileID: 2729992081377077045}
-  leverRange: 30
+  leverRange: 100
 --- !u!1 &6561136121016641507
 GameObject:
   m_ObjectHideFlags: 0
