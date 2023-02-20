@@ -44,8 +44,8 @@ public class GameDataManager : Singleton<GameDataManager>
     
     private void FilePathInfo()
     {
-        filePath = "Assets/Resources/Data/";
-        
+        filePath = Application.persistentDataPath + "/Data/";
+
         tileMapFileName = "tileMapData.csv";
         objectMapFileName = "objectMapData.csv";
         objectInfoFileName = "objectInfoData.json";
@@ -85,8 +85,8 @@ public class GameDataManager : Singleton<GameDataManager>
         SetCardEncyclopedia(levelDataDic[level].cardView);
         
         SaveLoadFile loadFile = new SaveLoadFile();
-        StreamReader tileMapData = loadFile.ReadCsvFile(filePath + sceneName, tileMapFileName);
-        StreamReader objectMapData = loadFile.ReadCsvFile(filePath + sceneName, objectMapFileName);
+        StringReader tileMapData = loadFile.ReadCsvFile(filePath + sceneName, tileMapFileName);
+        StringReader objectMapData = loadFile.ReadCsvFile(filePath + sceneName, objectMapFileName);
         Dictionary<int, SObjectInfo> objectInfoDic = loadFile.ReadJsonFile<int, SObjectInfo>(filePath + sceneName, objectInfoFileName);
 
         MapCreator mapCreator = gameObject.AddComponent<MapCreator>();
@@ -122,6 +122,9 @@ public class GameDataManager : Singleton<GameDataManager>
 
             SaveLoadFile saveFile = new SaveLoadFile();
             saveFile.UpdateDicDataToJsonFile(userDataDic, filePath + "SaveLoad", userDataFileName);
+            
+            GameManager.GetInstance.userId = userID;
+            firstUserID = userID;
         }
         
         // Test
@@ -229,7 +232,7 @@ public class GameDataManager : Singleton<GameDataManager>
     public void GetCardData()
     {
         SaveLoadFile loadFile = new SaveLoadFile();
-        XmlNodeList data = loadFile.ReadXmlFile("Data/SaveLoad/XML/CardData", "root/worksheet");
+        XmlNodeList data = loadFile.ReadXmlFile(filePath + "SaveLoad", "root/worksheet");
         
         names = loadFile.GetCardData<EName, SNameInfo>(data, 0);
         adjectives = loadFile.GetCardData<EAdjective, SAdjectiveInfo>(data, 1);

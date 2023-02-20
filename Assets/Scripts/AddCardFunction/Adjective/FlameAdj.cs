@@ -35,7 +35,6 @@ public class FlameAdj : IAdjective
     
     public void Execute(InteractiveObject thisObject)
     {
-        //Debug.Log("this is Flame");
         ParticleSetting(thisObject);
         OnFire();
     }
