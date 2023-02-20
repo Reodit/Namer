@@ -32,7 +32,7 @@ public class FlameAdj : IAdjective
     
     public void Execute(InteractiveObject thisObject)
     {
-        //Debug.Log("this is Flame");
+        Debug.Log("this is Flame");
     }
 
     public void Execute(InteractiveObject thisObject, GameObject player)
