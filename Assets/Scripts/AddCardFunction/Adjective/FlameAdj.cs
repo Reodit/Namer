@@ -49,6 +49,7 @@ public class FlameAdj : IAdjective
     {
         // Debug.Log("Flame : this Object -> other Object");
              // thisObject.SubtractAdjective(EAdjective.Flame);
+
          if(sprayObj == null)
              GetSpray(otherObject.gameObject);
          if (thisObject.CheckAdjective(EAdjective.Flame))
@@ -147,10 +148,10 @@ public class FlameAdj : IAdjective
     
     private void ParticleSetting(InteractiveObject thisObject)
     {
-        if (thisObject.transform.Find("FireBall")) return;
+        if (thisObject.transform.Find("FireBall3")) return;
 
-        GameObject effect = GameObject.Instantiate( FindEffect("FireBall"), thisObject.transform);
-        effect.name = "FireBall";
+        GameObject effect = GameObject.Instantiate( FindEffect("FireBall3"), thisObject.transform);
+        effect.name = "FireBall3";
         fireBallEffect = effect;
 
         fireBall = thisObject.gameObject.GetComponentsInChildren<ParticleSystem>();
