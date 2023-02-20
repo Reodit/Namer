@@ -22,17 +22,23 @@ public class PlayerMovement : MonoBehaviour
     private VirtualJoystick virtualJoystick;
     public float moveSpeed;
     public int rotateSpeed;
-    public Vector3 inputVector;
+    private Vector3 inputVector;
     private Dir targetDir;
     private int objscale;
     private Rigidbody climbRb;
     public InputType inputType;
+    public int scalarHash;
 
     [SerializeField] [Range(0.1f, 5f)] private float rootmotionSpeed;
     [SerializeField] [Range(0.5f, 5f)] private float interactionDelay;
     // TODO KeyMapping ?
 
     private void Start()
+    {
+        Init();
+    }
+
+    public void Init()
     {
         rb = GetComponent<Rigidbody>();
         playerEntity = GetComponent<PlayerEntity>();
@@ -53,23 +59,37 @@ public class PlayerMovement : MonoBehaviour
 
     public void PlayerMove(Vector3 inputVec)
     {
-        float gravity = rb.velocity.y;
-
-        //Player Move
-        if (inputVec == Vector3.zero)
+        // 예외처리
+        RaycastHit hit;
+        if (Physics.Raycast(new Vector3(transform.position.x + inputVec.x, transform.position.y, transform.position.z + inputVec.z), Vector3.down, out hit, 20f))
         {
-            rb.velocity = new Vector3(inputVec.x, gravity, inputVec.z);
-            playerEntity.ChangeState(PlayerStates.Idle);
-            return;
+            float gravity = rb.velocity.y;
+        
+            //Player Move : Idle = Stop
+            if (inputVec == Vector3.zero)
+            {
+                rb.velocity = new Vector3(0f, gravity, 0f);
+                playerEntity.pAnimator.SetFloat("scalar" , 0);
+                playerEntity.ChangeState(PlayerStates.Idle);
+                return;
+            }
+
+            //Player Move : Walk <-> Run
+            Vector3 velocity = moveSpeed * new Vector3(inputVec.x, 0, inputVec.z);
+            velocity.y = gravity;
+            rb.velocity = velocity;
+
+            playerEntity.pAnimator.SetFloat("scalar" , velocity.magnitude / moveSpeed);
+            playerEntity.ChangeState(PlayerStates.Move);
+
+            //Player Rotation
+            if (velocity != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputVec), Time.deltaTime * rotateSpeed);
+            }
         }
 
-        Vector3 velocity = moveSpeed * new Vector3(inputVec.x, 0, inputVec.z);
-        velocity.y = gravity;
-        rb.velocity = velocity;
-        playerEntity.ChangeState(PlayerStates.Run);
-
-        //Player Rotation
-        if (velocity != Vector3.zero)
+        if (inputVec != Vector3.zero)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputVec), Time.deltaTime * rotateSpeed);
         }
@@ -86,38 +106,45 @@ public class PlayerMovement : MonoBehaviour
         {
             if (interactObj && interactObj.CompareTag("InteractObj"))
             {
-                targetDir = DetectManager.GetInstance.objDir;
-                InteractionSequencer.GetInstance.playerActionTargetObject = interactObj.GetComponent<InteractiveObject>();
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
+                // TODO 하드 코딩 제거
+                // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
                 {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-                
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-                
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-                
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
-                {
-                    climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
-                    objscale = (int)InteractionSequencer.GetInstance.playerActionTargetObject.transform.localScale.y
-                               - ((int)transform.position.y - (int)InteractionSequencer.GetInstance.playerActionTargetObject.transform.position.y);
-                        
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
+                    targetDir = DetectManager.GetInstance.objDir;
+                    InteractionSequencer.GetInstance.playerActionTargetObject =
+                        interactObj.GetComponent<InteractiveObject>();
+                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
+                    {
+                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
+                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                        return;
+                    }
+
+                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
+                    {
+                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
+                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                        return;
+                    }
+
+                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
+                    {
+                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
+                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                        return;
+                    }
+
+                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
+                    {
+                        climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
+                        var targetTransform = InteractionSequencer.GetInstance
+                            .playerActionTargetObject.transform;
+                        objscale = (int)targetTransform.localScale.y
+                                   - ((int)transform.position.y - (int)targetTransform.position.y);
+
+                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
+                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                        return;
+                    }
                 }
             }
         }
@@ -152,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
 
         else
         {
-            Start();
+            Init();
         }
     }
 
