@@ -83,7 +83,8 @@ public class FreezeAdj : IAdjective
         
         // iceEffect=GameObject.Instantiate(freezeEffect, sphere.transform);
         iceEffect = GameObject.Instantiate(freezeEffect, thisObject.transform);
-        iceEffect.transform.localPosition = Vector3.zero;
+        iceEffect.transform.localPosition = new Vector3(0f, thisObject.transform.lossyScale.y, 0f);
+
         // iceEffect.transform.localPosition = new Vector3(.5f, 0f,.5f );   //요넘 
         iceEffect.GetComponentInChildren<ParticleSystem>().Play();
         // InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(RotateAroundEffect(thisObject,sphere));

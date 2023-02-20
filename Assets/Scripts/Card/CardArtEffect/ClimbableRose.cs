@@ -16,12 +16,12 @@ public class ClimbableRose : MonoBehaviour
 
         if (highLight.activeInHierarchy && !isFadIn)
         {
-            StartCoroutine(FadeIn());
+            StartCoroutine("FadeIn");
         }
         else if (!highLight.activeInHierarchy)
         {
             isFadIn = false;
-            StopCoroutine(FadeIn());
+            StopCoroutine("FadeIn");
             stairSprite.color = new Color(0.4980392f, 0.9882353f, 0.9882353f, 0f);
         }
     }

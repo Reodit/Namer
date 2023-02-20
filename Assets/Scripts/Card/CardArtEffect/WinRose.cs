@@ -15,12 +15,12 @@ public class WinRose : MonoBehaviour
 
         if (highLight.activeInHierarchy && !isFadIn)
         {
-            StartCoroutine(FillIn());
+            StartCoroutine("FillIn");
         }
         else if (!highLight.activeInHierarchy)
         {
             isFadIn = false;
-            StopCoroutine(FillIn());
+            StopCoroutine("FillIn");
             fireWork.transform.localScale = new Vector3(0, 0, 0);
         }
     }
