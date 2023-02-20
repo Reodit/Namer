@@ -41,6 +41,27 @@ namespace PlayerOwnedStates
             }
         }
     }
+    
+    public class TeeterState : IState<PlayerEntity>
+    {
+        public void Enter(PlayerEntity entity)
+        {
+            //entity.pAnimator.SetBool("isMove", true);
+        }
+
+        public void Execute(PlayerEntity entity)
+        {
+        }
+
+        public void Exit(PlayerEntity entity)
+        {
+            if (GameManager.GetInstance.isPlayerDoAction != true)
+            {
+                //entity.pAnimator.SetBool("isMove", false);
+            }
+        }
+    }
+
     public class ObtainState : IState<PlayerEntity>
     {
         public void Enter(PlayerEntity entity)

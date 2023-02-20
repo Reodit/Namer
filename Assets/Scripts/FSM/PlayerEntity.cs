@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Serialization;
 
-public enum PlayerStates { Idle = 0, Move, Push, Victory, Obtain, Climb, AddCard, EndPoint }
+public enum PlayerStates { Idle = 0, Move, Push, Victory, Teeter, Obtain, Climb, AddCard, EndPoint }
 
 public class PlayerEntity : BaseGameEntity
 {	
@@ -34,7 +34,7 @@ public class PlayerEntity : BaseGameEntity
 		states[PlayerStates.Obtain] = new PlayerOwnedStates.ObtainState();
 		states[PlayerStates.Climb] = new PlayerOwnedStates.ClimbState();
 		states[PlayerStates.AddCard] = new PlayerOwnedStates.AddCardState();
-
+		states[PlayerStates.Teeter] = new PlayerOwnedStates.TeeterState();
 		// stateMachine 할당 및 초기화
 		// stateMachine을 새로 entity 타입으로 할당한 후 초기값을 세팅해주세요
 		stateMachine = new StateMachine<PlayerEntity>();

@@ -1,15 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Serialization;
-
-public enum InputType
-{
-    Keyboard,
-    Joystick
-}
-
 public class PlayerMovement : MonoBehaviour
 {
     #region components
@@ -22,16 +13,13 @@ public class PlayerMovement : MonoBehaviour
     private VirtualJoystick virtualJoystick;
     public float moveSpeed;
     public int rotateSpeed;
-    private Vector3 inputVector;
+    private Vector3 pInputVector;
     private Dir targetDir;
     private int objscale;
     private Rigidbody climbRb;
-    public InputType inputType;
-    public int scalarHash;
 
     [SerializeField] [Range(0.1f, 5f)] private float rootmotionSpeed;
     [SerializeField] [Range(0.5f, 5f)] private float interactionDelay;
-    // TODO KeyMapping ?
 
     private void Start()
     {
@@ -40,111 +28,79 @@ public class PlayerMovement : MonoBehaviour
 
     public void Init()
     {
+        #region Component Init
         rb = GetComponent<Rigidbody>();
         playerEntity = GetComponent<PlayerEntity>();
-        GameManager.GetInstance.KeyAction += MoveKeyInput;
-        GameManager.GetInstance.localPlayerMovement = this;
         GameObject vrJoystick = GameObject.Find("IngameCanvas").transform.Find("VirtualJoystick").gameObject;
         vrJoystick.SetActive(true);
         virtualJoystick = vrJoystick.GetComponent<VirtualJoystick>();
-        inputType = InputType.Joystick;
+        #endregion
+
+        #region KeyAction Init
+        GameManager.GetInstance.KeyAction += MoveKeyInput;
+        GameManager.GetInstance.KeyAction += PlayInteraction;
+        #endregion
         
         #region Init Variable
+        GameManager.GetInstance.localPlayerMovement = this;
         rootmotionSpeed = 1f;
         interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
         #endregion
     }
-
-    public void PlayerMove(Vector3 inputVec)
-    {
-        // 예외처리
-        RaycastHit hit;
-        if (Physics.Raycast(new Vector3(transform.position.x + inputVec.x, transform.position.y, transform.position.z + inputVec.z), Vector3.down, out hit, 20f))
-        {
-            float gravity = rb.velocity.y;
-        
-            //Player Move : Idle = Stop
-            if (inputVec == Vector3.zero)
-            {
-                rb.velocity = new Vector3(0f, gravity, 0f);
-                playerEntity.pAnimator.SetFloat("scalar" , 0);
-                playerEntity.ChangeState(PlayerStates.Idle);
-                return;
-            }
-
-            //Player Move : Walk <-> Run
-            Vector3 velocity = moveSpeed * new Vector3(inputVec.x, 0, inputVec.z);
-            velocity.y = gravity;
-            rb.velocity = velocity;
-
-            playerEntity.pAnimator.SetFloat("scalar" , velocity.magnitude / moveSpeed);
-            playerEntity.ChangeState(PlayerStates.Move);
-
-            //Player Rotation
-            if (velocity != Vector3.zero)
-            {
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputVec), Time.deltaTime * rotateSpeed);
-            }
-        }
-
-        if (inputVec != Vector3.zero)
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(inputVec), Time.deltaTime * rotateSpeed);
-        }
-    }
     
     public void MoveKeyInput()
     {
-        inputVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        pInputVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
     }
-
-    private void PlayInteraction()
+    
+    public void PlayInteraction()
     {
-        if (Input.GetKeyDown(GameManager.GetInstance.interactionKey))
+        if (Input.GetKeyDown(GameManager.GetInstance.interactionKey) && 
+                             GameManager.GetInstance.isPlayerCanInput && 
+                             !GameManager.GetInstance.isPlayerDoAction &&
+                             interactObj &&
+                             interactObj.CompareTag("InteractObj"))
         {
-            if (interactObj && interactObj.CompareTag("InteractObj"))
+            // TODO 하드 코딩 제거
+            // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
             {
-                // TODO 하드 코딩 제거
-                // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
+                targetDir = DetectManager.GetInstance.objDir;
+                InteractionSequencer.GetInstance.playerActionTargetObject =
+                    interactObj.GetComponent<InteractiveObject>();
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
                 {
-                    targetDir = DetectManager.GetInstance.objDir;
-                    InteractionSequencer.GetInstance.playerActionTargetObject =
-                        interactObj.GetComponent<InteractiveObject>();
-                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
-                    {
-                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
-                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                        return;
-                    }
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
 
-                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
-                    {
-                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
-                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                        return;
-                    }
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
 
-                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
-                    {
-                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
-                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                        return;
-                    }
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
 
-                    if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
-                    {
-                        climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
-                        var targetTransform = InteractionSequencer.GetInstance
-                            .playerActionTargetObject.transform;
-                        objscale = (int)targetTransform.localScale.y
-                                   - ((int)transform.position.y - (int)targetTransform.position.y);
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
+                {
+                    climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
+                    var targetTransform = InteractionSequencer.GetInstance
+                        .playerActionTargetObject.transform;
+                    objscale = (int)targetTransform.localScale.y
+                               - ((int)transform.position.y - (int)targetTransform.position.y);
 
-                        InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
-                            InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                        return;
-                    }
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
                 }
             }
         }
@@ -157,24 +113,6 @@ public class PlayerMovement : MonoBehaviour
             DetectManager.GetInstance.CheckCharacterCurrentTile(this.gameObject);
             DetectManager.GetInstance.CheckForwardObj(this.gameObject);
             interactObj = DetectManager.GetInstance.forwardObjectInfo;
-
-            // 인터렉션 중에는 이동 또는 다른 인터렉션 불가
-            // 플레이어 인풋이 막힌 경우 동작하지 않도록 변경
-            if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
-            {
-                // 이동 함수 + 인터렉션
-                switch (inputType)
-                {
-                    case InputType.Keyboard:
-                        PlayerMove(inputVector);
-                        PlayInteraction();
-                        break;
-                    case InputType.Joystick:
-                        virtualJoystick.InputControlVector();
-                        PlayInteraction();
-                        break;
-                }
-            }
         }
 
         else
@@ -183,6 +121,51 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (pInputVector == Vector3.zero)
+        {
+            pInputVector = virtualJoystick.vInputVector;
+        }
+   
+        if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
+        {
+            //Player Move : Idle = Stop
+            if (pInputVector == Vector3.zero)
+            {
+                rb.MovePosition(rb.position);
+                playerEntity.pAnimator.SetFloat("scalar", 0);
+                playerEntity.ChangeState(PlayerStates.Idle);
+                return;
+            }
+
+            if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed), Vector3.down, 20f))
+            {
+                rb.MovePosition(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
+                playerEntity.pAnimator.SetFloat("scalar", rb.velocity.magnitude / moveSpeed);
+                playerEntity.ChangeState(PlayerStates.Move);
+
+                if (pInputVector != Vector3.zero)
+                {
+                    rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
+                        Time.fixedDeltaTime * rotateSpeed);
+                }
+
+            }
+
+            else
+            {
+                //절벽에서 떨어질거 같은 모션 추가
+                //playerEntity.ChangeState();
+                if (pInputVector != Vector3.zero)
+                {
+                    rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
+                        Time.fixedDeltaTime * rotateSpeed);
+                }
+            }
+        }
+    }
+    
     // 방향만 맞춰주면 되는 경우
     public IEnumerator SetRotationBeforeInteraction()
     {
