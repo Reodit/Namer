@@ -168,7 +168,7 @@ public class MovableAdj : IAdjective
         isRoll = true;
         
         GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Push);
-        SoundManager.GetInstance.Play(SoundManager.GetInstance.effectClips[1]);
+        SoundManager.GetInstance.Play(adjectiveName);
 
         while (currentTime < movingSpeed)
         {
