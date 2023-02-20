@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -16,7 +17,8 @@ public class SoundManager : Singleton<SoundManager>
     public Toggle muteToggle;
     public Toggle bgToggle;
 
-    public List<AudioClip> effectClips = new List<AudioClip> ();
+    // public List<AudioClip> effectClips = new List<AudioClip> ();
+    private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
     public List<AudioClip> bgmClips = new List<AudioClip> ();
 
     public bool isMuteToggleOn;
@@ -28,6 +30,7 @@ public class SoundManager : Singleton<SoundManager>
     private void Awake()
     {
         BgmPlay();
+        SetObjectSFXClips();
     }
 
     private void Start()
@@ -42,6 +45,20 @@ public class SoundManager : Singleton<SoundManager>
         isBgToggleOn = bgmSound.mute;
     }
 
+    [ContextMenu("SetObjSFXClips")]
+    public void SetObjectSFXClips()
+    {
+        var audioClips =  Resources.LoadAll<AudioClip>("Prefabs/Interaction/ObjectSoundEffect");
+        for (int i = 0; i < audioClips.Length; i++)
+        {
+            var idx = audioClips[i].name.IndexOf('_');
+            var eadjNum = int.Parse(audioClips[i].name.Substring(0, idx));
+            Debug.Log(eadjNum);
+            effectClips.Add((EAdjective)eadjNum,audioClips[i]);
+            Debug.Log(effectClips[(EAdjective)eadjNum].name);
+        }
+    }
+
     public void BgmPlay()
     {
         bgmSound.loop = true;
@@ -52,6 +69,12 @@ public class SoundManager : Singleton<SoundManager>
     public void Play(AudioClip clip)
     {
         sfxSound.PlayOneShot(clip);
+    }
+
+    public void Play(EAdjective eAdjective)
+    {
+        if(effectClips.ContainsKey(eAdjective))
+            Play(effectClips[eAdjective]);
     }
 
     public void SetMasterVolume()
