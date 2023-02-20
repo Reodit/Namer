@@ -137,6 +137,50 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         KeyAction += Reset;
+#if UNITY_EDITOR
+        OnAllow();
+#elif UNITY_ANDROID
+        CheckPermission();
+#endif
+    }
+
+    void CheckPermission()
+    {
+        if (!UniAndroidPermission.IsPermitted(AndroidPermission.WRITE_EXTERNAL_STORAGE))
+        {
+            RequestPermissionWrite();
+        }
+
+        if (!UniAndroidPermission.IsPermitted(AndroidPermission.READ_EXTERNAL_STORAGE))
+        {
+            RequestPermissionRead();
+        }
+    }
+
+    void RequestPermissionWrite()
+    {
+        UniAndroidPermission.RequestPermission(AndroidPermission.WRITE_EXTERNAL_STORAGE, OnAllow, OnDeny, OnDenyAndNeverAskAgain);
+    }
+
+    void RequestPermissionRead()
+    {
+        UniAndroidPermission.RequestPermission(AndroidPermission.READ_EXTERNAL_STORAGE, OnAllow, OnDeny, OnDenyAndNeverAskAgain);
+    }
+
+    void OnAllow()
+    {
+        // allow -> load data
+        GameObject.Find("UniAndroidPermission").SetActive(false);
+    }
+
+    void OnDeny()
+    {
+        Application.Quit();
+    }
+
+    void OnDenyAndNeverAskAgain()
+    {
+        Application.Quit();
     }
 
     public void SetTimeScale(float timeScale)
