@@ -18,6 +18,7 @@ public class FlowAdj : IAdjective
 
     // FlowAdj value
     private Material originMat;
+    private float flowAlpha = 0.4f;
 
     public EAdjective GetAdjectiveName()
     {
@@ -71,6 +72,14 @@ public class FlowAdj : IAdjective
         ChangeMat(obj);
     }
 
+    void ChangeStandardMatAlpha(Material standardMaterial, float percent)
+    {
+        changeRenderMode(standardMaterial, BlendMode.Fade);
+        Color color = standardMaterial.color;
+        color.a = percent;
+        standardMaterial.color = color;
+    }
+
     void ChangeMat(InteractiveObject obj)
     {
         switch (obj.transform.name)
@@ -83,9 +92,53 @@ public class FlowAdj : IAdjective
                 Texture tex = originMat.GetTexture("_TopTexture0");
                 newMat.mainTexture = tex;
                 Color color = newMat.color;
-                color.a = 0.5f;
+                color.a = flowAlpha;
                 newMat.color = color;
                 mesh.material = newMat;
+                break;
+            case ("RoseObj(Clone)"):
+                MeshRenderer[] roseMeshes = obj.transform.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer curMesh in roseMeshes)
+                {
+                    foreach (Material mat in curMesh.materials)
+                    {
+                        ChangeStandardMatAlpha(mat, flowAlpha);
+                    }
+                }
+                break;
+            default:
+                MeshRenderer[] meshes = obj.transform.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer curMesh in meshes)
+                {
+                    ChangeStandardMatAlpha(curMesh.material, flowAlpha);
+                }
+                break;
+        }
+    }
+
+    void RepairMat(InteractiveObject obj)
+    {
+        switch (obj.transform.name)
+        {
+            case ("WaterObj(Clone)"):
+                obj.transform.GetComponentInChildren<MeshRenderer>().material = originMat;
+                break;
+            case ("RoseObj(Clone)"):
+                MeshRenderer[] roseMeshes = obj.transform.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer curMesh in roseMeshes)
+                {
+                    foreach (Material mat in curMesh.materials)
+                    {
+                        ChangeStandardMatAlpha(mat, 1f);
+                    }
+                }
+                break;
+            default:
+                MeshRenderer[] meshes = obj.transform.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer curMesh in meshes)
+                {
+                    ChangeStandardMatAlpha(curMesh.material, 1f);
+                }
                 break;
         }
     }
@@ -95,7 +148,7 @@ public class FlowAdj : IAdjective
         yield return null;
         obj.gameObject.layer = 0;
         obj.SubtractAdjective(EAdjective.Flow);
-        obj.transform.GetComponent<MeshRenderer>().material = originMat;
+        RepairMat(obj);
     }
 
     public IAdjective DeepCopy()

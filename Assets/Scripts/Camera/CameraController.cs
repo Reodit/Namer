@@ -24,7 +24,6 @@ public class CameraController : MonoBehaviour
     CinemachineComponentBase topcamOption;
 
     // android Values
-    int m_touchCount = 0;
     float m_touchDis = 0;
     float m_touchOldDis = 0;
     float fDis = 0;
