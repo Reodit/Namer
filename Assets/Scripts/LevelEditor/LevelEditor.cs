@@ -12,6 +12,14 @@ public class LevelEditor : MonoBehaviour
         BigSize = 2
     }
 
+    enum EditState
+    {
+        SetSize = 0,
+        SetHeight,
+        SetPosition,
+        SetBlock
+    }
+
     [SerializeField] Transform pointer;
     [SerializeField] GameObject blankBlock;
     [SerializeField] Button leftBtn;
@@ -22,6 +30,7 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] Button cancelBtn;
     [SerializeField] Image selectSizePanel;
     [SerializeField] Text sizeText;
+    [SerializeField] GameObject blocksPanel;
 
     private int selectedSize = 1;
     [SerializeField] private int[] maxX;
@@ -32,42 +41,77 @@ public class LevelEditor : MonoBehaviour
     private int curY = 0;
     private int curX = 0;
     private int curZ = 0;
+    private int blockNum = 0;
+
+    GameObject[][][] blocks;
+    EditState curState = EditState.SetSize;
 
     void Awake()
+    {
+        Init();
+    }
+
+    void Init()
     {
         selectSizePanel.gameObject.SetActive(true);
         leftBtn.onClick.AddListener(() => OnClickHorizontalBtn(-1));
         rightBtn.onClick.AddListener(() => OnClickHorizontalBtn(1));
         selectBtn.onClick.AddListener(OnClickSelectBtn);
+        cancelBtn.onClick.AddListener(OnClickCancelBtn);
         upBtn.onClick.AddListener(() => OnClickVerticalBtn(1));
         downBtn.onClick.AddListener(() => OnClickVerticalBtn(-1));
+
+        curState = EditState.SetSize;
+        curX = 0;
+        curY = 0;
+        curZ = 0;
+
+        selectSizePanel.gameObject.SetActive(true);
+        blocksPanel.SetActive(false);
+        blockNum = 0;
     }
 
     private void OnClickHorizontalBtn(int i)
     {
-        if (selectSizePanel.gameObject.activeSelf)
+        if (curState == EditState.SetSize)
         {
             int newSize = selectedSize + i;
             if (newSize > 2) newSize = 2;
             else if (newSize < 0) newSize = 0;
             selectedSize = newSize;
         }
-        else
+        else if (curState == EditState.SetPosition)
         {
+            curX += i;
+            if (curX > maxX[selectedSize] - 1) curX = maxX[selectedSize] - 1;
+            else if (curX < 0) curX = 0;
 
+            pointer.transform.position = new Vector3(curX, pointer.position.y, pointer.position.z);
+        }
+        else if (curState == EditState.SetBlock)
+        {
+            blocksPanel.transform.GetChild(blockNum).GetComponent<Image>().color = Color.white;
+            pointer.GetChild(blockNum).gameObject.SetActive(false);
+            blockNum += i;
+            if (blockNum > blocksPanel.transform.childCount - 1) blockNum = blocksPanel.transform.childCount - 1;
+            else if (blockNum < 0) blockNum = 0;
+
+            Transform pointerBlock = blocksPanel.transform.GetChild(blockNum);
+            pointerBlock.GetComponent<Image>().color = Color.red;
+            pointer.GetChild(blockNum).gameObject.SetActive(true);
         }
     }
 
     private void OnClickVerticalBtn(int i)
     {
-        if (selectSizePanel.gameObject.activeSelf)
+        if (curState == EditState.SetSize)
         {
             int newSize = selectedSize + i;
             if (newSize > 2) newSize = 2;
             else if (newSize < 0) newSize = 0;
             selectedSize = newSize;
         }
-        else
+        else if (curState == EditState.SetHeight)
         {
             curY += i;
             if (curY > maxY[selectedSize] - 1) curY = maxY[selectedSize] - 1;
@@ -75,6 +119,14 @@ public class LevelEditor : MonoBehaviour
 
             ViewCurY();
             pointer.position = new Vector3(pointer.position.x, curY, pointer.position.z);
+        }
+        else if (curState == EditState.SetPosition)
+        {
+            curZ += i;
+            if (curZ > maxZ[selectedSize] - 1) curZ = maxZ[selectedSize] - 1;
+            else if (curZ < 0) curZ = 0;
+
+            pointer.transform.position = new Vector3(pointer.position.x, pointer.position.y, curZ);
         }
     }
 
@@ -93,10 +145,28 @@ public class LevelEditor : MonoBehaviour
         }
     }
 
+    private void OnClickCancelBtn()
+    {
+        if (curState == EditState.SetHeight)
+        {
+            curState = EditState.SetSize;
+            selectSizePanel.gameObject.SetActive(true);
+        }
+        else if (curState == EditState.SetPosition)
+        {
+            curState = EditState.SetHeight;
+        }
+        else if (curState == EditState.SetBlock)
+        {
+            curState = EditState.SetPosition;
+            pointer.transform.GetChild(blockNum).gameObject.SetActive(false);
+        }
+    }
+
     private void OnClickSelectBtn()
     {
         heights = new GameObject[maxY[selectedSize]];
-        if (selectSizePanel.gameObject.activeSelf)
+        if (curState == EditState.SetSize)
         {
             for (int y = 0; y < maxY[selectedSize]; y++)
             {
@@ -112,17 +182,32 @@ public class LevelEditor : MonoBehaviour
                 }
             }
             blankBlock.SetActive(false);
+            curState = EditState.SetHeight;
             selectSizePanel.gameObject.SetActive(false);
             ViewCurY();
         }
-        else
+        else if (curState == EditState.SetHeight)
         {
-
+            curState = EditState.SetPosition;
+        }
+        else if (curState == EditState.SetPosition)
+        {
+            curState = EditState.SetBlock;
+            blocksPanel.SetActive(true);
+            pointer.GetChild(blockNum).gameObject.SetActive(true);
+        }
+        else if (curState == EditState.SetBlock)
+        {
+            pointer.GetChild(blockNum).gameObject.SetActive(false);
+            Transform block = GameObject.Instantiate(pointer.GetChild(blockNum));
+            block.position = pointer.position;
+            curState = EditState.SetPosition;
         }
     }
 
     void Update()
     {
-        sizeText.text = ((MapSize)selectedSize).ToString();
+        if (curState == EditState.SetSize)
+            sizeText.text = ((MapSize)selectedSize).ToString();
     }
 }
