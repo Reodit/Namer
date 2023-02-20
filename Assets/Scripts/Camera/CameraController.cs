@@ -80,10 +80,10 @@ public class CameraController : MonoBehaviour
 
         SetPriority();
 
-        // 모든 팔로우 캠이 플레이어를 따라다니도록 설정 
-        player = GameObject.Find("Player").transform;
-        playerNormalViewCam.Follow = player;
-        playerTopViewCam.Follow = player;
+        // 모든 팔로우 캠이 플레이어를 따라다니도록 설정
+        //player = GameObject.Find("Player").transform;
+        //playerNormalViewCam.Follow = player;
+        //playerTopViewCam.Follow = player;
 
         isTopView = false;
         canZoom = true;
@@ -167,13 +167,11 @@ public class CameraController : MonoBehaviour
         {
             m_touchDis = (Input.touches[0].position - Input.touches[1].position).magnitude;
             m_touchOldDis = m_touchDis;
-            //testText.text = fDis.ToString();
         }
         else if (touchCount == 2 && (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved))
         {
             m_touchDis = (Input.touches[0].position - Input.touches[1].position).magnitude;
             fDis = (m_touchDis - m_touchOldDis) * 0.01f;
-            //testText.text = fDis.ToString();
             if (canZoom && fDis < -zoomDis)
             {
                 // zoom in
@@ -186,7 +184,7 @@ public class CameraController : MonoBehaviour
                 zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
                 StartCoroutine(ZoomInOut());
             }
-            
+
             m_touchOldDis = m_touchDis;
         }
 #else
