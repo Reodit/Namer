@@ -71,6 +71,7 @@ public class FlameAdj : IAdjective
         if(otherObject.Adjectives[extinguishIdx] == null) yield break;
         if (sprayObj == null) yield break;
         sprayObj.GetComponent<ParticleSystem>().Play();
+        SoundManager.GetInstance.Play(adjectiveName);
         yield return new WaitUntil(() => sprayObj == null || !sprayObj.GetComponent<ParticleSystem>().isPlaying);
         EradicateFlame(thisObject);
     }

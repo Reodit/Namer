@@ -50,10 +50,8 @@ public class FlowAdj : IAdjective
     
     public void Execute(InteractiveObject thisObject, InteractiveObject otherObject)
     {
-        //Debug.Log("Null : this Object -> other Object");
         FindEffect(thisObject.gameObject);
         InteractionSequencer.GetInstance.SequentialQueue.Enqueue(FreezeObj(thisObject));
-        
     }
     
     public void Abandon(InteractiveObject thisObject)
@@ -71,6 +69,7 @@ public class FlowAdj : IAdjective
 
     IEnumerator AbandonFlow(InteractiveObject obj)
     {
+        SoundManager.GetInstance.Play(adjectiveName);
         yield return null;
         obj.gameObject.layer = 0;
         //obj.SubtractAdjective(EAdjective.Flow);
