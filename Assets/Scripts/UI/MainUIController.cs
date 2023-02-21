@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-enum MainMenuState
+public enum MainMenuState
 {
     Title = 0,
     Main = 1,
@@ -55,6 +55,7 @@ public class MainUIController : MonoBehaviour
     {
         StartCoroutine(PressAnyKeyFloat());
         state = MainMenuState.Title;
+        SoundManager.GetInstance.ChangeMainBGM(state);
         if (GameManager.GetInstance.CurrentState == GameStates.LevelSelect)
         {
             DirectLevelSelect();
@@ -173,6 +174,7 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
+        SoundManager.GetInstance.ChangeMainBGM(state);
         Invoke("LevelSelectPanelOn", 1f);
     }
 
@@ -198,6 +200,7 @@ public class MainUIController : MonoBehaviour
         Camera.main.transform.DORotate(new Vector3(60f, 0f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.5f, 0.5f, 1f), levelSelectMovingTime);
         title.transform.DOMove(new Vector3(Screen.width / 2f, Screen.height / 1.161f, 0f), levelSelectMovingTime);
+        SoundManager.GetInstance.ChangeMainBGM(state);
     }
 
     //도감 화면으로 넘어감 
@@ -210,6 +213,7 @@ public class MainUIController : MonoBehaviour
         mainRose.SetActive(false);
         mainRose.transform.GetChild(0).gameObject.SetActive(false);
         CardManager.GetInstance.isEncyclopedia = true;
+        SoundManager.GetInstance.ChangeMainBGM(state);
     }
 
     public void CreditScene()
@@ -219,6 +223,7 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 2f, -200, 0f), 2f);
         title.transform.DOScale(new Vector3(0.3f, 0.3f, 1f), 2f);
         Invoke("CreditObjOn", 3f);
+        SoundManager.GetInstance.ChangeMainBGM(state);
     }
 
     void CreditObjOn()
@@ -228,6 +233,7 @@ public class MainUIController : MonoBehaviour
         pauseBtn.SetActive(true);
     }
 
+
     public void EncyclopediaReturnBtn()
     {
         state = MainMenuState.Main;
@@ -236,6 +242,7 @@ public class MainUIController : MonoBehaviour
         mainMenucards.SetActive(true);
         mainRose.SetActive(true);
         CardManager.GetInstance.isEncyclopedia = false;
+        SoundManager.GetInstance.ChangeMainBGM(state);
     }
 
     public void ReturnBtn()
