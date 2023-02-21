@@ -174,7 +174,8 @@ public class GameManager : Singleton<GameManager>
     void OnAllow()
     {
         // allow -> load data
-        GameObject.Find("UniAndroidPermission").SetActive(false);
+        if (CurrentState == GameStates.Lobby)
+            GameObject.Find("UniAndroidPermission")?.SetActive(false);
     }
 
     void OnDeny()
