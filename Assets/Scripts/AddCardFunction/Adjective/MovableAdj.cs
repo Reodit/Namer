@@ -168,14 +168,15 @@ public class MovableAdj : IAdjective
         isRoll = true;
         
         GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Push);
-        SoundManager.GetInstance.Play(adjectiveName);
-
+        SoundManager.GetInstance.Play(adjectiveName,movingSpeed);
+        // movingSpeed 가 토털 타임? 
         while (currentTime < movingSpeed)
         {
             currentTime += Time.deltaTime;
             obj.transform.localPosition = Vector3.Lerp(startPos, target, currentTime / movingSpeed);
             yield return null;
         }
+        // SoundManager.GetInstance.SetSFXEndTime(movingSpeed);
         isRoll = false;
         //dt.SetNewPosOrSize();
         //수정한 부분
