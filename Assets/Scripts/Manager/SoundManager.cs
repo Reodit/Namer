@@ -81,7 +81,7 @@ public class SoundManager : Singleton<SoundManager>
 
     public void Play(AudioClip clip)
     {
-        if (sfxSound.isPlaying) return;
+        //if (sfxSound.isPlaying) return;
         //한번만 실행되면 그 다음은 실행 안되게 bool?
 
         sfxSound.PlayOneShot(clip);
