@@ -73,18 +73,17 @@ public partial class DetectManager : Singleton<DetectManager>
     // }
     public void Init(int level)
     {
-        GameObject player = GameObject.Find("Player");
-        if (player != null) player.SetActive(false);
+        GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(false);
 
         scaleChangedObjects = new Dictionary<Vector3, GameObject>();
         gameDataManager = GameDataManager.GetInstance;
         SPosition position = gameDataManager.LevelDataDic[level].playerPosition;
-        player.transform.position = new Vector3(position.x, position.y, position.z);
         
         gameDataManager.CreateMap(level);
         SetMapData();
-        if (player != null) player.SetActive(true);
-        
+        GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
+        GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(position.x, position.y, position.z);
+        GameManager.GetInstance.localPlayerMovement.Init();
     }
 
     // 맵을 로드할 때에 한 번 배열을 가져오는 메서드로 따로 사용하면 안 됨

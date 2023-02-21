@@ -17,6 +17,7 @@ public class LoadingSceneController : MonoBehaviour
     {
         SoundManager.GetInstance.Play("GameStart2");
         nextScene = sceneName;
+        SoundManager.GetInstance.bgmSound.Stop();
         SceneManager.LoadScene("LoadingScene");
     }
 

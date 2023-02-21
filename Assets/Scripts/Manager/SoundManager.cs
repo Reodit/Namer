@@ -1,16 +1,28 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class SoundManager : Singleton<SoundManager>
 {
     public AudioMixer audioMixer; 
     public AudioSource bgmSound;
+    [SerializeField]private AudioSource newAudioSource;
+    // public AudioSource bGMSoundTrack02;
+    // private Stack<AudioSource> bgmTracks = new Stack<AudioSource>();
+    public AudioSource curBGMSoundTrack;
+    
     public AudioSource sfxSound;
+    private bool isBGMSOundTrack01Playing;
 
+    private double dspStartTime;
+    private double dspEndTime;
+    
     public Slider masterSlider;
     public Slider BGMSlider;
     public Slider SFXSlider;
@@ -18,9 +30,18 @@ public class SoundManager : Singleton<SoundManager>
     public Toggle bgToggle;
 
     // public List<AudioClip> effectClips = new List<AudioClip> ();
+    /*
+     * 1. enum -> main, credit , ....
+     * 2. seting
+     * 3. when scene has changed  -> change bgmSound audioclip
+     * 4. ........
+     */
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
+
     private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
-    public List<AudioClip> bgmClips = new List<AudioClip> ();
+    
+    private AudioClip[] bgmClips;
+
 
     public bool isMuteToggleOn;
     public bool isBgToggleOn;
@@ -31,9 +52,9 @@ public class SoundManager : Singleton<SoundManager>
 
     private void Awake()
     {
-        BgmPlay();
         SetObjectSFXClips();
         SetUISFXClips();
+        SetBGM();
     }
 
     private void Start()
@@ -41,6 +62,7 @@ public class SoundManager : Singleton<SoundManager>
         if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting.isMute)
         {
             bgmSound.mute = !bgmSound.mute;
+            // MuteBgm();
             sfxSound.mute = !sfxSound.mute;
 
         }
@@ -72,6 +94,79 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
+    private void SetBGM()
+    {
+        bgmClips = Resources.LoadAll<AudioClip>("BGM");
+        
+        // Debug.Log(bgmClips.Length);
+        foreach (var clip in bgmClips)
+        {
+            // Debug.Log(clip.name);
+        }
+    }
+
+    AudioClip FindBgm(string BGMName)
+    {
+        foreach (var clip in bgmClips)
+        {
+            if (clip.name == BGMName)
+            {
+                return clip;
+            }
+        }
+        return null;
+    }
+
+    void MuteBgm()
+    {
+        if (isBGMSOundTrack01Playing)
+        {
+            bgmSound.mute = !bgmSound.mute;
+            isMuteToggleOn = bgmSound.mute;
+            isBgToggleOn = bgmSound.mute;
+
+        }
+        else
+        {
+            bgmSound.mute = !bgmSound.mute;
+            isMuteToggleOn = bgmSound.mute;
+            isBgToggleOn = bgmSound.mute;
+        }
+
+
+    }
+    public void ChangeMainBGM(MainMenuState _state)
+    {
+        switch (_state)
+        {
+            case MainMenuState.Main:
+            case MainMenuState.Level:
+            case MainMenuState.Title:
+                BgmPlay(FindBgm("Main"));
+                break;
+            case MainMenuState.Credit:
+                BgmPlay(FindBgm("Credit"));
+                break;
+            case MainMenuState.Encyclopedia:
+                BgmPlay(FindBgm("Encyclopedia"));
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void ChangeInGameLevelBGM()
+    {
+        int currentLevel = GameManager.GetInstance.Level + 1;
+        string levelBGM = "Level" + currentLevel;
+        var audioClip = FindBgm(levelBGM);
+        bgmSound.clip = audioClip;
+        bgmSound.loop = true;
+        bgmSound.Play();
+    }
+    
+
+
     public void BgmPlay()
     {
         bgmSound.loop = true;
@@ -79,18 +174,133 @@ public class SoundManager : Singleton<SoundManager>
         bgmSound.Play(); 
     }
 
+    public void BgmPlay(AudioClip clip)
+    {
+        // Debug.Log(clip);
+        // Debug.Log(bgmSound.clip);
+        if(bgmSound.clip == clip) return;
+        
+        // StartCoroutine(SmothelySwapAudio(clip));
+        bgmSound.clip = clip;
+        bgmSound.Play();
+        
+        // isBGMSOundTrack01Playing = !isBGMSOundTrack01Playing;
+    }
+    IEnumerator SmothelySwapAudio(AudioClip newClip)
+    {
+        float timeToFade = .25f;
+        float timeElapsed = 0;
+        newAudioSource.clip = newClip;
+        // bgmTracks.Push(newAudioSource);
+        newAudioSource.volume = 0f;
+        newAudioSource.Play();
+        while (timeElapsed < timeToFade)
+        {
+            newAudioSource.volume = Mathf.Lerp(0, 1, timeElapsed / timeToFade);
+            bgmSound.volume = Mathf.Lerp(1, 0, timeElapsed / timeToFade);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        bgmSound.Stop();
+        // Debug.Log("--------------------");
+        // Debug.Log(bgmSound.clip);
+        bgmSound = newAudioSource;
+        newAudioSource = bgmSound;
+        // Debug.Log(bgmSound.clip);
+        // if (isBGMSOundTrack01Playing)
+        // {
+        //     bGMSoundTrack02.clip = newClip;
+        //     bGMSoundTrack02.volume = 0f;
+        //     bGMSoundTrack02.Play();
+        //     while (timeElapsed < timeToFade)
+        //     {
+        //         bGMSoundTrack02.volume = Mathf.Lerp(0, 1, timeElapsed / timeToFade);
+        //         bGMSoundTrack01.volume = Mathf.Lerp(1, 0, timeElapsed / timeToFade);
+        //         timeElapsed += Time.deltaTime;
+        //         yield return null;
+        //     }
+        //     bGMSoundTrack01.Stop();
+        // }
+        // else
+        // {
+        //     bGMSoundTrack01.clip = newClip;
+        //     bGMSoundTrack01.volume = 0f;
+        //     bGMSoundTrack01.Play();
+        //     while (timeElapsed < timeToFade)
+        //     {
+        //         bGMSoundTrack01.volume = Mathf.Lerp(0, 1, timeElapsed / timeToFade);
+        //         bGMSoundTrack02.volume = Mathf.Lerp(1, 0, timeElapsed / timeToFade);
+        //         timeElapsed += Time.deltaTime;
+        //         yield return null;
+        //     }
+        //     bGMSoundTrack02.Stop();
+        //     
+        // }
+    }
+
+    void BGMChange(Scene scene)
+    {
+        if (scene.name == "LoadingScene") return;
+        // bgmSound = 
+    }
+
+    public void Play(AudioClip clip, double time)
+    {
+        double duration = (double)clip.samples / clip.frequency; //  clips playTime need to get  
+        sfxSound.Stop();
+        sfxSound.clip = clip;
+        dspStartTime = AudioSettings.dspTime;
+        sfxSound.PlayScheduled(dspStartTime);
+        SetEndDSPTime(time);
+        if (dspEndTime > duration)
+        {
+            // Debug.Log(duration);
+            // Debug.Log(dspEndTime);
+            sfxSound.PlayScheduled(dspStartTime+duration);
+        }
+
+     
+        // if(AudioSettings.dspTime < duration)
+        //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
+        // sfxSound.PlayOneShot(clip);
+    }
     public void Play(AudioClip clip)
     {
-        //if (sfxSound.isPlaying) return;
-        //한번만 실행되면 그 다음은 실행 안되게 bool?
+        double duration = (double)clip.samples / clip.frequency; //  clips playTime need to get  
+        sfxSound.Stop();
+        sfxSound.clip = clip;
+        dspStartTime = AudioSettings.dspTime;
+        sfxSound.PlayScheduled(dspStartTime);
+        // SetEndDSPTime(time);
+        // if (dspEndTime > duration)
+        // {
+        //     sfxSound.PlayScheduled(dspStartTime+duration);
+        // }
+        // if(AudioSettings.dspTime < duration)
+        //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
+        // sfxSound.PlayOneShot(clip);
+    }
 
-        sfxSound.PlayOneShot(clip);
+    void SetSFXEndTime(double despEndTime)
+    {
+        sfxSound.SetScheduledEndTime(despEndTime);
+    }
+
+    private void SetEndDSPTime(double time)
+    {
+        dspEndTime = dspStartTime + time;
+        SetSFXEndTime(dspEndTime);
     }
 
     public void Play(EAdjective eAdjective)
     {
         if(effectClips.ContainsKey(eAdjective))
             Play(effectClips[eAdjective]);
+    }
+    public void Play(EAdjective eAdjective, double playTime)
+    {
+        if(effectClips.ContainsKey(eAdjective))
+            Play(effectClips[eAdjective], playTime);
     }
 
     public void Play(string clipname)
