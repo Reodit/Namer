@@ -19,10 +19,12 @@ public class SoundManager : Singleton<SoundManager>
 
     // public List<AudioClip> effectClips = new List<AudioClip> ();
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
+    private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
     public List<AudioClip> bgmClips = new List<AudioClip> ();
 
     public bool isMuteToggleOn;
     public bool isBgToggleOn;
+    bool isStop;
 
     SGameSetting sGameSetting = new SGameSetting();
 
@@ -31,6 +33,7 @@ public class SoundManager : Singleton<SoundManager>
     {
         BgmPlay();
         SetObjectSFXClips();
+        SetUISFXClips();
     }
 
     private void Start()
@@ -59,6 +62,16 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
+    public void SetUISFXClips()
+    {
+        AudioClip[] uiAudioClips = Resources.LoadAll<AudioClip>("Prefabs/Interaction/UISoundEffect");
+
+        for (int i = 0; i < uiAudioClips.Length; i++)
+        {
+            uiEffectClips.Add(uiAudioClips[i].name, uiAudioClips[i]);
+        }
+    }
+
     public void BgmPlay()
     {
         bgmSound.loop = true;
@@ -68,6 +81,9 @@ public class SoundManager : Singleton<SoundManager>
 
     public void Play(AudioClip clip)
     {
+        if (sfxSound.isPlaying) return;
+        //한번만 실행되면 그 다음은 실행 안되게 bool?
+
         sfxSound.PlayOneShot(clip);
     }
 
@@ -75,6 +91,15 @@ public class SoundManager : Singleton<SoundManager>
     {
         if(effectClips.ContainsKey(eAdjective))
             Play(effectClips[eAdjective]);
+    }
+
+    public void Play(string clipname)
+    {
+
+        if (uiEffectClips.ContainsKey(clipname))
+        {
+            Play(uiEffectClips[clipname]);
+        }
     }
 
     public void SetMasterVolume()

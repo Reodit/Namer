@@ -21,6 +21,8 @@ public class CardController : MonoBehaviour
     [SerializeField] private Text NameAdjUIText;
     CardRotate cr;
 
+    bool isHover;
+
     public EAdjective GetAdjectiveTypeOfCard()
     {
         return adjectiveType;
@@ -93,8 +95,8 @@ public class CardController : MonoBehaviour
             transform.rotation = prs.rot;
             transform.localScale = prs.scale;
         }
-
     }
+
     //마우스가 호버중이면 하이라이트 표시를하고 카트를 회전시킨다
     private void OnMouseOver()
     {
@@ -102,6 +104,11 @@ public class CardController : MonoBehaviour
         if (!CardManager.GetInstance.ableCardCtr) return;
         highlight.SetActive(true);
 
+        if (!isHover)
+        {
+            SoundManager.GetInstance.Play("CardSelect");
+            isHover = true;
+        }
 
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
@@ -113,11 +120,14 @@ public class CardController : MonoBehaviour
             return;
 
         cr.enabled = true;
+
+       
     }
 
     //마우스가 호버하다가 떠나면 하이라이트 표시를 끄고 카드 회전을 멈추고 처음 상태로 되돌린다
     private void OnMouseExit()
     {
+        isHover = false;
         if (!CardManager.GetInstance.ableCardCtr) return;
         highlight.SetActive(false);
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
@@ -142,6 +152,7 @@ public class CardController : MonoBehaviour
         frontCover.SetActive(false);
 
         CardManager.GetInstance.pickCard = gameObject;
+        //SoundManager.GetInstance.Play("CardSelect");
     }
 
     //카드 선택 커서 상태에서 상호작용 오브젝트 위에서 마우스를 놓으면 속성 부여,
@@ -158,11 +169,12 @@ public class CardController : MonoBehaviour
             CardManager.GetInstance.CardAlignment();
             Destroy(this.gameObject, 0.5f);
         }
-        else if(bc != null)
+        else if (bc != null)
         {
             bc.enabled = true;
             frontCover.SetActive(true);
             CardManager.GetInstance.ableAddCard = true;
+            SoundManager.GetInstance.Play("CardFail");
         }
     }
 
