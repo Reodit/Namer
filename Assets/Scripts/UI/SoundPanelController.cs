@@ -13,6 +13,7 @@ public class SoundPanelController : MonoBehaviour
     [SerializeField] Slider BGMSlider;
     [SerializeField] Slider SFXSlider;
     [SerializeField] Toggle muteToggle;
+    [SerializeField] Toggle bgToggle;
 
     void Start()
     {
@@ -28,6 +29,8 @@ public class SoundPanelController : MonoBehaviour
             SoundManager.GetInstance.bgmSound.mute = true;
             SoundManager.GetInstance.sfxSound.mute = true;
         }
+
+        bgToggle.isOn = SoundManager.GetInstance.isBgToggleOn;
         audioMixer = SoundManager.GetInstance.audioMixer;
         float mValue, bValue, sValue;
 
@@ -38,7 +41,6 @@ public class SoundPanelController : MonoBehaviour
         masterSlider.value = MathF.Pow(10, mValue / 20);
         BGMSlider.value = MathF.Pow(10, bValue / 20);
         SFXSlider.value = MathF.Pow(10, sValue / 20);
-
 
     }
 

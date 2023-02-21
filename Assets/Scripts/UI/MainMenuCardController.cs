@@ -19,12 +19,12 @@ public class MainMenuCardController : MonoBehaviour
     {
         cr = this.gameObject.GetComponent<CardRotate>();
         mainUIController = FindObjectOfType<MainUIController>();
-        levelSelectCardHolder = GameObject.Find(“CardHolders”).transform.Find(“LevelSelectCardHolder”).gameObject;
+        levelSelectCardHolder = GameObject.Find("CardHolders").transform.Find("LevelSelectCardHolder").gameObject;
         cardHolderPicker();
     }
     void cardHolderPicker()
     {
-        if (this.gameObject.transform.parent?.name == “MainMenuCards”)
+        if (this.gameObject.transform.parent?.name == "MainMenuCards")
         {
             cardHolder = FindObjectOfType<CardManager>().gameObject;
         }
@@ -108,7 +108,7 @@ public class MainMenuCardController : MonoBehaviour
             CardManager.GetInstance.target.transform.position + new Vector3(0, 0.5f, 0), 0.4f);
         yield return new WaitForSeconds(0.1f);
         GameObject particleObj =
-            Instantiate(Resources.Load<GameObject>(“Prefabs / Interaction / Effect / CardCastEffect”),
+            Instantiate(Resources.Load<GameObject>("Prefabs/Interaction/Effect/CardCastEffect"),
             CardManager.GetInstance.target.transform.position + new Vector3(0, 1.1f, 0), Quaternion.identity);
         yield return new WaitForSeconds(0.3f);
         CardManager.GetInstance.myCards.Remove(gameObject.GetComponent<CardController>());
@@ -120,7 +120,7 @@ public class MainMenuCardController : MonoBehaviour
         Destroy(particleObj);
         AllPopUpNameOff();
         yield return new WaitForSeconds(1f);
-        if (this.name != “OptionCard(Clone)” && name != “EncyclopediaCard(Clone)“)
+        if (this.name != "OptionCard(Clone)" && name != "EncyclopediaCard(Clone)")
         {
             CardReturn();
         }
@@ -142,44 +142,44 @@ public class MainMenuCardController : MonoBehaviour
     {
         switch (cardName)
         {
-            case “StartCard(Clone)“:
+            case "StartCard(Clone)":
                 mainUIController.LevelSelectScene();
                 break;
-            case “EncyclopediaCard(Clone)“:
+            case "EncyclopediaCard(Clone)":
                 mainUIController.EncyclopediaScene();
                 break;
-            case “OptionCard(Clone)“:
+            case "OptionCard(Clone)":
                 mainUIController.OptionPanelOpen();
                 break;
-            case “CreditCard(Clone)“:
+            case "CreditCard(Clone)":
                 mainUIController.CreditScene();
                 break;
-            case “MainCard(Clone)“:
+            case "MainCard(Clone)":
                 mainUIController.MainMenuScene();
                 break;
-            case “1StageCard(Clone)“:
+            case "1StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene(“DemoPlay”);
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
-            case “2StageCard(Clone)“:
+            case "2StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene(“DemoPlay”);
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
-            case “3StageCard(Clone)“:
+            case "3StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene(“DemoPlay”);
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
-            case “4StageCard(Clone)“:
+            case "4StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene(“DemoPlay”);
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
-            case “5StageCard(Clone)“:
+            case "5StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene(“DemoPlay”);
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
-            case “6StageCard(Clone)“:
+            case "6StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene(“DemoPlay”);
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
             // LoadingSceneController.LoadScene(“JSTESTER”);
             //이부분 살짝 수정함

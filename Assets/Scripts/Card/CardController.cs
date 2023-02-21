@@ -133,6 +133,7 @@ public class CardController : MonoBehaviour
         }
         cr.enabled = true;
         UIManager.GetInstance.isShowNameKeyPressed = true;
+        SoundManager.GetInstance.Play("CardHover");
     }
 
     void CardSelectOff()
