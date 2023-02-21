@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 public enum PlayerStates { Idle = 0, Move, Push, Victory, Teeter, Obtain, Climb, AddCard, EndPoint }
 
