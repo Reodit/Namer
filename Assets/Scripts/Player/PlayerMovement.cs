@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
                     var targetTransform = InteractionSequencer.GetInstance
                         .playerActionTargetObject.transform;
                     objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - (int)targetTransform.position.y);
+                               - ((int)transform.position.y - Mathf.RoundToInt(targetTransform.position.y));
 
                     InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
