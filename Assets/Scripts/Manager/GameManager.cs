@@ -373,6 +373,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
         int level = int.Parse(sb.ToString()) - 1;
+        // Debug.Log(level);
         //testCode
         // level = 1;        
         GetCurrentLevel(level);
@@ -439,6 +440,7 @@ public class GameManager : Singleton<GameManager>
         DetectManager.GetInstance.Init(curLevel);
         CardManager.GetInstance.CardStart(); // 여기서 문제네
         scenarioController.Init();
+        SoundManager.GetInstance.ChangeInGameLevelBGM();
     }
     //load scene with loading card -> get level data from level card
 

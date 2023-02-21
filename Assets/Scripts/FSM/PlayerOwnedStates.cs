@@ -1,17 +1,15 @@
-using System.Collections;
-using UnityEngine;
-
 namespace PlayerOwnedStates
 {
 	public class IdleState : IState<PlayerEntity>
 	{
 		public void Enter(PlayerEntity entity)
         {
-            entity.currentStates = PlayerStates.Idle;
-            if (entity.pAnimator)
-            {
-                entity.pAnimator.SetBool("isMove", false);
-            }
+            // TODO Blend로 수정되어 잠시 사용 X
+            // entity.currentStates = PlayerStates.Idle;
+            // if (entity.pAnimator)
+            // {
+            //     entity.pAnimator.SetBool("isMove", false);
+            // }
         }
 
 		public void Execute(PlayerEntity entity)
@@ -28,7 +26,6 @@ namespace PlayerOwnedStates
 		public void Enter(PlayerEntity entity)
 		{
             entity.currentStates = PlayerStates.Move;
-            entity.pAnimator.SetBool("isMove", true);
         }
 
         public void Execute(PlayerEntity entity)
@@ -37,10 +34,7 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
 		{
-            if (GameManager.GetInstance.isPlayerDoAction != true)
-            {
-                entity.pAnimator.SetBool("isMove", false);
-            }
+            
         }
     }
     
@@ -84,7 +78,7 @@ namespace PlayerOwnedStates
             if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("Obtain") &&
                 entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
-                entity.ChangeState(PlayerStates.Idle);
+                entity.RevertToPreviousState();
             }        
         }
 
@@ -108,7 +102,7 @@ namespace PlayerOwnedStates
             if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("Climb") &&
                 entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
-                entity.ChangeState(PlayerStates.Idle);
+                entity.RevertToPreviousState();
             }                
         }
 
@@ -132,7 +126,7 @@ namespace PlayerOwnedStates
             if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("Push") &&
                 entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.5)
             {
-                entity.ChangeState(PlayerStates.Idle);
+                entity.RevertToPreviousState();
             }
         }
 
@@ -158,7 +152,7 @@ namespace PlayerOwnedStates
             if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("AddCard") &&
                 entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
-                entity.ChangeState(PlayerStates.Idle);
+                entity.RevertToPreviousState();
             }
         }
 
@@ -184,7 +178,7 @@ namespace PlayerOwnedStates
             if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("Victory") &&
                 entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
-                entity.ChangeState(PlayerStates.Idle);
+                entity.RevertToPreviousState();
             }
         }
 
