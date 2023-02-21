@@ -7,11 +7,11 @@ namespace PlayerOwnedStates
 	{
 		public void Enter(PlayerEntity entity)
         {
-            entity.currentStates = PlayerStates.Idle;
-            if (entity.pAnimator)
-            {
-                entity.pAnimator.SetBool("isMove", false);
-            }
+            // entity.currentStates = PlayerStates.Idle;
+            // if (entity.pAnimator)
+            // {
+            //     entity.pAnimator.SetBool("isMove", false);
+            // }
         }
 
 		public void Execute(PlayerEntity entity)
