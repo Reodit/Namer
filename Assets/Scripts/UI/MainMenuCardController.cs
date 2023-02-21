@@ -14,6 +14,7 @@ public class MainMenuCardController : MonoBehaviour
     MainUIController mainUIController;
     CardRotate cr;
     GameObject levelSelectCardHolder;
+    bool isHover;
 
     private void Start()
     {
@@ -60,11 +61,17 @@ public class MainMenuCardController : MonoBehaviour
         if (!CardManager.GetInstance.ableCardCtr) return;
         highlight.SetActive(true);
         cr.enabled = true;
+        if (!isHover)
+        {
+            SoundManager.GetInstance.Play("CardSelect");
+            isHover = true;
+        }
     }
 
     //마우스가 호버하다가 떠나면 하이라이트 표시를 끄고 카드 회전을 멈추고 처음 상태로 되돌린다
     private void OnMouseExit()
     {
+        isHover = false;
         if (!CardManager.GetInstance.ableCardCtr) return;
         highlight.SetActive(false);
         cr.enabled = false;

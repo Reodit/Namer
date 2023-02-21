@@ -37,11 +37,12 @@ public class SoundManager : Singleton<SoundManager>
      * 4. ........
      */
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
-    // public List<AudioClip> bgmClips = new List<AudioClip> ();
     private AudioClip[] bgmClips;
+    private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
 
     public bool isMuteToggleOn;
     public bool isBgToggleOn;
+    bool isStop;
 
     SGameSetting sGameSetting = new SGameSetting();
 
@@ -50,7 +51,7 @@ public class SoundManager : Singleton<SoundManager>
     {
         SetObjectSFXClips();
         SetBGM();
-        // BgmPlay();
+        SetUISFXClips();
     }
 
     private void Start()
@@ -151,6 +152,15 @@ public class SoundManager : Singleton<SoundManager>
         bgmSound.Play();
     }
     
+    public void SetUISFXClips()
+    {
+        AudioClip[] uiAudioClips = Resources.LoadAll<AudioClip>("Prefabs/Interaction/UISoundEffect");
+
+        for (int i = 0; i < uiAudioClips.Length; i++)
+        {
+            uiEffectClips.Add(uiAudioClips[i].name, uiAudioClips[i]);
+        }
+    }
 
     public void BgmPlay()
     {
@@ -286,6 +296,15 @@ public class SoundManager : Singleton<SoundManager>
     {
         if(effectClips.ContainsKey(eAdjective))
             Play(effectClips[eAdjective], playTime);
+    }
+
+    public void Play(string clipname)
+    {
+
+        if (uiEffectClips.ContainsKey(clipname))
+        {
+            Play(uiEffectClips[clipname]);
+        }
     }
 
     public void SetMasterVolume()
