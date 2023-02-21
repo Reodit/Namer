@@ -24,7 +24,6 @@ public class CameraController : MonoBehaviour
     CinemachineComponentBase topcamOption;
 
     // android Values
-    int m_touchCount = 0;
     float m_touchDis = 0;
     float m_touchOldDis = 0;
     float fDis = 0;
@@ -101,7 +100,7 @@ public class CameraController : MonoBehaviour
         targetCam.Priority = (int)PriorityOrder.FrontAtAll;
 
         // zoom in 상태에서는 카드가 안 보이도록 함 
-        CardManager.GetInstance.CardsHide();
+        CardManager.GetInstance.CardsDown();
 
         if (!canMove)
         {
@@ -119,7 +118,7 @@ public class CameraController : MonoBehaviour
         targetCam.Follow = null;
 
         // zoom in 상태에서는 카드가 안 보이도록 함 
-        CardManager.GetInstance.CardsReveal();
+        CardManager.GetInstance.CardsUp();
 
         GameManager.GetInstance.isPlayerCanInput = true;
 
@@ -177,14 +176,14 @@ public class CameraController : MonoBehaviour
             fDis = (m_touchDis - m_touchOldDis) * 0.01f;
             if (canZoom && fDis < -zoomDis)
             {
-                // zoom in
-                zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
+                // zoom out
+                zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
                 StartCoroutine(ZoomInOut());
             }
             else if (canZoom && fDis > zoomDis)
             {
-                // zoom out
-                zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
+                // zoom in
+                zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
                 StartCoroutine(ZoomInOut());
             }
 
