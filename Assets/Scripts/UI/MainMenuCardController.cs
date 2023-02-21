@@ -132,19 +132,19 @@ public class MainMenuCardController : MonoBehaviour
                 break;
             case "1StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene("DemoPlayHJH");
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
             case "2StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene("DemoPlayHJH");
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
             case "3StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene("DemoPlayHJH");
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
             case "4StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                LoadingSceneController.LoadScene("DemoPlayHJH");
+                LoadingSceneController.LoadScene("DemoPlay");
                 break;
             case "5StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
