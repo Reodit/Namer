@@ -8,6 +8,7 @@ public class PlayerEntity : BaseGameEntity
 {	
 	private	Dictionary<PlayerStates, IState<PlayerEntity>> states;
 	private	StateMachine<PlayerEntity> stateMachine;
+	public PlayerStates currentStates;
 	#region components
     private Rigidbody rb;
     public Animator pAnimator;

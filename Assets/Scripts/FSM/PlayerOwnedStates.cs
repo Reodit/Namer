@@ -7,6 +7,7 @@ namespace PlayerOwnedStates
 	{
 		public void Enter(PlayerEntity entity)
         {
+            entity.currentStates = PlayerStates.Idle;
             if (entity.pAnimator)
             {
                 entity.pAnimator.SetBool("isMove", false);
@@ -26,6 +27,7 @@ namespace PlayerOwnedStates
 	{
 		public void Enter(PlayerEntity entity)
 		{
+            entity.currentStates = PlayerStates.Move;
             entity.pAnimator.SetBool("isMove", true);
         }
 
@@ -46,6 +48,7 @@ namespace PlayerOwnedStates
     {
         public void Enter(PlayerEntity entity)
         {
+            entity.currentStates = PlayerStates.Teeter;
             entity.pAnimator.SetBool("isTeeter", true);
         }
 
@@ -71,6 +74,7 @@ namespace PlayerOwnedStates
     {
         public void Enter(PlayerEntity entity)
         {
+            entity.currentStates = PlayerStates.Obtain;
             entity.pAnimator.SetBool("isObtain", true);
             //GameManager.GetInstance.isPlayerDoAction = true;
         }
@@ -94,6 +98,7 @@ namespace PlayerOwnedStates
     {
         public void Enter(PlayerEntity entity)
         {
+            entity.currentStates = PlayerStates.Climb;
             entity.pAnimator.SetBool("isClimb", true);
             //GameManager.GetInstance.isPlayerDoAction = true;        
         }
@@ -117,6 +122,7 @@ namespace PlayerOwnedStates
     {
         public void Enter(PlayerEntity entity)
         {
+            entity.currentStates = PlayerStates.Push;
             entity.pAnimator.SetBool("isPush", true);
             GameManager.GetInstance.isPlayerDoAction = true;
         }
@@ -140,6 +146,7 @@ namespace PlayerOwnedStates
     {
         public void Enter(PlayerEntity entity)
         {
+            entity.currentStates = PlayerStates.AddCard;
             entity.pAnimator.SetBool("isAddCard", true);
             GameManager.GetInstance.isPlayerDoAction = true;
             InteractionSequencer.GetInstance.PlayerActionQueue.Enqueue(GameManager.GetInstance.localPlayerMovement.AddcardRootmotion());
@@ -166,6 +173,7 @@ namespace PlayerOwnedStates
     {
         public void Enter(PlayerEntity entity)
         {
+            entity.currentStates = PlayerStates.Victory;
             entity.pAnimator.SetBool("isVictory", true);
             GameManager.GetInstance.isPlayerDoAction = true;
         }
