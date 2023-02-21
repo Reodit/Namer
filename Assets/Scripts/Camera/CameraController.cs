@@ -24,7 +24,6 @@ public class CameraController : MonoBehaviour
     CinemachineComponentBase topcamOption;
 
     // android Values
-    int m_touchCount = 0;
     float m_touchDis = 0;
     float m_touchOldDis = 0;
     float fDis = 0;
@@ -55,7 +54,10 @@ public class CameraController : MonoBehaviour
         GameManager.GetInstance.KeyAction += CheckCameraSwitch;
         if (GameManager.GetInstance.cameraController == null)
             GameManager.GetInstance.cameraController = GameObject.Find("Cameras").GetComponent<CameraController>();
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+        if (cameraBtn != null)
+            cameraBtn.onClick.AddListener(M_SwitchCam);
+#elif UNITY_ANDROID
         cameraBtn.onClick.AddListener(M_SwitchCam);
 #else
         cameraBtn.gameObject.SetActive(false);
@@ -98,7 +100,7 @@ public class CameraController : MonoBehaviour
         targetCam.Priority = (int)PriorityOrder.FrontAtAll;
 
         // zoom in 상태에서는 카드가 안 보이도록 함 
-        CardManager.GetInstance.CardsHide();
+        CardManager.GetInstance.CardsDown();
 
         if (!canMove)
         {
@@ -116,7 +118,7 @@ public class CameraController : MonoBehaviour
         targetCam.Follow = null;
 
         // zoom in 상태에서는 카드가 안 보이도록 함 
-        CardManager.GetInstance.CardsReveal();
+        CardManager.GetInstance.CardsUp();
 
         GameManager.GetInstance.isPlayerCanInput = true;
 

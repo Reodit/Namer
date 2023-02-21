@@ -17,6 +17,9 @@ public class StageClearPanelController : MonoBehaviour
     [SerializeField] GameObject nameCancleBtn;
     [SerializeField] GameObject stageClearOKBtn;
     [SerializeField] GameObject rewardInfoTxt;
+    [SerializeField] GameObject topButtons;
+    [SerializeField] GameObject bottomButtons;
+    [SerializeField] GameObject joyButtons;
     GameObject clearRig;
     GameObject namingRig;
     GameObject rewardRig;
@@ -35,6 +38,9 @@ public class StageClearPanelController : MonoBehaviour
         rewardRig = clearRig.transform.Find("RewardRig").gameObject;
 
         clearRig.SetActive(true);
+        topButtons.SetActive(false);
+        bottomButtons.SetActive(false);
+        joyButtons.SetActive(false);
     }
 
     public void NamingProcess()
@@ -52,7 +58,9 @@ public class StageClearPanelController : MonoBehaviour
 
     IEnumerator NameConfirm()
     {
-        nameFrame.transform.DOScale(new Vector3(0.622527f, 0.622527f, 0.622527f), 1f);
+        nameFrame.transform.DOLocalMove(new Vector3(-354, -392, 0), 1f);
+        nameFrame.transform.DOScale(new Vector3(0.6720456f, 0.6720456f, 0.6720456f), 1f);
+        nameKit.transform.GetChild(1).transform.gameObject.SetActive(false);
         yield return new WaitForSeconds(1f);
         nameKit.SetActive(false);
         namingRig.transform.GetChild(0).gameObject.SetActive(true);
@@ -63,8 +71,10 @@ public class StageClearPanelController : MonoBehaviour
     {
         nameCancleBtn.SetActive(false);
         namingRig.transform.GetChild(0).gameObject.SetActive(false);
+        nameKit.transform.GetChild(1).transform.gameObject.SetActive(true);
         nameKit.SetActive(true);
         nameFrame.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 1f);
+        nameFrame.transform.DOLocalMove(new Vector3(-351.399994f, -120f, 0f), 1f);
     }
 
     public void NamingDone()

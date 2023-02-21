@@ -10,19 +10,23 @@ public class FlowRose : MonoBehaviour
     float fadeInTime = 0.5f;
 
     bool isFadIn;
+    Coroutine fillInCoroutine = null;
 
     private void Update()
     {
 
         if (highLight.activeInHierarchy && !isFadIn)
         {
-            StartCoroutine(FillIn());
+            StartCoroutine("FillIn");
         }
         else if (!highLight.activeInHierarchy)
         {
             isFadIn = false;
-            StopCoroutine(FillIn());
+
+            StopCoroutine("FillIn");
+
             arrow.fillAmount = 0;
+
         }
     }
 
