@@ -5,24 +5,40 @@ using UnityEngine.UI;
 
 public class LogText : MonoBehaviour
 {
-    [SerializeField] bool existXButton;
+    [SerializeField] Button skipBtn;
+    [SerializeField] bool isSystemlog;
     [SerializeField] float activeTime;
-    [SerializeField] GameObject button;
     public float curTime;
 
     public void SetTime()
     {
         curTime = activeTime;
+        if (skipBtn != null)
+            skipBtn.onClick.AddListener(OnClickBtn);
     }
 
     void Start()
     {
-        if (button == null || !existXButton)
+
+    }
+
+    void OnClickBtn()
+    {
+        Text btnText = skipBtn.GetComponentInChildren<Text>();
+        if (btnText.text == "Skip")
         {
-            return;
+            SkipScenario();
         }
-        button.SetActive(true);
-        button.GetComponent<Button>().onClick.AddListener(() => this.gameObject.SetActive(false));
+        else
+        {
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    void SkipScenario()
+    {
+        ScenarioController sc = GameObject.Find("LevelInfos").GetComponent<ScenarioController>();
+        sc.StartCoroutine("SkipLog");
     }
 
     void OnEnable()
@@ -32,7 +48,7 @@ public class LogText : MonoBehaviour
 
     void Update()
     {
-        if (existXButton) return;
+        if (!isSystemlog) return;
 
         curTime -= Time.unscaledDeltaTime;
         if (curTime <= 0)

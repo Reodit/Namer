@@ -38,6 +38,7 @@ public class ScenarioController : MonoBehaviour
     private Transform player;
     private CameraController cameraController;
     private float scenarioTime = 20f;
+    private bool isStart = false;
 
     [Header("필수로 등록해야 하는 부분")]
     [SerializeField] GameObject logBox;
@@ -45,7 +46,8 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] GameObject dialogBox;
     [SerializeField] Text dialogText;
     [SerializeField] GameObject stageClearPanel;
-    GameObject popUpTouchUI;
+    [SerializeField] GameObject targetPoint;
+    GameObject skipBtn;
 
     [System.NonSerialized] public bool logOpened = false;
     [System.NonSerialized] public bool dialogOpened = false;
@@ -53,6 +55,7 @@ public class ScenarioController : MonoBehaviour
 
     [Header("조정값")]
     [SerializeField] private float delayWinUI = 2f;
+    [SerializeField] private float delayDealingTime = 3f;
 
     private void Awake()
     {
@@ -68,12 +71,14 @@ public class ScenarioController : MonoBehaviour
         dialogBox.SetActive(false);
         dialogOpened = false;
 
-        popUpTouchUI = dialogBox.transform.Find("PopUpTouch").gameObject;
+        skipBtn = dialogBox.transform.Find("SkipBtn").gameObject;
         stageClearPanel =
             GameObject.Find("IngameCanvas").transform.
             Find("StageClearPanel").gameObject;
 
         isUI = false;
+        isStart = false;
+        GameManager.GetInstance.isPlayerCanInput = false;
 
         scenarioCount = 0;
         scenarios = new Queue<Scenario>();
@@ -87,6 +92,15 @@ public class ScenarioController : MonoBehaviour
         }
 
         player = GameObject.Find("Player").transform;
+
+        StartCoroutine(WaitDealing());
+    }
+
+    private IEnumerator WaitDealing()
+    {
+        yield return new WaitForSeconds(delayDealingTime);
+        isStart = true;
+        GameManager.GetInstance.isPlayerCanInput = true;
         NextScenario();
         StartScenario();
     }
@@ -109,11 +123,12 @@ public class ScenarioController : MonoBehaviour
         }
     }
 
-    private void SystemLog(string message)
+    private void SystemLog(string message, bool isClick = false)
     {
         logBox.SetActive(true);
         logText.text = message;
         logBox.GetComponent<LogText>().SetTime();
+        skipBtn.GetComponentInChildren<Text>().text = isClick ? "Skip" : "Close";
     }
 
     private void LogError(string message)
@@ -126,9 +141,21 @@ public class ScenarioController : MonoBehaviour
     {
         string dialogMessage = $"<color=red>[{objName}]</color>\n{message}";
         dialogBox.SetActive(true);
-        popUpTouchUI.SetActive(isClick);
+        skipBtn.GetComponentInChildren<Text>().text = isClick ? "Skip" : "Close";
         dialogText.text = dialogMessage;
         dialogBox.GetComponent<LogText>().SetTime();
+    }
+
+    public IEnumerator SkipLog()
+    {
+        int curNum = scenarioCount;
+        while (curScenario.type == ERequireType.MouseClick)
+        {
+            if (curNum != scenarioCount)
+                StartScenario();
+            else
+                yield return new WaitForSeconds(0.02f);
+        }
     }
 #endregion
 
@@ -193,7 +220,7 @@ public class ScenarioController : MonoBehaviour
 
                 if (curScenario.message.Contains("[System]"))
                 {
-                    SystemLog(curScenario.message.Replace("[System]", ""));
+                    SystemLog(curScenario.message.Replace("[System]", ""), scenarios.Peek().type == ERequireType.MouseClick);
                 }
                 else
                 {
@@ -246,8 +273,11 @@ public class ScenarioController : MonoBehaviour
             case (ERequireType.PlayerPos):
                 Vector3 playerPos = new Vector3(Mathf.Round(player.position.x), Mathf.Round(player.position.y), Mathf.Round(player.position.z));
                 Vector3 requireScenarioPos = new Vector3(curScenario.requirePos.x, curScenario.requirePos.y, curScenario.requirePos.z);
+                targetPoint.transform.position = requireScenarioPos + (Vector3.up * 0.5f);
+                targetPoint.SetActive(true);
                 if (playerPos == requireScenarioPos)
                 {
+                    targetPoint.SetActive(false);
                     StartScenario();
                 }
                 break;
@@ -310,6 +340,7 @@ public class ScenarioController : MonoBehaviour
 
     private void Update()
     {
+        if (!isStart) return;
         if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
         if (scenarioTime > 0) scenarioTime -= Time.deltaTime;
         else

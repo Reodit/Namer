@@ -1,29 +1,17 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private RectTransform lever;
     private RectTransform rectTransform;
     [SerializeField, Range(10f, 150f)] private float leverRange;
+    [FormerlySerializedAs("inputVector")] public Vector3 vInputVector;
     
-    private Vector3 inputVector;
-
-    private PlayerMovement _player; // Move 함수 호출시 사용
-
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-    }
-
-    private void OnEnable()
-    {
-        _player = GameManager.GetInstance.localPlayerMovement;
-    }
-
-    public void Update()
-    {
-        Debug.Log(inputVector); // 변경점
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -36,24 +24,18 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ControlJoystickLever(eventData);
     }
 
-
-    public void InputControlVector()
-    {
-        _player.PlayerMove(inputVector);
-    }
-    
     public void ControlJoystickLever(PointerEventData eventData)
     {
         var inputDir = eventData.position - rectTransform.anchoredPosition;
         var clampedDir = inputDir.magnitude < leverRange ? inputDir 
             : inputDir.normalized * leverRange;
         lever.anchoredPosition = clampedDir;
-        inputVector = new Vector3 (clampedDir.x / leverRange, 0f, clampedDir.y / leverRange);
+        vInputVector = new Vector3 (clampedDir.x / leverRange, 0f, clampedDir.y / leverRange);
     }
     
     public void OnEndDrag(PointerEventData eventData)
     {        
-        inputVector = Vector3.zero;
+        vInputVector = Vector3.zero;
         lever.anchoredPosition = Vector2.zero;
     }
 }
