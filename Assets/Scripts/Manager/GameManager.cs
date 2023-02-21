@@ -39,6 +39,10 @@ public class GameManager : Singleton<GameManager>
     public ScenarioController scenarioController;
     #endregion
 
+    #region texture
+    public Shader flowShader;
+    #endregion
+
     #region Input Delegate
     public Action KeyAction;
     #endregion

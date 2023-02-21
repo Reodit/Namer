@@ -5424,6 +5424,7 @@ MonoBehaviour:
   isPlayerCanInput: 0
   cameraController: {fileID: 0}
   scenarioController: {fileID: 0}
+  flowShader: {fileID: 4800000, guid: 30dd10d0f6da64d48be1516e100020ac, type: 3}
   restartKey: 114
   interactionKey: 32
   showNameKey: 9
