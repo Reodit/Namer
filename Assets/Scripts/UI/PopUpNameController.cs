@@ -31,14 +31,24 @@ class PopUpNameController : MonoBehaviour
 
         currentAdjCount = interactiveObject.GetAddAdjectiveCount();
 
-        if(currentAdjCount == 1)
+        gameObject.transform.localPosition = new Vector3(
+             gameObject.transform.localPosition.x,
+             0.5f * gameObject.transform.parent.transform.localScale.y,
+             gameObject.transform.localPosition.z
+            );
+
+
+        gameObject.transform.localScale = new Vector3(
+            1,1 / gameObject.transform.parent.transform.localScale.y,1);
+
+        if (currentAdjCount == 1)
         {
-            nameText.gameObject.transform.localScale = new Vector3(0.0095f, 0.01f, 0.01f);
+            nameText.gameObject.transform.localScale = new Vector3(0.009f, 0.01f, 0.01f);
         }
 
         if(currentAdjCount == 2)
         {
-            nameText.gameObject.transform.localScale = new Vector3(0.0065f, 0.01f, 0.01f);
+            nameText.gameObject.transform.localScale = new Vector3(0.006f, 0.01f, 0.01f);
         }
         else
         {
