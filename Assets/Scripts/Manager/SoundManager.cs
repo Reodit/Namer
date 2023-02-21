@@ -187,11 +187,11 @@ public class SoundManager : Singleton<SoundManager>
             yield return null;
         }
         bgmSound.Stop();
-        Debug.Log("--------------------");
-        Debug.Log(bgmSound.clip);
+        // Debug.Log("--------------------");
+        // Debug.Log(bgmSound.clip);
         bgmSound = newAudioSource;
         newAudioSource = bgmSound;
-        Debug.Log(bgmSound.clip);
+        // Debug.Log(bgmSound.clip);
         // if (isBGMSOundTrack01Playing)
         // {
         //     bGMSoundTrack02.clip = newClip;
@@ -239,8 +239,8 @@ public class SoundManager : Singleton<SoundManager>
         SetEndDSPTime(time);
         if (dspEndTime > duration)
         {
-            Debug.Log(duration);
-            Debug.Log(dspEndTime);
+            // Debug.Log(duration);
+            // Debug.Log(dspEndTime);
             sfxSound.PlayScheduled(dspStartTime+duration);
         }
 
