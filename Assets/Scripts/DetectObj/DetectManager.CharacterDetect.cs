@@ -31,7 +31,7 @@ public partial class DetectManager : Singleton<DetectManager>
         var position = gameObject.transform.position;
         //Debug.DrawRay(new Vector3(position.x, position.y + 0.5f, position.z), fwd, Color.green);
 
-        if (Physics.Raycast(new Vector3(position.x, position.y + 0.5f, position.z), fwd, out IORay, 0.4f))
+        if (Physics.Raycast(new Vector3(position.x, position.y + 0.5f, position.z), fwd, out IORay, 0.4f) && curObjectInfo)
         {
             if (curObjectInfo.GetComponent<BoxCollider>().bounds.center.x - IORay.transform.position.x == -1 &&
                 curObjectInfo.GetComponent<BoxCollider>().bounds.center.z - IORay.transform.position.z == 0)
