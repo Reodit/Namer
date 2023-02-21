@@ -28,7 +28,6 @@ namespace PlayerOwnedStates
 		public void Enter(PlayerEntity entity)
 		{
             entity.currentStates = PlayerStates.Move;
-            entity.pAnimator.SetBool("isMove", true);
         }
 
         public void Execute(PlayerEntity entity)
@@ -37,10 +36,7 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
 		{
-            if (GameManager.GetInstance.isPlayerDoAction != true)
-            {
-                entity.pAnimator.SetBool("isMove", false);
-            }
+            
         }
     }
     

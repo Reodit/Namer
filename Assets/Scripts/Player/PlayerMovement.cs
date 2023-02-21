@@ -99,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
                     var targetTransform = InteractionSequencer.GetInstance
                         .playerActionTargetObject.transform;
                     objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - (int)targetTransform.position.y);
+                               - ((int)transform.position.y - Mathf.RoundToInt(targetTransform.position.y));
 
                     InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
@@ -306,10 +306,10 @@ public class PlayerMovement : MonoBehaviour
         while (moveTime < 1)
         {
             moveTime += Time.deltaTime * rootmotionSpeed; 
-            rb.position = Vector3.Lerp(curPos, destinationPos, moveTime + 0.1f);
-            yield return new WaitForFixedUpdate();
+            transform.position = Vector3.Lerp(curPos, destinationPos, moveTime + 0.1f);
+            yield return null;
         }
-
+        playerEntity.pAnimator.SetFloat("scalar", 0);
         yield return new WaitForSeconds(interactionDelay);
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -328,6 +328,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 targetPos = Vector3.zero;
             var curPos = position;
             climbRb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
             switch (targetDir)
             {
                 case Dir.right:
@@ -360,7 +361,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    rb.position = Vector3.Lerp(curPos, target1, moveTime);
+                    transform.position = Vector3.Lerp(curPos, target1, moveTime);
                 }
 
                 yield return new WaitForFixedUpdate();;
@@ -373,7 +374,7 @@ public class PlayerMovement : MonoBehaviour
             while (moveTime < 1)
             {
                 moveTime += Time.deltaTime * rootmotionSpeed;
-                rb.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
+                transform.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
                 yield return new WaitForFixedUpdate();
             }
 
@@ -389,11 +390,12 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    rb.position = Vector3.Lerp(curPos, target2, moveTime);
+                    transform.position = Vector3.Lerp(curPos, target2, moveTime);
                 }
 
                 yield return new WaitForFixedUpdate();;
             }
+            playerEntity.pAnimator.SetFloat("scalar", 0);
             yield return new WaitForSeconds(interactionDelay);
         }
         GameManager.GetInstance.isPlayerDoAction = false;
@@ -405,8 +407,9 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.rotation = Quaternion.LookRotation(new Vector3(addCardTarget.transform.position.x, 0f, addCardTarget.transform.position.z));
 
+        playerEntity.pAnimator.SetFloat("scalar", 0);
         yield return new WaitForSeconds(interactionDelay);
-        
+
         yield return null;
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
