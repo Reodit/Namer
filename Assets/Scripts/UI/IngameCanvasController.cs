@@ -9,12 +9,16 @@ using UnityEngine.UI;
 public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     GameObject encyclopedia;
-    [SerializeField] GameObject buttons;
+    [SerializeField] GameObject topButtons;
+    [SerializeField] GameObject bottomButtons;
+    [SerializeField] GameObject joyStick;
     [SerializeField] GameObject pediaBtn;
     [SerializeField] GameObject optionBtn;
     [SerializeField] GameObject gameOptionPanel;
     [SerializeField] GameObject topPanel;
+    [SerializeField] GameObject cardBtnImg;
     [SerializeField] Text stageName;
+    PlayerMovement playerMovement;
     Canvas canvas;
 
     bool isCardVisible = true;
@@ -37,67 +41,52 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         encyclopedia = Camera.main.gameObject.transform.GetChild(2).gameObject;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        CardsToggle();
-    }
-
-    private void CardsToggle()
-    {
-        if (Input.GetKeyDown(GameManager.GetInstance.cardToggleKey) && CardManager.GetInstance.isCardDealingDone)
-        {
-            if (isCardVisible)
-            {
-                CardManager.GetInstance.CardsDown();
-                isCardVisible = false;
-            }
-            else
-            {
-                CardManager.GetInstance.CardsUp();
-                isCardVisible = true;
-            }
-        }
-    }
-
     public void EncyclopediaOpen()
     {
         GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         GameManager.GetInstance.isPlayerCanInput = false;
         encyclopedia.SetActive(true);
-        buttons.SetActive(false);
+        topButtons.SetActive(false);
+        bottomButtons.SetActive(false);
+        joyStick.SetActive(false);
         topPanel.SetActive(false);
-        CardManager.GetInstance.CardsHide();
     }
 
     public void EncyclopediaClose()
     {
         GameManager.GetInstance.isPlayerCanInput = true;
         encyclopedia.SetActive(false);
-        buttons.SetActive(true);
-        CardManager.GetInstance.CardsReveal();
+        bottomButtons.SetActive(true);
+        CardManager.GetInstance.CardsUp();
+        joyStick.SetActive(true);
+        topButtons.SetActive(true);
+        bottomButtons.SetActive(true);
         topPanel.SetActive(true);
         GameManager.GetInstance.ChangeGameState(GameStates.InGame);
     }
 
     public void OptionBtn()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOn();
     }
 
     public void StartBtn()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
     }
 
     public void RestartBtn()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
         GameManager.GetInstance.ResetCurrentLvl();
     }
 
     public void ReturnLobby()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
         GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
         SceneManager.LoadScene("MainScene");
@@ -154,6 +143,41 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         {
             stageName.text = currentName;
         }
+    }
+
+    public void PediaButton()
+    {
+        SoundManager.GetInstance.Play("BtnPress");
+        CardManager.GetInstance.CardsDown();
+        Invoke("EncyclopediaOpen", 0.5f);
+    }
+
+    public void CardToggleButton()
+    {
+        if (isCardVisible)
+        {
+            CardManager.GetInstance.CardsDown();
+            isCardVisible = false;
+            cardBtnImg.transform.localScale = new Vector3(1, -1, 1);
+
+        }
+        else
+        {
+            CardManager.GetInstance.CardsUp();
+            isCardVisible = true;
+            cardBtnImg.transform.localScale = new Vector3(1, 1, 1);
+        }
+    }
+
+    public void InteractionButton()
+    {
+        playerMovement = GameObject.Find("Player").gameObject.GetComponent<PlayerMovement>();
+        playerMovement.PlayInteraction();
+    }
+
+    public void BtnPressedSound()
+    {
+        SoundManager.GetInstance.Play("BtnPress");
     }
 
 }
