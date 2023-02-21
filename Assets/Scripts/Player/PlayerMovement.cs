@@ -39,6 +39,9 @@ public class PlayerMovement : MonoBehaviour
         #region KeyAction Init
         GameManager.GetInstance.KeyAction += MoveKeyInput;
         GameManager.GetInstance.KeyAction += PlayInteraction;
+        #if UNITY_ANDROID
+        GameManager.GetInstance.KeyAction -= PlayInteraction;
+        #endif
         #endregion
         
         #region Init Variable
@@ -160,6 +163,7 @@ public class PlayerMovement : MonoBehaviour
         {
             DetectManager.GetInstance.CheckCharacterCurrentTile(this.gameObject);
             DetectManager.GetInstance.CheckForwardObj(this.gameObject);
+            Debug.Log(DetectManager.GetInstance.forwardObjectInfo);
             interactObj = DetectManager.GetInstance.forwardObjectInfo;
         }
 
@@ -175,38 +179,37 @@ public class PlayerMovement : MonoBehaviour
         {
             pInputVector = virtualJoystick.vInputVector;
         }
-   
+        
         if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
         {
             if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed), Vector3.down, 20f))
             {
-                rb.MovePosition(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
+                rb.MovePosition(transform.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
                 playerEntity.pAnimator.SetFloat("scalar", pInputVector.magnitude);
                 playerEntity.ChangeState(PlayerStates.Move);
 
                 if (pInputVector != Vector3.zero)
                 {
-                    rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
+                    transform.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
                         Time.fixedDeltaTime * rotateSpeed);
                 }
 
             }
-
             else
             {
                 //절벽에서 떨어질거 같은 모션 추가
                 // playerEntity.ChangeState(PlayerStates.Teeter);
                 if (pInputVector != Vector3.zero)
                 {
-                    rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
+                    transform.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
                         Time.fixedDeltaTime * rotateSpeed);
                 }
             }
-            
+
             //Player Move : Idle = Stop
             if (pInputVector == Vector3.zero)
             { 
-                if (Physics.Raycast(rb.position + new Vector3(1, 0f, 1) * (Time.fixedDeltaTime * moveSpeed),
+                if (Physics.Raycast(transform.position + new Vector3(1, 0f, 1) * (Time.fixedDeltaTime * moveSpeed),
                       Vector3.down, 20f))
                 {
                     playerEntity.ChangeState(PlayerStates.Idle);
@@ -424,7 +427,4 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(AddcardRootmotion());
     }
     #endregion
-
 }
-
-
