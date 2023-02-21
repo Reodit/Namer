@@ -104,6 +104,54 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+        #if UNITY_ANDROID
+        if (GameManager.GetInstance.isPlayerCanInput && 
+            !GameManager.GetInstance.isPlayerDoAction &&
+            interactObj &&
+            interactObj.CompareTag("InteractObj"))
+        {
+            // TODO 하드 코딩 제거
+            // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
+            {
+                targetDir = DetectManager.GetInstance.objDir;
+                InteractionSequencer.GetInstance.playerActionTargetObject =
+                    interactObj.GetComponent<InteractiveObject>();
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
+
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
+
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
+
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
+                {
+                    climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
+                    var targetTransform = InteractionSequencer.GetInstance
+                        .playerActionTargetObject.transform;
+                    objscale = (int)targetTransform.localScale.y
+                               - ((int)transform.position.y - (int)targetTransform.position.y);
+
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
+            }
+        }
+        #endif
     }
 
     private void Update()
