@@ -164,6 +164,7 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
         {
+            GameManager.GetInstance.isPlayerDoAction = false;
             entity.pAnimator.SetBool("isAddCard", false);
             CardManager.GetInstance.ableCardCtr = true;
         }
