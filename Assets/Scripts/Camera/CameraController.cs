@@ -100,12 +100,12 @@ public class CameraController : MonoBehaviour
         targetCam.Priority = (int)PriorityOrder.FrontAtAll;
 
         // zoom in 상태에서는 카드가 안 보이도록 함 
-        CardManager.GetInstance.CardsDown();
+        CardManager.GetInstance.CardsHide();
 
         if (!canMove)
         {
             GameManager.GetInstance.isPlayerCanInput = false;
-            GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Idle);
+            GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Move);
         }
 
         isFocused = true;
@@ -118,7 +118,7 @@ public class CameraController : MonoBehaviour
         targetCam.Follow = null;
 
         // zoom in 상태에서는 카드가 안 보이도록 함 
-        CardManager.GetInstance.CardsUp();
+        CardManager.GetInstance.CardsReveal();
 
         GameManager.GetInstance.isPlayerCanInput = true;
 

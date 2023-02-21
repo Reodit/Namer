@@ -4,10 +4,8 @@ using UnityEngine;
 
 public enum BlendMode
 {
-    Opaque = 0,
-    Cutout,
-    Fade,
-    Transparent
+    Back = 0,
+    Custom
 }
 
 public class FlowAdj : IAdjective
@@ -75,13 +73,13 @@ public class FlowAdj : IAdjective
     {
         yield return null;
         obj.gameObject.layer = 4;
-        
+
         ChangeMat(obj);
     }
 
     void ChangeStandardMatAlpha(Material standardMaterial, float percent)
     {
-        changeRenderMode(standardMaterial, BlendMode.Fade);
+        changeRenderMode(standardMaterial, percent == 1f ? BlendMode.Back : BlendMode.Custom);
         Color color = standardMaterial.color;
         color.a = percent;
         standardMaterial.color = color;
@@ -94,11 +92,11 @@ public class FlowAdj : IAdjective
             case ("WaterObj(Clone)"):
                 MeshRenderer mesh = obj.transform.GetComponentInChildren<MeshRenderer>();
                 originMat = new Material(mesh.materials[0]);
-                Material newMat = new Material(Shader.Find("Standard"));
-                changeRenderMode(newMat, BlendMode.Fade);
+                Material newMat = new Material(GameManager.GetInstance.flowShader);
                 Texture tex = originMat.GetTexture("_TopTexture0");
                 newMat.mainTexture = tex;
                 Color color = newMat.color;
+                color = Color.white;
                 color.a = flowAlpha;
                 newMat.color = color;
                 mesh.material = newMat;
@@ -164,10 +162,9 @@ public class FlowAdj : IAdjective
         return new FlowAdj();
     }
 
-
     void FindEffect(GameObject thisObject)
     {
-        
+
         //if (thisObject.transform.Find("iceShardEffect")) return;
         //Debug.Log("find");
         var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceShardEffect");
@@ -184,7 +181,7 @@ public class FlowAdj : IAdjective
     IEnumerator FreezeObj(InteractiveObject obj)
     {
         obj.gameObject.layer = 0;
-        
+
 
         for (int i = 0; i < iceShardEffects.Length; i++)
         {
@@ -193,7 +190,7 @@ public class FlowAdj : IAdjective
 
         yield return new WaitForSeconds(.5f);
 
-        
+
 
         for (int i = 1; i < iceShardEffects.Length; i++)
         {
@@ -206,53 +203,16 @@ public class FlowAdj : IAdjective
         obj.SubtractAdjective(EAdjective.Extinguisher);
     }
 
-    public static void changeRenderMode(Material standardShaderMaterial, BlendMode blendMode)
+    public static void changeRenderMode(Material standardShaderMaterial, BlendMode mode)
     {
-        switch (blendMode)
+        switch (mode)
         {
-            case BlendMode.Opaque:
-                standardShaderMaterial.SetFloat("_Mode", 0.0f);
-                standardShaderMaterial.SetOverrideTag("RenderType", "Opaque");
-                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                standardShaderMaterial.SetInt("_ZWrite", 1);
-                standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
-                standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
-                standardShaderMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                standardShaderMaterial.renderQueue = -1;
+            case (BlendMode.Custom):
+                standardShaderMaterial.shader = GameManager.GetInstance.flowShader; ;
                 break;
-            case BlendMode.Cutout:
-                standardShaderMaterial.SetFloat("_Mode", 1.0f);
-                standardShaderMaterial.SetOverrideTag("RenderType", "Opaque");
-                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                standardShaderMaterial.SetInt("_ZWrite", 1);
-                standardShaderMaterial.EnableKeyword("_ALPHATEST_ON");
-                standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
-                standardShaderMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                standardShaderMaterial.renderQueue = 2450;
-                break;
-            case BlendMode.Fade:
-                standardShaderMaterial.SetFloat("_Mode", 2.0f);
-                standardShaderMaterial.SetOverrideTag("RenderType", "Transparent");
-                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                standardShaderMaterial.SetInt("_ZWrite", 0);
-                standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
-                standardShaderMaterial.EnableKeyword("_ALPHABLEND_ON");
-                standardShaderMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                standardShaderMaterial.renderQueue = 3000;
-                break;
-            case BlendMode.Transparent:
-                standardShaderMaterial.SetFloat("_Mode", 3.0f);
-                standardShaderMaterial.SetOverrideTag("RenderType", "Transparent");
-                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                standardShaderMaterial.SetInt("_ZWrite", 0);
-                standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
-                standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
-                standardShaderMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                standardShaderMaterial.renderQueue = 3000;
+            case (BlendMode.Back):
+            default:
+                standardShaderMaterial.shader = GameManager.GetInstance.flowShader;
                 break;
         }
     }

@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     #region components
-    private Rigidbody rb;
+    public Rigidbody rb;
     public PlayerEntity playerEntity;
     #endregion
 
@@ -50,6 +50,10 @@ public class PlayerMovement : MonoBehaviour
         interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
+        GameManager.GetInstance.isPlayerCanInput = true;
+        GameManager.GetInstance.isPlayerDoAction = false;
+        playerEntity.ChangeState(PlayerStates.Move);
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
         #endregion
     }
     
@@ -99,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
                     var targetTransform = InteractionSequencer.GetInstance
                         .playerActionTargetObject.transform;
                     objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - (int)targetTransform.position.y);
+                               - ((int)transform.position.y - Mathf.RoundToInt(targetTransform.position.y));
 
                     InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
@@ -146,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
                     var targetTransform = InteractionSequencer.GetInstance
                         .playerActionTargetObject.transform;
                     objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - (int)targetTransform.position.y);
+                               - ((int)transform.position.y - Mathf.RoundToInt(targetTransform.position.y));
 
                     InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
@@ -179,39 +183,38 @@ public class PlayerMovement : MonoBehaviour
             pInputVector = virtualJoystick.vInputVector;
         }
         
+        //Player Move : Idle = Stop
+        if (pInputVector == Vector3.zero)
+        {
+            if (playerEntity.currentStates == PlayerStates.Teeter)
+            {
+                return;
+            }
+        }
+        
         if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
         {
             if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed), Vector3.down, 20f))
             {
-                rb.MovePosition(transform.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
+                rb.MovePosition(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
                 playerEntity.pAnimator.SetFloat("scalar", pInputVector.magnitude);
                 playerEntity.ChangeState(PlayerStates.Move);
 
                 if (pInputVector != Vector3.zero)
                 {
-                    transform.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
+                    rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
                         Time.fixedDeltaTime * rotateSpeed);
                 }
-
             }
+            
             else
             {
-                //절벽에서 떨어질거 같은 모션 추가
-                // playerEntity.ChangeState(PlayerStates.Teeter);
+                // 절벽에서 떨어질거 같은 모션 추가
+                playerEntity.ChangeState(PlayerStates.Teeter);
                 if (pInputVector != Vector3.zero)
                 {
-                    transform.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
+                    rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
                         Time.fixedDeltaTime * rotateSpeed);
-                }
-            }
-
-            //Player Move : Idle = Stop
-            if (pInputVector == Vector3.zero)
-            { 
-                if (Physics.Raycast(transform.position + new Vector3(1, 0f, 1) * (Time.fixedDeltaTime * moveSpeed),
-                      Vector3.down, 20f))
-                {
-                    playerEntity.ChangeState(PlayerStates.Idle);
                 }
             }
         }
@@ -242,15 +245,16 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
 
+        transform.rotation = Quaternion.Euler(new Vector3(0, targetRotationY, 0));
+        
+        // TODO Lerp Lotation 하기 (예정)
         // if (this.transform.rotation.y < 0)
         // {
         //     curPlayerRoationY += 360;
         // }
         //float destinationRotationY = targetRotationY - curPlayerRoationY;
         
-        // TODO Lerp Lotation 하기
         //float rotationTime = 0;
-        transform.rotation = Quaternion.Euler(new Vector3(0, targetRotationY, 0));
 
         // while (rotationTime < 1 )
         // {
@@ -263,16 +267,15 @@ public class PlayerMovement : MonoBehaviour
         //     yield return new WaitForEndOfFrame();
         // }
         
-        yield return null;
+        yield return new WaitForFixedUpdate();
     }
     
     
     // 포지션도 맞춰줘야 할 경우
     public IEnumerator SetPositionBeforeInteraction(Transform targetObjTransform)
     {
-        // TODO 포지션 맞춰줘야 하는 경우 고민
-        
-        yield return null;
+        // TODO 포지션까지 맞춰줘야 하는 경우 고민 (예정)
+        yield return new WaitForFixedUpdate();
     }
 
     #region Animation Rootmotion
@@ -310,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = Vector3.Lerp(curPos, destinationPos, moveTime + 0.1f);
             yield return null;
         }
-
+        playerEntity.pAnimator.SetFloat("scalar", 0);
         yield return new WaitForSeconds(interactionDelay);
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -322,77 +325,83 @@ public class PlayerMovement : MonoBehaviour
         var position = transform.position;
         position = new Vector3((float)Math.Round(position.x, 1),
             (float)Math.Round(position.y, 1), (float)Math.Round(position.z, 1));
-            transform.position = position;
+        transform.position = position;
 
-        Vector3 targetPos = Vector3.zero;
-        var curPos = position;
-        climbRb.constraints = RigidbodyConstraints.FreezeAll;
-        switch (targetDir)
+        // TODO 애니메이션 폴리싱 예정 (오브젝트 모양이 제각각이라 일단 일괄적으로 하드코딩 처리)
         {
-            case Dir.right :
-                targetPos = Vector3.right;
-                break;
-            case Dir.down :
-                targetPos = Vector3.back;
-                break;
-            case Dir.left :
-                targetPos = Vector3.left;
-                break;
-            case Dir.up :
-                targetPos = Vector3.forward;
-                break;
-            default :
-                Debug.LogError("잘못된 타겟 방향값입니다...!");
-                break;
-        }
-
-        float moveTime = 0;
-        Vector3 target1 = new Vector3(curPos.x, curPos.y + objscale * 0.5f, curPos.z);
-        yield return new WaitForSeconds(1f);
-        
-        while (moveTime < 1)
-        {
-            moveTime += Time.deltaTime * rootmotionSpeed;
-            if (transform.position.y > target1.y)
+            Vector3 targetPos = Vector3.zero;
+            var curPos = position;
+            climbRb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            switch (targetDir)
             {
-                yield return null;
+                case Dir.right:
+                    targetPos = Vector3.right;
+                    break;
+                case Dir.down:
+                    targetPos = Vector3.back;
+                    break;
+                case Dir.left:
+                    targetPos = Vector3.left;
+                    break;
+                case Dir.up:
+                    targetPos = Vector3.forward;
+                    break;
+                default:
+                    Debug.LogError("잘못된 타겟 방향값입니다...!");
+                    break;
             }
-            else
-            {
-                transform.position = Vector3.Lerp(curPos, target1, moveTime);
-            }
-            yield return null;
-        }
 
-        transform.position = target1;
-        moveTime = 0;
-        curPos = transform.position;
-        
-        while (moveTime < 1)
-        {
-            moveTime += Time.deltaTime * rootmotionSpeed; 
-            transform.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
-            yield return null;
-        }
+            float moveTime = 0;
+            Vector3 target1 = new Vector3(curPos.x, curPos.y + objscale * 0.5f, curPos.z);
+            yield return new WaitForSeconds(1f);
 
-        curPos = transform.position;
-        moveTime = 0;
-        Vector3 target2 = new Vector3(curPos.x, curPos.y + objscale * 0.5f + 0.05f, curPos.z);
-        while (moveTime < 1f)
-        {
-            moveTime += Time.deltaTime * rootmotionSpeed; 
-            if (transform.position.y > target2.y)
+            while (moveTime < 1)
             {
-                yield return null;
-            }
-            else
-            {
-                transform.position = Vector3.Lerp(curPos, target2, moveTime);
-            }
-            yield return null;
-        }
+                moveTime += Time.deltaTime * rootmotionSpeed;
+                if (transform.position.y > target1.y)
+                {
+                    yield return null;
+                }
+                else
+                {
+                    transform.position = Vector3.Lerp(curPos, target1, moveTime);
+                }
 
-        yield return new WaitForSeconds(interactionDelay);
+                yield return new WaitForFixedUpdate();;
+            }
+
+            transform.position = target1;
+            moveTime = 0;
+            curPos = transform.position;
+
+            while (moveTime < 1)
+            {
+                moveTime += Time.deltaTime * rootmotionSpeed;
+                transform.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
+                yield return new WaitForFixedUpdate();
+            }
+
+            curPos = transform.position;
+            moveTime = 0;
+            Vector3 target2 = new Vector3(curPos.x, curPos.y + objscale * 0.5f + 0.05f, curPos.z);
+            while (moveTime < 1f)
+            {
+                moveTime += Time.deltaTime * rootmotionSpeed;
+                if (transform.position.y > target2.y)
+                {
+                    yield return null;
+                }
+                else
+                {
+                    transform.position = Vector3.Lerp(curPos, target2, moveTime);
+                }
+
+                yield return new WaitForFixedUpdate();;
+            }
+            playerEntity.pAnimator.SetFloat("scalar", 0);
+            yield return new WaitForSeconds(interactionDelay);
+        }
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         climbRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
@@ -400,10 +409,11 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator AddcardRootmotion()
     {
-        transform.rotation = Quaternion.LookRotation(new Vector3(addCardTarget.transform.position.x, 0f, addCardTarget.transform.position.z));
+        rb.rotation = Quaternion.LookRotation(new Vector3(addCardTarget.transform.position.x, 0f, addCardTarget.transform.position.z));
 
+        playerEntity.pAnimator.SetFloat("scalar", 0);
         yield return new WaitForSeconds(interactionDelay);
-        
+
         yield return null;
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
