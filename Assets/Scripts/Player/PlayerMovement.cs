@@ -80,9 +80,9 @@ public class PlayerMovement : MonoBehaviour
         inputVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
     }
 
-    private void PlayInteraction()
+    public void PlayInteraction()
     {
-        if (Input.GetKeyDown(GameManager.GetInstance.interactionKey))
+        //if (Input.GetKeyDown(GameManager.GetInstance.interactionKey))
         {
             if (interactObj && interactObj.CompareTag("InteractObj"))
             {
@@ -144,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
                         break;
                     case InputType.Joystick:
                         virtualJoystick.InputControlVector();
-                        PlayInteraction();
+                        //PlayInteraction();
                         break;
                 }
             }

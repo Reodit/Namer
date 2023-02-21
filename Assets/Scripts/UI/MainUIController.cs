@@ -103,10 +103,10 @@ public class MainUIController : MonoBehaviour
         }
     }
 
-    //타이틀 화면에서 아무키나 입력하면 메인메뉴 화면으로 이동 
+    //타이틀 화면을 터치3면 메인메뉴 화면으로 이동 
     void PressAnyKey()
     {
-        if (!isPressAnyKey && Input.anyKeyDown)
+        if (!isPressAnyKey && Input.touchCount > 0)
         {
             isPressAnyKey = true;
             TitleMove(titleMovingTime);
@@ -122,7 +122,7 @@ public class MainUIController : MonoBehaviour
     void TitleMove(float titleMovingTime)
     {
         title.transform.DOMove(new Vector3(Screen.width/2f, Screen.height/1.161f, 0f), titleMovingTime);
-        title.transform.DOScale(new Vector3(0.5f, 0.5f, 1f), titleMovingTime);
+        title.transform.DOScale(new Vector3(0.35f, 0.35f, 1f), titleMovingTime);
     }
 
     void CameraMoving(float cameraMovingTime)
@@ -196,7 +196,7 @@ public class MainUIController : MonoBehaviour
         levelSelectBtnPanel.SetActive(false);
         Camera.main.transform.DOMove(new Vector3(0f, 7f, -3.17f), levelSelectMovingTime);
         Camera.main.transform.DORotate(new Vector3(60f, 0f, 0f), levelSelectMovingTime);
-        title.transform.DOScale(new Vector3(0.5f, 0.5f, 1f), levelSelectMovingTime);
+        title.transform.DOScale(new Vector3(0.35f, 0.35f, 1f), levelSelectMovingTime);
         title.transform.DOMove(new Vector3(Screen.width / 2f, Screen.height / 1.161f, 0f), levelSelectMovingTime);
     }
 
