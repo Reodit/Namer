@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,18 +22,18 @@ public class GameDataManager : Singleton<GameDataManager>
 
     // user information dictionary
     private Dictionary<string, SUserData> userDataDic = new Dictionary<string, SUserData>();
-    public Dictionary<string, SUserData> UserDataDic { get { return userDataDic; }}
+    public Dictionary<string, SUserData> UserDataDic { get { return userDataDic; } set { userDataDic = value; } }
     
     // level information dictionary
     private Dictionary<int, SLevelData> levelDataDic = new Dictionary<int, SLevelData>();
-    public Dictionary<int, SLevelData> LevelDataDic { get { return levelDataDic; } }
+    public Dictionary<int, SLevelData> LevelDataDic { get { return levelDataDic; } set { levelDataDic = value; } }
     
     // card information dictionary
     private Dictionary<EName, SNameInfo> names = new Dictionary<EName, SNameInfo>();
-    public Dictionary<EName, SNameInfo> Names { get { return names; } }
+    public Dictionary<EName, SNameInfo> Names { get { return names; } set { names = value; } }
 
     private Dictionary<EAdjective, SAdjectiveInfo> adjectives = new Dictionary<EAdjective, SAdjectiveInfo>();
-    public Dictionary<EAdjective, SAdjectiveInfo> Adjectives { get { return adjectives; } }
+    public Dictionary<EAdjective, SAdjectiveInfo> Adjectives { get { return adjectives; } set { adjectives = value; } }
     
     // file information
     private string filePath;
@@ -41,7 +42,20 @@ public class GameDataManager : Singleton<GameDataManager>
     private string objectInfoFileName;
     private string userDataFileName;
     private string levelDataFileName;
-    
+
+    private void Awake()
+    {
+        UploadFileToServer();
+    }
+
+    private void Update()
+    {
+        if (UserDataDic.Count > 0 && LevelDataDic.Count > 0 && Names.Count > 0 && Adjectives.Count > 0)
+        {
+            Debug.Log(UserDataDic.Count + " :  " + LevelDataDic.Count + " : " + Names.Count + " : " + Adjectives.Count);
+        }
+    }
+
     private void FilePathInfo()
     {
         filePath = Application.persistentDataPath + "/Data/";
@@ -54,7 +68,19 @@ public class GameDataManager : Singleton<GameDataManager>
         levelDataFileName = "levels.json";
     }
 
-#region Map(tile, object) Data 
+    public void UploadFileToServer()
+    {
+        // SaveLoadFileInServer uploadFile = new SaveLoadFileInServer();
+        // uploadFile.UploadFile("Assets/Resources/Data/Tutorial/CSV/objectMapData.csv");
+
+        SaveLoadFileInServer downloadFile = new SaveLoadFileInServer();
+        downloadFile.DownloadFile("Data/SaveLoad/JSON/user.json");
+        downloadFile.DownloadFile("Data/SaveLoad/JSON/levels.json");
+        downloadFile.DownloadFile("Data/SaveLoad/XML/CardData.xml", 0);
+        downloadFile.DownloadFile("Data/SaveLoad/XML/CardData.xml", 1);
+    }
+
+    #region Map(tile, object) Data 
 
     public void CreateFile()
     {
