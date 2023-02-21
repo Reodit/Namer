@@ -131,8 +131,6 @@ public class CardController : MonoBehaviour
             Encyclopedia.SetActive(true);
             return;
         }
-        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
-            return;
         cr.enabled = true;
         UIManager.GetInstance.isShowNameKeyPressed = true;
     }
@@ -141,15 +139,15 @@ public class CardController : MonoBehaviour
     {
         if (CardManager.GetInstance.pickCard != this.gameObject) return;
         highlight.SetActive(false);
+        cr.enabled = false;
+        CardManager.GetInstance.isPickCard = false;
+        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
+        CardManager.GetInstance.pickCard = null;
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
             Encyclopedia.SetActive(false);
             return;
         }
-        cr.enabled = false;
-        CardManager.GetInstance.isPickCard = false;
-        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
-        CardManager.GetInstance.pickCard = null;
         UIManager.GetInstance.isShowNameKeyPressed = false;
     }
 
@@ -172,7 +170,7 @@ public class CardController : MonoBehaviour
         gameObject.transform.DOLocalRotate(new Vector3(300, 180, 0), 0.3f);
         if (name == "NamingCard")
         {
-            gameObject.transform.DOScale(new Vector3(0.01f, 0.01f, 0.01f), 0.3f);
+            gameObject.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.2f);
         }
         else
         {
