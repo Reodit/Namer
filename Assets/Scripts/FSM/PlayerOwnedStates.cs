@@ -46,18 +46,23 @@ namespace PlayerOwnedStates
     {
         public void Enter(PlayerEntity entity)
         {
-            //entity.pAnimator.SetBool("isMove", true);
+            entity.pAnimator.SetBool("isTeeter", true);
         }
 
         public void Execute(PlayerEntity entity)
         {
+            if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("Teeter") &&
+                entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+            {
+                entity.RevertToPreviousState();
+            }   
         }
 
         public void Exit(PlayerEntity entity)
         {
             if (GameManager.GetInstance.isPlayerDoAction != true)
             {
-                //entity.pAnimator.SetBool("isMove", false);
+                entity.pAnimator.SetBool("isTeeter", false);
             }
         }
     }

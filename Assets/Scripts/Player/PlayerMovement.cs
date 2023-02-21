@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
     
     public void MoveKeyInput()
     {
-        pInputVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        pInputVector = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
     }
     
     public void PlayInteraction()
@@ -130,19 +130,10 @@ public class PlayerMovement : MonoBehaviour
    
         if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
         {
-            //Player Move : Idle = Stop
-            if (pInputVector == Vector3.zero)
-            {
-                rb.MovePosition(rb.position);
-                playerEntity.pAnimator.SetFloat("scalar", 0);
-                playerEntity.ChangeState(PlayerStates.Idle);
-                return;
-            }
-
             if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed), Vector3.down, 20f))
             {
                 rb.MovePosition(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
-                playerEntity.pAnimator.SetFloat("scalar", rb.velocity.magnitude / moveSpeed);
+                playerEntity.pAnimator.SetFloat("scalar", pInputVector.magnitude);
                 playerEntity.ChangeState(PlayerStates.Move);
 
                 if (pInputVector != Vector3.zero)
@@ -156,11 +147,21 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 //절벽에서 떨어질거 같은 모션 추가
-                //playerEntity.ChangeState();
+                // playerEntity.ChangeState(PlayerStates.Teeter);
                 if (pInputVector != Vector3.zero)
                 {
                     rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
                         Time.fixedDeltaTime * rotateSpeed);
+                }
+            }
+            
+            //Player Move : Idle = Stop
+            if (pInputVector == Vector3.zero)
+            { 
+                if (Physics.Raycast(rb.position + new Vector3(1, 0f, 1) * (Time.fixedDeltaTime * moveSpeed),
+                      Vector3.down, 20f))
+                {
+                    playerEntity.ChangeState(PlayerStates.Idle);
                 }
             }
         }
