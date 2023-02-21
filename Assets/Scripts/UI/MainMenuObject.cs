@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuObject : MonoBehaviour
 {
@@ -13,33 +14,48 @@ public class MainMenuObject : MonoBehaviour
         AllPopUpNameCtr();
     }
 
-    private void OnMouseOver()
+    bool isTouched = false;
+    private void OnMouseDown()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
-        isHoverling = true;
-        if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
+        if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null)
         {
-            CardManager.GetInstance.target = this.gameObject;
+            CardManager.GetInstance.target = gameObject;
+            CardManager.GetInstance.pickCard.GetComponent<MainMenuCardController>().TouchInteractObj();
         }
-        if (this.gameObject.CompareTag("InteractObj"))
+        else if (!isTouched)
         {
-            PopUpNameOn();
+            if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+            if (GameManager.GetInstance.CurrentState == GameStates.Victory &&
+                this.name != "PlanetObj") return;
+            isTouched = true;
+            if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
+            {
+                CardManager.GetInstance.target = this.gameObject;
+            }
+            if (this.gameObject.CompareTag("InteractObj"))
+            {
+                PopUpNameOn();
+            }
+
+            if (CardManager.GetInstance.isPickCard)
+            {
+                CardManager.GetInstance.pickCard.GetComponent<MainMenuCardController>().TouchInteractObj();
+            }
+        }
+        else
+        {
+            if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+            isTouched = false;
+            CardManager.GetInstance.target = null;
+            popUpName.SetActive(false);
+            if (this.gameObject.CompareTag("InteractObj"))
+            {
+                PopUpNameOff();
+                CardManager.GetInstance.ableAddCard = true;
+            }
         }
     }
 
-    //마우스가 떠나면 카드의 타겟은 다시 null로 설정
-    //오브젝트의 이름을 화면에서 가림 
-    private void OnMouseExit()
-    {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
-        isHoverling = false;
-        CardManager.GetInstance.target = null;
-        popUpName.SetActive(false);
-        if (this.gameObject.CompareTag("InteractObj"))
-        {
-            PopUpNameOff();
-        }
-    }
 
     //오브젝트 현재 이름 팝업을 띄움 
     void PopUpNameOn()

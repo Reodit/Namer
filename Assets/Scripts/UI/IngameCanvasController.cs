@@ -171,7 +171,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void InteractionButton()
     {
-        playerMovement = GameObject.Find("Player").gameObject.GetComponent<PlayerMovement>();
+        playerMovement = GameManager.GetInstance.localPlayerMovement;
         playerMovement.PlayInteraction();
     }
 

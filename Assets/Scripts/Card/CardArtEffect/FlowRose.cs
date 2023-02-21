@@ -10,7 +10,6 @@ public class FlowRose : MonoBehaviour
     float fadeInTime = 0.5f;
 
     bool isFadIn;
-    Coroutine fillInCoroutine = null;
 
     private void Update()
     {

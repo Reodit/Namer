@@ -14,14 +14,11 @@ public class OptionPanelController : MonoBehaviour
     [SerializeField] Slider BGMSlider;
     [SerializeField] Slider SFXSlider;
     [SerializeField] Toggle muteToggle;
-    [SerializeField] Toggle bgToggle;
 
     SGameSetting sGameSetting = new SGameSetting();
 
     void OnEnable()
     {
-        //ResolutionInit();
-        //MaxFrameInit();
         Init();
 
     }
@@ -34,9 +31,6 @@ public class OptionPanelController : MonoBehaviour
         muteToggle.isOn = GameDataManager.GetInstance.
             UserDataDic[GameManager.GetInstance.userId].
             gameSetting.isMute;
-        bgToggle.isOn = GameDataManager.GetInstance.
-            UserDataDic[GameManager.GetInstance.userId].
-            gameSetting.isMuteInBackground;
         masterSlider.value = GameDataManager.GetInstance.
             UserDataDic[GameManager.GetInstance.userId].
             gameSetting.volume;
