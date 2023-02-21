@@ -70,8 +70,13 @@ public class FlameAdj : IAdjective
         int extinguishIdx = (int)EAdjective.Extinguisher;
         if(otherObject.Adjectives[extinguishIdx] == null) yield break;
         if (sprayObj == null) yield break;
+        SoundManager.GetInstance.Play(adjectiveName,sprayObj.GetComponent<ParticleSystem>().main.duration);
+        var duraion = (double)SoundManager.GetInstance.sfxSound.clip.samples /
+                      SoundManager.GetInstance.sfxSound.clip.frequency;
+        var mainModule =sprayObj.GetComponent<ParticleSystem>().main;
+        mainModule.duration = (float)duraion;
         sprayObj.GetComponent<ParticleSystem>().Play();
-        SoundManager.GetInstance.Play(adjectiveName);
+        // SoundManager.GetInstance.SetEndDSPTime(sprayObj.GetComponent<ParticleSystem>().main.duration);
         yield return new WaitUntil(() => sprayObj == null || !sprayObj.GetComponent<ParticleSystem>().isPlaying);
         EradicateFlame(thisObject);
     }

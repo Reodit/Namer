@@ -44,7 +44,7 @@ public class LongAdj : IAdjective
     
     public void Execute(InteractiveObject thisObject)
     {
-        SoundManager.GetInstance.Play(adjectiveName);
+        // SoundManager.GetInstance.Play(adjectiveName);
         ObjectScaling(thisObject);
     }
 
@@ -78,7 +78,7 @@ public class LongAdj : IAdjective
         if (flag)
         {
             SetGrowScale(targetObj.gameObject);
-            DetectManager.GetInstance.OnObjectScaleChanged(targetScale,targetObj.transform);
+            // DetectManager.GetInstance.OnObjectScaleChanged(targetScale,targetObj.transform);
             InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(ScaleObj(targetObj.gameObject));
             // targetObj.StartCoroutine(WrapperCoroutine(flag,targetObj));
         }
@@ -134,13 +134,13 @@ public class LongAdj : IAdjective
     {
         currentTime = 0;
         Vector3 startScale = targetObj.transform.localScale;
+        SoundManager.GetInstance.Play(adjectiveName,growingSpeed);
         while (targetObj != null && currentTime < growingSpeed)
         {
             currentTime += Time.deltaTime;
             targetObj.transform.localScale = Vector3.Lerp(startScale, targetScale, currentTime / growingSpeed);
             yield return null;
         }
-
         targetObj.transform.localScale = targetScale;
         //수정한 부분
         DetectManager.GetInstance.StartDetector(new List<GameObject>() { targetObj });
