@@ -894,6 +894,11 @@ MonoBehaviour:
   objectName: 0
   countAdj: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   popUpName: {fileID: 99964937000152958}
+  objectInfo:
+    prefabName: 
+    objectID: 0
+    nameType: 0
+    adjectives: 
 --- !u!1 &6285838120994439454
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,6 +1367,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6802793900543241518}
     m_Modifications:
+    - target: {fileID: 758260569833533938, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 41539a4dee9f64ce2b54c6eabad53ecb, type: 3}
+    - target: {fileID: 758260569833533938, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 758260569833533938, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 758260569833533938, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 758260569833533938, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3581945574174358292, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
       propertyPath: nameText
       value: 
@@ -1376,7 +1401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5099703050391114227, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5473862790532644448, guid: a04da139b729947c8b466ba34c3ddff7, type: 3}
       propertyPath: m_Pivot.x

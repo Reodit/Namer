@@ -1,6 +1,7 @@
 using System.Linq;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InteractiveObject : MonoBehaviour
 {
@@ -398,41 +399,52 @@ public class InteractiveObject : MonoBehaviour
 
     //카드를 선택한 상태에서 오브젝트를 호버링하면 카드의 타겟으로 설정
     //오브젝트의 이름을 화면에 띄움
-    bool isHoverling = false;
-    private void OnMouseOver()
+    bool isTouched = false;
+    private void OnMouseDown()
     {
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory
+            && name != "PlanetObj") return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
-        if (GameManager.GetInstance.CurrentState == GameStates.Victory &&
-            this.name != "PlanetObj") return;
-        isHoverling = true;
-        if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
+
+        if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null
+            && CardManager.GetInstance.isPickCard)
         {
             CardManager.GetInstance.target = this.gameObject;
-            
-            if (!CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()))
+            CardManager.GetInstance.pickCard.GetComponent<CardController>().TouchInteractObj();
+        } 
+        else if (!isTouched)
+        {
+            isTouched = true;
+            if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
             {
-                CardManager.GetInstance.ableAddCard = false;
-                return;
+                CardManager.GetInstance.target = this.gameObject;
+            
+                if (!CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()))
+                {
+                    CardManager.GetInstance.ableAddCard = false;
+                    return;
+                }
+            }
+            if (this.gameObject.CompareTag("InteractObj"))
+            {
+                PopUpNameOn();
+            }
+
+            if (CardManager.GetInstance.isPickCard)
+            {
+                CardManager.GetInstance.pickCard.GetComponent<CardController>().TouchInteractObj();
             }
         }
-        if (this.gameObject.CompareTag("InteractObj"))
+        else
         {
-            PopUpNameOn();
-        }
-    }
-
-    //마우스가 떠나면 카드의 타겟은 다시 null로 설정
-    //오브젝트의 이름을 화면에서 가림 
-    private void OnMouseExit()
-    {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
-        isHoverling = false;
-        CardManager.GetInstance.target = null;
-        popUpName.SetActive(false);
-        if (this.gameObject.CompareTag("InteractObj"))
-        {
-            PopUpNameOff();
-            CardManager.GetInstance.ableAddCard = true;
+            isTouched = false;
+            CardManager.GetInstance.target = null;
+            popUpName.SetActive(false);
+            if (this.gameObject.CompareTag("InteractObj"))
+            {
+                PopUpNameOff();
+                CardManager.GetInstance.ableAddCard = true;
+            }
         }
     }
 
@@ -457,7 +469,7 @@ public class InteractiveObject : MonoBehaviour
          {
              PopUpNameOn();
          }
-         if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isHoverling)
+         if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isTouched)
          {
              PopUpNameOff();
          }

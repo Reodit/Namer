@@ -15,7 +15,6 @@ public class SoundManager : Singleton<SoundManager>
     public Slider BGMSlider;
     public Slider SFXSlider;
     public Toggle muteToggle;
-    public Toggle bgToggle;
 
     // public List<AudioClip> effectClips = new List<AudioClip> ();
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
@@ -132,12 +131,6 @@ public class SoundManager : Singleton<SoundManager>
             Find("SoundPanel").transform.
             Find("MutePanel").transform.
             GetChild(0).GetComponent<Toggle>();
-            bgToggle =
-            GameObject.Find("MainCanvas").transform.
-            Find("OptionPanel").transform.
-            Find("SoundPanel").transform.
-            Find("MutePanel").transform.
-            GetChild(1).GetComponent<Toggle>();
         } else
         {
             muteToggle =
@@ -146,19 +139,10 @@ public class SoundManager : Singleton<SoundManager>
             Find("SoundPanel").transform.
             Find("MutePanel").transform.
             GetChild(0).GetComponent<Toggle>();
-            bgToggle = 
-            GameObject.Find("IngameCanvas").transform.
-            Find("OptionPanel").transform.
-            Find("SoundPanel").transform.
-            Find("MutePanel").transform.
-            GetChild(0).GetComponent<Toggle>();
         }
-            isBgToggleOn = bgToggle.isOn;
             muteToggle.onValueChanged.AddListener(delegate {
                 SetSound(); });
-            bgToggle.onValueChanged.AddListener(delegate {
-                SetBgMuteToggle(); ;
-            });
+
     }
 
     private void OnApplicationPause(bool pause)

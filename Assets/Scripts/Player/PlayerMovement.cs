@@ -163,7 +163,6 @@ public class PlayerMovement : MonoBehaviour
         {
             DetectManager.GetInstance.CheckCharacterCurrentTile(this.gameObject);
             DetectManager.GetInstance.CheckForwardObj(this.gameObject);
-            Debug.Log(DetectManager.GetInstance.forwardObjectInfo);
             interactObj = DetectManager.GetInstance.forwardObjectInfo;
         }
 

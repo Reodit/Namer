@@ -235,6 +235,10 @@ public class MainUIController : MonoBehaviour
         titlePanel.SetActive(true);
         mainMenucards.SetActive(true);
         mainRose.SetActive(true);
+        MainMenuCardController card =
+        GameObject.Find("MainMenuCards").transform.Find("EncyclopediaCard(Clone)").
+        GetComponent<MainMenuCardController>();
+        card.CardReturn();
         CardManager.GetInstance.isEncyclopedia = false;
     }
 
