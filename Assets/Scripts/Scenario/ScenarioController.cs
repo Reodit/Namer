@@ -148,10 +148,13 @@ public class ScenarioController : MonoBehaviour
 
     public IEnumerator SkipLog()
     {
+        int curNum = scenarioCount;
         while (curScenario.type == ERequireType.MouseClick)
         {
-            StartScenario();
-            yield return new WaitForSeconds(0.01f);
+            if (curNum != scenarioCount)
+                StartScenario();
+            else
+                yield return new WaitForSeconds(0.02f);
         }
     }
 #endregion
