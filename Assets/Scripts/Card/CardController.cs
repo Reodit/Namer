@@ -16,9 +16,9 @@ public class CardController : MonoBehaviour
     [SerializeField] GameObject frontCover;
     [SerializeField] BoxCollider bc;
     [SerializeField] GameObject highlight;
-    [SerializeField] GameObject Encyclopedia;
     [SerializeField] private Text UIText;
     [SerializeField] private Text NameAdjUIText;
+    GameObject Encyclopedia;
     CardRotate cr;
 
     bool isHover;
@@ -32,7 +32,7 @@ public class CardController : MonoBehaviour
     {
         cr = this.gameObject.GetComponent<CardRotate>();
         cardHolder = FindObjectOfType<CardManager>().gameObject;
-
+        Encyclopedia = this.transform.GetChild(0).transform.GetChild(6).gameObject;
         SetUIText();
     }
 

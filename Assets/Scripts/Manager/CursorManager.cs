@@ -14,7 +14,7 @@ public class CursorManager : Singleton<CursorManager>
     }
 
     private void Update()
-    { 
+    {
         if (CardManager.GetInstance.isPickCard)
         {
             Cursor.SetCursor(cardCursor, new Vector2(0, 0), CursorMode.ForceSoftware);
@@ -23,7 +23,7 @@ public class CursorManager : Singleton<CursorManager>
         {
             Cursor.SetCursor(original, new Vector2(0, 0), CursorMode.ForceSoftware);
         }
-        
+
         if (!CardManager.GetInstance.ableAddCard)
         {
             Cursor.SetCursor(cancelCardCursor, new Vector2(0, 0), CursorMode.ForceSoftware);
