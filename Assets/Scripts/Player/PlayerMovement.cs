@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     #region components
-    private Rigidbody rb;
+    public Rigidbody rb;
     public PlayerEntity playerEntity;
     #endregion
 
@@ -50,6 +50,10 @@ public class PlayerMovement : MonoBehaviour
         interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
+        GameManager.GetInstance.isPlayerCanInput = true;
+        GameManager.GetInstance.isPlayerDoAction = false;
+        playerEntity.ChangeState(PlayerStates.Move);
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
         #endregion
     }
     
