@@ -16,7 +16,9 @@ public class FlowAdj : IAdjective
     private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
     private int count = 0;
 
-    // FlowAdj value
+    private GameObject iceShardEffect;
+    private ParticleSystem[] iceShardEffects;
+
     private Material originMat;
     private float flowAlpha = 0.4f;
 
@@ -44,6 +46,11 @@ public class FlowAdj : IAdjective
     {
         //Debug.Log("this is Null");
         //thisObject.gameObject.layer = 4;
+        if (thisObject.transform.Find("iceShardEffect"))
+        {
+            GameObject.Destroy(thisObject.transform.Find("iceShardEffect").gameObject);
+        }
+
         InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(FlowObj(thisObject));
     }
 
@@ -54,9 +61,8 @@ public class FlowAdj : IAdjective
 
     public void Execute(InteractiveObject thisObject, InteractiveObject otherObject)
     {
-        //Debug.Log("Null : this Object -> other Object");
-        // InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(AbandonFlow(thisObject));
-        InteractionSequencer.GetInstance.SequentialQueue.Enqueue(AbandonFlow(thisObject));
+        FindEffect(thisObject.gameObject);
+        InteractionSequencer.GetInstance.SequentialQueue.Enqueue(FreezeObj(thisObject));
     }
 
     public void Abandon(InteractiveObject thisObject)
@@ -156,6 +162,48 @@ public class FlowAdj : IAdjective
     public IAdjective DeepCopy()
     {
         return new FlowAdj();
+    }
+
+
+    void FindEffect(GameObject thisObject)
+    {
+        
+        //if (thisObject.transform.Find("iceShardEffect")) return;
+        //Debug.Log("find");
+        var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceShardEffect");
+        iceShardEffect = GameObject.Instantiate(freezeEffect, thisObject.transform);
+        iceShardEffect.name = "iceShardEffect";
+        iceShardEffects = iceShardEffect.GetComponentsInChildren<ParticleSystem>();
+
+        for (int i = 0; i < iceShardEffects.Length; i++)
+        {
+            iceShardEffects[i].Stop();
+        }
+    }
+
+    IEnumerator FreezeObj(InteractiveObject obj)
+    {
+        obj.gameObject.layer = 0;
+        
+
+        for (int i = 0; i < iceShardEffects.Length; i++)
+        {
+            iceShardEffects[i].Play();
+        }
+
+        yield return new WaitForSeconds(.5f);
+
+        
+
+        for (int i = 1; i < iceShardEffects.Length; i++)
+        {
+            iceShardEffects[i].Stop();
+        }
+
+        iceShardEffects[0].Pause();
+
+        obj.SubtractAdjective(EAdjective.Flow);
+        obj.SubtractAdjective(EAdjective.Extinguisher);
     }
 
     public static void changeRenderMode(Material standardShaderMaterial, BlendMode blendMode)

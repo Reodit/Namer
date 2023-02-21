@@ -16,7 +16,9 @@ public class FunctionComparer : IComparer<IEnumerator>
         Climb,
         ScaleObj,
         FloatObj,
-        BounceObj
+        BounceObj,
+        FlowObj,
+        FreezeObj
     }
 
     public int Compare(IEnumerator functionA, IEnumerator functionB)

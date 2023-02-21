@@ -156,17 +156,19 @@ public class InteractiveObject : MonoBehaviour
 
         adjectives[adjIndex].SetCount(1);
         addAdjectiveTexts[adjIndex] = adjectiveInfo.uiText;
-        
+
+        adjectives[adjIndex].Execute(this);
+
         // Todo 다른 곳으로 이동해야하는 IAdjective 함수?
-        switch (adjectives[adjIndex].GetAdjectiveType())
-        {
-            case (EAdjectiveType.Normal): // normal
-            case (EAdjectiveType.Repeat): // repeat
-                adjectives[adjIndex].Execute(this);
-                break;
-            case (EAdjectiveType.Contradict): // contradict
-                break;
-        }
+        //switch (adjectives[adjIndex].GetAdjectiveType())
+        //{
+        //    case (EAdjectiveType.Normal): // normal
+        //    case (EAdjectiveType.Repeat): // repeat
+        //        adjectives[adjIndex].Execute(this);
+        //        break;
+        //    case (EAdjectiveType.Contradict): // contradict
+        //        break;
+        //}
         //
         // todo 카드 넣었을 때에 검출 테스트
         var target = (new[] { this.gameObject }).ToList();
