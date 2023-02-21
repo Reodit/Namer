@@ -4,15 +4,15 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     #region components
-    public Rigidbody rb;
+    private Rigidbody rb;
     public PlayerEntity playerEntity;
     #endregion
 
-    public GameObject interactObj;
+    private GameObject interactObj;
     public GameObject addCardTarget;
     private VirtualJoystick virtualJoystick;
-    public float moveSpeed;
-    public int rotateSpeed;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private int rotateSpeed;
     private Vector3 pInputVector;
     private Dir targetDir;
     private int objscale;
@@ -50,10 +50,6 @@ public class PlayerMovement : MonoBehaviour
         interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
-        GameManager.GetInstance.isPlayerCanInput = true;
-        GameManager.GetInstance.isPlayerDoAction = false;
-        playerEntity.ChangeState(PlayerStates.Move);
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
         #endregion
     }
     
@@ -103,7 +99,7 @@ public class PlayerMovement : MonoBehaviour
                     var targetTransform = InteractionSequencer.GetInstance
                         .playerActionTargetObject.transform;
                     objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - Mathf.RoundToInt(targetTransform.position.y));
+                               - ((int)transform.position.y - (int)targetTransform.position.y);
 
                     InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
@@ -150,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
                     var targetTransform = InteractionSequencer.GetInstance
                         .playerActionTargetObject.transform;
                     objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - Mathf.RoundToInt(targetTransform.position.y));
+                               - ((int)transform.position.y - (int)targetTransform.position.y);
 
                     InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
@@ -310,10 +306,10 @@ public class PlayerMovement : MonoBehaviour
         while (moveTime < 1)
         {
             moveTime += Time.deltaTime * rootmotionSpeed; 
-            transform.position = Vector3.Lerp(curPos, destinationPos, moveTime + 0.1f);
-            yield return null;
+            rb.position = Vector3.Lerp(curPos, destinationPos, moveTime + 0.1f);
+            yield return new WaitForFixedUpdate();
         }
-        playerEntity.pAnimator.SetFloat("scalar", 0);
+
         yield return new WaitForSeconds(interactionDelay);
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -332,7 +328,6 @@ public class PlayerMovement : MonoBehaviour
             Vector3 targetPos = Vector3.zero;
             var curPos = position;
             climbRb.constraints = RigidbodyConstraints.FreezeAll;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
             switch (targetDir)
             {
                 case Dir.right:
@@ -365,7 +360,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    transform.position = Vector3.Lerp(curPos, target1, moveTime);
+                    rb.position = Vector3.Lerp(curPos, target1, moveTime);
                 }
 
                 yield return new WaitForFixedUpdate();;
@@ -378,7 +373,7 @@ public class PlayerMovement : MonoBehaviour
             while (moveTime < 1)
             {
                 moveTime += Time.deltaTime * rootmotionSpeed;
-                transform.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
+                rb.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
                 yield return new WaitForFixedUpdate();
             }
 
@@ -394,12 +389,11 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    transform.position = Vector3.Lerp(curPos, target2, moveTime);
+                    rb.position = Vector3.Lerp(curPos, target2, moveTime);
                 }
 
                 yield return new WaitForFixedUpdate();;
             }
-            playerEntity.pAnimator.SetFloat("scalar", 0);
             yield return new WaitForSeconds(interactionDelay);
         }
         GameManager.GetInstance.isPlayerDoAction = false;
@@ -409,13 +403,13 @@ public class PlayerMovement : MonoBehaviour
 
     public IEnumerator AddcardRootmotion()
     {
-        rb.rotation = Quaternion.LookRotation(new Vector3(addCardTarget.transform.position.x, 0f, addCardTarget.transform.position.z));
-
+        float angle = Mathf.Atan2(transform.position.x - addCardTarget.transform.position.x, transform.position.z - addCardTarget.transform.position.z) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, angle + 180,0f);
+        
         playerEntity.pAnimator.SetFloat("scalar", 0);
         yield return new WaitForSeconds(interactionDelay);
-
+        
         yield return null;
-        GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
     #endregion
@@ -429,11 +423,6 @@ public class PlayerMovement : MonoBehaviour
     public void ClimbRootmotionEvent()
     {
         StartCoroutine(ClimbRootmotion());
-    }
-
-    public void AddCardRootmotionEvent()
-    {
-        StartCoroutine(AddcardRootmotion());
     }
     #endregion
 }
