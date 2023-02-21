@@ -104,12 +104,6 @@ public class CardController : MonoBehaviour
         if (!CardManager.GetInstance.ableCardCtr) return;
         highlight.SetActive(true);
 
-        if (!isHover)
-        {
-            SoundManager.GetInstance.Play("CardSelect");
-            isHover = true;
-        }
-
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
             Encyclopedia.SetActive(true);
@@ -118,6 +112,12 @@ public class CardController : MonoBehaviour
 
         if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
             return;
+
+        if (!isHover)
+        {
+            SoundManager.GetInstance.Play("CardSelect");
+            isHover = true;
+        }
 
         cr.enabled = true;
 
@@ -169,7 +169,7 @@ public class CardController : MonoBehaviour
             CardManager.GetInstance.CardAlignment();
             Destroy(this.gameObject, 0.5f);
         }
-        else if (bc != null)
+        else if (bc != null && GameManager.GetInstance.CurrentState != GameStates.Encyclopedia)
         {
             bc.enabled = true;
             frontCover.SetActive(true);
