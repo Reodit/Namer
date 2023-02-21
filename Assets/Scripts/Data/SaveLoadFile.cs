@@ -19,26 +19,23 @@ public class SaveLoadFile
         {
             Directory.CreateDirectory(filePath + "/JSON/");
         }
-
+        
         DataList<T> dataList = new DataList<T>();
         dataList.dataList = info;
         
         string data = JsonUtility.ToJson(dataList, true);
-        File.WriteAllText(filePath + "/JSON/" + fileName, data, Encoding.UTF8);
+        File.WriteAllText(filePath + "/JSON/" + fileName, data);
     }
     
     public Dictionary<TK, TV> ReadJsonFile<TK,TV> (string filePath, string fileName) where TV : struct
     {
         Dictionary<TK, TV> dataDic = new Dictionary<TK, TV>();
         
-        if (!File.Exists(filePath + "/JSON/" + fileName))
-        {
-            Debug.Log( filePath + "/JSON/" + fileName + " 파일이 없습니다! 원하는 씬으로 가서 맵 정보 파일을 먼저 생성해주세요.");
-            return null;
-        }
+        CheckFolderFile(filePath + "/JSON/", fileName);
         
         FileStream fileStream = new FileStream(filePath + "/JSON/" + fileName, FileMode.Open);
         StreamReader streamReader = new StreamReader(fileStream);
+
         string data = streamReader.ReadToEnd();
         DataList<TV> infoList = JsonUtility.FromJson<DataList<TV>>(data);
         streamReader.Close();
@@ -77,7 +74,7 @@ public class SaveLoadFile
         
         return dataDic;
     }
-    
+
     // 업데이트가 필요한 자료가 딕션너리인 경우 사용하는 함수
     // 만약 업데이트가 필요한 자료가 리스트인 경우, CreateJsonFile을 사용할 것!
     public void UpdateDicDataToJsonFile<TK, TV>(Dictionary<TK, TV> dataDic, string filePath, string fileName)
@@ -106,21 +103,23 @@ public class SaveLoadFile
         {
             Directory.CreateDirectory(filePath + "/CSV/");
         }
-            
+        
         StreamWriter outStream = File.CreateText(filePath + "/CSV/"+ fileName);
         outStream.Write(data);
         outStream.Close();
     }
 
-    public StreamReader ReadCsvFile(string filePath, string fileName)
+    public StringReader ReadCsvFile(string filePath, string fileName)
     {
-        if (!File.Exists(filePath + "/CSV/" + fileName))
-        {
-            Debug.Log(fileName + " 파일이 없습니다! 원하는 씬으로 가서 맵 정보 파일을 먼저 생성해주세요.");
-            return null;
-        }
-            
-        return new StreamReader(filePath + "/CSV/" + fileName);
+        CheckFolderFile(filePath + "/CSV/", fileName);
+
+        FileStream fileStream = new FileStream(filePath + "/CSV/" + fileName, FileMode.Open);
+        StreamReader streamReader = new StreamReader(fileStream);
+        
+        string data = streamReader.ReadToEnd();
+        streamReader.Close();
+        
+        return new StringReader(data);
     }
     
 #endregion
@@ -129,10 +128,16 @@ public class SaveLoadFile
 
     public XmlNodeList ReadXmlFile(string filePath, string xPath)
     {
-        TextAsset textAsset = Resources.Load(filePath) as TextAsset;
-        XmlDocument xmlFile = new XmlDocument();
-        xmlFile.LoadXml(textAsset.text);
+        CheckFolderFile(filePath + "/XML/", "CardData.xml");
 
+        FileStream fileStream = new FileStream(filePath + "/XML/CardData.xml", FileMode.Open);
+        StreamReader streamReader = new StreamReader(fileStream);
+        string data = streamReader.ReadToEnd();
+        streamReader.Close();
+        
+        XmlDocument xmlFile = new XmlDocument();
+        xmlFile.LoadXml(data);
+        
         return xmlFile.SelectNodes(xPath);
     }
     
@@ -194,4 +199,26 @@ public class SaveLoadFile
     }
 
 #endregion
+
+    private void CheckFolderFile(string filePath, string fileName)
+    {
+        if (!Directory.Exists(filePath))
+        {
+            Directory.CreateDirectory(filePath);
+        }
+
+        if (!File.Exists(filePath + fileName))
+        {
+            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
+            string[] resFileName = fileName.Split('.').ToArray();
+
+            if (!File.Exists("Assets/Resources/" + resFilePath + fileName))
+            {
+                Debug.LogError("Assets/Resources/" + resFilePath + fileName + "에 파일이 없어요ㅠ");
+            }
+
+            TextAsset resData = Resources.Load(resFilePath + resFileName[0]) as TextAsset;
+            File.WriteAllText(filePath + fileName, resData.text);
+        }
+    }
 }

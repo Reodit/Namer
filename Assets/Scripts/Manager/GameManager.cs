@@ -3,10 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using UnityEditor;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public enum GameStates
 {
@@ -122,6 +120,12 @@ public class GameManager : Singleton<GameManager>
         #endregion
 
         #region Get User, Level and Card Data & Set UserID "111111"
+        // Test
+        if (Directory.Exists(Application.persistentDataPath + "/Data"))
+        {
+            Directory.Delete(Application.persistentDataPath + "/Data", true);
+        }
+        //
         GameDataManager.GetInstance.GetUserAndLevelData();
         GameDataManager.GetInstance.AddUserData("111111");
         GameDataManager.GetInstance.GetCardData();
@@ -133,6 +137,50 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         KeyAction += Reset;
+#if UNITY_EDITOR
+        OnAllow();
+#elif UNITY_ANDROID
+        CheckPermission();
+#endif
+    }
+
+    void CheckPermission()
+    {
+        if (!UniAndroidPermission.IsPermitted(AndroidPermission.WRITE_EXTERNAL_STORAGE))
+        {
+            RequestPermissionWrite();
+        }
+
+        if (!UniAndroidPermission.IsPermitted(AndroidPermission.READ_EXTERNAL_STORAGE))
+        {
+            RequestPermissionRead();
+        }
+    }
+
+    void RequestPermissionWrite()
+    {
+        UniAndroidPermission.RequestPermission(AndroidPermission.WRITE_EXTERNAL_STORAGE, OnAllow, OnDeny, OnDenyAndNeverAskAgain);
+    }
+
+    void RequestPermissionRead()
+    {
+        UniAndroidPermission.RequestPermission(AndroidPermission.READ_EXTERNAL_STORAGE, OnAllow, OnDeny, OnDenyAndNeverAskAgain);
+    }
+
+    void OnAllow()
+    {
+        // allow -> load data
+        GameObject.Find("UniAndroidPermission").SetActive(false);
+    }
+
+    void OnDeny()
+    {
+        Application.Quit();
+    }
+
+    void OnDenyAndNeverAskAgain()
+    {
+        Application.Quit();
     }
 
     public void SetTimeScale(float timeScale)
