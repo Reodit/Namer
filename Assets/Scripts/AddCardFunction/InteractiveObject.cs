@@ -56,14 +56,12 @@ public class InteractiveObject : MonoBehaviour
             Debug.LogError("태그를 InteractObj로 설정해주세요!");
         }
 
-        if (GameManager.GetInstance.CurrentState == GameStates.InGame)
-        {
-            gameData = GameDataManager.GetInstance;
-            addAdjectiveTexts = new Queue<EAdjective>();
-            countNameAdj = new int[gameData.Adjectives.Count];
-            adjectives = new IAdjective[gameData.Adjectives.Count];
-        }
-        else if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+        gameData = GameDataManager.GetInstance;
+        addAdjectiveTexts = new Queue<EAdjective>();
+        countNameAdj = new int[gameData.Adjectives.Count];
+        adjectives = new IAdjective[gameData.Adjectives.Count];
+        
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
             objectName = EName.Null;
             isFinishMapSetting = false;
@@ -108,9 +106,8 @@ public class InteractiveObject : MonoBehaviour
     private void Update()
     {
         // todo 후에 배열 포지션 체크하는 로직이 이동하면, 수정 예정
-        if (!(GameManager.GetInstance.CurrentState == GameStates.InGame || GameManager.GetInstance.CurrentState == GameStates.LevelEditMode))
+        if (!(GameManager.GetInstance.CurrentState == GameStates.InGame || GameManager.GetInstance.CurrentState == GameStates.LevelEditMode || GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay))
         {
-            Debug.Log(GameManager.GetInstance.CurrentState);
             return;
         }
         
@@ -123,13 +120,10 @@ public class InteractiveObject : MonoBehaviour
             DetectManager.GetInstance.StartDetector(new[] { this.gameObject }.ToList());
         }
 
-        if (GameManager.GetInstance.CurrentState == GameStates.InGame)
-        {
-            AllPopUpNameCtr();
-            AdjectiveTest();
-        }
+        AllPopUpNameCtr();
+        AdjectiveTest();
 
-        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode && !isFinishMapSetting)
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay && !isFinishMapSetting)
         {
             isFinishMapSetting = SetCard();
         }
