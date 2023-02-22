@@ -163,6 +163,7 @@ public class CardController : MonoBehaviour
         CardManager.GetInstance.isPickCard = false;
         if (CardManager.GetInstance.target != null && CardManager.GetInstance.ableAddCard)
         {
+            SoundManager.GetInstance.Play("CardSFX");
             CastCard(CardManager.GetInstance.target);
             CardManager.GetInstance.target = null;
             CardManager.GetInstance.myCards.Remove(this.gameObject.GetComponent<CardController>());
