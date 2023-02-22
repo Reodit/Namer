@@ -518,7 +518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 546694876881348835}
   - component: {fileID: 8357658514841745944}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: AdiBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -636,7 +636,7 @@ GameObject:
   - component: {fileID: 272787787228209577}
   - component: {fileID: 9157275809319562258}
   - component: {fileID: 495017475644149406}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1070,7 +1070,7 @@ GameObject:
   - component: {fileID: 592583294680547001}
   - component: {fileID: 3795948105353818991}
   - component: {fileID: 7435384917123340058}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1173,7 +1173,7 @@ GameObject:
   - component: {fileID: 360391558035295819}
   - component: {fileID: 4783772639068802738}
   - component: {fileID: 2457775549880798153}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1294,7 +1294,7 @@ MeshCollider:
   m_GameObject: {fileID: 5573523151509343100}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -1352,7 +1352,7 @@ GameObject:
   - component: {fileID: 4400667539720779313}
   - component: {fileID: 6206333135108819428}
   - component: {fileID: 4370321639461043835}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: NameAdj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1516,7 +1516,7 @@ GameObject:
   - component: {fileID: 9054999398668324088}
   - component: {fileID: 2188741640197903337}
   - component: {fileID: 5912989029215623428}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Adj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2060,7 +2060,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8194186648563884521}
   - component: {fileID: 8529392176788630715}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: NameBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
