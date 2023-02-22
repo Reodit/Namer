@@ -10,19 +10,19 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class SoundManager : Singleton<SoundManager>
 {
-    public AudioMixer audioMixer; 
+    public AudioMixer audioMixer;
     public AudioSource bgmSound;
-    [SerializeField]private AudioSource newAudioSource;
+    [SerializeField] private AudioSource newAudioSource;
     // public AudioSource bGMSoundTrack02;
     // private Stack<AudioSource> bgmTracks = new Stack<AudioSource>();
     public AudioSource curBGMSoundTrack;
-    
+
     public AudioSource sfxSound;
     private bool isBGMSOundTrack01Playing;
 
     private double dspStartTime;
     private double dspEndTime;
-    
+
     public Slider masterSlider;
     public Slider BGMSlider;
     public Slider SFXSlider;
@@ -38,7 +38,7 @@ public class SoundManager : Singleton<SoundManager>
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
 
     private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
-    
+
     private AudioClip[] bgmClips;
 
 
@@ -72,13 +72,13 @@ public class SoundManager : Singleton<SoundManager>
     [ContextMenu("SetObjSFXClips")]
     public void SetObjectSFXClips()
     {
-        var audioClips =  Resources.LoadAll<AudioClip>("Prefabs/Interaction/ObjectSoundEffect");
+        var audioClips = Resources.LoadAll<AudioClip>("Prefabs/Interaction/ObjectSoundEffect");
         for (int i = 0; i < audioClips.Length; i++)
         {
             var idx = audioClips[i].name.IndexOf('_');
             var eadjNum = int.Parse(audioClips[i].name.Substring(0, idx));
             // Debug.Log(eadjNum);
-            effectClips.Add((EAdjective)eadjNum,audioClips[i]);
+            effectClips.Add((EAdjective)eadjNum, audioClips[i]);
             // Debug.Log(effectClips[(EAdjective)eadjNum].name);
         }
     }
@@ -96,7 +96,7 @@ public class SoundManager : Singleton<SoundManager>
     private void SetBGM()
     {
         bgmClips = Resources.LoadAll<AudioClip>("BGM");
-        
+
         // Debug.Log(bgmClips.Length);
         foreach (var clip in bgmClips)
         {
@@ -163,26 +163,26 @@ public class SoundManager : Singleton<SoundManager>
         bgmSound.loop = true;
         bgmSound.Play();
     }
-    
+
 
 
     public void BgmPlay()
     {
         bgmSound.loop = true;
         bgmSound.volume = 1;
-        bgmSound.Play(); 
+        bgmSound.Play();
     }
 
     public void BgmPlay(AudioClip clip)
     {
         // Debug.Log(clip);
         // Debug.Log(bgmSound.clip);
-        if(bgmSound.clip == clip) return;
-        
+        if (bgmSound.clip == clip) return;
+
         // StartCoroutine(SmothelySwapAudio(clip));
         bgmSound.clip = clip;
         bgmSound.Play();
-        
+
         // isBGMSOundTrack01Playing = !isBGMSOundTrack01Playing;
     }
     IEnumerator SmothelySwapAudio(AudioClip newClip)
@@ -255,10 +255,10 @@ public class SoundManager : Singleton<SoundManager>
         {
             // Debug.Log(duration);
             // Debug.Log(dspEndTime);
-            sfxSound.PlayScheduled(dspStartTime+duration);
+            sfxSound.PlayScheduled(dspStartTime + duration);
         }
 
-     
+
         // if(AudioSettings.dspTime < duration)
         //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
         // sfxSound.PlayOneShot(clip);
@@ -280,6 +280,11 @@ public class SoundManager : Singleton<SoundManager>
         // sfxSound.PlayOneShot(clip);
     }
 
+    public void Pause(AudioClip clip)
+    {
+        sfxSound.Pause();
+    }
+
     void SetSFXEndTime(double despEndTime)
     {
         sfxSound.SetScheduledEndTime(despEndTime);
@@ -293,21 +298,29 @@ public class SoundManager : Singleton<SoundManager>
 
     public void Play(EAdjective eAdjective)
     {
-        if(effectClips.ContainsKey(eAdjective))
+        if (effectClips.ContainsKey(eAdjective))
             Play(effectClips[eAdjective]);
     }
     public void Play(EAdjective eAdjective, double playTime)
     {
-        if(effectClips.ContainsKey(eAdjective))
+        if (effectClips.ContainsKey(eAdjective))
             Play(effectClips[eAdjective], playTime);
     }
 
     public void Play(string clipname)
     {
-
         if (uiEffectClips.ContainsKey(clipname))
         {
             Play(uiEffectClips[clipname]);
+        }
+    }
+
+
+    public void Pause(string clipName)
+    {
+        if (uiEffectClips.ContainsKey(clipName))
+        {
+            Pause(uiEffectClips[clipName]);
         }
     }
 
@@ -327,8 +340,8 @@ public class SoundManager : Singleton<SoundManager>
         sGameSetting = GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].gameSetting;
         sGameSetting.backgroundVolume = BGMSlider.value;
         GameDataManager.GetInstance.SetGameSetting(sGameSetting);
-    }   
-    
+    }
+
     public void SetSfxVolume()
     {
         FindSlider();
@@ -375,8 +388,8 @@ public class SoundManager : Singleton<SoundManager>
             Find("MutePanel").transform.
             GetChild(0).GetComponent<Toggle>();
         }
-            muteToggle.onValueChanged.AddListener(delegate {
-                SetSound(); });
+        muteToggle.onValueChanged.AddListener(delegate {
+            SetSound(); });
 
     }
 
@@ -385,7 +398,7 @@ public class SoundManager : Singleton<SoundManager>
         if (!isBgToggleOn) return;
         if (pause)
         {
-            if(!isMuteToggleOn)
+            if (!isMuteToggleOn)
             {
                 bgmSound.mute = !bgmSound.mute;
                 sfxSound.mute = !sfxSound.mute;
@@ -458,4 +471,15 @@ public class SoundManager : Singleton<SoundManager>
                 GetChild(1).GetComponent<Slider>();
         }
     }
+    #region test
+    public string testClipName;
+
+    [ContextMenu("PauseTest")]
+    public void TestPause()
+    {
+        Pause(testClipName);
+    }
+    #endregion
+
+
 }
