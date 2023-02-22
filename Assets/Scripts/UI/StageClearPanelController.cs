@@ -36,7 +36,7 @@ public class StageClearPanelController : MonoBehaviour
         clearRig = Camera.main.transform.Find("ClearRig").gameObject;
         namingRig = clearRig.transform.Find("NamingRig").gameObject;
         rewardRig = clearRig.transform.Find("RewardRig").gameObject;
-
+        SoundManager.GetInstance.Play("WinSound");       
         clearRig.SetActive(true);
         topButtons.SetActive(false);
         bottomButtons.SetActive(false);

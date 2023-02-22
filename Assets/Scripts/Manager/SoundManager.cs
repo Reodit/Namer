@@ -182,7 +182,6 @@ public class SoundManager : Singleton<SoundManager>
         // StartCoroutine(SmothelySwapAudio(clip));
         bgmSound.clip = clip;
         bgmSound.Play();
-        
         // isBGMSOundTrack01Playing = !isBGMSOundTrack01Playing;
     }
     IEnumerator SmothelySwapAudio(AudioClip newClip)
@@ -248,20 +247,36 @@ public class SoundManager : Singleton<SoundManager>
         double duration = (double)clip.samples / clip.frequency; //  clips playTime need to get  
         sfxSound.Stop();
         sfxSound.clip = clip;
+        sfxSound.volume = 1f;
         dspStartTime = AudioSettings.dspTime;
         sfxSound.PlayScheduled(dspStartTime);
+        
         SetEndDSPTime(time);
-        if (dspEndTime > duration)
+        if (duration > dspEndTime-dspStartTime)
         {
+            StartCoroutine(AudioFadeOut(sfxSound));
             // Debug.Log(duration);
             // Debug.Log(dspEndTime);
-            sfxSound.PlayScheduled(dspStartTime+duration);
+            // sfxSound.PlayScheduled(dspStartTime+duration);
         }
 
      
         // if(AudioSettings.dspTime < duration)
         //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
         // sfxSound.PlayOneShot(clip);
+    }
+
+    IEnumerator AudioFadeOut(AudioSource audio)
+    {
+        double remainingTime = dspEndTime-AudioSettings.dspTime;
+        float elapsedTime = 0;
+        while (remainingTime > 0)
+        {
+            audio.volume = Mathf.Lerp(1, 0, (float)(dspEndTime-AudioSettings.dspTime/remainingTime));
+            remainingTime -= Time.deltaTime;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
     }
     public void Play(AudioClip clip)
     {
