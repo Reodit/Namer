@@ -123,6 +123,91 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &67255882
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1242912157399330, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_Name
+      value: MovePoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242912157399330, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4974382435571030, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198156828135952296, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: lengthInSec
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198156828135952296, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 198156828135952296, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 198156828135952296, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198156828135952296, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 199143939678563640, guid: 6066b7833d493734a9af353bbd046758, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6066b7833d493734a9af353bbd046758, type: 3}
 --- !u!1 &334616143
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,48 +425,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenarioList:
   - type: 0
-    requirePos:
+    destinationPos:
       x: 0
-      y: 2
+      y: 0
       z: 0
-    targetObj:
-      x: 8
-      y: 3
-      z: 3
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
+      x: 0
+      y: 0
+      z: 0
     nextPos:
       x: 0
       y: 2
       z: 2
     requiredName: "\uC7A5\uBBF8"
+    key: 0
+    time: 0
     isDialog: 0
     message: 
     funcName: MoveObject
     isFocus: 0
+    canSkip: 0
+    showArrow: 0
   - type: 0
-    requirePos:
+    destinationPos:
       x: 0
-      y: 2
-      z: 1
-    targetObj:
+      y: 0
+      z: 0
+    targetPos:
       x: 0
-      y: 2
-      z: 2
+      y: 0
+      z: 0
+    prePos:
+      x: 0
+      y: 0
+      z: 0
     nextPos:
       x: 0
       y: 0
       z: 0
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uC5B4\uB9B0 \uC655\uC790\uC758 \uD6C4\uB4DC\uC5D0\uB294 \uC2E0\uAE30\uD55C
       \uD798\uC774 \uC788\uC5B4."
     funcName: 
     isFocus: 1
+    canSkip: 0
+    showArrow: 0
   - type: 2
-    requirePos:
+    destinationPos:
       x: 0
       y: 0
       z: 0
-    targetObj:
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
       x: 0
       y: 0
       z: 0
@@ -390,17 +495,25 @@ MonoBehaviour:
       y: 0
       z: 0
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uB545 \uC544\uB798\uC5D0 \uBB4D\uD600\uC788\uB294 \uC800 \uC2DD\uBB3C\uC774
       \uBCF4\uC774\uB2C8?"
     funcName: FocusOff
     isFocus: 0
+    canSkip: 0
+    showArrow: 0
   - type: 2
-    requirePos:
+    destinationPos:
       x: 0
       y: 0
       z: 0
-    targetObj:
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
       x: 0
       y: 0
       z: 0
@@ -409,54 +522,78 @@ MonoBehaviour:
       y: 0
       z: 0
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uC704\uB85C \uC62C\uB77C\uAC00\uC11C \uADF8 \uC2DD\uBB3C\uC774 \u2018\uAE38\uCB49\u2019\uD558\uB2E4\uACE0
       \uC0C1\uC0C1\uD574\uBD10!"
     funcName: 
     isFocus: 0
+    canSkip: 0
+    showArrow: 0
   - type: 0
-    requirePos:
-      x: 2
-      y: 3
-      z: 2
-    targetObj:
+    destinationPos:
       x: 0
-      y: 2
-      z: 2
+      y: 0
+      z: 0
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
+      x: 0
+      y: 0
+      z: 0
     nextPos:
       x: 8
       y: 3
       z: 3
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uC798\uD588\uC5B4! "
     funcName: MoveObject
     isFocus: 0
+    canSkip: 0
+    showArrow: 0
   - type: 0
-    requirePos:
-      x: 3
-      y: 3
-      z: 2
-    targetObj:
-      x: 8
-      y: 3
-      z: 3
+    destinationPos:
+      x: 0
+      y: 0
+      z: 0
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
+      x: 0
+      y: 0
+      z: 0
     nextPos:
       x: 0
       y: 0
       z: 0
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uC774\uC81C\uB294 \uBC14\uC704\uB97C \uC5B4\uB5BB\uAC8C\uB4E0 \uCE58\uC6CC\uC11C
       \uB098\uD55C\uD14C \uC640\uBD10."
     funcName: 
     isFocus: 1
+    canSkip: 0
+    showArrow: 0
   - type: 2
-    requirePos:
+    destinationPos:
       x: 0
       y: 0
       z: 0
-    targetObj:
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
       x: 0
       y: 0
       z: 0
@@ -465,17 +602,25 @@ MonoBehaviour:
       y: 0
       z: 0
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uC774\uBC88\uC5D0\uB294 \uC5B4\uB5A4 \uC131\uC9C8\uC774 \uC544\uB2C8\uB77C
       \uBC14\uC704\uAC00 \uB2E4\uB978 \uBB3C\uCCB4\uAC00 \uB41C\uB2E4\uACE0 \uC0DD\uAC01\uD574\uBD10."
     funcName: 
     isFocus: 0
+    canSkip: 0
+    showArrow: 0
   - type: 2
-    requirePos:
+    destinationPos:
       x: 0
       y: 0
       z: 0
-    targetObj:
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
       x: 0
       y: 0
       z: 0
@@ -484,17 +629,25 @@ MonoBehaviour:
       y: 0
       z: 0
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uBB54\uAC00 \uAE38\uACE0, \uC798 \uD0C8 \uAC83 \uAC19\uC740 \u2026\uADF8\uB7F0
       \uBB3C\uCCB4\uBA74 \uC88B\uC744 \uAC83 \uAC19\uB124?"
     funcName: FocusOff
     isFocus: 0
+    canSkip: 0
+    showArrow: 0
   - type: 0
-    requirePos:
-      x: 7
-      y: 3
-      z: 3
-    targetObj:
+    destinationPos:
+      x: 0
+      y: 0
+      z: 0
+    targetPos:
+      x: 0
+      y: 0
+      z: 0
+    prePos:
       x: 0
       y: 0
       z: 0
@@ -503,18 +656,28 @@ MonoBehaviour:
       y: 0
       z: 0
     requiredName: 
+    key: 0
+    time: 0
     isDialog: 1
     message: "\uC88B\uC544! \uC798\uD588\uC5B4!!"
     funcName: 
     isFocus: 0
+    canSkip: 0
+    showArrow: 0
   logBox: {fileID: 1145747100}
   logText: {fileID: 1145747099}
   dialogBox: {fileID: 1145747101}
   dialogText: {fileID: 1145747098}
-  stageClearPanel: {fileID: 0}
-  targetPoint: {fileID: 0}
+  stageClearPanel: {fileID: 1145747102}
+  arrow: {fileID: 0}
+  skipBtn: {fileID: 0}
+  uiCam: {fileID: 0}
+  canvasRect: {fileID: 0}
+  MButtons: []
   delayWinUI: 2
-  delayDealingTime: 3
+  delayDealingTime: 2.5
+  PCwords: []
+  Andwords: []
 --- !u!114 &860033200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,38 +769,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 529420550, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 513194277916605633, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 41539a4dee9f64ce2b54c6eabad53ecb, type: 3}
-    - target: {fileID: 513194277916605633, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 513194277916605633, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 513194277916605633, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 513194277916605633, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2442874975645326919, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 953321061}
+    - target: {fileID: 2917080154686001765, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.000000011404853
+      objectReference: {fileID: 0}
+    - target: {fileID: 2917080154686001765, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0000000047240447
+      objectReference: {fileID: 0}
     - target: {fileID: 3776172339434556567, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 953321061}
+    - target: {fileID: 4426741327379167428, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+      propertyPath: cameraBtn
+      value: 
+      objectReference: {fileID: 1713008208}
     - target: {fileID: 4426741327379167430, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Name
       value: Cameras
@@ -704,15 +855,15 @@ PrefabInstance:
       objectReference: {fileID: 953321061}
     - target: {fileID: 6014788414723752968, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.5000002
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 6014788414723752968, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.966301
+      value: 12.356192
       objectReference: {fileID: 0}
     - target: {fileID: 6014788414723752968, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.044673
+      value: -6.858075
       objectReference: {fileID: 0}
     - target: {fileID: 8778275761908025208, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
@@ -853,6 +1004,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4533317990385593611, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
   m_PrefabInstance: {fileID: 1145747097}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1145747102 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1381482274, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+  m_PrefabInstance: {fileID: 1145747097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1438360706
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,3 +1090,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1713008208 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 290479521, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+  m_PrefabInstance: {fileID: 1145747097}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
