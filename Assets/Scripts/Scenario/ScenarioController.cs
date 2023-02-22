@@ -169,7 +169,7 @@ public class ScenarioController : MonoBehaviour
         StartScenario();
     }
 
-#region LogMessage
+    #region LogMessage
     public void LogOnOff(bool isOn)
     {
         switch (isOn)
@@ -250,9 +250,9 @@ public class ScenarioController : MonoBehaviour
                 yield return new WaitForSeconds(0.02f);
         }
     }
-#endregion
+    #endregion
 
-#region Scenario Functions
+    #region Scenario Functions
     [ContextMenu("SaveNewScenario")]
     public void SaveScenario()
     {
@@ -427,11 +427,11 @@ public class ScenarioController : MonoBehaviour
             default:
                 break;
         }
-        
-    }
-#endregion
 
-#region ETC Functions
+    }
+    #endregion
+
+    #region ETC Functions
     private void MoveObject()
     {
         Vector3 curScenarioPos = new Vector3(curScenario.prePos.x, curScenario.prePos.y, curScenario.prePos.z);
