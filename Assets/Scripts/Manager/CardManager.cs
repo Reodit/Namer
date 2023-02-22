@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using System;
 
 public class CardManager : Singleton<CardManager>
 {
@@ -44,6 +45,74 @@ public class CardManager : Singleton<CardManager>
         }
     }
 
+
+    private void Update()
+    {
+        ClearCheck();
+    }
+
+    private void ClearCheck()
+    {
+        if (!isPickCard && CardManager.GetInstance.target == null) return;
+
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            Vector2 touchPos = Input.GetTouch(0).position;
+            Ray ray = Camera.main.ScreenPointToRay(touchPos);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider.gameObject.name.Contains("Tile"))
+                {
+                    SelectClear();
+                }
+                return;
+            }
+            else
+            {
+                if (isPickCard || CardManager.GetInstance.target != null)
+                {
+                    SelectClear();
+                }
+            }
+        }
+    }
+
+    private void SelectClear()
+    {
+        if (SceneManager.GetActiveScene().name == "MainScene")
+        {
+            if (pickCard != null)
+            {
+                if(pickCard.transform.parent.name == "LayoutCards")
+                {
+                    pickCard.GetComponent<CardController>().CardSelectOff();
+                    return;
+                }
+                pickCard.GetComponent<MainMenuCardController>().CardSelectOff();
+            }
+            if (target != null)
+            {
+                target.GetComponent<MainMenuObject>().isTouched = false;
+            }
+        }
+        else
+        {
+            if (pickCard != null)
+            {
+                pickCard.GetComponent<CardController>().CardSelectOff();
+            }
+            if (target != null)
+            {
+                target.GetComponent<InteractiveObject>().isTouched = false;
+            }
+        }
+        pickCard = null;
+        UIManager.GetInstance.isShowNameKeyPressed = false;
+        CardManager.GetInstance.target = null;
+    }
+
     public void CardStart()
     {
         if (dealCardCoroutine != null)
@@ -59,11 +128,15 @@ public class CardManager : Singleton<CardManager>
 
         if (scene.name == "MainScene")
         {
+            isCardDealingDone = false;
             for (int i = 0; i < startCards.Length; i++)
             {
                 MainMenuAddCard(startCards[i]);
                 yield return new WaitForSeconds(0.5f);
             }
+
+            yield return new WaitForSeconds(1.5f);
+            isCardDealingDone = true;
         }
         else
         {
@@ -82,7 +155,7 @@ public class CardManager : Singleton<CardManager>
                 yield return new WaitForSeconds(0.5f);
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.5f);
             isCardDealingDone = true;
             topButtons.SetActive(true);
             bottomButtons.SetActive(true);

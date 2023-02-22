@@ -4526,7 +4526,7 @@ RectTransform:
   m_GameObject: {fileID: 971117022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1612767815}
@@ -4535,7 +4535,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 150, y: 200}
-  m_SizeDelta: {x: 28, y: 40}
+  m_SizeDelta: {x: 100, y: 160}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &971117024
 MonoBehaviour:
@@ -5971,7 +5971,7 @@ RectTransform:
   m_GameObject: {fileID: 1193286670}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -2, y: 2, z: 1}
+  m_LocalScale: {x: -0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1612767815}
@@ -5980,7 +5980,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -200, y: 200}
-  m_SizeDelta: {x: 28, y: 40}
+  m_SizeDelta: {x: 100, y: 160}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1193286672
 MonoBehaviour:
@@ -6691,7 +6691,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1295306261
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8778,7 +8778,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "<- \uCE74\uB4DC\uB97C \uB04C\uC5B4\uB123\uC5B4 \uC8FC\uC138\uC694"
+  m_Text: "<- \uC7A5\uBBF8\uB97C \uD130\uCE58\uD574\uC8FC\uC138\uC694"
 --- !u!222 &1620201239
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8947,7 +8947,6 @@ GameObject:
   - component: {fileID: 1651018104}
   - component: {fileID: 1651018103}
   - component: {fileID: 1651018102}
-  - component: {fileID: 1651018101}
   m_Layer: 0
   m_Name: MainCardHolder
   m_TagString: Untagged
@@ -8955,18 +8954,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1651018101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1651018100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66df00523c6284e46b4689a0bed21237, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1651018102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8990,6 +8977,7 @@ MonoBehaviour:
   - {fileID: 6591964947668748173, guid: 1aadb96750976408ea8ed31efdea359e, type: 3}
   - {fileID: 6591964947668748173, guid: f3c1570ed2cd443d0b2f1bf04e7cc8e1, type: 3}
   - {fileID: 6591964947668748173, guid: 0bd57f39d48004c5494aafb4cdfdc0f8, type: 3}
+  - {fileID: 6591964947668748173, guid: 7d279ab81ca9e4d999a9e6a1973ccaf6, type: 3}
   target: {fileID: 0}
   isPickCard: 0
   ableCardCtr: 1
@@ -12911,7 +12899,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8979535684733509658, guid: f5d06205347b3424d85d38d373c50b32, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8979535684733509659, guid: f5d06205347b3424d85d38d373c50b32, type: 3}
       propertyPath: m_Pivot.x
