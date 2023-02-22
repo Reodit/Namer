@@ -213,83 +213,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1242912157399330, guid: 6066b7833d493734a9af353bbd046758, type: 3}
   m_PrefabInstance: {fileID: 67255882}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &126893545
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 126893546}
-  - component: {fileID: 126893547}
-  - component: {fileID: 126893548}
-  m_Layer: 5
-  m_Name: TutorialArrow
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &126893546
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 126893545}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1128213576}
-  m_Father: {fileID: 1777352285}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &126893547
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 126893545}
-  m_CullTransparentMesh: 1
---- !u!114 &126893548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 126893545}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &334616143
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,1295 +429,182 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scenarioList:
-  - type: 5
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 2
-      z: 2
-    requiredName: 
-    key: 
-    time: 0.1
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uD751\uD751..."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: -1
-      y: 0
-      z: 0
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uB098:(\uD130\uBC85)"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uB204\uAD6C\uC138\uC694? \uD639\uC2DC \uC5B4\uB9B0 \uC655\uC790\uB2C8?"
-    funcName: 
-    isFocus: 0
-    canSkip: 1
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 0
-      z: 0
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 2
-    isDialog: 1
-    message: "[System]\uC7A5\uBBF8 \uC55E\uC73C\uB85C \uC774\uB3D9\uD558\uC138\uC694"
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 1
   - type: 0
-    destinationPos:
+    requirePos:
       x: 0
       y: 2
-      z: 1
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
       z: 0
-    nextPos:
+    targetObj:
       x: 8
       y: 3
       z: 3
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC544... \uC544\uB2C8\uAD6C\uB098."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 1
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
     nextPos:
       x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC5B4\uB9B0 \uC655\uC790\uB791 \uBE44\uC2B7\uD55C \uB290\uB08C\uC774
-      \uC788\uC5B4\uC11C \uCC29\uAC01\uD588\uC5B4."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: -1
-      y: 0
-      z: 0
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uB098:(\uBB34\uC2A8 \uC77C\uC778\uC9C0 \uBB3B\uB294 \uC911...)"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC5B4\uB9B0 \uC655\uC790\uB294 \uB0B4 \uD558\uB098\uBFD0\uC778
-      \uCE5C\uAD6C\uC57C."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC6B0\uB9AC\uB294 \uC774 \uBCC4\uC5D0 \uC0B4\uACE0 \uC788\uC5C8\uACE0,
-      1\uB144 \uC804\uC5D0 \uB098 \uB54C\uBB38\uC5D0 \uC655\uC790\uAC00 \uB5A0\uB0AC\uC5B4."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uADF8\uB9AC\uACE0, 1\uB144\uC774 \uC9C0\uB09C \uC544\uC9C1\uAE4C\uC9C0\uB3C4
-      \uC18C\uC2DD\uC774 \uC5C6\uC5B4..."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC5B4\uB514 \uC788\uB294\uC9C0, \uB3CC\uC544 \uC624\uACE0
-      \uC788\uB294\uC9C0.. \uB108\uBB34 \uAC71\uC815\uB3FC."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: -1
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uB098:..."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: -1
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uB098:(\uC548\uD0C0\uAE4C\uC6B4 \uC0AC\uC5F0\uC5D0 \uC7A5\uBBF8\uB97C
-      \uB3D5\uACA0\uB2E4\uACE0 \uC598\uAE30 \uC911)"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uBB50? \uB098\uB97C \uB3C4\uC640\uC11C \uC5B4\uB9B0 \uC655\uC790\uB97C
-      \uCC3E\uC544\uBCF4\uACA0\uB2E4\uACE0?"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC815\uB9D0 \uADF8\uB798\uC904\uAC70\uC57C?"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC815\uB9D0 \uCC29\uD55C \uC0AC\uB78C\uC774\uAD6C\uB098.
-      \uB108\uBB34 \uACE0\uB9C8\uC6CC!"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uB300\uC2E0 \uB098\uB3C4 \uC870\uADF8\uB9CC \uBCF4\uB2F5\uC744
-      \uD558\uB098 \uD574\uC904\uAC8C!"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:('\uC5B4\uB9B0'\uC774\uB77C\uB294 \uAFB8\uBC08\uC744 \uB098\uC5D0\uAC8C
-      \uC8FC\uB294 \uC911...)"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: -1
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uB098:(\uAC11\uC790\uAE30 \uC0C1\uC0C1\uB825\uC774 \uB118\uCCD0\uB098\uB294
-      \uB290\uB08C\uC774 \uB4ED\uB2C8\uB2E4.)"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uB124 \uC548\uC5D0\uB294 \uC5B4\uB9B0 \uC655\uC790\uC640
-      \uAC19\uC774 \uD2B9\uBCC4\uD55C \uD798\uC774 \uC788\uB294 \uAC83 \uAC19\uC544."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC7A0\uC2DC \uB124 \uB2A5\uB825\uC744 \uD655\uC778\uD574\uBCF4\uACE0
-      \uB2E4\uC74C \uBCC4\uB85C \uC774\uB3D9\uD558\uB3C4\uB85D \uD558\uC790"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC800\uAE30 \uB545 \uC544\uB798 \uBC15\uD78C \uBC14\uC704\uAC00
-      \uBCF4\uC774\uB2C8?"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 1
-    isDialog: 0
-    message: "[System]#05\uB97C \uB20C\uB7EC \uBC14\uC704\uC758 \uC704\uCE58\uB97C
-      \uD655\uC778\uD558\uC138\uC694."
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uBC14\uC704 \uC704\uC5D0 \uC62C\uB77C\uAC04 \uB4A4\uC5D0
-      \uD55C \uBC88 \u2018\uAE38\uCB49\uD55C\u2019 \uBC14\uC704\uAC00 \uB418\uC5C8\uB2E4\uACE0
-      \uC0C1\uC0C1\uD574\uBD10."
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 0
-      y: 0
-      z: 0
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 1
-    isDialog: 0
-    message: "[System]\uBC14\uC704 \uC704\uB85C \uC62C\uB77C\uAC00\uC138\uC694."
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 0
-    destinationPos:
-      x: 2
       y: 2
       z: 2
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: 
-    key: 
-    time: 1
-    isDialog: 0
-    message: "[System]\uBC14\uC704 \uC704\uC5D0\uC11C \u2018\uAE38\uCB49\uD55C\u2019
-      #02"
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 1
-  - type: 1
-    destinationPos:
-      x: 2
-      y: 2
-      z: 2
-    targetPos:
-      x: 2
-      y: 1
-      z: 2
-    prePos:
-      x: 0
-      y: 0
-      z: 0
-    nextPos:
-      x: 0
-      y: 0
-      z: 0
-    requiredName: "\uAE38\uCB49"
-    key: 
-    time: 1
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC798\uD588\uC5B4!"
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 2
-      y: 2
-      z: 2
-    targetPos:
-      x: 0
-      y: 3
-      z: 2
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0.2
+    requiredName: "\uC7A5\uBBF8"
     isDialog: 0
     message: 
     funcName: MoveObject
     isFocus: 0
-    canSkip: 0
-    showArrow: 0
   - type: 0
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
+    requirePos:
       x: 0
-      y: 3
+      y: 2
+      z: 1
+    targetObj:
+      x: 0
+      y: 2
       z: 2
     nextPos:
-      x: 8
-      y: 3
-      z: 3
+      x: 0
+      y: 0
+      z: 0
     requiredName: 
-    key: 
-    time: 1
     isDialog: 1
-    message: "\uC7A5\uBBF8:\uC774\uBC88\uC5D0\uB294 \uBC14\uC704\uB97C \uCE58\uC6CC\uC11C
-      \uB098\uD55C\uD14C \uC640!"
+    message: "\uC5B4\uB9B0 \uC655\uC790\uC758 \uD6C4\uB4DC\uC5D0\uB294 \uC2E0\uAE30\uD55C
+      \uD798\uC774 \uC788\uC5B4."
     funcName: 
     isFocus: 1
-    canSkip: 1
-    showArrow: 1
   - type: 2
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
+    requirePos:
       x: 0
-      y: 3
-      z: 2
+      y: 0
+      z: 0
+    targetObj:
+      x: 0
+      y: 0
+      z: 0
     nextPos:
-      x: 8
-      y: 3
-      z: 3
+      x: 0
+      y: 0
+      z: 0
     requiredName: 
-    key: 
-    time: 1
     isDialog: 1
-    message: "\uC7A5\uBBF8:\uB9F5\uC744 \uC774\uB9AC \uC800\uB9AC \uB458\uB7EC\uBCF4\uB294\uAC8C
-      \uC88B\uC744\uAC70\uC57C."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0.2
-    isDialog: 1
-    message: "[System]#06\uC744 \uB204\uB974\uBA74, \uCE74\uB4DC\uB97C \uC62C\uB9AC\uACE0
-      \uB0B4\uB9B4 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
-    funcName: 
+    message: "\uB545 \uC544\uB798\uC5D0 \uBB4D\uD600\uC788\uB294 \uC800 \uC2DD\uBB3C\uC774
+      \uBCF4\uC774\uB2C8?"
+    funcName: FocusOff
     isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 6
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: CardBtn
-    time: 0
-    isDialog: 0
-    message: "[System]\uD720\uC774\uB098 \uC190\uAC00\uB77D \uB450\uAC1C\uB85C \uD654\uBA74\uC744
-      \uD655\uB300, \uCD95\uC18C\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 1
   - type: 2
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
+    requirePos:
       x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 0
-    message: "[System]#03\uC744 \uB204\uB974\uBA74 \uBCF4\uB294 \uC704\uCE58\uB97C
-      \uB2E4\uB974\uAC8C \uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 6
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
+      y: 0
+      z: 0
+    targetObj:
       x: 0
-      y: 3
-      z: 2
+      y: 0
+      z: 0
     nextPos:
-      x: 8
-      y: 3
-      z: 3
+      x: 0
+      y: 0
+      z: 0
     requiredName: 
-    key: CameraBtn
-    time: 0
     isDialog: 1
-    message: "\uC7A5\uBBF8:\uC774\uBC88\uC5D0\uB294 \uBC14\uC704\uB97C '\uB098\uBB34'\uB85C
-      \uBC14\uAFD4\uC11C \uD0DC\uC6CC\uBCF4\uC790!"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 1
-  - type: 2
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:'\uB098\uBB34'\uAC00 \uBB50\uB0D0\uACE0?"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 1
-  - type: 2
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uB3C4\uAC10 \uBC84\uD2BC\uC744 \uB204\uB974\uBA74 \uCE74\uB4DC\uC5D0
-      \uB300\uD55C \uC815\uBCF4\uB97C \uD655\uC778\uD560 \uC218 \uC788\uC5B4."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 1
-  - type: 5
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0.3
-    isDialog: 0
-    message: "[System]'\uB098\uBB34' \uCE74\uB4DC\uB97C '\uBC14\uC704'\uC5D0 \uBD80\uC5EC\uD558\uC138\uC694."
+    message: "\uC704\uB85C \uC62C\uB77C\uAC00\uC11C \uADF8 \uC2DD\uBB3C\uC774 \u2018\uAE38\uCB49\u2019\uD558\uB2E4\uACE0
+      \uC0C1\uC0C1\uD574\uBD10!"
     funcName: 
     isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 1
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 7
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: "\uB098\uBB34"
-    key: 
-    time: 0
-    isDialog: 0
-    message: "[System]\uC774\uB984\uC740 \uD558\uB098\uB9CC \uBD99\uC77C \uC218 \uC788\uC2B5\uB2C8\uB2E4."
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 7
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 2
-    isDialog: 0
-    message: "[System]\uC774\uB984\uC744 \uBD99\uC774\uBA74, \uC774\uB984\uC774 \uAC00\uC9C4
-      \uAFB8\uBC08\uB3C4 \uBAA8\uB450 \uBD80\uC5EC\uB429\uB2C8\uB2E4. "
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 3
-      y: 3
-      z: 2
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 1
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC88B\uC544! \uC774\uC81C \uB098\uD55C\uD14C \uC640\uC11C
-      \uB9D0\uC744 \uAC78\uC5B4\uC918!"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 5
-    destinationPos:
-      x: 7
-      y: 3
-      z: 3
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 2
-    isDialog: 0
-    message: "[System]\uC7A5\uBBF8\uC5D0\uAC8C \uB2E4\uAC00\uAC00 #01\uC744 \uB204\uB974\uC138\uC694."
-    funcName: 
-    isFocus: 0
-    canSkip: 0
-    showArrow: 0
   - type: 0
-    destinationPos:
-      x: 7
+    requirePos:
+      x: 2
       y: 3
-      z: 3
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
+      z: 2
+    targetObj:
       x: 0
-      y: 3
+      y: 2
       z: 2
     nextPos:
       x: 8
       y: 3
       z: 3
     requiredName: 
-    key: 
-    time: 0
-    isDialog: 0
-    message: 
+    isDialog: 1
+    message: "\uC798\uD588\uC5B4! "
+    funcName: MoveObject
+    isFocus: 0
+  - type: 0
+    requirePos:
+      x: 3
+      y: 3
+      z: 2
+    targetObj:
+      x: 8
+      y: 3
+      z: 3
+    nextPos:
+      x: 0
+      y: 0
+      z: 0
+    requiredName: 
+    isDialog: 1
+    message: "\uC774\uC81C\uB294 \uBC14\uC704\uB97C \uC5B4\uB5BB\uAC8C\uB4E0 \uCE58\uC6CC\uC11C
+      \uB098\uD55C\uD14C \uC640\uBD10."
+    funcName: 
+    isFocus: 1
+  - type: 2
+    requirePos:
+      x: 0
+      y: 0
+      z: 0
+    targetObj:
+      x: 0
+      y: 0
+      z: 0
+    nextPos:
+      x: 0
+      y: 0
+      z: 0
+    requiredName: 
+    isDialog: 1
+    message: "\uC774\uBC88\uC5D0\uB294 \uC5B4\uB5A4 \uC131\uC9C8\uC774 \uC544\uB2C8\uB77C
+      \uBC14\uC704\uAC00 \uB2E4\uB978 \uBB3C\uCCB4\uAC00 \uB41C\uB2E4\uACE0 \uC0DD\uAC01\uD574\uBD10."
     funcName: 
     isFocus: 0
-    canSkip: 0
-    showArrow: 0
-  - type: 6
-    destinationPos:
-      x: 7
-      y: 3
-      z: 3
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: InteractionBtn
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC88B\uC544! \uC5BC\uCD94 \uB2E4 \uB41C\uAC70 \uAC19\uB124!"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 1
   - type: 2
-    destinationPos:
-      x: 7
-      y: 3
-      z: 3
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
+    requirePos:
       x: 0
-      y: 3
-      z: 2
+      y: 0
+      z: 0
+    targetObj:
+      x: 0
+      y: 0
+      z: 0
     nextPos:
-      x: 8
-      y: 3
-      z: 3
+      x: 0
+      y: 0
+      z: 0
     requiredName: 
-    key: 
-    time: 0
     isDialog: 1
-    message: "\uC7A5\uBBF8:\uAC00\uAE30 \uC804\uC5D0 \uC5B4\uB9B0 \uC655\uC790\uAC00
-      \uBCC4\uC5D0 \uC62C \uC218 \uC788\uC73C\uB2C8\uAE4C..."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
+    message: "\uBB54\uAC00 \uAE38\uACE0, \uC798 \uD0C8 \uAC83 \uAC19\uC740 \u2026\uADF8\uB7F0
+      \uBB3C\uCCB4\uBA74 \uC88B\uC744 \uAC83 \uAC19\uB124?"
+    funcName: FocusOff
+    isFocus: 0
+  - type: 0
+    requirePos:
       x: 7
       y: 3
       z: 3
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
+    targetObj:
       x: 0
-      y: 3
-      z: 2
+      y: 0
+      z: 0
     nextPos:
-      x: 8
-      y: 3
-      z: 3
+      x: 0
+      y: 0
+      z: 0
     requiredName: 
-    key: 
-    time: 0
     isDialog: 1
-    message: "\uC7A5\uBBF8:\uBCC4\uC5D0 \uC774\uB984\uC744 \uBD99\uC5EC\uC11C \uB0A8\uACA8\uB450\uACE0
-      \uAC00\uC790."
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 2
-    destinationPos:
-      x: 7
-      y: 3
-      z: 3
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 1
-    message: "\uC7A5\uBBF8:\uC88B\uC740 \uC774\uB984\uC744 \uD55C \uBC88 \uBD99\uC5EC\uC8FC\uACA0\uB2C8?"
-    funcName: 
-    isFocus: 1
-    canSkip: 1
-    showArrow: 0
-  - type: 3
-    destinationPos:
-      x: 7
-      y: 3
-      z: 3
-    targetPos:
-      x: 8
-      y: 3
-      z: 3
-    prePos:
-      x: 0
-      y: 3
-      z: 2
-    nextPos:
-      x: 8
-      y: 3
-      z: 3
-    requiredName: 
-    key: 
-    time: 0
-    isDialog: 0
-    message: 
+    message: "\uC88B\uC544! \uC798\uD588\uC5B4!!"
     funcName: 
     isFocus: 0
-    canSkip: 0
-    showArrow: 0
   logBox: {fileID: 1145747100}
   logText: {fileID: 1145747099}
   dialogBox: {fileID: 1145747101}
   dialogText: {fileID: 1145747098}
   stageClearPanel: {fileID: 1145747102}
   targetPoint: {fileID: 67255883}
-  arrow: {fileID: 126893548}
-  skipBtn: {fileID: 1099121529}
-  uiCam: {fileID: 1101825859}
   delayWinUI: 2
   delayDealingTime: 2.5
-  PCwords:
-  - id: '#01'
-    context: "\uC2A4\uD398\uC774\uC2A4\uBC14"
-  - id: '#02'
-    context: "\uCE74\uB4DC\uB97C \uBB3C\uCCB4\uC5D0 \uB04C\uC5B4\uB2E4 \uB193\uC73C\uC138\uC694."
-  - id: '#03'
-    context: "Q\uD0A4"
-  - id: '#04'
-    context: "\uBC29\uD5A5\uD0A4 \uBC0F wasd"
-  - id: '#05'
-    context: "tab\uD0A4"
-  - id: '#06'
-    context: "e\uD0A4"
-  Andwords:
-  - id: '#01'
-    context: "\uC778\uD130\uB809\uC158 \uD0A4"
-  - id: '#02'
-    context: "\uCE74\uB4DC\uB97C \uD130\uCE58 \uD6C4 \uB2E4\uC2DC \uBB3C\uCCB4\uB97C
-      \uB204\uB974\uC138\uC694."
-  - id: '#03'
-    context: "\uCE74\uBA54\uB77C \uBC84\uD2BC "
-  - id: '#04'
-    context: "\uC88C\uCE21 \uC870\uC774\uC2A4\uD2F1"
-  - id: '#05'
-    context: "\uC544\uBB34 \uCE74\uB4DC"
-  - id: '#06'
-    context: "\uCE74\uB4DC \uBC84\uD2BC"
 --- !u!114 &860033200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1878,11 +688,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8922161847626270825, guid: 47cb50c07573949c586a05fc22ebba0a, type: 3}
   m_PrefabInstance: {fileID: 953321060}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1099121529 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1014603425, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
-  m_PrefabInstance: {fileID: 1145747097}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1101825858
 PrefabInstance:
@@ -1989,11 +794,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6014788414723752968, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.576411
+      value: 9.966301
       objectReference: {fileID: 0}
     - target: {fileID: 6014788414723752968, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.2312713
+      value: -5.044673
       objectReference: {fileID: 0}
     - target: {fileID: 7069369649635480213, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2029,108 +834,6 @@ PrefabInstance:
       objectReference: {fileID: 953321061}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
---- !u!20 &1101825859 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 6014788415078358367, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
-  m_PrefabInstance: {fileID: 1101825858}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1128213575
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1128213576}
-  - component: {fileID: 1128213578}
-  - component: {fileID: 1128213577}
-  - component: {fileID: 1128213579}
-  m_Layer: 5
-  m_Name: arrow
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1128213576
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128213575}
-  m_LocalRotation: {x: -0, y: -0, z: 0.92387956, w: 0.38268343}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 126893546}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 135}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 214.4, y: 135.6}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1128213577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128213575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f6a9d35d2d6cd49349075a3dc5a488cd, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1128213578
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128213575}
-  m_CullTransparentMesh: 1
---- !u!95 &1128213579
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128213575}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: db618cb60f8d4437fa1b93b269145358, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &1145747097
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2357,8 +1060,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &1777352285 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3262066694583849346, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
-  m_PrefabInstance: {fileID: 1145747097}
-  m_PrefabAsset: {fileID: 0}
