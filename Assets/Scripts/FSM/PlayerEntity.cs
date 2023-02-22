@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-
 /// <summary>
 /// 플레이어의 상태 enum값
 /// </summary>
@@ -24,6 +23,10 @@ public class PlayerEntity : BaseGameEntity
     /// 플레이어 Entity의 Animator
     /// </summary>
     public Animator pAnimator;
+    /// <summary>
+    /// 플레이어 Entity의 EffectClass
+    /// </summary>
+    public PlayerEffetct pEffetct;
 	#endregion
 
 	public override void Start()
@@ -32,6 +35,7 @@ public class PlayerEntity : BaseGameEntity
         pAnimator = GetComponentInChildren<Animator>();
         FindObjectOfType<StateMachineRunner>().entitys.Add(this);
         GameManager.GetInstance.localPlayerEntity = this;
+        pEffetct = GetComponent<PlayerEffetct>();
     }
 
 	/// <summary>
