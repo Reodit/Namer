@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadingScene.unity
     guid: c2ca953fb7e0e4bc4a5a14988e2e1988
-  - enabled: 1
-    path: Assets/Scenes/Levels/touchZoom.unity
-    guid: 55cb38bbbb4b04030b3888f5ba63a774
   m_configObjects: {}

@@ -17,35 +17,38 @@ public class CardManager : Singleton<CardManager>
     //타겟 상호작용 오브젝트 
     //[HideInInspector]
     public GameObject target;
-    GameObject buttons;
-    
-    public bool isPickCard = false; 
+    GameObject topButtons;
+    GameObject bottomButtons;
+
+    public bool isPickCard = false;
     public bool ableCardCtr = true;
     public bool isEncyclopedia = false;
     public bool isCardDealingDone = false;
     public bool isCardsHide = false;
 
-    // 마우스로 선택한 카드
+    //선택한 카드
     public GameObject pickCard;
     public bool ableAddCard = true;
 
     private void Start()
     {
-        if(SceneManager.GetActiveScene().name=="MainScene")
+        if (SceneManager.GetActiveScene().name == "MainScene")
         {
             CardStart();
-        } else
+        }
+        else
         {
             CardStart();
-            buttons = GameObject.Find("IngameCanvas").transform.GetChild(1).gameObject;
+            topButtons = GameObject.Find("IngameCanvas").transform.GetChild(1).gameObject;
+            bottomButtons = GameObject.Find("IngameCanvas").transform.GetChild(2).gameObject;
         }
     }
 
     public void CardStart()
     {
-        if(dealCardCoroutine !=null)
+        if (dealCardCoroutine != null)
             StopCoroutine(dealCardCoroutine);
-        dealCardCoroutine=StartCoroutine(DealCard());
+        dealCardCoroutine = StartCoroutine(DealCard());
     }
 
     //시작 카드를 딜링해주는 메서드 
@@ -53,8 +56,8 @@ public class CardManager : Singleton<CardManager>
     {
         var scene = SceneManager.GetActiveScene();
         yield return new WaitForSeconds(0.1f);
-        
-        if(scene.name == "MainScene")
+
+        if (scene.name == "MainScene")
         {
             for (int i = 0; i < startCards.Length; i++)
             {
@@ -68,7 +71,7 @@ public class CardManager : Singleton<CardManager>
             GameDataManager gameData = GameDataManager.GetInstance;
             int level = GameManager.GetInstance.Level;
             GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
-            
+
             for (int i = 0; i < cards.Length; i++)
             {
                 if (isCardsHide)
@@ -81,7 +84,8 @@ public class CardManager : Singleton<CardManager>
 
             yield return new WaitForSeconds(1f);
             isCardDealingDone = true;
-            buttons.SetActive(true);
+            topButtons.SetActive(true);
+            bottomButtons.SetActive(true);
             // 테스트 시 위의 코드를 주석처리하고, 아래의 함수를 사용해주세요.
             // for (int i = 0; i < startCards.Length; i++)
             // {
@@ -127,7 +131,7 @@ public class CardManager : Singleton<CardManager>
         for (int i = 0; i < myCards.Count; i++)
         {
             var targetCard = myCards[i];
-            
+
             targetCard.originPRS = originCardPRSs[i];
             targetCard.originPRS.rot = cardHolderPoint.transform.rotation;
             targetCard.MoveTransform(targetCard.originPRS, true, time);
@@ -165,7 +169,7 @@ public class CardManager : Singleton<CardManager>
         {
             case 1: objLerps = new float[] { 0.5f }; break;
             case 2: objLerps = new float[] { 0.24f, 0.73f }; break;
-            case 3: objLerps = new float[] { 0.1f, 0.5f, 0.9f }; break;
+            case 3: objLerps = new float[] { 0.2f, 0.5f, 0.8f }; break;
             case 4: objLerps = new float[] { 0.1f, 0.37f, 0.64f, 0.9f }; break;
             case 5: objLerps = new float[] { 0.05f, 0.275f, 0.5f, 0.725f, 0.95f }; break;
             default:
@@ -200,43 +204,21 @@ public class CardManager : Singleton<CardManager>
         return results;
     }
 
-    public void CardsHide()
-    {
-        isCardsHide = true;
-        for (int i = 0; i< myCards.Count; i++)
-        {
-            myCards[i].gameObject.GetComponent<BoxCollider>().enabled = false;
-            myCards[i].gameObject.transform.GetChild(0).gameObject.SetActive(false);
-        }
-    }
-
     public void CardsDown()
     {
-        isCardsHide = true;
         for (int i = 0; i < myCards.Count; i++)
         {
             myCards[i].gameObject.transform.
-                DOLocalMove(new Vector3(myCards[i].transform.localPosition.x, -1.5f, 1.496f), 1f);
+                DOLocalMove(new Vector3(myCards[i].transform.localPosition.x, -1.5f, myCards[i].transform.localPosition.z), 1f);
         }
     }
 
     public void CardsUp()
     {
-        isCardsHide = false;
         for (int i = 0; i < myCards.Count; i++)
         {
             myCards[i].gameObject.transform.
-                DOLocalMove(new Vector3(myCards[i].transform.localPosition.x, -0.5f, 1.496f), 1f);
-        }
-    }
-
-    public void CardsReveal()
-    {
-        isCardsHide = false;
-        for (int i = 0; i < myCards.Count; i++)
-        {
-            myCards[i].gameObject.GetComponent<BoxCollider>().enabled = true;
-            myCards[i].gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                DOLocalMove(new Vector3(myCards[i].transform.localPosition.x, -0.5f, myCards[i].transform.localPosition.z), 1f);
         }
     }
 }

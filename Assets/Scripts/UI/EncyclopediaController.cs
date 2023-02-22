@@ -48,7 +48,7 @@ public class EncyclopediaController : MonoBehaviour
         }
 
         if (pediaCards == null) return;
-        maxHeight = 0.5f + (float) 0.5 * (pediaCards.Length / 4);
+        maxHeight = 0.5f + (float) 0.6 * (pediaCards.Length / 4);
 
         for (int i = 0; i < pediaCards.Length; i++)
         {

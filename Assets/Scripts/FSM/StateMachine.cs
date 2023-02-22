@@ -56,5 +56,10 @@ public class StateMachine<T> where T : class
 	{
 		ChangeState(previousState);
 	}
+
+	public IState<T> GetCurrentState()
+	{
+		return currentState;
+	}
 }
 

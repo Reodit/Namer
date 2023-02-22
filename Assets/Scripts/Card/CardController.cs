@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using PlayerOwnedStates;
 using UnityEngine.Serialization;
+using System.Collections;
 
 public class CardController : MonoBehaviour
 {
@@ -16,9 +17,9 @@ public class CardController : MonoBehaviour
     [SerializeField] GameObject frontCover;
     [SerializeField] BoxCollider bc;
     [SerializeField] GameObject highlight;
-    [SerializeField] GameObject Encyclopedia;
     [SerializeField] private Text UIText;
     [SerializeField] private Text NameAdjUIText;
+    GameObject Encyclopedia;
     CardRotate cr;
 
     public EAdjective GetAdjectiveTypeOfCard()
@@ -30,7 +31,7 @@ public class CardController : MonoBehaviour
     {
         cr = this.gameObject.GetComponent<CardRotate>();
         cardHolder = FindObjectOfType<CardManager>().gameObject;
-
+        Encyclopedia = this.transform.GetChild(0).transform.GetChild(6).gameObject;
         SetUIText();
     }
 
@@ -95,75 +96,107 @@ public class CardController : MonoBehaviour
         }
 
     }
-    //마우스가 호버중이면 하이라이트 표시를하고 카트를 회전시킨다
-    private void OnMouseOver()
+    //카드를 누르면 하이라이트 표시를하고 카트를 회전시킨다
+    private void OnMouseDown()
     {
         if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
         if (!CardManager.GetInstance.ableCardCtr) return;
+
+        //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경 
+        if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
+        {
+            CardManager.GetInstance.pickCard.GetComponent<CardController>().CardSelectOff();
+            CardSelectOn();
+        }
+        else if (!CardManager.GetInstance.isPickCard)
+        {
+            CardSelectOn();
+        }
+        //카드를 선택후에 한번 더 누르면 하이라이트를 끄고 회전을 멈추고 처음 상태로 되돌
+        else
+        {
+            CardSelectOff();
+        }
+    }
+
+    void CardSelectOn()
+    {
+        if (CardManager.GetInstance.pickCard != null) return;
+
         highlight.SetActive(true);
-
-
+        CardManager.GetInstance.isPickCard = true;
+        CardManager.GetInstance.pickCard = this.gameObject;
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
             Encyclopedia.SetActive(true);
             return;
         }
-
-        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
-            return;
-
         cr.enabled = true;
+        UIManager.GetInstance.isShowNameKeyPressed = true;
     }
 
-    //마우스가 호버하다가 떠나면 하이라이트 표시를 끄고 카드 회전을 멈추고 처음 상태로 되돌린다
-    private void OnMouseExit()
+    void CardSelectOff()
     {
-        if (!CardManager.GetInstance.ableCardCtr) return;
+        if (CardManager.GetInstance.pickCard != this.gameObject) return;
         highlight.SetActive(false);
+        cr.enabled = false;
+        CardManager.GetInstance.isPickCard = false;
+        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
+        CardManager.GetInstance.pickCard = null;
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
             Encyclopedia.SetActive(false);
             return;
         }
-        cr.enabled = false;
-        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
-    }
-
-    //카드 영역에서 마우스 누르면 카드 선택 커서로 변경, 카드를 숨김 
-    private void OnMouseDown()
-    {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
-        if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia) return;
-        if (!CardManager.GetInstance.ableCardCtr) return;
-        CardManager.GetInstance.isPickCard = true;
-        //transform.DOMove(Input.mousePosition , 5f);
-        //transform.DOScale(new Vector3(0, 0, 0), 5f);
-        bc.enabled = false;
-        frontCover.SetActive(false);
-
-        CardManager.GetInstance.pickCard = gameObject;
+        UIManager.GetInstance.isShowNameKeyPressed = false;
     }
 
     //카드 선택 커서 상태에서 상호작용 오브젝트 위에서 마우스를 놓으면 속성 부여,
     //오브젝트 아닌곳에서는 기본 커서로 다시 변경하고 카드를 다시 보이게,
-    private void OnMouseUp()
+    public void TouchInteractObj()
     {
-        if (!CardManager.GetInstance.ableCardCtr) return;
+        StartCoroutine(CastCardDealing());
+
+    }
+
+    IEnumerator CastCardDealing()
+    {
+        highlight.SetActive(false);
+        bc.enabled = false;
+        cr.enabled = false;
         CardManager.GetInstance.isPickCard = false;
-        if (CardManager.GetInstance.target != null && CardManager.GetInstance.ableAddCard)
+        gameObject.transform.DOLocalRotate(new Vector3(0, 180, 0), 0.3f);
+        yield return new WaitForSeconds(0.3f);
+        gameObject.transform.DOLocalRotate(new Vector3(300, 180, 0), 0.3f);
+        if (name == "NamingCard")
         {
-            CastCard(CardManager.GetInstance.target);
-            CardManager.GetInstance.target = null;
-            CardManager.GetInstance.myCards.Remove(this.gameObject.GetComponent<CardController>());
-            CardManager.GetInstance.CardAlignment();
-            Destroy(this.gameObject, 0.5f);
+            gameObject.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.2f);
         }
-        else if(bc != null)
+        else
         {
-            bc.enabled = true;
-            frontCover.SetActive(true);
-            CardManager.GetInstance.ableAddCard = true;
+            gameObject.transform.DOScale(new Vector3(0.5f, 0.5f, 0.5f), 0.3f);
         }
+        gameObject.transform.DOMove(
+            CardManager.GetInstance.target.transform.position + new Vector3(0, 0.5f, 0), 0.4f);
+        yield return new WaitForSeconds(0.1f);
+        CardManager.GetInstance.myCards.Remove(gameObject.GetComponent<CardController>());
+        GameObject particleObj =
+            Instantiate(Resources.Load<GameObject>("Prefabs/Interaction/Effect/CardCastEffect"),
+            CardManager.GetInstance.target.transform.position + new Vector3(0, 1.1f, 0), Quaternion.identity);
+        CardManager.GetInstance.CardAlignment();
+        yield return new WaitForSeconds(0.3f);
+        CastCard(CardManager.GetInstance.target);
+        yield return new WaitForSeconds(2f);
+        CardManager.GetInstance.target = null;
+        Destroy(particleObj);
+        AllPopUpNameOff();
+        Destroy(gameObject);
+    }
+
+
+    void AllPopUpNameOff()
+    {
+        UIManager.GetInstance.isShowNameKeyPressed = false;
     }
 
     public string currentLevelName = "";
