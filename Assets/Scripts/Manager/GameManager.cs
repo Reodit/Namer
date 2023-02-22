@@ -15,6 +15,8 @@ public enum GameStates
     Victory,
     Encyclopedia,
     LevelSelect,
+    LevelEditMode,
+    LevelEditorTestPlay,
 }
 public class GameManager : Singleton<GameManager>
 {
@@ -61,7 +63,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private List<GameObject> managerPrefabs;
 
     public float CurTimeScale { get; private set; }
-    
+
     private void Awake()
     {
         if (GameObject.FindObjectsOfType<GameManager>().Length > 1)
@@ -72,7 +74,7 @@ public class GameManager : Singleton<GameManager>
         DontDestroyOnLoad(this.gameObject);
         Init();
     }
-    
+
     private void Init()
     {
         #region StateMachine Runner
@@ -244,6 +246,10 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameStates.LevelSelect:
                 break;
+            case GameStates.LevelEditMode:
+                break;
+            case GameStates.LevelEditorTestPlay:
+                break;
         }
     }
     public void ChangeGameState(GameStates newState)
@@ -365,6 +371,12 @@ public class GameManager : Singleton<GameManager>
 
     public void SetLevelFromCard(string CardName)
     {
+        if (CardName == "LevelDesign")
+        {
+            ChangeGameState(GameStates.LevelEditMode);
+            return;
+        }
+
         StringBuilder sb = new StringBuilder();
         foreach (var letter in CardName)
         {
@@ -434,10 +446,15 @@ public class GameManager : Singleton<GameManager>
     [ContextMenu("LoadMapTest")]
     public void LoadMap()
     {
+        if (CurrentState == GameStates.LevelEditMode)
+        {
+            DetectManager.GetInstance.Init();
+        }
+        
         // LoadPlayerPrefabs();
         if(curLevel == -3)
             curLevel=GetCurrentLevel();
-   
+
         DetectManager.GetInstance.Init(curLevel);
         CardManager.GetInstance.CardStart(); // 여기서 문제네
         scenarioController.Init();

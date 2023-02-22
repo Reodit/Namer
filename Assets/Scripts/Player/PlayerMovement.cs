@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
         GameManager.GetInstance.isPlayerCanInput = true;
         GameManager.GetInstance.isPlayerDoAction = false;
         playerEntity.ChangeState(PlayerStates.Move);
+        rb.velocity = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         #endregion
     }
