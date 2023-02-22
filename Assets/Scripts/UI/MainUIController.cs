@@ -78,6 +78,8 @@ public class MainUIController : MonoBehaviour
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
         Invoke("LevelSelectPanelOn", 1f);
+
+        CardManager.GetInstance.isMenuLevel = true;
     }
 
     void Update()

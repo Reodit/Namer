@@ -49,8 +49,9 @@ public class LevelSelectCardController : MonoBehaviour
         for (int i = 0; i < startCards.Length; i++)
         {
             MainMenuAddCard(startCards[i]);
-
+            //SoundManager.GetInstance.Play("CardHover");
             yield return new WaitForSeconds(cardDealingSpeed);
+            SoundManager.GetInstance.Play("CardHover");
         }
 
     }
@@ -65,6 +66,7 @@ public class LevelSelectCardController : MonoBehaviour
         mainCards.Add(card);
         cardObject.transform.parent = GameObject.Find("LevelSelectCards").transform;
         MainCardAlignment();
+        
     }
 
 
