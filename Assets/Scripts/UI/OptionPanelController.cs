@@ -123,6 +123,7 @@ public class OptionPanelController : MonoBehaviour
 
     public void OptionPanelClose()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         this.gameObject.SetActive(false);
     }
 }
