@@ -59,10 +59,10 @@ public class InteractiveObject : MonoBehaviour
         addAdjectiveTexts = new Queue<EAdjective>();
         countNameAdj = new int[gameData.Adjectives.Count];
         adjectives = new IAdjective[gameData.Adjectives.Count];
-        
+
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
-            objectName = EName.Null;
+            // objectName = EName.Null;
             isFinishMapSetting = false;
         }
     }
@@ -72,15 +72,15 @@ public class InteractiveObject : MonoBehaviour
         if (GameManager.GetInstance.CurrentState == GameStates.InGame)
         {
             objectName = objectInfo.nameType;
-            addNameText = gameData.Names[objectName].uiText;
 
             SetAdjectiveFromData(gameData.Names[objectName].adjectives, false);
             SetAdjectiveFromData(objectInfo.adjectives);
-
-            // Test
-            countAdj.CopyTo(initCountAdj, 0);
-            //
         }
+        addNameText = gameData.Names[objectName].uiText;
+        
+        // Test
+        countAdj.CopyTo(initCountAdj, 0);
+        //
     }
 
     private void SetAdjectiveFromData(EAdjective[] addedAdjectives, bool isAdjective = true)
@@ -110,7 +110,7 @@ public class InteractiveObject : MonoBehaviour
             return;
         }
         
-        if (objectPos != Vector3Int.RoundToInt(this.gameObject.transform.position))
+        if (DetectManager.GetInstance.GetObjectsData() != null && objectPos != Vector3Int.RoundToInt(this.gameObject.transform.position))
         {
             DetectManager.GetInstance.CheckValueInMap(this.gameObject);
             objectPos = Vector3Int.RoundToInt(this.gameObject.transform.position);
@@ -121,10 +121,11 @@ public class InteractiveObject : MonoBehaviour
 
         AllPopUpNameCtr();
         AdjectiveTest();
-
-        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay && !isFinishMapSetting)
+        
+        if (DetectManager.GetInstance.GetObjectsData() != null && GameManager.GetInstance.CurrentState == GameStates.LevelEditMode && !isFinishMapSetting)
         {
-            isFinishMapSetting = SetCard();
+            isFinishMapSetting = true;
+            SetCard();
         }
     }
     
@@ -132,6 +133,7 @@ public class InteractiveObject : MonoBehaviour
     {
         if (!isCard && countAdj.Sum() != initCountAdj.Sum())
         {
+            Debug.Log("oooo");
             for (int i = 0; i < countAdj.Length; i++)
             {
                 if (countAdj[i] < initCountAdj[i])
@@ -178,7 +180,6 @@ public class InteractiveObject : MonoBehaviour
 
         adjectives[adjIndex].SetCount(1);
         addAdjectiveTexts.Enqueue(addAdjective);
-        Debug.Log(addAdjective);
 
         // Todo 다른 곳으로 이동해야하는 IAdjective 함수?
         adjectives[adjIndex].Execute(this);
@@ -250,21 +251,28 @@ public class InteractiveObject : MonoBehaviour
         return true;
     }
 
-    private bool SetCard()
+    private void SetCard()
     {
-        AddName(objectName);
+        // 테스트 완료 후 살릴 예정
+        // AddName(objectName); 
+        
+        AddNameCard(objectName);
 
-        for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
+        if (countAdj.Sum() != initCountAdj.Sum() && countAdj.Sum() - countNameAdj.Sum() > 0)
         {
-            if (countAdj[i] > 0)
+            for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
             {
-                for (int j = 0; j < countAdj[i]; j++)
+                if (countAdj.Sum() - countNameAdj.Sum() > 0)
                 {
-                    AddAdjective((EAdjective)i);
+                    for (int j = 0; j < countAdj[i] - countNameAdj[i]; j++)
+                    {
+                        // 테스트 완료 후 살릴 예정
+                        // AddAdjective((EAdjective)i);
+                        AddAdjectiveCard((EAdjective)i);
+                    }
                 }
             }
         }
-        return true;
     }
     
 #endregion
@@ -335,7 +343,7 @@ public class InteractiveObject : MonoBehaviour
         {
             ++countNameAdj[adjIndex];
         }
-        
+
         adjectives[adjIndex].SetCount(1);
         ++countAdj[adjIndex];
         // Test
