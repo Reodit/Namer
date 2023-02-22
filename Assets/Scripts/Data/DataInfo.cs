@@ -70,12 +70,16 @@ public struct SObjectInfo
 [Serializable]
 public struct SMapData
 {
+    public readonly GameObject[,,] tiles;
+    public readonly GameObject[,,] objects;
     public readonly StringBuilder tileMapData;
     public readonly StringBuilder objectMapData;
     public readonly List<SObjectInfo> objectInfoData;
-    
-    public SMapData(StringBuilder tileMapData, StringBuilder objectMapData, List<SObjectInfo> objectInfoData)
+
+    public SMapData(GameObject[,,] tiles, GameObject[,,] objects, StringBuilder tileMapData, StringBuilder objectMapData, List<SObjectInfo> objectInfoData)
     {
+        this.tiles = tiles;
+        this.objects = objects;
         this.tileMapData = tileMapData;
         this.objectMapData = objectMapData;
         this.objectInfoData = objectInfoData;
