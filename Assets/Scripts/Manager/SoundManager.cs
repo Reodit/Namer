@@ -36,11 +36,15 @@ public class SoundManager : Singleton<SoundManager>
      * 4. ........
      */
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
-    // public List<AudioClip> bgmClips = new List<AudioClip> ();
+
+    private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
+    
     private AudioClip[] bgmClips;
+
 
     public bool isMuteToggleOn;
     public bool isBgToggleOn;
+    bool isStop;
 
     SGameSetting sGameSetting = new SGameSetting();
 
@@ -48,8 +52,8 @@ public class SoundManager : Singleton<SoundManager>
     private void Awake()
     {
         SetObjectSFXClips();
+        SetUISFXClips();
         SetBGM();
-        // BgmPlay();
     }
 
     private void Start()
@@ -76,6 +80,16 @@ public class SoundManager : Singleton<SoundManager>
             // Debug.Log(eadjNum);
             effectClips.Add((EAdjective)eadjNum,audioClips[i]);
             // Debug.Log(effectClips[(EAdjective)eadjNum].name);
+        }
+    }
+
+    public void SetUISFXClips()
+    {
+        AudioClip[] uiAudioClips = Resources.LoadAll<AudioClip>("Prefabs/Interaction/UISoundEffect");
+
+        for (int i = 0; i < uiAudioClips.Length; i++)
+        {
+            uiEffectClips.Add(uiAudioClips[i].name, uiAudioClips[i]);
         }
     }
 
@@ -151,6 +165,7 @@ public class SoundManager : Singleton<SoundManager>
     }
     
 
+
     public void BgmPlay()
     {
         bgmSound.loop = true;
@@ -167,7 +182,6 @@ public class SoundManager : Singleton<SoundManager>
         // StartCoroutine(SmothelySwapAudio(clip));
         bgmSound.clip = clip;
         bgmSound.Play();
-        
         // isBGMSOundTrack01Playing = !isBGMSOundTrack01Playing;
     }
     IEnumerator SmothelySwapAudio(AudioClip newClip)
@@ -233,20 +247,36 @@ public class SoundManager : Singleton<SoundManager>
         double duration = (double)clip.samples / clip.frequency; //  clips playTime need to get  
         sfxSound.Stop();
         sfxSound.clip = clip;
+        sfxSound.volume = 1f;
         dspStartTime = AudioSettings.dspTime;
         sfxSound.PlayScheduled(dspStartTime);
+        
         SetEndDSPTime(time);
-        if (dspEndTime > duration)
+        if (duration > dspEndTime-dspStartTime)
         {
+            StartCoroutine(AudioFadeOut(sfxSound));
             // Debug.Log(duration);
             // Debug.Log(dspEndTime);
-            sfxSound.PlayScheduled(dspStartTime+duration);
+            // sfxSound.PlayScheduled(dspStartTime+duration);
         }
 
      
         // if(AudioSettings.dspTime < duration)
         //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
         // sfxSound.PlayOneShot(clip);
+    }
+
+    IEnumerator AudioFadeOut(AudioSource audio)
+    {
+        double remainingTime = dspEndTime-AudioSettings.dspTime;
+        float elapsedTime = 0;
+        while (remainingTime > 0)
+        {
+            audio.volume = Mathf.Lerp(1, 0, (float)(dspEndTime-AudioSettings.dspTime/remainingTime));
+            remainingTime -= Time.deltaTime;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
     }
     public void Play(AudioClip clip)
     {
@@ -285,6 +315,15 @@ public class SoundManager : Singleton<SoundManager>
     {
         if(effectClips.ContainsKey(eAdjective))
             Play(effectClips[eAdjective], playTime);
+    }
+
+    public void Play(string clipname)
+    {
+
+        if (uiEffectClips.ContainsKey(clipname))
+        {
+            Play(uiEffectClips[clipname]);
+        }
     }
 
     public void SetMasterVolume()

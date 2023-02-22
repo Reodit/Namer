@@ -54,6 +54,7 @@ public class CardManager : Singleton<CardManager>
     //시작 카드를 딜링해주는 메서드 
     IEnumerator DealCard()
     {
+        
         var scene = SceneManager.GetActiveScene();
         yield return new WaitForSeconds(0.1f);
 
@@ -62,6 +63,7 @@ public class CardManager : Singleton<CardManager>
             for (int i = 0; i < startCards.Length; i++)
             {
                 MainMenuAddCard(startCards[i]);
+                SoundManager.GetInstance.Play("CardHover");
                 yield return new WaitForSeconds(0.5f);
             }
         }
@@ -79,6 +81,7 @@ public class CardManager : Singleton<CardManager>
                     cards[i].transform.GetChild(0).gameObject.SetActive(false);
                 }
                 AddCard(cards[i]);
+                SoundManager.GetInstance.Play("CardHover");
                 yield return new WaitForSeconds(0.5f);
             }
 

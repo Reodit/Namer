@@ -133,6 +133,7 @@ public class CardController : MonoBehaviour
         }
         cr.enabled = true;
         UIManager.GetInstance.isShowNameKeyPressed = true;
+        SoundManager.GetInstance.Play("CardHover");
     }
 
     void CardSelectOff()
@@ -183,6 +184,7 @@ public class CardController : MonoBehaviour
         GameObject particleObj =
             Instantiate(Resources.Load<GameObject>("Prefabs/Interaction/Effect/CardCastEffect"),
             CardManager.GetInstance.target.transform.position + new Vector3(0, 1.1f, 0), Quaternion.identity);
+        SoundManager.GetInstance.Play("CardSFX");
         CardManager.GetInstance.CardAlignment();
         yield return new WaitForSeconds(0.3f);
         CastCard(CardManager.GetInstance.target);

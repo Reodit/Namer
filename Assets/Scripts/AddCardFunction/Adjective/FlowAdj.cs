@@ -42,8 +42,6 @@ public class FlowAdj : IAdjective
 
     public void Execute(InteractiveObject thisObject)
     {
-        //Debug.Log("this is Null");
-        //thisObject.gameObject.layer = 4;
         if (thisObject.transform.Find("iceShardEffect"))
         {
             GameObject.Destroy(thisObject.transform.Find("iceShardEffect").gameObject);
@@ -66,7 +64,6 @@ public class FlowAdj : IAdjective
     public void Abandon(InteractiveObject thisObject)
     {
         InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(AbandonFlow(thisObject));
-        //thisObject.gameObject.layer = 0;
     }
 
     IEnumerator FlowObj(InteractiveObject obj)
@@ -164,9 +161,6 @@ public class FlowAdj : IAdjective
 
     void FindEffect(GameObject thisObject)
     {
-
-        //if (thisObject.transform.Find("iceShardEffect")) return;
-        //Debug.Log("find");
         var freezeEffect = Resources.Load<GameObject>("Prefabs/Interaction/Effect/IceShardEffect");
         iceShardEffect = GameObject.Instantiate(freezeEffect, thisObject.transform);
         iceShardEffect.name = "iceShardEffect";
@@ -189,15 +183,6 @@ public class FlowAdj : IAdjective
         }
 
         yield return new WaitForSeconds(.5f);
-
-
-
-        for (int i = 1; i < iceShardEffects.Length; i++)
-        {
-            iceShardEffects[i].Stop();
-        }
-
-        iceShardEffects[0].Pause();
 
         obj.SubtractAdjective(EAdjective.Flow);
         obj.SubtractAdjective(EAdjective.Extinguisher);
