@@ -18,11 +18,14 @@ public class MapReader : MonoBehaviour
     private int totalX;
     private int totalY;
     private int totalZ;
-    
-    private void Start()
+
+    private SMapGameObjects mapGameObjects;
+
+    public SMapGameObjects GetMapGameObjects()
     {
-        GameDataManager.GetInstance.GetCardData();
-        GameDataManager.GetInstance.CreateFile();
+        GetMapSize();
+        Indicator();
+        return mapGameObjects;
     }
 
     public SMapData GetMapData()
@@ -56,7 +59,10 @@ public class MapReader : MonoBehaviour
         string[,,] tileMapData = new string[totalX, totalY, totalZ];
         string[,,] objectMapData = new string[totalX, totalY, totalZ];
         List<SObjectInfo> objectInfos = new List<SObjectInfo>();
-        
+
+        GameObject[,,] tiles = new GameObject[totalX, totalY, totalZ];
+        GameObject[,,] objects = new GameObject[totalX, totalY, totalZ];
+
         int id = 0;
         for (int y = minY; y <= maxY; y++)
         {
@@ -73,16 +79,21 @@ public class MapReader : MonoBehaviour
                         {
                             objectMapData[x - minX, y - minY, z - minZ] = id.ToString();
                             objectInfos.Add(AddObjectInfo(hit.collider, id++, GetPrefabName(objectPredabs, hit.collider.name)));
+
+                            objects[x - minX, y - minY, z - minZ] = hit.collider.gameObject;
                         }
                         else if (!hit.collider.CompareTag("Player"))
                         {
                             tileMapData[x - minX, y - minY, z - minZ] = GetPrefabName(tilePrefabs, hit.collider.name);
+                            tiles[x - minX, y - minY, z - minZ] = hit.collider.gameObject;
                         }
                     }
                 }
             }
         }
 
+        mapGameObjects = new SMapGameObjects(tiles, objects);
+        
         return new SMapData(CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
     }
 

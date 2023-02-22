@@ -54,7 +54,16 @@ public class GameDataManager : Singleton<GameDataManager>
         levelDataFileName = "levels.json";
     }
 
-#region Map(tile, object) Data 
+#region Map(tile, object) Data
+
+    public void ReadMap()
+    {
+        MapReader mapReader = gameObject.AddComponent<MapReader>();
+        SMapGameObjects mapGameObjects = mapReader.GetMapGameObjects();
+
+        initTiles = mapGameObjects.tiles;
+        initObjects = mapGameObjects.objects;
+    }
 
     public void CreateFile()
     {
@@ -66,9 +75,9 @@ public class GameDataManager : Singleton<GameDataManager>
         SMapData mapData = mapReader.GetMapData();
         
         SaveLoadFile saveFile = new SaveLoadFile();
-        saveFile.CreateCsvFile(mapData.tileMapData, filePath + sceneName, tileMapFileName);
-        saveFile.CreateCsvFile(mapData.objectMapData, filePath + sceneName, objectMapFileName);
-        saveFile.CreateJsonFile(mapData.objectInfoData, filePath + sceneName, objectInfoFileName);
+        saveFile.CreateCsvFile(mapData.tileMapData, "Assets/Resources/Data/" + sceneName, tileMapFileName);
+        saveFile.CreateCsvFile(mapData.objectMapData, "Assets/Resources/Data/" + sceneName, objectMapFileName);
+        saveFile.CreateJsonFile(mapData.objectInfoData, "Assets/Resources/Data/" + sceneName, objectInfoFileName);
     }
 
     public void CreateMap(int level)
@@ -118,8 +127,12 @@ public class GameDataManager : Singleton<GameDataManager>
         if (!userDataDic.ContainsKey(userID))
         {
             SUserData userData = new SUserData(userID);
+            // Test
+            userData.cardView.nameRead = new[] { (EName)1, (EName)2, (EName)3, (EName)4, (EName)5, (EName)6, (EName)7, (EName)8, (EName)9 }.ToList();
+            userData.cardView.adjectiveRead = new[] { (EAdjective)1, (EAdjective)2, (EAdjective)3, (EAdjective)4, (EAdjective)5, (EAdjective)6, (EAdjective)7, (EAdjective)8, (EAdjective)9, (EAdjective)10, (EAdjective)11, (EAdjective)12, (EAdjective)13, (EAdjective)14 }.ToList();
+            //
             userDataDic.Add(userID, userData);
-
+            
             SaveLoadFile saveFile = new SaveLoadFile();
             saveFile.UpdateDicDataToJsonFile(userDataDic, filePath + "SaveLoad", userDataFileName);
             

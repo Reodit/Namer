@@ -82,6 +82,18 @@ public struct SMapData
     }
 }
 
+public struct SMapGameObjects
+{
+    public readonly GameObject[,,] tiles;
+    public readonly GameObject[,,] objects;
+    
+    public SMapGameObjects(GameObject[,,] tiles, GameObject[,,] objects)
+    {
+        this.tiles = tiles;
+        this.objects = objects;
+    }
+}
+
 [Serializable]
 public struct SUserData
 {

@@ -35,6 +35,8 @@ public class LevelEditor : MonoBehaviour
 
     void Awake()
     {
+        GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
+        
         selectSizePanel.gameObject.SetActive(true);
         leftBtn.onClick.AddListener(() => OnClickHorizontalBtn(-1));
         rightBtn.onClick.AddListener(() => OnClickHorizontalBtn(1));
