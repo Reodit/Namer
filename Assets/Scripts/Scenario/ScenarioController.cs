@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEditor.VersionControl;
+using UnityEditor.Experimental.GraphView;
 
 public enum ERequireType
 {
@@ -11,21 +13,47 @@ public enum ERequireType
     PlayerPos,
     AddCard,
     MouseClick,
-    Victory
+    Victory,
+    InputKey,
+    time
+}
+
+public enum EKeyType
+{
+    Null = -1,
+    Q = 0,
+    E,
+    R,
+    Space,
+    Esc,
+    Encyclopedia,
+    Tab
 }
 
 [System.Serializable]
 public struct Scenario
 {
     public ERequireType type;
-    public SPosition requirePos;
-    public SPosition targetObj;
+    public SPosition destinationPos;
+    public SPosition targetPos;
+    public SPosition prePos;
     public SPosition nextPos;
     public string requiredName;
+    public EKeyType key;
+    public float time;
     public bool isDialog;
     public string message;
     public string funcName;
     public bool isFocus;
+    public bool canSkip;
+    public bool showArrow;
+}
+
+[System.Serializable]
+public struct Word
+{
+    public string id;
+    public string context;
 }
 
 public class ScenarioController : MonoBehaviour
@@ -37,7 +65,8 @@ public class ScenarioController : MonoBehaviour
     private int scenarioCount = 0;
     private Transform player;
     private CameraController cameraController;
-    private float scenarioTime = 20f;
+    private float restartTime = 20f;
+    private float nextSenarioTime = -3f;
     private bool isStart = false;
 
     [Header("필수로 등록해야 하는 부분")]
@@ -46,20 +75,50 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] GameObject dialogBox;
     [SerializeField] Text dialogText;
     [SerializeField] GameObject stageClearPanel;
-    [SerializeField] GameObject targetPoint;
-    GameObject skipBtn;
+    [SerializeField] Image arrow;
+    [SerializeField] GameObject skipBtn;
+    [SerializeField] Camera uiCam;
+    [SerializeField] RectTransform canvasRect;
+
+    [Header("안드로이드 버전만 등록 (Q,E,R,Space,Esc,도감순)")]
+    [SerializeField] Button[] MButtons;
 
     [System.NonSerialized] public bool logOpened = false;
     [System.NonSerialized] public bool dialogOpened = false;
     [System.NonSerialized] public bool isUI = false;
+    private bool[] keyPressed;
 
     [Header("조정값")]
     [SerializeField] private float delayWinUI = 2f;
     [SerializeField] private float delayDealingTime = 3f;
 
+    [Header("PC, Android 명명")]
+    [SerializeField] Word[] PCwords;
+    Dictionary<string, string> PCword = new Dictionary<string, string>();
+    [SerializeField] Word[] Andwords;
+    Dictionary<string, string> Andword = new Dictionary<string, string>();
+
     private void Awake()
     {
         GameManager.GetInstance.scenarioController = this;
+
+        foreach (Word Pword in PCwords)
+        {
+            if (PCword.Keys.Contains(Pword.id)) return;
+            PCword[Pword.id] = Pword.context;
+        }
+
+        foreach (Word Aword in Andwords)
+        {
+            if (Andword.Keys.Contains(Aword.id)) return;
+            Andword[Aword.id] = Aword.context;
+        }
+
+        for (int i = 0; i < MButtons.Length; i++)
+        {
+            int idx = i;
+            MButtons[idx].onClick.AddListener(() => keyPressed[idx] = true);
+        }
     }
 
     public void Init()
@@ -70,6 +129,8 @@ public class ScenarioController : MonoBehaviour
         logOpened = false;
         dialogBox.SetActive(false);
         dialogOpened = false;
+        arrow.gameObject.SetActive(false);
+        ClearKeyPressed();
 
         skipBtn = dialogBox.transform.Find("SkipBtn").gameObject;
         stageClearPanel =
@@ -82,7 +143,7 @@ public class ScenarioController : MonoBehaviour
 
         scenarioCount = 0;
         scenarios = new Queue<Scenario>();
-        scenarioTime = 20f;
+        restartTime = 20f;
 
         cameraController = Camera.main.transform.parent.GetComponent<CameraController>();
         foreach (Scenario scenario in GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario)
@@ -125,10 +186,15 @@ public class ScenarioController : MonoBehaviour
 
     private void SystemLog(string message, bool isClick = false)
     {
+        if (message.Contains("#"))
+        {
+            message = ChangeIDinPlatform(message);
+        }
         logBox.SetActive(true);
         logText.text = message;
         logBox.GetComponent<LogText>().SetTime();
         skipBtn.GetComponentInChildren<Text>().text = isClick ? "Skip" : "Close";
+        restartTime = 20f;
     }
 
     private void LogError(string message)
@@ -139,6 +205,10 @@ public class ScenarioController : MonoBehaviour
 
     private void Log(string message, string objName, bool isClick = false)
     {
+        if (message.Contains("#"))
+        {
+            message = ChangeIDinPlatform(message);
+        }
         string dialogMessage = $"<color=red>[{objName}]</color>\n{message}";
         dialogBox.SetActive(true);
         skipBtn.GetComponentInChildren<Text>().text = isClick ? "Skip" : "Close";
@@ -146,10 +216,30 @@ public class ScenarioController : MonoBehaviour
         dialogBox.GetComponent<LogText>().SetTime();
     }
 
+    private string ChangeIDinPlatform(string msg)
+    {
+        int idx = msg.IndexOf("#");
+        string id = msg.Substring(idx, 3);
+#if UNITY_ANDROID
+        if (!Andword.Keys.Contains(id))
+        {
+            msg = msg.Replace("#", "");
+        }
+        msg = msg.Replace(id, Andword[id]);
+#else
+        if (!PCword.Keys.Contains(id))
+        {
+            message.Replace("#", "");
+        }
+        message.Replace(id, PCword[id]);
+#endif
+        return msg;
+    }
+
     public IEnumerator SkipLog()
     {
         int curNum = scenarioCount;
-        while (curScenario.type == ERequireType.MouseClick)
+        while (curScenario.canSkip)
         {
             if (curNum != scenarioCount)
                 StartScenario();
@@ -182,17 +272,23 @@ public class ScenarioController : MonoBehaviour
     private void NextScenario()
     {
         if (scenarios.Count != 0)
+        {
+            ClearKeyPressed();
             curScenario = scenarios.Dequeue();
+            if (!curScenario.showArrow && arrow.gameObject.activeSelf)
+                arrow.gameObject.SetActive(false);
+        }
         else
         {
             curScenario = new Scenario();
             curScenario.type = ERequireType.Null;
         }
-        scenarioTime = 20f;
+        restartTime = 20f;
     }
 
     private void DoScenario()
     {
+        nextSenarioTime = -3;
         if (cameraController == null) cameraController = Camera.main.transform.parent.GetComponent<CameraController>();
         if (curScenario.isDialog)
         {
@@ -200,15 +296,13 @@ public class ScenarioController : MonoBehaviour
             {
                 if (curScenario.isFocus)
                 {
-                    Vector3 curScenarioPos = new Vector3(curScenario.targetObj.x, curScenario.targetObj.y, curScenario.targetObj.z);
+                    Vector3 curScenarioPos = new Vector3(curScenario.targetPos.x, curScenario.targetPos.y, curScenario.targetPos.z);
                     Dictionary<Vector3, GameObject> objDict = DetectManager.GetInstance.GetArrayObjects(curScenarioPos);
                     Vector3 vec = Vector3Int.FloorToInt(curScenarioPos);
-                    if (objDict[vec] == null)
-                    {
-                        LogError("[에러]json의 targetObj x, y, z에 해당하는 오브젝트가 없습니다.");
-                        return;
-                    }
-                    cameraController.FocusOn(objDict[vec].transform, false);
+                    if (objDict[vec] == null || objDict.Count == 0)
+                        cameraController.FocusOn(false);
+                    else
+                        cameraController.FocusOn(objDict[vec].transform, false);
                 }
                 else
                 {
@@ -272,12 +366,11 @@ public class ScenarioController : MonoBehaviour
         {
             case (ERequireType.PlayerPos):
                 Vector3 playerPos = new Vector3(Mathf.Round(player.position.x), Mathf.Round(player.position.y), Mathf.Round(player.position.z));
-                Vector3 requireScenarioPos = new Vector3(curScenario.requirePos.x, curScenario.requirePos.y, curScenario.requirePos.z);
-                targetPoint.transform.position = requireScenarioPos + (Vector3.up * 0.5f);
-                targetPoint.SetActive(true);
+                Vector3 requireScenarioPos = new Vector3(curScenario.destinationPos.x, curScenario.destinationPos.y, curScenario.destinationPos.z);
+                if (curScenario.showArrow)
+                    SetArrowPos(requireScenarioPos + (Vector3.up * 0.5f));
                 if (playerPos == requireScenarioPos)
                 {
-                    targetPoint.SetActive(false);
                     StartScenario();
                 }
                 break;
@@ -303,16 +396,42 @@ public class ScenarioController : MonoBehaviour
                     StartScenario();
                 }
                 break;
+            case (ERequireType.InputKey):
+#if UNITY_ANDROID
+                int idx = (int)curScenario.key;
+                if (curScenario.key == EKeyType.R) idx -= 1;
+                SetArrowPos(MButtons[idx].GetComponent<RectTransform>());
+                if (GetButton(curScenario.key))
+                {
+                    StartScenario();
+                    ClearKeyPressed();
+                }
+#else
+                if (GetKeyCode(curScenario.key))
+                {
+                    StartScenario();
+                }
+#endif
+                break;
+            case (ERequireType.time):
+                if (nextSenarioTime == -3)
+                    nextSenarioTime = curScenario.time;
+                if (nextSenarioTime <= 0)
+                {
+                    StartScenario();
+                }
+                break;
             default:
                 break;
         }
+        
     }
 #endregion
 
 #region ETC Functions
     private void MoveObject()
     {
-        Vector3 curScenarioPos = new Vector3(curScenario.targetObj.x, curScenario.targetObj.y, curScenario.targetObj.z);
+        Vector3 curScenarioPos = new Vector3(curScenario.prePos.x, curScenario.prePos.y, curScenario.prePos.z);
         Vector3 nextScenarioPos = new Vector3(curScenario.nextPos.x, curScenario.nextPos.y, curScenario.nextPos.z);
         GameObject target = DetectManager.GetInstance.GetArrayObjects(curScenarioPos)[curScenarioPos];
         DetectManager.GetInstance.SwapBlockInMap(curScenarioPos, nextScenarioPos);
@@ -323,7 +442,7 @@ public class ScenarioController : MonoBehaviour
 
     private InteractiveObject GetIObj()
     {
-        Vector3 curScenarioPos = new Vector3(curScenario.targetObj.x, curScenario.targetObj.y, curScenario.targetObj.z);
+        Vector3 curScenarioPos = new Vector3(curScenario.targetPos.x, curScenario.targetPos.y, curScenario.targetPos.z);
         Dictionary<Vector3, GameObject> objDict = DetectManager.GetInstance.GetArrayObjects(curScenarioPos);
         if (objDict.Keys.Count <= 0) return null;
         Vector3 vec = Vector3Int.FloorToInt(curScenarioPos);
@@ -336,17 +455,134 @@ public class ScenarioController : MonoBehaviour
         yield return new WaitForSeconds(delayWinUI);
         stageClearPanel.SetActive(true);
     }
-#endregion
+
+    private void SetArrowPos(RectTransform targetUI)
+    {
+        arrow.gameObject.SetActive(true);
+        arrow.rectTransform.position = targetUI.position;
+
+        RectTransform childRect = arrow.transform.GetChild(0).GetComponent<RectTransform>();
+        switch (curScenario.key)
+        {
+            case (EKeyType.Q):
+                childRect.localRotation = Quaternion.Euler(0, 0, -15);
+                childRect.anchorMin = new Vector2(0.5f, 0.5f);
+                childRect.anchorMax = new Vector2(0.5f, 0.5f);
+                break;
+            case (EKeyType.E):
+                childRect.localRotation = Quaternion.Euler(0, 0, -15);
+                childRect.anchorMin = new Vector2(-0.8f, 0.5f);
+                childRect.anchorMax = new Vector2(-0.8f, 0.5f);
+                break;
+            case (EKeyType.Space):
+                childRect.localRotation = Quaternion.Euler(0, 0, -15);
+                childRect.anchorMin = new Vector2(0f, 2f);
+                childRect.anchorMax = new Vector2(0f, 2f);
+                break;
+            case (EKeyType.Encyclopedia):
+                childRect.localRotation = Quaternion.Euler(180, 0, -15);
+                childRect.anchorMin = new Vector2(0.5f, 0f);
+                childRect.anchorMax = new Vector2(0.5f, 0f);
+                break;
+            case (EKeyType.R):
+            case (EKeyType.Esc):
+                childRect.localRotation = Quaternion.Euler(180, 0, -15);
+                childRect.anchorMin = new Vector2(-0.5f, 0f);
+                childRect.anchorMax = new Vector2(-0.5f, 0f);
+                break;
+        }
+    }
+
+    private void SetArrowPos(Vector3 targetObj)
+    {
+        arrow.gameObject.SetActive(true);
+
+        RectTransform childRect = arrow.transform.GetChild(0).GetComponent<RectTransform>();
+        childRect.localRotation = Quaternion.Euler(0, 0, -15);
+        childRect.anchorMin = new Vector2(0f, 1f);
+        childRect.anchorMax = new Vector2(0f, 1f);
+        Vector2 ViewportPosition = uiCam.WorldToViewportPoint(targetObj);
+        Vector2 WorldObject_ScreenPosition = new Vector2(
+        ((ViewportPosition.x * canvasRect.sizeDelta.x) - (canvasRect.sizeDelta.x * 0.5f)),
+        ((ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)));
+
+        arrow.rectTransform.anchoredPosition = WorldObject_ScreenPosition;
+    }
+
+    private bool GetKeyCode(EKeyType Ekey)
+    {
+        KeyCode key = KeyCode.None;
+        switch (Ekey)
+        {
+            case (EKeyType.Q):
+                key = KeyCode.Q;
+                break;
+            case (EKeyType.Tab):
+                key = KeyCode.Tab;
+                break;
+            case (EKeyType.Space):
+                key = KeyCode.Space;
+                break;
+            case (EKeyType.E):
+                key = KeyCode.E;
+                break;
+            case (EKeyType.R):
+                key = KeyCode.R;
+                break;
+            case (EKeyType.Esc):
+                key = KeyCode.Escape;
+                break;
+            default:
+                return GetButton(Ekey);
+        }
+        return Input.GetKey(key);
+    }
+
+    private bool GetButton(EKeyType Ekey)
+    {
+        if (Ekey == EKeyType.Null)
+        {
+            return true;
+        }
+
+        return keyPressed[(int)Ekey];
+    }
+
+    private void ClearKeyPressed()
+    {
+        keyPressed = new bool[6] { false, false, false, false, false, false };
+    }
+
+    private IEnumerator LogRestart()
+    {
+        string preMsg = logText.text;
+        string errorMsg;
+#if UNITY_ANDROID
+        errorMsg = "오른쪽 위에 톱니 버튼을 누르고 재시작 할 수 있습니다.";
+        LogError(errorMsg);
+#else
+        errorMsg = "R키를 꾹 눌러서 재시작 할 수 있습니다.";
+        LogError(errorMsg);
+#endif
+        yield return new WaitForSeconds(2f);
+        if (logText.text == errorMsg)
+        {
+            SystemLog(preMsg);
+        }
+    }
+
+    #endregion
 
     private void Update()
     {
         if (!isStart) return;
         if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
-        if (scenarioTime > 0) scenarioTime -= Time.deltaTime;
+        if (nextSenarioTime != -3f) nextSenarioTime -= Time.deltaTime;
+        if (restartTime > 0) restartTime -= Time.deltaTime;
         else
         {
-            LogError("R키를 꾹 눌러서 재시작 할 수 있습니다.");
-            scenarioTime = 10f;
+            restartTime = 20f;
+            StartCoroutine(LogRestart());
         }
 
         if (CheckScenarioCount())
