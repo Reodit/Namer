@@ -420,14 +420,9 @@ public class InteractiveObject : MonoBehaviour
         return false;
     }
     
-    private bool CheckCountAdjective(EAdjective checkAdjective)
+    public int CheckCountAdjective(EAdjective checkAdjective)
     {
-        if (countAdj[(int)checkAdjective] >= maxAdjCount)
-        {
-            return false;
-        }
-
-        return true;
+        return countAdj[(int)checkAdjective] - countNameAdj[(int)checkAdjective];
     }
     
 #endregion
@@ -466,8 +461,12 @@ public class InteractiveObject : MonoBehaviour
         if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
         {
             CardManager.GetInstance.target = this.gameObject;
-            
-            if (!CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()))
+            if (CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()) >= maxAdjCount)
+            {
+                CardManager.GetInstance.ableAddCard = false;
+                return;
+            }
+            if (this.gameObject.CompareTag("InteractObj"))
             {
                 CardManager.GetInstance.ableAddCard = false;
                 return;

@@ -19,15 +19,6 @@ public class MapReader : MonoBehaviour
     private int totalY;
     private int totalZ;
 
-    private SMapGameObjects mapGameObjects;
-
-    public SMapGameObjects GetMapGameObjects()
-    {
-        GetMapSize();
-        Indicator();
-        return mapGameObjects;
-    }
-
     public SMapData GetMapData()
     {
         GetMapSize();
@@ -79,7 +70,7 @@ public class MapReader : MonoBehaviour
                         {
                             objectMapData[x - minX, y - minY, z - minZ] = id.ToString();
                             objectInfos.Add(AddObjectInfo(hit.collider, id++, GetPrefabName(objectPredabs, hit.collider.name)));
-
+                            
                             objects[x - minX, y - minY, z - minZ] = hit.collider.gameObject;
                         }
                         else if (!hit.collider.CompareTag("Player"))
@@ -91,10 +82,8 @@ public class MapReader : MonoBehaviour
                 }
             }
         }
-
-        mapGameObjects = new SMapGameObjects(tiles, objects);
         
-        return new SMapData(CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
+        return new SMapData(tiles, objects, CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
     }
 
     private string GetPrefabName(Transform[] prefabs, string colliderName)
@@ -121,12 +110,11 @@ public class MapReader : MonoBehaviour
         objectInfo.nameType = interObj.GetObjectName();
 
         List<EAdjective> adjectives = new List<EAdjective>();
-        for (int i = 0; i < interObj.Adjectives.Length; i++)
+        for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
         {
-            if (interObj.Adjectives[i] != null)
+            if (interObj.CheckCountAdjective((EAdjective)i) > 0)
             {
-                EAdjective adjective = interObj.Adjectives[i].GetAdjectiveName();
-                adjectives.Add(adjective);
+                adjectives.Add((EAdjective)i);
             }
         }
         objectInfo.adjectives = adjectives.ToArray();

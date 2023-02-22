@@ -83,7 +83,7 @@ public partial class DetectManager : Singleton<DetectManager>
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(false);
         gameDataManager = GameDataManager.GetInstance;
 
-        gameDataManager.ReadMap();
+        gameDataManager.ReadMapData();
         SetMapData();
         
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
@@ -95,7 +95,6 @@ public partial class DetectManager : Singleton<DetectManager>
     {
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
-            Init();
             return;
         }
         

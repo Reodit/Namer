@@ -448,6 +448,7 @@ public class GameManager : Singleton<GameManager>
         if (CurrentState == GameStates.LevelEditMode)
         {
             DetectManager.GetInstance.Init();
+            return;
         }
         
         // LoadPlayerPrefabs();

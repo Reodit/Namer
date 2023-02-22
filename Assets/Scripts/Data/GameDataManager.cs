@@ -42,6 +42,9 @@ public class GameDataManager : Singleton<GameDataManager>
     private string userDataFileName;
     private string levelDataFileName;
     
+    // MapData
+    private SMapData mapData;
+    
     private void FilePathInfo()
     {
         filePath = Application.persistentDataPath + "/Data/";
@@ -56,24 +59,31 @@ public class GameDataManager : Singleton<GameDataManager>
 
 #region Map(tile, object) Data
 
-    public void ReadMap()
+    public void ReadMapData()
     {
-        MapReader mapReader = gameObject.AddComponent<MapReader>();
-        SMapGameObjects mapGameObjects = mapReader.GetMapGameObjects();
+        MapReader mapReader = FindObjectOfType<MapReader>();
+        if (!mapReader)
+        {
+            mapReader = gameObject.AddComponent<MapReader>();
+        }
+        
+        mapData = mapReader.GetMapData();
 
-        initTiles = mapGameObjects.tiles;
-        initObjects = mapGameObjects.objects;
+        initTiles = mapData.tiles;
+        initObjects = mapData.objects;
     }
 
     public void CreateFile()
     {
         FilePathInfo();
 
+        if (mapData.tiles == null)
+        {
+            Debug.LogError("ReadMapData() 함수 사용했는지 확인해주세요!");
+        }
+
         string sceneName = SceneManager.GetActiveScene().name;
-        
-        MapReader mapReader = FindObjectOfType<MapReader>();
-        SMapData mapData = mapReader.GetMapData();
-        
+
         SaveLoadFile saveFile = new SaveLoadFile();
         saveFile.CreateCsvFile(mapData.tileMapData, "Assets/Resources/Data/" + sceneName, tileMapFileName);
         saveFile.CreateCsvFile(mapData.objectMapData, "Assets/Resources/Data/" + sceneName, objectMapFileName);
@@ -98,7 +108,11 @@ public class GameDataManager : Singleton<GameDataManager>
         StringReader objectMapData = loadFile.ReadCsvFile(filePath + sceneName, objectMapFileName);
         Dictionary<int, SObjectInfo> objectInfoDic = loadFile.ReadJsonFile<int, SObjectInfo>(filePath + sceneName, objectInfoFileName);
 
-        MapCreator mapCreator = gameObject.AddComponent<MapCreator>();
+        MapCreator mapCreator = FindObjectOfType<MapCreator>();
+        if (!mapCreator)
+        {
+            mapCreator = gameObject.AddComponent<MapCreator>();
+        }
         initTiles = mapCreator.CreateTileMap(tileMapData);
         initObjects = mapCreator.CreateObjectMap(objectMapData, objectInfoDic);
     }
