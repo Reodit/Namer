@@ -291,6 +291,7 @@ public class CardManager : Singleton<CardManager>
 
     public void CardsUp()
     {
+        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia) return;
         for (int i = 0; i < myCards.Count; i++)
         {
             myCards[i].gameObject.transform.

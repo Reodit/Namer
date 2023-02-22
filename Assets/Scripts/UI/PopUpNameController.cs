@@ -15,6 +15,7 @@ class PopUpNameController : MonoBehaviour
     {
         cardHolder = Camera.main.transform;
         interactiveObject = GetComponentInParent<InteractiveObject>();
+        gameObject.transform.rotation = cardHolder.rotation;
     }
 
     void Update()

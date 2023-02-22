@@ -89,7 +89,6 @@ public class EncyclopediaController : MonoBehaviour
             {
                 float deltaY = touch.position.y - startPos.y;
                 wheelSpeed =  deltaY * scrollSpeed;
-                print(deltaY);
             }
             else if (touch.phase == TouchPhase.Ended)
             {
