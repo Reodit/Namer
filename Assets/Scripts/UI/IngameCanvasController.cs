@@ -67,22 +67,26 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void OptionBtn()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOn();
     }
 
     public void StartBtn()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
     }
 
     public void RestartBtn()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
         GameManager.GetInstance.ResetCurrentLvl();
     }
 
     public void ReturnLobby()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
         GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
         SceneManager.LoadScene("MainScene");
@@ -143,6 +147,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void PediaButton()
     {
+        SoundManager.GetInstance.Play("BtnPress");
         CardManager.GetInstance.CardsDown();
         Invoke("EncyclopediaOpen", 0.5f);
     }
@@ -166,8 +171,13 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void InteractionButton()
     {
-        playerMovement = GameObject.Find("Player").gameObject.GetComponent<PlayerMovement>();
+        playerMovement = GameManager.GetInstance.localPlayerMovement;
         playerMovement.PlayInteraction();
+    }
+
+    public void BtnPressedSound()
+    {
+        SoundManager.GetInstance.Play("BtnPress");
     }
 
 }

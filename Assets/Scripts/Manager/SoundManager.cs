@@ -27,7 +27,6 @@ public class SoundManager : Singleton<SoundManager>
     public Slider BGMSlider;
     public Slider SFXSlider;
     public Toggle muteToggle;
-    public Toggle bgToggle;
 
     // public List<AudioClip> effectClips = new List<AudioClip> ();
     /*
@@ -37,11 +36,15 @@ public class SoundManager : Singleton<SoundManager>
      * 4. ........
      */
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
-    // public List<AudioClip> bgmClips = new List<AudioClip> ();
+
+    private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
+    
     private AudioClip[] bgmClips;
+
 
     public bool isMuteToggleOn;
     public bool isBgToggleOn;
+    bool isStop;
 
     SGameSetting sGameSetting = new SGameSetting();
 
@@ -49,8 +52,8 @@ public class SoundManager : Singleton<SoundManager>
     private void Awake()
     {
         SetObjectSFXClips();
+        SetUISFXClips();
         SetBGM();
-        // BgmPlay();
     }
 
     private void Start()
@@ -77,6 +80,16 @@ public class SoundManager : Singleton<SoundManager>
             // Debug.Log(eadjNum);
             effectClips.Add((EAdjective)eadjNum,audioClips[i]);
             // Debug.Log(effectClips[(EAdjective)eadjNum].name);
+        }
+    }
+
+    public void SetUISFXClips()
+    {
+        AudioClip[] uiAudioClips = Resources.LoadAll<AudioClip>("Prefabs/Interaction/UISoundEffect");
+
+        for (int i = 0; i < uiAudioClips.Length; i++)
+        {
+            uiEffectClips.Add(uiAudioClips[i].name, uiAudioClips[i]);
         }
     }
 
@@ -151,6 +164,7 @@ public class SoundManager : Singleton<SoundManager>
         bgmSound.Play();
     }
     
+
 
     public void BgmPlay()
     {
@@ -288,6 +302,15 @@ public class SoundManager : Singleton<SoundManager>
             Play(effectClips[eAdjective], playTime);
     }
 
+    public void Play(string clipname)
+    {
+
+        if (uiEffectClips.ContainsKey(clipname))
+        {
+            Play(uiEffectClips[clipname]);
+        }
+    }
+
     public void SetMasterVolume()
     {
         FindSlider();
@@ -343,12 +366,6 @@ public class SoundManager : Singleton<SoundManager>
             Find("SoundPanel").transform.
             Find("MutePanel").transform.
             GetChild(0).GetComponent<Toggle>();
-            bgToggle =
-            GameObject.Find("MainCanvas").transform.
-            Find("OptionPanel").transform.
-            Find("SoundPanel").transform.
-            Find("MutePanel").transform.
-            GetChild(1).GetComponent<Toggle>();
         } else
         {
             muteToggle =
@@ -357,19 +374,10 @@ public class SoundManager : Singleton<SoundManager>
             Find("SoundPanel").transform.
             Find("MutePanel").transform.
             GetChild(0).GetComponent<Toggle>();
-            bgToggle = 
-            GameObject.Find("IngameCanvas").transform.
-            Find("OptionPanel").transform.
-            Find("SoundPanel").transform.
-            Find("MutePanel").transform.
-            GetChild(0).GetComponent<Toggle>();
         }
-            isBgToggleOn = bgToggle.isOn;
             muteToggle.onValueChanged.AddListener(delegate {
                 SetSound(); });
-            bgToggle.onValueChanged.AddListener(delegate {
-                SetBgMuteToggle(); ;
-            });
+
     }
 
     private void OnApplicationPause(bool pause)

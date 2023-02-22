@@ -11,10 +11,11 @@ public class LoadingSceneController : MonoBehaviour
     static string nextScene;
     public AsyncOperation op;
     [SerializeField] Image progressBar;
-    [SerializeField] float fakeLoadTime = 0.35f;
+    [SerializeField] float fakeLoadTime = 0.7f;
 
     public static void LoadScene(string sceneName)
     {
+        SoundManager.GetInstance.Play("GameStart2");
         nextScene = sceneName;
         SoundManager.GetInstance.bgmSound.Stop();
         SceneManager.LoadScene("LoadingScene");
