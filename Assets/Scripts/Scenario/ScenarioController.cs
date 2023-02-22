@@ -60,6 +60,7 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] Scenario[] scenarioList;
     private static Queue<Scenario> scenarios = new Queue<Scenario>();
     private Scenario curScenario;
+    private int goalScenarioCount;
     private int scenarioCount = 0;
     private Transform player;
     private CameraController cameraController;
@@ -149,11 +150,17 @@ public class ScenarioController : MonoBehaviour
         restartTime = 20f;
 
         cameraController = Camera.main.transform.parent.GetComponent<CameraController>();
+        bool existGoal = false;
         foreach (Scenario scenario in GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario)
         {
+            if (!existGoal && scenario.type == ERequireType.Victory)
+            {
+                goalScenarioCount = scenarioCount;
+            }
             scenarios.Enqueue(scenario);
             scenarioCount++;
         }
+        goalScenarioCount = scenarioCount - goalScenarioCount;
 
         player = GameObject.Find("Player").transform;
 
@@ -359,6 +366,16 @@ public class ScenarioController : MonoBehaviour
             // 승리 ui 실행 
             StartCoroutine(OpenClearPanel());
             scenarioCount = -1;
+        }
+        else if (GameManager.GetInstance.CurrentState == GameStates.Victory)
+        {
+            if (scenarioCount > goalScenarioCount)
+            {
+                scenarioCount = 0;
+                // 승리 ui 실행 
+                StartCoroutine(OpenClearPanel());
+                scenarioCount = -1;
+            }
         }
         return checkedValue;
     }
