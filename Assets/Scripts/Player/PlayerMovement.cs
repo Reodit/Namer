@@ -190,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
         
         if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
         {
-            if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed), Vector3.down, 20f))
+            if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed) + Vector3.up * 0.2f, Vector3.down, 20f))
             {
                 rb.MovePosition(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
                 playerEntity.pAnimator.SetFloat("scalar", pInputVector.magnitude);
