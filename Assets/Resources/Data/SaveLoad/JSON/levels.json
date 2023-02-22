@@ -48,7 +48,7 @@
                         "z": 2.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.10000000149011612,
                     "isDialog": true,
                     "message": "장미:흑흑...",
@@ -80,7 +80,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "나:(터벅)",
@@ -112,7 +112,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:누구세요? 혹시 어린 왕자니?",
@@ -144,8 +144,8 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
-                    "time": 2.0,
+                    "key": -1,
+                    "time": 0.2,
                     "isDialog": true,
                     "message": "[System]장미 앞으로 이동하세요",
                     "funcName": "",
@@ -176,7 +176,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:아... 아니구나.",
@@ -208,7 +208,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:어린 왕자랑 비슷한 느낌이 있어서 착각했어.",
@@ -240,7 +240,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "나:(무슨 일인지 묻는 중...)",
@@ -272,7 +272,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:어린 왕자는 내 하나뿐인 친구야.",
@@ -304,7 +304,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:우리는 이 별에 살고 있었고, 1년 전에 나 때문에 왕자가 떠났어.",
@@ -336,7 +336,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:그리고, 1년이 지난 아직까지도 소식이 없어...",
@@ -368,7 +368,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:어디 있는지, 돌아 오고 있는지.. 너무 걱정돼.",
@@ -400,7 +400,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "나:...",
@@ -432,7 +432,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "나:(안타까운 사연에 장미를 돕겠다고 얘기 중)",
@@ -464,7 +464,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:뭐? 나를 도와서 어린 왕자를 찾아보겠다고?",
@@ -496,7 +496,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:정말 그래줄거야?",
@@ -528,7 +528,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:정말 착한 사람이구나. 너무 고마워!",
@@ -560,7 +560,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:대신 나도 조그만 보답을 하나 해줄게!",
@@ -592,7 +592,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:('어린'이라는 꾸밈을 나에게 주는 중...)",
@@ -624,7 +624,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "나:(갑자기 상상력이 넘쳐나는 느낌이 듭니다.)",
@@ -656,7 +656,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:네 안에는 어린 왕자와 같이 특별한 힘이 있는 것 같아.",
@@ -688,7 +688,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:잠시 네 능력을 확인해보고 다음 별로 이동하도록 하자",
@@ -720,7 +720,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:저기 땅 아래 박힌 바위가 보이니?",
@@ -752,7 +752,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 1.0,
                     "isDialog": true,
                     "message": "[System]#05를 눌러 바위의 위치를 확인하세요.",
@@ -784,7 +784,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:바위 위에 올라간 뒤에 한 번 ‘길쭉한’ 바위가 되었다고 상상해봐.",
@@ -816,7 +816,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 1.0,
                     "isDialog": true,
                     "message": "[System]바위 위로 올라가세요.",
@@ -848,7 +848,7 @@
                         "z": 0.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 1.0,
                     "isDialog": true,
                     "message": "[System]바위 위에서 ‘길쭉한’ #02",
@@ -880,7 +880,7 @@
                         "z": 0.0
                     },
                     "requiredName": "길쭉",
-                    "key": "",
+                    "key": -1,
                     "time": 1.0,
                     "isDialog": true,
                     "message": "장미:잘했어!",
@@ -912,7 +912,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.20000000298023225,
                     "isDialog": false,
                     "message": "",
@@ -944,7 +944,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 1.0,
                     "isDialog": true,
                     "message": "장미:이번에는 바위를 치워서 나한테 와!",
@@ -976,7 +976,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 1.0,
                     "isDialog": true,
                     "message": "장미:맵을 이리 저리 둘러보는게 좋을거야.",
@@ -1008,7 +1008,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.5,
                     "isDialog": true,
                     "message": "[System]#06을 누르면, 카드를 올리고 내릴 수 있습니다.",
@@ -1018,7 +1018,7 @@
                     "showArrow": false
                 },
                 {
-                    "type": 6,
+                    "type": 4,
                     "destinationPos": {
                         "x": 3.0,
                         "y": 3.0,
@@ -1040,7 +1040,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "CardBtn",
+                    "key": 1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "[System]휠이나 손가락 두개로 화면을 확대, 축소할 수 있습니다.",
@@ -1072,7 +1072,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "[System]#03을 누르면 보는 위치를 다르게 할 수 있습니다.",
@@ -1082,7 +1082,7 @@
                     "showArrow": false
                 },
                 {
-                    "type": 6,
+                    "type": 4,
                     "destinationPos": {
                         "x": 3.0,
                         "y": 3.0,
@@ -1104,8 +1104,40 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "CameraBtn",
-                    "time": 0.0,
+                    "key": 0,
+                    "time": 0.1,
+                    "isDialog": false,
+                    "message": "",
+                    "funcName": "",
+                    "isFocus": false,
+                    "canSkip": false,
+                    "showArrow": false
+                },
+                {
+                    "type": 5,
+                    "destinationPos": {
+                        "x": 3.0,
+                        "y": 3.0,
+                        "z": 2.0
+                    },
+                    "targetPos": {
+                        "x": 8.0,
+                        "y": 3.0,
+                        "z": 3.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 2.0
+                    },
+                    "nextPos": {
+                        "x": 8.0,
+                        "y": 3.0,
+                        "z": 3.0
+                    },
+                    "requiredName": "",
+                    "key": 0,
+                    "time": 2.0,
                     "isDialog": true,
                     "message": "장미:이번에는 바위를 '나무'로 바꿔서 태워보자!",
                     "funcName": "",
@@ -1136,14 +1168,14 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:'나무'가 뭐냐고?",
                     "funcName": "",
                     "isFocus": true,
                     "canSkip": true,
-                    "showArrow": true
+                    "showArrow": false
                 },
                 {
                     "type": 2,
@@ -1168,14 +1200,46 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:도감 버튼을 누르면 카드에 대한 정보를 확인할 수 있어.",
                     "funcName": "",
                     "isFocus": true,
                     "canSkip": true,
-                    "showArrow": true
+                    "showArrow": false
+                },
+                {
+                    "type": 4,
+                    "destinationPos": {
+                        "x": 3.0,
+                        "y": 3.0,
+                        "z": 2.0
+                    },
+                    "targetPos": {
+                        "x": 8.0,
+                        "y": 3.0,
+                        "z": 3.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 2.0
+                    },
+                    "nextPos": {
+                        "x": 8.0,
+                        "y": 3.0,
+                        "z": 3.0
+                    },
+                    "requiredName": "",
+                    "key": 5,
+                    "time": 0.1,
+                    "isDialog": false,
+                    "message": "",
+                    "funcName": "",
+                    "isFocus": false,
+                    "canSkip": false,
+                    "showArrow": false
                 },
                 {
                     "type": 5,
@@ -1200,7 +1264,39 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": 0,
+                    "time": 2.0,
+                    "isDialog": true,
+                    "message": "장미:잘 했어! 이제 바위를 치울 차례야.",
+                    "funcName": "",
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
+                },
+                {
+                    "type": 5,
+                    "destinationPos": {
+                        "x": 3.0,
+                        "y": 3.0,
+                        "z": 2.0
+                    },
+                    "targetPos": {
+                        "x": 8.0,
+                        "y": 3.0,
+                        "z": 3.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 2.0
+                    },
+                    "nextPos": {
+                        "x": 8.0,
+                        "y": 3.0,
+                        "z": 3.0
+                    },
+                    "requiredName": "",
+                    "key": -1,
                     "time": 0.30000001192092898,
                     "isDialog": true,
                     "message": "[System]'나무' 카드를 '바위'에 부여하세요.",
@@ -1232,7 +1328,7 @@
                         "z": 3.0
                     },
                     "requiredName": "나무",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "[System]이름은 하나만 붙일 수 있습니다.",
@@ -1264,7 +1360,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 2.0,
                     "isDialog": true,
                     "message": "[System]이름을 붙이면, 이름이 가진 꾸밈도 모두 부여됩니다. ",
@@ -1296,7 +1392,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 1.0,
                     "isDialog": true,
                     "message": "장미:좋아! 이제 나한테 와서 말을 걸어줘!",
@@ -1328,7 +1424,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 2.0,
                     "isDialog": true,
                     "message": "[System]장미에게 다가가 #01을 누르세요.",
@@ -1360,7 +1456,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": false,
                     "message": "",
@@ -1370,7 +1466,7 @@
                     "showArrow": false
                 },
                 {
-                    "type": 6,
+                    "type": 4,
                     "destinationPos": {
                         "x": 7.0,
                         "y": 3.0,
@@ -1392,7 +1488,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "InteractionBtn",
+                    "key": 3,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:좋아! 얼추 다 된거 같네!",
@@ -1424,7 +1520,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:가기 전에 어린 왕자가 별에 올 수 있으니까...",
@@ -1456,7 +1552,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:별에 이름을 붙여서 남겨두고 가자.",
@@ -1488,7 +1584,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:좋은 이름을 한 번 붙여주겠니?",
@@ -1520,7 +1616,7 @@
                         "z": 3.0
                     },
                     "requiredName": "",
-                    "key": "",
+                    "key": -1,
                     "time": 0.0,
                     "isDialog": false,
                     "message": "",
@@ -1549,13 +1645,18 @@
             "sceneName": "Level01",
             "scenario": [
                 {
-                    "type": 0,
-                    "requirePos": {
+                    "type": 5,
+                    "destinationPos": {
                         "x": 0.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "y": 0.0,
+                        "z": 0.0
                     },
-                    "targetObj": {
+                    "targetPos": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "prePos": {
                         "x": 7.0,
                         "y": 1.0,
                         "z": 1.0
@@ -1566,65 +1667,92 @@
                         "z": 0.0
                     },
                     "requiredName": "",
+                    "key": 0,
+                    "time": 0.20000000298023225,
                     "isDialog": false,
                     "message": "",
                     "funcName": "MoveObject",
-                    "isFocus": false
+                    "isFocus": false,
+                    "canSkip": false,
+                    "showArrow": false
                 },
                 {
-                    "type": 0,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "targetObj": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "nextPos": {
+                    "type": 5,
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "prePos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "nextPos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
                     "message": "장미 : 이 별에서도 어린 왕자의 기운이 느껴져",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
                     "type": 2,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "prePos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "nextPos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
                     "message": "장미 : 내가 먼저 살펴볼게!",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": false,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
-                    "type": 2,
-                    "requirePos": {
+                    "type": 5,
+                    "destinationPos": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "targetPos": {
                         "x": 0.0,
                         "y": 1.0,
                         "z": 0.0
                     },
-                    "targetObj": {
+                    "prePos": {
                         "x": 0.0,
                         "y": 1.0,
                         "z": 0.0
@@ -1635,240 +1763,302 @@
                         "z": 1.0
                     },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.2,
                     "isDialog": false,
                     "message": "",
                     "funcName": "MoveObject",
-                    "isFocus": false
+                    "isFocus": false,
+                    "canSkip": false,
+                    "showArrow": false
                 },
                 {
-                    "type": 1,
-                    "requirePos": {
+                    "type": 0,
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 1.0,
-                        "z": 0.0
+                        "z": 2.0
                     },
-                    "targetObj": {
+                    "targetPos": {
                         "x": 7.0,
                         "y": 1.0,
                         "z": 1.0
                     },
-                    "nextPos": {
+                    "prePos": {
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 1.0,
                         "z": 0.0
                     },
-                    "requiredName": "장미",
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "requiredName": "",
+                    "key": -1,
+                    "time": 0,
                     "isDialog": true,
                     "message": "장미 : 여기봐! 여기에 어린 왕자의 흔적이 있어!",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": false,
+                    "canSkip": false,
+                    "showArrow": true
                 },
                 {
-                    "type": 2,
-                    "requirePos": {
+                    "type": 5,
+                    "destinationPos": {
                         "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "targetPos": {
+                        "x": 7.0,
                         "y": 1.0,
                         "z": 1.0
                     },
-                    "targetObj": {
+                    "prePos": {
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 1.0,
                         "z": 0.0
                     },
                     "nextPos": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 1,
                     "isDialog": true,
                     "message": "[System]장미에게 다가가서 어린 왕자의 흔적을 확인하세요.",
                     "funcName": "",
-                    "isFocus": false
+                    "isFocus": false,
+                    "canSkip": false,
+                    "showArrow": false
                 },
                 {
                     "type": 3,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 7.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
                     "message": "장미:(장미가 작은 쪽지를 건넨다.)",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
                     "type": 2,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 7.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": -7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
-                    "message": "나:(어린 왕자와 왕이 그려져있고,)",
+                    "message": "나:(어린 왕자와 왕이 그려져있고, 왕이 왕자에게 명령을 하는 듯한 모습이 보인다.)",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
                     "type": 2,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 7.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
-                    "requiredName": "",
-                    "isDialog": true,
-                    "message": "나:(왕이 왕자에게 명령을 하는 듯한 모습이 보인다.)",
-                    "funcName": "",
-                    "isFocus": true
-                },
-                {
-                    "type": 2,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
+                    "targetPos": {
                         "x": 7.0,
                         "y": 1.0,
                         "z": 1.0
                     },
-                    "nextPos": {
+                    "prePos": {
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 1.0,
                         "z": 0.0
                     },
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
                     "message": "장미:사람들은 직위에 왜이리 집착하는 걸까?",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
                     "type": 2,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 7.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": -7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
                     "message": "나:(절레절레 고개를 젓는 중…)",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
                     "type": 2,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 7.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
                     "message": "장미:아무래도 왕자는 이 곳에 없는 것 같네.",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
                     "type": 2,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 7.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 0.0,
                     "isDialog": true,
                     "message": "장미:다른 별로 가기 전에 여기에도 이름을 남겨두자.",
                     "funcName": "",
-                    "isFocus": true
+                    "isFocus": true,
+                    "canSkip": true,
+                    "showArrow": false
                 },
                 {
                     "type": 3,
-                    "requirePos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetObj": {
-                        "x": 7.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "nextPos": {
+                    "destinationPos": {
                         "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
+                    "targetPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "prePos": {
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    "nextPos": {
+                        "x": 7.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
                     "requiredName": "",
+                    "key": -1,
+                    "time": 1.0,
                     "isDialog": false,
                     "message": "",
                     "funcName": "",
-                    "isFocus": false
+                    "isFocus": false,
+                    "canSkip": false,
+                    "showArrow": false
                 }
             ],
             "playerPosition": {
