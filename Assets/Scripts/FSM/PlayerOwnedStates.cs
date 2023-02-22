@@ -29,7 +29,8 @@ namespace PlayerOwnedStates
         }
 
         public void Execute(PlayerEntity entity)
-		{
+        {
+            float scalar = entity.pAnimator.GetFloat("scalar");
         }
 
         public void Exit(PlayerEntity entity)
