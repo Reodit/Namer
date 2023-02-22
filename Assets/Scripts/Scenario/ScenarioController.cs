@@ -4,8 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using UnityEditor.VersionControl;
-using UnityEditor.Experimental.GraphView;
 
 public enum ERequireType
 {
