@@ -114,11 +114,16 @@ public class ScenarioController : MonoBehaviour
             Andword[Aword.id] = Aword.context;
         }
 
+#if UNITY_ANDROID
         for (int i = 0; i < MButtons.Length; i++)
         {
             int idx = i;
             MButtons[idx].onClick.AddListener(() => keyPressed[idx] = true);
         }
+#else
+        MButtons[4].onClick.AddListener(() => keyPressed[4] = true);
+        MButtons[5].onClick.AddListener(() => keyPressed[5] = true);
+#endif
     }
 
     public void Init()
@@ -229,9 +234,9 @@ public class ScenarioController : MonoBehaviour
 #else
         if (!PCword.Keys.Contains(id))
         {
-            message.Replace("#", "");
+            msg.Replace("#", "");
         }
-        message.Replace(id, PCword[id]);
+        msg = msg.Replace(id, PCword[id]);
 #endif
         return msg;
     }

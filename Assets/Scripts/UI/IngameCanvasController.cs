@@ -9,16 +9,12 @@ using UnityEngine.UI;
 public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     GameObject encyclopedia;
-    [SerializeField] GameObject topButtons;
-    [SerializeField] GameObject bottomButtons;
-    [SerializeField] GameObject joyStick;
+    [SerializeField] GameObject buttons;
     [SerializeField] GameObject pediaBtn;
     [SerializeField] GameObject optionBtn;
     [SerializeField] GameObject gameOptionPanel;
     [SerializeField] GameObject topPanel;
-    [SerializeField] GameObject cardBtnImg;
     [SerializeField] Text stageName;
-    PlayerMovement playerMovement;
     Canvas canvas;
 
     bool isCardVisible = true;
@@ -46,9 +42,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         GameManager.GetInstance.isPlayerCanInput = false;
         encyclopedia.SetActive(true);
-        topButtons.SetActive(false);
-        bottomButtons.SetActive(false);
-        joyStick.SetActive(false);
+        buttons.SetActive(false);
         topPanel.SetActive(false);
     }
 
@@ -56,11 +50,8 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     {
         GameManager.GetInstance.isPlayerCanInput = true;
         encyclopedia.SetActive(false);
-        bottomButtons.SetActive(true);
-        CardManager.GetInstance.CardsUp();
-        joyStick.SetActive(true);
-        topButtons.SetActive(true);
-        bottomButtons.SetActive(true);
+        buttons.SetActive(true);
+        CardManager.GetInstance.CardsReveal();
         topPanel.SetActive(true);
         GameManager.GetInstance.ChangeGameState(GameStates.InGame);
     }
@@ -158,21 +149,12 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         {
             CardManager.GetInstance.CardsDown();
             isCardVisible = false;
-            cardBtnImg.transform.localScale = new Vector3(1, -1, 1);
-
         }
         else
         {
             CardManager.GetInstance.CardsUp();
             isCardVisible = true;
-            cardBtnImg.transform.localScale = new Vector3(1, 1, 1);
         }
-    }
-
-    public void InteractionButton()
-    {
-        playerMovement = GameObject.Find("Player").gameObject.GetComponent<PlayerMovement>();
-        playerMovement.PlayInteraction();
     }
 
     public void BtnPressedSound()
