@@ -133,7 +133,6 @@ public class InteractiveObject : MonoBehaviour
     {
         if (!isCard && countAdj.Sum() != initCountAdj.Sum())
         {
-            Debug.Log("oooo");
             for (int i = 0; i < countAdj.Length; i++)
             {
                 if (countAdj[i] < initCountAdj[i])

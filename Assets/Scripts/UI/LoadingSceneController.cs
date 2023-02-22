@@ -67,9 +67,7 @@ public class LoadingSceneController : MonoBehaviour
         UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
         
         var scene = SceneManager.GetActiveScene();
-        
-        Debug.Log(scene.name);
-        
+
         if (scene.name == "LevelDesign")
         {
             GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
