@@ -48,7 +48,7 @@ public class BouncyAdj : IAdjective
 
     public void Execute(InteractiveObject thisObject)
     {
-        thisObject.abandonBoucy = true;
+        thisObject.abandonBouncy = true;
         downY = (int)thisObject.transform.position.y;
         InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(BounceObj(thisObject.gameObject));
     }
@@ -326,7 +326,7 @@ public class BouncyAdj : IAdjective
             if (thisObject != null)
             {
                 thisObject.transform.position = targetPos;
-                thisObject.abandonBoucy = true;
+                thisObject.abandonBouncy = true;
             }
         }
 

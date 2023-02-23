@@ -110,7 +110,7 @@ public class FloatAdj : IAdjective
 
             while (obj != null && obj.GetComponent<InteractiveObject>().CheckAdjective(adjectiveName))
             {
-                if (obj.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Bouncy) || !obj.GetComponent<InteractiveObject>().abandonBoucy)
+                if (obj.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Bouncy) || !obj.GetComponent<InteractiveObject>().abandonBouncy)
                 {
                     int counting = obj.GetComponent<InteractiveObject>().Adjectives[(int)EAdjective.Float].GetCount();
                     if (obj.GetComponent<InteractiveObject>().floatDone != counting)
