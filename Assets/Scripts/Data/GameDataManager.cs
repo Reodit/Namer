@@ -236,6 +236,24 @@ public class GameDataManager : Singleton<GameDataManager>
         
         names = loadFile.GetCardData<EName, SNameInfo>(data, 0);
         adjectives = loadFile.GetCardData<EAdjective, SAdjectiveInfo>(data, 1);
+        
+        int contradictPriority = 0;
+        int normalPriority = 0;
+        
+        for (int i = 0; i < adjectives.Count; i++)
+        {
+            SAdjectiveInfo adjectiveInfo = adjectives[(EAdjective)i];
+            if (adjectiveInfo.adjective.GetAdjectiveType() == EAdjectiveType.Contradict)
+            {
+                adjectiveInfo.uiPriority = ++contradictPriority;
+            }
+            else
+            {
+                adjectiveInfo.uiPriority = ++normalPriority;
+            }
+
+            adjectives[(EAdjective)i] = adjectiveInfo;
+        }
     }
 
     public void SetCardEncyclopedia(SCardView cardView)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class FreezeAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Freeze;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Contradict;
     private int count = 0;
 
     #region Freeze변수
