@@ -235,10 +235,6 @@ using UnityEngine;
                         Debug.Log(test);
                     }
                         
-                    Debug.Log(obj.transform.position);
-                    //문제 1. 여기서 현재 물체 위치가 배열상의 위치가 달라서 문제가 발생 --> 다시 배열의 위치를 바꾸어 버린다.
-                    // 올라가고 있을때랑, 내려가는 중일 때를 정확히 파악해야한다. 
-                    // 파악은 했는데 그다음은? 
                     
                     // var underTileObject = tileMap[Mathf.FloorToInt(obj.transform.position.x),
                     //     Mathf.FloorToInt(startPos.y - 1f), Mathf.FloorToInt(obj.transform.position.z)];
@@ -246,7 +242,13 @@ using UnityEngine;
                     // var upperPositionedGameObject= objectsData[Mathf.FloorToInt(obj.transform.position.x),
                     //     Mathf.FloorToInt(startPos.y+1f),Mathf.FloorToInt(obj.transform.position.z)];
                     
-                    var underPositionedGameObject = DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.down,obj.transform.lossyScale);
+                    Debug.Log(obj.transform.position);
+                    //문제 1. 여기서 현재 물체 위치가 배열상의 위치가 달라서 문제가 발생 --> 다시 배열의 위치를 바꾸어 버린다.
+                    // 올라가고 있을때랑, 내려가는 중일 때를 정확히 파악해야한다. -> 이거 해도 뭘해야할지 모르겟네;;
+                    
+                    // var underPositionedGameObject = DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.down,obj.transform.lossyScale);
+                    var underPositionedGameObject = CheckUnderGameObject(obj.transform.position);
+                    Debug.Log(underPositionedGameObject);
                     var upperPositionedGameObject = DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.up, obj.transform.lossyScale);
                     
                     if (upperPositionedGameObject != null && upperPositionedGameObject != obj &&
@@ -621,6 +623,22 @@ using UnityEngine;
             //     }
             // }
            
+        }
+
+        GameObject CheckUnderGameObject(Vector3 targetPos)
+        {
+            Vector3 interPos = new Vector3(targetPos.x, Mathf.RoundToInt(targetPos.y) - 1, targetPos.z);
+            Debug.Log(interPos);
+            Vector3Int underPos = Vector3Int.RoundToInt(interPos);
+            var objectsMap = DetectManager.GetInstance.GetObjectsData();
+            var underObj = objectsMap[underPos.x, underPos.y, underPos.z];
+            if (!underObj)
+            {
+                var tileMap = DetectManager.GetInstance.GetTilesData();
+                underObj=tileMap[underPos.x, underPos.y, underPos.z];
+
+            }
+            return underObj;
         }
 
         GameObject CheckCharacter(GameObject thisObject )
