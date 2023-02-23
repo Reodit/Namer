@@ -162,6 +162,17 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         //
     }
+
+    public void ResetUserData(string userID)
+    {
+        if (UserDataDic.ContainsKey(userID))
+        {
+            Debug.LogError(userID + " 사용자 ID를 가진 사용자가 없습니다. 확인해주세요!");
+        }
+        
+        SUserData userData = new SUserData(userID);
+        userDataDic[userID] = userData;
+    }
     
     public string GetUserID()
     {

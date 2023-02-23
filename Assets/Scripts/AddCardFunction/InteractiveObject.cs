@@ -17,14 +17,9 @@ public class InteractiveObject : MonoBehaviour
 
         private int[] initCountAdj = new int[20];
         private bool isCard = false;
-
+        
     #endregion
-
-    #region [Repeat Adj]
-        public int floatDone = 0;
-        public bool abandonBoucy = false;
-    #endregion
-
+    
     // Level Edit Mode
     private bool isFinishMapSetting = false;
     
@@ -41,7 +36,7 @@ public class InteractiveObject : MonoBehaviour
     public IAdjective[] Adjectives { get { return  adjectives; } }
     
     // object's information
-    public SObjectInfo objectInfo;
+    [HideInInspector] public SObjectInfo objectInfo;
     public int GetObjectID()
     {
         return objectInfo.objectID;
@@ -263,18 +258,15 @@ public class InteractiveObject : MonoBehaviour
         
         AddNameCard(objectName);
 
-        if (countAdj.Sum() != initCountAdj.Sum() && countAdj.Sum() - countNameAdj.Sum() > 0)
+        for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
         {
-            for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
+            if (countAdj.Sum() - countNameAdj.Sum() > 0)
             {
-                if (countAdj.Sum() - countNameAdj.Sum() > 0)
+                for (int j = 0; j < countAdj[i] - countNameAdj[i]; j++)
                 {
-                    for (int j = 0; j < countAdj[i] - countNameAdj[i]; j++)
-                    {
-                        // 테스트 완료 후 살릴 예정
-                        // AddAdjective((EAdjective)i);
-                        AddAdjectiveCard((EAdjective)i);
-                    }
+                    // 테스트 완료 후 살릴 예정
+                    // AddAdjective((EAdjective)i);
+                    AddAdjectiveCard((EAdjective)i);
                 }
             }
         }
@@ -484,7 +476,9 @@ public class InteractiveObject : MonoBehaviour
             CardManager.GetInstance.target = this.gameObject;
             if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
             {
-                if (!CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()))
+                CardManager.GetInstance.target = this.gameObject;
+            
+                if (CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()) >= maxAdjCount)
                 {
                     CardManager.GetInstance.ableAddCard = false;
                     return;
