@@ -19,15 +19,15 @@
             "adjectives": []
         },
         {
-            "prefabName": "TreeObj",
+            "prefabName": "WaterObj",
             "objectID": 3,
-            "nameType": 5,
+            "nameType": 6,
             "adjectives": []
         },
         {
-            "prefabName": "WaterObj",
+            "prefabName": "RockObj",
             "objectID": 4,
-            "nameType": 6,
+            "nameType": 3,
             "adjectives": []
         },
         {

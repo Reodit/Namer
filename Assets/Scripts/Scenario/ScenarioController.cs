@@ -609,6 +609,7 @@ public class ScenarioController : MonoBehaviour
     private void Update()
     {
         if (!isStart) return;
+        if (stageClearPanel.activeSelf) return;
         if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
         if (nextSenarioTime != -3f) nextSenarioTime -= Time.deltaTime;
         if (restartTime > 0) restartTime -= Time.deltaTime;
