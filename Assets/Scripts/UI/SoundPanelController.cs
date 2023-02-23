@@ -29,8 +29,9 @@ public class SoundPanelController : MonoBehaviour
             SoundManager.GetInstance.bgmSound.mute = true;
             SoundManager.GetInstance.sfxSound.mute = true;
         }
-
+#if !UNITY_ANDROID
         bgToggle.isOn = SoundManager.GetInstance.isBgToggleOn;
+#endif
         audioMixer = SoundManager.GetInstance.audioMixer;
         float mValue, bValue, sValue;
 

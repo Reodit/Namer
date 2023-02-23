@@ -17,9 +17,13 @@ public class InteractiveObject : MonoBehaviour
 
         private int[] initCountAdj = new int[20];
         private bool isCard = false;
-        
+
     #endregion
-    
+    #region
+        public int floatDone = 0;
+        public bool abandonBouncy = false;
+    #endregion
+
     // Level Edit Mode
     private bool isFinishMapSetting = false;
     
