@@ -28,7 +28,7 @@ public class InteractiveObject : MonoBehaviour
     private int[] countNameAdj;
     
     // Max Value of Adjective Count
-    private int maxAdjCount = 1;
+    private int maxAdjCount = 2;
 
     // added adjective functions(interface)
     private IAdjective[] adjectives;
@@ -257,18 +257,15 @@ public class InteractiveObject : MonoBehaviour
         
         AddNameCard(objectName);
 
-        if (countAdj.Sum() != initCountAdj.Sum() && countAdj.Sum() - countNameAdj.Sum() > 0)
+        for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
         {
-            for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
+            if (countAdj.Sum() - countNameAdj.Sum() > 0)
             {
-                if (countAdj.Sum() - countNameAdj.Sum() > 0)
+                for (int j = 0; j < countAdj[i] - countNameAdj[i]; j++)
                 {
-                    for (int j = 0; j < countAdj[i] - countNameAdj[i]; j++)
-                    {
-                        // 테스트 완료 후 살릴 예정
-                        // AddAdjective((EAdjective)i);
-                        AddAdjectiveCard((EAdjective)i);
-                    }
+                    // 테스트 완료 후 살릴 예정
+                    // AddAdjective((EAdjective)i);
+                    AddAdjectiveCard((EAdjective)i);
                 }
             }
         }
