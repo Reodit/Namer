@@ -11,8 +11,12 @@ public class EncyclopediaController : MonoBehaviour
     [SerializeField] UnityEngine.UI.Button returnBtn;
     GameObject[] pediaCards;
     IngameCanvasController canvasController;
-
     GameDataManager gameDataManager;
+
+    Touch touch;
+    float wheelInput;
+    Vector2 startPos;
+    float scrollSpeed = 0.0001f;
 
     private void Start()
     {
@@ -69,16 +73,41 @@ public class EncyclopediaController : MonoBehaviour
             new Vector3(0f, scrollbar.value * maxHeight, 0f);
     }
 
+   
     private void ScrollWheel()
     {
-        float wheelInput = Input.GetAxis("Mouse ScrollWheel");
+
+        if (Input.touchCount > 0)
+        {
+            touch = Input.GetTouch(0);
+            wheelInput = -1 * touch.deltaPosition.y;
+            if (touch.phase == TouchPhase.Began)
+            {
+                startPos = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Moved)
+            {
+                float deltaY = touch.position.y - startPos.y;
+                wheelSpeed =  deltaY * scrollSpeed;
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                wheelSpeed = 0f;
+            }
+
+
+        }
         if (wheelInput > 0)
         {
-            layoutGroup.transform.localPosition -= new Vector3(0, wheelSpeed, 0);
+            layoutGroup.transform.localPosition -= new Vector3(0, -1 * wheelSpeed, 0);
             scrollbar.value = layoutGroup.transform.localPosition.y / maxHeight;
             if (layoutGroup.transform.localPosition.y <= 0f)
             {
                 layoutGroup.transform.localPosition = new Vector3(0, 0, 0);
+            }
+            if (layoutGroup.transform.localPosition.y >= maxHeight)
+            {
+                layoutGroup.transform.localPosition = new Vector3(0, maxHeight, 0);
             }
         }
         else if (wheelInput < 0)
@@ -89,6 +118,11 @@ public class EncyclopediaController : MonoBehaviour
             {
                 layoutGroup.transform.localPosition = new Vector3(0, maxHeight, 0);
             }
+            if (layoutGroup.transform.localPosition.y <= 0f)
+            {
+                layoutGroup.transform.localPosition = new Vector3(0, 0, 0);
+            }
+
         }
     }
 }
