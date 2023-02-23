@@ -18,12 +18,6 @@ public class MapReader : MonoBehaviour
     private int totalX;
     private int totalY;
     private int totalZ;
-    
-    private void Start()
-    {
-        GameDataManager.GetInstance.GetCardData();
-        GameDataManager.GetInstance.CreateFile();
-    }
 
     public SMapData GetMapData()
     {
@@ -56,7 +50,10 @@ public class MapReader : MonoBehaviour
         string[,,] tileMapData = new string[totalX, totalY, totalZ];
         string[,,] objectMapData = new string[totalX, totalY, totalZ];
         List<SObjectInfo> objectInfos = new List<SObjectInfo>();
-        
+
+        GameObject[,,] tiles = new GameObject[totalX, totalY, totalZ];
+        GameObject[,,] objects = new GameObject[totalX, totalY, totalZ];
+
         int id = 0;
         for (int y = minY; y <= maxY; y++)
         {
@@ -73,17 +70,20 @@ public class MapReader : MonoBehaviour
                         {
                             objectMapData[x - minX, y - minY, z - minZ] = id.ToString();
                             objectInfos.Add(AddObjectInfo(hit.collider, id++, GetPrefabName(objectPredabs, hit.collider.name)));
+                            
+                            objects[x - minX, y - minY, z - minZ] = hit.collider.gameObject;
                         }
                         else if (!hit.collider.CompareTag("Player"))
                         {
                             tileMapData[x - minX, y - minY, z - minZ] = GetPrefabName(tilePrefabs, hit.collider.name);
+                            tiles[x - minX, y - minY, z - minZ] = hit.collider.gameObject;
                         }
                     }
                 }
             }
         }
-
-        return new SMapData(CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
+        
+        return new SMapData(tiles, objects, CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
     }
 
     private string GetPrefabName(Transform[] prefabs, string colliderName)
@@ -110,12 +110,11 @@ public class MapReader : MonoBehaviour
         objectInfo.nameType = interObj.GetObjectName();
 
         List<EAdjective> adjectives = new List<EAdjective>();
-        for (int i = 0; i < interObj.Adjectives.Length; i++)
+        for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
         {
-            if (interObj.Adjectives[i] != null)
+            if (interObj.CheckCountAdjective((EAdjective)i) > 0)
             {
-                EAdjective adjective = interObj.Adjectives[i].GetAdjectiveName();
-                adjectives.Add(adjective);
+                adjectives.Add((EAdjective)i);
             }
         }
         objectInfo.adjectives = adjectives.ToArray();
