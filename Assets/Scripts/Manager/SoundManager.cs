@@ -18,6 +18,11 @@ public class SoundManager : Singleton<SoundManager>
     public AudioSource curBGMSoundTrack;
 
     public AudioSource sfxSound;
+    public AudioSource playerSfxSound;
+    public AudioSource playerFootStepSound1;
+    public AudioSource playerFootStepSound2;
+    public AudioSource playerFootStepSound3;
+    public AudioSource repeatableSfx;
     private bool isBGMSOundTrack01Playing;
 
     private double dspStartTime;
@@ -36,8 +41,8 @@ public class SoundManager : Singleton<SoundManager>
      * 4. ........
      */
     private Dictionary<EAdjective, AudioClip> effectClips = new Dictionary<EAdjective, AudioClip>();
-
     private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
+    Dictionary<string, AudioClip> playerEffectClips = new Dictionary<string, AudioClip>();
 
     private AudioClip[] bgmClips;
 
@@ -53,6 +58,7 @@ public class SoundManager : Singleton<SoundManager>
     {
         SetObjectSFXClips();
         SetUISFXClips();
+        SetPlayerSFXClips();
         SetBGM();
     }
 
@@ -90,6 +96,16 @@ public class SoundManager : Singleton<SoundManager>
         for (int i = 0; i < uiAudioClips.Length; i++)
         {
             uiEffectClips.Add(uiAudioClips[i].name, uiAudioClips[i]);
+        }
+    }
+
+    public void SetPlayerSFXClips()
+    {
+        AudioClip[] playerAudioClips = Resources.LoadAll<AudioClip>("Prefabs/Interaction/PlayerSoundEffect");
+
+        for (int i = 0; i < playerAudioClips.Length; i++)
+        {
+            playerEffectClips.Add(playerAudioClips[i].name, playerAudioClips[i]);
         }
     }
 
@@ -263,21 +279,22 @@ public class SoundManager : Singleton<SoundManager>
         //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
         // sfxSound.PlayOneShot(clip);
     }
-    public void Play(AudioClip clip)
+
+    IEnumerator AudioFadeOut(AudioSource audio)
     {
-        double duration = (double)clip.samples / clip.frequency; //  clips playTime need to get  
-        sfxSound.Stop();
-        sfxSound.clip = clip;
-        dspStartTime = AudioSettings.dspTime;
-        sfxSound.PlayScheduled(dspStartTime);
-        // SetEndDSPTime(time);
-        // if (dspEndTime > duration)
-        // {
-        //     sfxSound.PlayScheduled(dspStartTime+duration);
-        // }
-        // if(AudioSettings.dspTime < duration)
-        //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
-        // sfxSound.PlayOneShot(clip);
+        double remainingTime = dspEndTime-AudioSettings.dspTime;
+        float elapsedTime = 0;
+        while (remainingTime > 0)
+        {
+            audio.volume = Mathf.Lerp(1, 0, (float)(dspEndTime-AudioSettings.dspTime/remainingTime));
+            remainingTime -= Time.deltaTime;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+    public void Play(AudioSource source, AudioClip clip)
+    {
+        source.PlayOneShot(clip);
     }
 
     public void Pause(AudioClip clip)
@@ -299,7 +316,7 @@ public class SoundManager : Singleton<SoundManager>
     public void Play(EAdjective eAdjective)
     {
         if (effectClips.ContainsKey(eAdjective))
-            Play(effectClips[eAdjective]);
+            Play(sfxSound, effectClips[eAdjective]);
     }
     public void Play(EAdjective eAdjective, double playTime)
     {
@@ -311,8 +328,31 @@ public class SoundManager : Singleton<SoundManager>
     {
         if (uiEffectClips.ContainsKey(clipname))
         {
-            Play(uiEffectClips[clipname]);
+            Play(sfxSound, uiEffectClips[clipname]);
         }
+
+        if (playerEffectClips.ContainsKey(clipname))
+        {
+            Play(playerSfxSound, playerEffectClips[clipname]);
+        }
+    }
+
+    //public void repeatPlay(string clipName)
+    //{
+    //    GameObject soundObject = new GameObject(clipName + " clip");
+    //    AudioSource repeatAudio = soundObject.AddComponent<AudioSource>();
+    //    repeatAudio.clip = playerEffectClips[clipName];
+    //    repeatAudio.Play();
+    //    Destroy(soundObject, playerEffectClips[clipName].length);
+    //}
+
+    public void repeatPlay(string clipName)
+    {
+        GameObject soundObject = new GameObject(clipName + " clip");
+        AudioSource repeatAudio = soundObject.AddComponent<AudioSource>();
+        repeatAudio.clip = uiEffectClips[clipName];
+        repeatAudio.Play();
+        Destroy(soundObject, uiEffectClips[clipName].length);
     }
 
 
