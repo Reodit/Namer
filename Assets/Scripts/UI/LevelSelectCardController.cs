@@ -45,6 +45,7 @@ public class LevelSelectCardController : MonoBehaviour
     IEnumerator DealCard()
     {
         var scene = SceneManager.GetActiveScene();
+        CardManager.GetInstance.isCardDealingDone = false;
         yield return new WaitForSeconds(0.1f);
         for (int i = 0; i < startCards.Length; i++)
         {
@@ -53,6 +54,8 @@ public class LevelSelectCardController : MonoBehaviour
             yield return new WaitForSeconds(cardDealingSpeed);
             SoundManager.GetInstance.Play("CardHover");
         }
+        yield return new WaitForSeconds(1.5f);
+        CardManager.GetInstance.isCardDealingDone = true;
 
     }
 
@@ -86,7 +89,7 @@ public class LevelSelectCardController : MonoBehaviour
         }
     }
 
-    //카드를 둘글게 정렬하는 메서드
+    //카드 정렬하는 메서드
     List<PRS> RoundAlignment(Transform leftTr, Transform rightTr, int objCount, Vector3 scale)
     {
         float[] objLerps = new float[objCount];

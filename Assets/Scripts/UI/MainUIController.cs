@@ -95,6 +95,8 @@ public class MainUIController : MonoBehaviour
     //안내 문구를 상황에 따라 키고 끕니다 
     void informationTxtOnOff()
     {
+        if (state == MainMenuState.Encyclopedia) return;
+
         if (CardManager.GetInstance.isPickCard && informationTxt.activeSelf == false)
         {
             informationTxt.SetActive(true);
