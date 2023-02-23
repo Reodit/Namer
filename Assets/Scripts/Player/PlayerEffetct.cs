@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,25 +10,29 @@ public enum EffectIndex
 
 public class PlayerEffetct : MonoBehaviour
 {
-
     [SerializeField] private ParticleSystem footprint;
     private List<string> footprintClipsName;
     [SerializeField] private AudioClip[] footprintSoundClips;
     public EffectIndex currentEffectIndex;
     private CollisionEffect ce;
+    [SerializeField] private ParticleSystem climbEffect;
+    [SerializeField] private ParticleSystem pushEffect;
     
     private void Start()
     {
         Init();
     }
 
+    private void FixedUpdate()
+    {
+        if (!GameManager.GetInstance.isPlayerDoAction)
+        {
+            pushEffect.gameObject.SetActive(false);
+        }
+    }
+    
     void Init()
     {
-        if (!footprint)
-        {
-            GameManager.GetInstance.localPlayerMovement.gameObject.transform.Find("FootPrint").Find("PlayerFootprint");
-        }
-
         ce = transform.Find("CollisionEffect").GetComponent<CollisionEffect>();
         
         footprintClipsName = new List<string>();
@@ -41,9 +46,18 @@ public class PlayerEffetct : MonoBehaviour
     #region Animation Event Function
     public void FootprintPlay()
     {
-        footprint.Play();
+        switch (currentEffectIndex)
+        { 
+            case EffectIndex.Footprint:
+                footprint.Play();
+                break;
+            case EffectIndex.WaterFootprint:
+                ce.WaterFootprint.Play();
+                break;
+        }
     }
     
+    // 복수의 오디오 소스 필요 (근데 확인해 봐야함)
     public void FootprintSoundPlay()
     {
         int randomClipIdx;
@@ -51,14 +65,25 @@ public class PlayerEffetct : MonoBehaviour
         {
             case EffectIndex.Footprint:
                 randomClipIdx = UnityEngine.Random.Range(0, footprintClipsName.Count);
-                SoundManager.GetInstance.Play(footprintClipsName[randomClipIdx]);
+                SoundManager.GetInstance.repeatPlay(footprintClipsName[randomClipIdx]);
                 break;
             case EffectIndex.WaterFootprint:
                 randomClipIdx = UnityEngine.Random.Range(0, ce.WaterFootprintClipsName.Count);
-                SoundManager.GetInstance.Play(ce.WaterFootprintClipsName[randomClipIdx]);
+                SoundManager.GetInstance.repeatPlay(ce.WaterFootprintClipsName[randomClipIdx]);
                 break;
         }
         
+    }
+
+    public void ClimbEffectPlay()
+    {
+        climbEffect.Play();
+    }
+
+    public void PushEffectPlay()
+    {
+        pushEffect.gameObject.SetActive(true);
+        pushEffect.Play();
     }
     #endregion
 }

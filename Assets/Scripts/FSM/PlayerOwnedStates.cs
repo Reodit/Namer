@@ -85,7 +85,10 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
         {
-            entity.pAnimator.SetBool("isObtain", false);
+            if (GameManager.GetInstance.isPlayerDoAction != true)
+            {
+                entity.pAnimator.SetBool("isObtain", false);
+            }
         }
     }
     
@@ -109,7 +112,10 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
         {
-            entity.pAnimator.SetBool("isClimb", false);
+            if (GameManager.GetInstance.isPlayerDoAction != true)
+            {
+                entity.pAnimator.SetBool("isClimb", false);
+            }
         }
     }
     
@@ -133,7 +139,10 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
         {
-            entity.pAnimator.SetBool("isPush", false);
+            if (GameManager.GetInstance.isPlayerDoAction != true)
+            {
+                entity.pAnimator.SetBool("isPush", false);
+            }
         }
     }
 
