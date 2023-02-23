@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class CollisionEffect : MonoBehaviour
@@ -9,27 +7,33 @@ public class CollisionEffect : MonoBehaviour
     public List<string> WaterFootprintClipsName { get; private set; }
     [field: SerializeField] public AudioClip[] WaterFootprintSoundClips { get; private set; }
     private PlayerEffetct pe;
+    private PlayerMovement pm;
+    private int layerMask;
     private void Start()
     {
         Init();
+
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.forward, out hit, 20f))
+        InteractiveObject io;
+        
+        if (Physics.Raycast(pm.transform.position + Vector3.down * 0.2f, Vector3.up, out hit, 0.5f, layerMask))
         {
-            if (hit.transform.name.Contains("WaterObj"))
+            if (hit.transform.TryGetComponent<InteractiveObject>(out io))
             {
-                pe.currentEffectIndex = EffectIndex.WaterFootprint;
+                if (io.Adjectives[13] != null)
+                {
+                    pe.currentEffectIndex = EffectIndex.WaterFootprint;
+                }
             }
-
-            return;
         }
         
-        if (Physics.Raycast(transform.position, Vector3.down, out hit,20f))
+        else if (Physics.Raycast(pm.transform.position + Vector3.up * 0.2f, Vector3.down, out hit, 1f, layerMask))
         {
-            if (hit.transform.name.Contains("GlassTile") || hit.transform.name.Contains("GroundTile"))
+            if (hit.transform.name.Contains("GroundTile") || hit.transform.name.Contains("GlassTile"))
             {
                 pe.currentEffectIndex = EffectIndex.Footprint;
             }
@@ -38,33 +42,35 @@ public class CollisionEffect : MonoBehaviour
 
     void Init()
     {
-        // if (!waterFootprint)
-        // {    
-        //     GameManager.GetInstance.localPlayerMovement.gameObject.transform.Find("CollisionEffect").Find("WaterFootprint");
-        // }
+        layerMask = ~(1 << LayerMask.NameToLayer("Player"));
+
+        pm = GameObject.FindWithTag("Player").GetComponent<PlayerMovement>();
         pe = GameObject.FindWithTag("Player").GetComponent<PlayerEffetct>();
-        
+
         WaterFootprintClipsName = new List<string>();
 
         foreach (var e in WaterFootprintSoundClips)
         {
             WaterFootprintClipsName.Add(e.name);
         }
-    }
-    
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.name.Contains("WaterObj"))
-        {
-            pe.currentEffectIndex = EffectIndex.WaterFootprint;
-        }
+        
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.name.Contains("WaterObj"))
+        InteractiveObject io;
+
+        if (other.TryGetComponent<InteractiveObject>(out io) ||
+            GameManager.GetInstance.isPlayerDoAction)
         {
-            pe.currentEffectIndex = EffectIndex.Footprint;
-        }    
+            if (io.Adjectives[13] != null)
+            {
+                return;
+                
+            }
+        }
+        
+        //pm.rb.MovePosition(pm.rb.position - pm.pInputVector * pm.moveSpeed * Time.deltaTime);
+        pm.rb.velocity = Vector3.zero;
     }
 }

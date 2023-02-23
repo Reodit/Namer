@@ -4,16 +4,16 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour
 {
     #region components
-    private Rigidbody rb;
+    public Rigidbody rb;
     public PlayerEntity playerEntity;
     #endregion
 
-    private GameObject interactObj;
+    [SerializeField] private GameObject interactObj;
     public GameObject addCardTarget;
     private VirtualJoystick virtualJoystick;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private int rotateSpeed;
-    private Vector3 pInputVector;
+    [SerializeField] public float moveSpeed;
+    [SerializeField] public int rotateSpeed;
+    public Vector3 pInputVector;
     private Dir targetDir;
     private int objscale;
     private Rigidbody climbRb;
@@ -188,6 +188,12 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         
+        if (rb.velocity.magnitude > 5)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
+
         if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
         {
             if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed) + Vector3.up * 0.2f, Vector3.down, 20f))
@@ -306,8 +312,8 @@ public class PlayerMovement : MonoBehaviour
         while (moveTime < 1)
         {
             moveTime += Time.deltaTime * rootmotionSpeed; 
-            rb.position = Vector3.Lerp(curPos, destinationPos, moveTime + 0.1f);
-            yield return new WaitForFixedUpdate();
+            transform.position = Vector3.Lerp(curPos, destinationPos, moveTime + 0.1f);
+            yield return null;
         }
 
         yield return new WaitForSeconds(interactionDelay);
@@ -322,12 +328,13 @@ public class PlayerMovement : MonoBehaviour
         position = new Vector3((float)Math.Round(position.x, 1),
             (float)Math.Round(position.y, 1), (float)Math.Round(position.z, 1));
         transform.position = position;
-
+        
         // TODO 애니메이션 폴리싱 예정 (오브젝트 모양이 제각각이라 일단 일괄적으로 하드코딩 처리)
         {
             Vector3 targetPos = Vector3.zero;
             var curPos = position;
             climbRb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
             switch (targetDir)
             {
                 case Dir.right:
@@ -350,7 +357,7 @@ public class PlayerMovement : MonoBehaviour
             float moveTime = 0;
             Vector3 target1 = new Vector3(curPos.x, curPos.y + objscale * 0.5f, curPos.z);
             yield return new WaitForSeconds(1f);
-
+            Debug.Log(target1);
             while (moveTime < 1)
             {
                 moveTime += Time.deltaTime * rootmotionSpeed;
@@ -360,10 +367,10 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    rb.position = Vector3.Lerp(curPos, target1, moveTime);
+                    transform.position = Vector3.Lerp(curPos, target1, moveTime);
                 }
 
-                yield return new WaitForFixedUpdate();;
+                yield return null;
             }
 
             transform.position = target1;
@@ -373,13 +380,15 @@ public class PlayerMovement : MonoBehaviour
             while (moveTime < 1)
             {
                 moveTime += Time.deltaTime * rootmotionSpeed;
-                rb.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
-                yield return new WaitForFixedUpdate();
+                transform.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
+                yield return null;
             }
 
             curPos = transform.position;
             moveTime = 0;
             Vector3 target2 = new Vector3(curPos.x, curPos.y + objscale * 0.5f + 0.05f, curPos.z);
+            Debug.Log(target2);
+
             while (moveTime < 1f)
             {
                 moveTime += Time.deltaTime * rootmotionSpeed;
@@ -389,10 +398,10 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    rb.position = Vector3.Lerp(curPos, target2, moveTime);
+                    transform.position = Vector3.Lerp(curPos, target2, moveTime);
                 }
 
-                yield return new WaitForFixedUpdate();;
+                yield return null;
             }
             yield return new WaitForSeconds(interactionDelay);
         }
