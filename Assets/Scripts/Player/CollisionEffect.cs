@@ -66,11 +66,10 @@ public class CollisionEffect : MonoBehaviour
             if (io.Adjectives[13] != null)
             {
                 return;
-                
             }
         }
         
-        //pm.rb.MovePosition(pm.rb.position - pm.pInputVector * pm.moveSpeed * Time.deltaTime);
+        pm.rb.MovePosition(pm.rb.position - pm.pInputVector * pm.moveSpeed * Time.deltaTime);
         pm.rb.velocity = Vector3.zero;
     }
 }
