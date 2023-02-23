@@ -150,7 +150,7 @@ public class SaveLoadFile
         }
         
         Dictionary<TK, TV> dataDic = new Dictionary<TK, TV>();
-        
+
         // index == 0 : Name, index == 1 : Adjective
         XmlNodeList nodeList = data.Item(index).SelectNodes("Row");
         foreach (XmlNode item in nodeList)
