@@ -550,7 +550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8979535684733509659
 RectTransform:
   m_ObjectHideFlags: 0
@@ -723,6 +723,7 @@ MonoBehaviour:
   wheelSpeed: 0.1
   maxHeight: 1
   scrollbar: {fileID: 8979535684733509660}
+  returnBtn: {fileID: 0}
 --- !u!1 &8979535685081250360
 GameObject:
   m_ObjectHideFlags: 0
