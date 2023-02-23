@@ -23,14 +23,6 @@ public class PlayerEffetct : MonoBehaviour
         Init();
     }
 
-    private void FixedUpdate()
-    {
-        if (!GameManager.GetInstance.isPlayerDoAction)
-        {
-            pushEffect.gameObject.SetActive(false);
-        }
-    }
-    
     void Init()
     {
         ce = transform.Find("CollisionEffect").GetComponent<CollisionEffect>();
@@ -82,7 +74,6 @@ public class PlayerEffetct : MonoBehaviour
 
     public void PushEffectPlay()
     {
-        pushEffect.gameObject.SetActive(true);
         pushEffect.Play();
     }
     #endregion

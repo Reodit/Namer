@@ -196,16 +196,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
         {
-            if (Physics.Raycast(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed) + Vector3.up * 0.2f, Vector3.down, 20f))
+            if (Physics.Raycast(rb.position + pInputVector * (Time.deltaTime * moveSpeed) + Vector3.up * 0.2f, Vector3.down, 20f))
             {
-                rb.MovePosition(rb.position + pInputVector * (Time.fixedDeltaTime * moveSpeed));
+                rb.MovePosition(rb.position + pInputVector * (Time.deltaTime * moveSpeed));
                 playerEntity.pAnimator.SetFloat("scalar", pInputVector.magnitude);
                 playerEntity.ChangeState(PlayerStates.Move);
 
                 if (pInputVector != Vector3.zero)
                 {
                     rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
-                        Time.fixedDeltaTime * rotateSpeed);
+                        Time.deltaTime * rotateSpeed);
                 }
             }
             
@@ -216,7 +216,7 @@ public class PlayerMovement : MonoBehaviour
                 if (pInputVector != Vector3.zero)
                 {
                     rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
-                        Time.fixedDeltaTime * rotateSpeed);
+                        Time.deltaTime * rotateSpeed);
                 }
             }
         }
