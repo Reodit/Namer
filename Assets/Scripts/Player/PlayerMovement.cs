@@ -319,6 +319,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(interactionDelay);
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        playerEntity.pAnimator.SetFloat("scalar", 0);
     }
 
     public IEnumerator ClimbRootmotion()
@@ -408,6 +409,7 @@ public class PlayerMovement : MonoBehaviour
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         climbRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
+        playerEntity.pAnimator.SetFloat("scalar", 0);
     }
 
     public IEnumerator AddcardRootmotion()
