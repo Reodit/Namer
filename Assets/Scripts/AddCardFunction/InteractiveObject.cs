@@ -35,7 +35,7 @@ public class InteractiveObject : MonoBehaviour
     public IAdjective[] Adjectives { get { return  adjectives; } }
     
     // object's information
-    public SObjectInfo objectInfo;
+    [HideInInspector] public SObjectInfo objectInfo;
     public int GetObjectID()
     {
         return objectInfo.objectID;
