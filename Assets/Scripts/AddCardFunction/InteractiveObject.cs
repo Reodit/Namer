@@ -29,7 +29,7 @@ public class InteractiveObject : MonoBehaviour
     private int[] countNameAdj;
     
     // Max Value of Adjective Count
-    private int maxAdjCount = 2;
+    private int maxAdjCount = 1;
 
     // added adjective functions(interface)
     private IAdjective[] adjectives;
