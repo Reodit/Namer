@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 
 public class StageClearPanelController : MonoBehaviour
 {
@@ -14,7 +13,6 @@ public class StageClearPanelController : MonoBehaviour
     [SerializeField] GameObject rewardBtn;
     [SerializeField] GameObject nameFrame;
     [SerializeField] GameObject nameKit;
-    [SerializeField] GameObject nameInfoText;
     [SerializeField] GameObject nameOKBtn;
     [SerializeField] GameObject nameCancleBtn;
     [SerializeField] GameObject stageClearOKBtn;
@@ -25,8 +23,6 @@ public class StageClearPanelController : MonoBehaviour
     GameObject clearRig;
     GameObject namingRig;
     GameObject rewardRig;
-    GameObject namingCard;
-    GameObject planetObj;
 
     bool isNamingDone, isRewardDone;
 
@@ -62,37 +58,29 @@ public class StageClearPanelController : MonoBehaviour
 
     IEnumerator NameConfirm()
     {
-
-        nameFrame.transform.DOLocalMove(new Vector3(0, -58.7999992f, 0), 1f);
+        nameFrame.transform.DOLocalMove(new Vector3(-354, -392, 0), 1f);
         nameFrame.transform.DOScale(new Vector3(0.6720456f, 0.6720456f, 0.6720456f), 1f);
         nameKit.transform.GetChild(1).transform.gameObject.SetActive(false);
         yield return new WaitForSeconds(1f);
         nameKit.SetActive(false);
-        namingCard = namingRig.transform.GetChild(0).gameObject;
-        namingCard.SetActive(true);
+        namingRig.transform.GetChild(0).gameObject.SetActive(true);
         nameCancleBtn.SetActive(true);
-        nameInfoText.SetActive(true);
     }
 
     public void NameCancleBtn()
     {
         nameCancleBtn.SetActive(false);
-        nameInfoText.SetActive(false);
         namingRig.transform.GetChild(0).gameObject.SetActive(false);
         nameKit.transform.GetChild(1).transform.gameObject.SetActive(true);
         nameKit.SetActive(true);
         nameFrame.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 1f);
-        nameFrame.transform.DOLocalMove(new Vector3(0, 100, 0), 1f);
+        nameFrame.transform.DOLocalMove(new Vector3(-351.399994f, -120f, 0f), 1f);
     }
 
     public void NamingDone()
     {
         nameOKBtn.SetActive(true);
         nameCancleBtn.SetActive(false);
-        nameInfoText.SetActive(false);
-        planetObj = namingRig.transform.GetChild(1).gameObject;
-        planetObj.transform.DOLocalMove(new Vector3(0, planetObj.transform.localPosition.y,
-            planetObj.transform.localPosition.z), 1f);
     }
 
     public void NameOKBtn()

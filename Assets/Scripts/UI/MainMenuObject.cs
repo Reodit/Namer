@@ -4,16 +4,17 @@ using UnityEngine.SceneManagement;
 public class MainMenuObject : MonoBehaviour
 {
     [SerializeField] GameObject popUpName;
-    public bool isTouched = false;
 
     //카드를 선택한 상태에서 오브젝트를 호버링하면 카드의 타겟으로 설정
     //오브젝트의 이름을 화면에 띄움
+    bool isHoverling = false;
 
     private void Update()
     {
         AllPopUpNameCtr();
     }
 
+    bool isTouched = false;
     private void OnMouseDown()
     {
         if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null)
@@ -26,21 +27,18 @@ public class MainMenuObject : MonoBehaviour
             if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
             if (GameManager.GetInstance.CurrentState == GameStates.Victory &&
                 this.name != "PlanetObj") return;
-
-            if (CardManager.GetInstance.target != null && !CardManager.GetInstance.isPickCard)
+            isTouched = true;
+            if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
             {
-                CardManager.GetInstance.target.GetComponent<MainMenuObject>().isTouched = false;
                 CardManager.GetInstance.target = this.gameObject;
             }
-            isTouched = true;
             if (this.gameObject.CompareTag("InteractObj"))
             {
-                CardManager.GetInstance.target = this.gameObject;
                 PopUpNameOn();
             }
+
             if (CardManager.GetInstance.isPickCard)
             {
-                CardManager.GetInstance.target = this.gameObject;
                 CardManager.GetInstance.pickCard.GetComponent<MainMenuCardController>().TouchInteractObj();
             }
         }
@@ -78,7 +76,7 @@ public class MainMenuObject : MonoBehaviour
         {
             PopUpNameOn();
         }
-        if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isTouched)
+        if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isHoverling)
         {
             PopUpNameOff();
         }

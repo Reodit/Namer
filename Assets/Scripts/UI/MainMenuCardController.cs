@@ -52,7 +52,7 @@ public class MainMenuCardController : MonoBehaviour
     private void OnMouseDown()
     {
         if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
-        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
+        if (!CardManager.GetInstance.ableCardCtr) return;
         //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경
         if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
         {
@@ -80,7 +80,7 @@ public class MainMenuCardController : MonoBehaviour
         UIManager.GetInstance.isShowNameKeyPressed = true;
         SoundManager.GetInstance.Play("CardHover");
     }
-    public void CardSelectOff()
+    void CardSelectOff()
     {
         highlight.SetActive(false);
         cr.enabled = false;
@@ -138,27 +138,9 @@ public class MainMenuCardController : MonoBehaviour
     {
         UIManager.GetInstance.isShowNameKeyPressed = false;
     }
-
-    string CheckCardName(string cardName)
-    {
-        string stageCard = "StageCard(Clone)";
-        if (cardName.Contains(stageCard))
-        {
-            return stageCard;
-        }
-        else
-        {
-            return cardName;
-        }
-    }
-
     public void MainCastCard(string cardName)
     {
-        string inputString;
-
-        inputString = CheckCardName(cardName);
-
-        switch (inputString)
+        switch (cardName)
         {
             case "StartCard(Clone)":
                 mainUIController.LevelSelectScene();
@@ -175,43 +157,39 @@ public class MainMenuCardController : MonoBehaviour
             case "MainCard(Clone)":
                 mainUIController.MainMenuScene();
                 break;
-            case "StageCard(Clone)":
+            case "1StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                //CheckClearLevel(cardName);
                 LoadingSceneController.LoadScene("DemoPlay");
                 // 레벨 디자인 시 활성화
                 // DetectManager.GetInstance.InitTilesObjects();
                 // GameManager.GetInstance.SetLevelFromCard("LevelDesign");
                 // LoadingSceneController.LoadScene("LevelDesign");
                 break;
-            // LoadingSceneController.LoadScene("JSTESTER");
+            case "2StageCard(Clone)":
+                GameManager.GetInstance.SetLevelFromCard(cardName);
+                LoadingSceneController.LoadScene("DemoPlay");
+                break;
+            case "3StageCard(Clone)":
+                GameManager.GetInstance.SetLevelFromCard(cardName);
+                LoadingSceneController.LoadScene("DemoPlay");
+                break;
+            case "4StageCard(Clone)":
+                GameManager.GetInstance.SetLevelFromCard(cardName);
+                LoadingSceneController.LoadScene("DemoPlay");
+                break;
+            case "5StageCard(Clone)":
+                GameManager.GetInstance.SetLevelFromCard(cardName);
+                LoadingSceneController.LoadScene("DemoPlay");
+                break;
+            case "6StageCard(Clone)":
+                GameManager.GetInstance.SetLevelFromCard(cardName);
+                LoadingSceneController.LoadScene("DemoPlay");
+                break;
+            // LoadingSceneController.LoadScene(“JSTESTER”);
             //이부분 살짝 수정함
-            // GameManager.GetInstance.SetLevelFromCard(cardName);              
+            // GameManager.GetInstance.SetLevelFromCard(cardName);
             default:
                 break;
-        }
-    }
-
-    private void CheckClearLevel(string cardName)
-    {
-        if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -3)
-        {
-            if (cardName == "1StageCard(Clone)")
-            {
-                LoadingSceneController.LoadScene("DemoPlay");
-            }
-            else
-            {
-                CardReturn();
-            }
-        }
-        else if (int.Parse(cardName.Substring(0, 1)) <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel + 2)
-        {
-            LoadingSceneController.LoadScene("DemoPlay");
-        }
-        else
-        {
-            CardReturn();
         }
     }
 }

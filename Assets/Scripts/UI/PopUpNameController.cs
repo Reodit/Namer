@@ -15,7 +15,6 @@ class PopUpNameController : MonoBehaviour
     {
         cardHolder = Camera.main.transform;
         interactiveObject = GetComponentInParent<InteractiveObject>();
-        gameObject.transform.rotation = cardHolder.rotation;
     }
 
     void Update()
@@ -49,7 +48,7 @@ class PopUpNameController : MonoBehaviour
 
         if(currentAdjCount == 2)
         {
-            nameText.gameObject.transform.localScale = new Vector3(0.0065f, 0.01f, 0.01f);
+            nameText.gameObject.transform.localScale = new Vector3(0.006f, 0.01f, 0.01f);
         }
         else
         {

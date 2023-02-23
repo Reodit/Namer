@@ -17,7 +17,6 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     [SerializeField] GameObject gameOptionPanel;
     [SerializeField] GameObject topPanel;
     [SerializeField] GameObject cardBtnImg;
-    [SerializeField] GameObject tutorialArrow;
     [SerializeField] Text stageName;
     PlayerMovement playerMovement;
     Canvas canvas;
@@ -42,14 +41,9 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         encyclopedia = Camera.main.gameObject.transform.GetChild(2).gameObject;
     }
 
-    bool isArrowOff;
     public void EncyclopediaOpen()
     {
-        if(tutorialArrow.activeInHierarchy)
-        {
-            tutorialArrow.SetActive(false);
-            isArrowOff = true;
-        }
+        GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         GameManager.GetInstance.isPlayerCanInput = false;
         encyclopedia.SetActive(true);
         topButtons.SetActive(false);
@@ -60,23 +54,15 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void EncyclopediaClose()
     {
-        if (isArrowOff)
-        {
-            tutorialArrow.SetActive(true);
-            isArrowOff = false;
-        }
-        if (!GameManager.GetInstance.cameraController.isFocused)
-        {
-            GameManager.GetInstance.isPlayerCanInput = true;
-        }
+        GameManager.GetInstance.isPlayerCanInput = true;
         encyclopedia.SetActive(false);
         bottomButtons.SetActive(true);
+        CardManager.GetInstance.CardsUp();
         joyStick.SetActive(true);
         topButtons.SetActive(true);
         bottomButtons.SetActive(true);
         topPanel.SetActive(true);
         GameManager.GetInstance.ChangeGameState(GameStates.InGame);
-        CardManager.GetInstance.CardsUp();
     }
 
     public void OptionBtn()
@@ -161,7 +147,6 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void PediaButton()
     {
-        GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         SoundManager.GetInstance.Play("BtnPress");
         CardManager.GetInstance.CardsDown();
         Invoke("EncyclopediaOpen", 0.5f);
