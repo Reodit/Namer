@@ -463,11 +463,6 @@ public class InteractiveObject : MonoBehaviour
                 CardManager.GetInstance.ableAddCard = false;
                 return;
             }
-            if (this.gameObject.CompareTag("InteractObj"))
-            {
-                CardManager.GetInstance.ableAddCard = false;
-                return;
-            }
         }
         if (this.gameObject.CompareTag("InteractObj"))
         {
