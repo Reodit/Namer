@@ -60,6 +60,7 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] Scenario[] scenarioList;
     private static Queue<Scenario> scenarios = new Queue<Scenario>();
     private Scenario curScenario;
+    private int goalScenarioCount;
     private int scenarioCount = 0;
     private Transform player;
     private CameraController cameraController;
@@ -149,12 +150,31 @@ public class ScenarioController : MonoBehaviour
         restartTime = 20f;
 
         cameraController = Camera.main.transform.parent.GetComponent<CameraController>();
-        foreach (Scenario scenario in GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario)
+        if (GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level))
         {
-            scenarios.Enqueue(scenario);
-            scenarioCount++;
+            bool existGoal = false;
+            foreach (Scenario scenario in GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario)
+            {
+                if (!existGoal && scenario.type == ERequireType.Victory)
+                {
+                    goalScenarioCount = scenarioCount;
+                }
+                scenarios.Enqueue(scenario);
+                scenarioCount++;
+            }
+            goalScenarioCount = scenarioCount - goalScenarioCount;
         }
-
+        else
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                Scenario basicScenario = new Scenario();
+                basicScenario.type = ERequireType.Victory;
+                scenarios.Enqueue(basicScenario);
+                scenarioCount++;
+            }
+            goalScenarioCount = 1;
+        }
         player = GameObject.Find("Player").transform;
 
         StartCoroutine(WaitDealing());
@@ -359,6 +379,16 @@ public class ScenarioController : MonoBehaviour
             // 승리 ui 실행 
             StartCoroutine(OpenClearPanel());
             scenarioCount = -1;
+        }
+        else if (GameManager.GetInstance.CurrentState == GameStates.Victory)
+        {
+            if (scenarioCount > goalScenarioCount)
+            {
+                scenarioCount = 0;
+                // 승리 ui 실행 
+                StartCoroutine(OpenClearPanel());
+                scenarioCount = -1;
+            }
         }
         return checkedValue;
     }

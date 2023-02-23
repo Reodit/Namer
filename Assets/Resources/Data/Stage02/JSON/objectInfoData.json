@@ -1,0 +1,24 @@
+{
+    "dataList": [
+        {
+            "prefabName": "BonfireObj",
+            "objectID": 0,
+            "nameType": 4,
+            "adjectives": [
+                5
+            ]
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 1,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 2,
+            "nameType": 3,
+            "adjectives": []
+        }
+    ]
+}

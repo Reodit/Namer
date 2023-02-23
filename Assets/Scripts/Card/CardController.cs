@@ -231,11 +231,11 @@ public class CardController : MonoBehaviour
             
             if (cardType == ECardType.Name)
             {
-                target.GetComponent<InteractiveObject>().AddName(nameType);
+                target.GetComponent<InteractiveObject>().AddNameCard(nameType);
             }
             else if (cardType == ECardType.Adjective)
             {
-                target.GetComponent<InteractiveObject>().AddAdjective(adjectiveType);
+                target.GetComponent<InteractiveObject>().AddAdjectiveCard(adjectiveType);
             }
         }
     }
