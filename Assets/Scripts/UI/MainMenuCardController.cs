@@ -158,9 +158,12 @@ public class MainMenuCardController : MonoBehaviour
                 mainUIController.MainMenuScene();
                 break;
             case "1StageCard(Clone)":
-                DetectManager.GetInstance.InitTilesObjects();
-                GameManager.GetInstance.SetLevelFromCard("LevelDesign");
-                LoadingSceneController.LoadScene("LevelDesign");
+                GameManager.GetInstance.SetLevelFromCard(cardName);
+                LoadingSceneController.LoadScene("DemoPlay");
+                // 레벨 디자인 시 활성화
+                // DetectManager.GetInstance.InitTilesObjects();
+                // GameManager.GetInstance.SetLevelFromCard("LevelDesign");
+                // LoadingSceneController.LoadScene("LevelDesign");
                 break;
             case "2StageCard(Clone)":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
