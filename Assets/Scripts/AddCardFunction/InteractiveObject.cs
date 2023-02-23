@@ -17,9 +17,14 @@ public class InteractiveObject : MonoBehaviour
 
         private int[] initCountAdj = new int[20];
         private bool isCard = false;
-        
+
     #endregion
-    
+
+    #region [Repeat Adj]
+        public int floatDone = 0;
+        public bool abandonBoucy = false;
+    #endregion
+
     // Level Edit Mode
     private bool isFinishMapSetting = false;
     
