@@ -342,7 +342,7 @@ public class GameManager : Singleton<GameManager>
     }
      #region JSCODE
 
-    int curLevel = -3;
+    int curLevel =-3;
     public int Level { get { return curLevel; } }
     private GameObject groundObjs;
     private GameObject objcts;
