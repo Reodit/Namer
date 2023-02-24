@@ -26,6 +26,9 @@ public class GameDataManager : Singleton<GameDataManager>
     // level information dictionary
     private Dictionary<int, SLevelData> levelDataDic = new Dictionary<int, SLevelData>();
     public Dictionary<int, SLevelData> LevelDataDic { get { return levelDataDic; } }
+    // custom level information dictionary
+    private Dictionary<int, SLevelData> customLevelDataDic = new Dictionary<int, SLevelData>();
+    public Dictionary<int, SLevelData> CustomLevelDataDic { get { return customLevelDataDic; } }
     
     // card information dictionary
     private Dictionary<EName, SNameInfo> names = new Dictionary<EName, SNameInfo>();
@@ -142,8 +145,8 @@ public class GameDataManager : Singleton<GameDataManager>
         {
             SUserData userData = new SUserData(userID);
             // Test
-            userData.cardView.nameRead = new[] { (EName)1, (EName)2, (EName)3, (EName)4, (EName)5, (EName)6, (EName)7, (EName)8, (EName)9 }.ToList();
-            userData.cardView.adjectiveRead = new[] { (EAdjective)1, (EAdjective)2, (EAdjective)3, (EAdjective)4, (EAdjective)5, (EAdjective)6, (EAdjective)7, (EAdjective)8, (EAdjective)9, (EAdjective)10, (EAdjective)11, (EAdjective)12, (EAdjective)13, (EAdjective)14 }.ToList();
+            userData.cardView.nameRead = new[] { (EName)1, (EName)2, (EName)3, (EName)4, (EName)5, (EName)6, (EName)7, (EName)8, (EName)9, (EName)10, (EName)11, (EName)12 }.ToList();
+            userData.cardView.adjectiveRead = new[] { (EAdjective)1, (EAdjective)2, (EAdjective)3, (EAdjective)4, (EAdjective)5, (EAdjective)6, (EAdjective)7, (EAdjective)8, (EAdjective)9, (EAdjective)10, (EAdjective)11, (EAdjective)12, (EAdjective)13}.ToList();
             //
             userDataDic.Add(userID, userData);
             
@@ -248,11 +251,12 @@ public class GameDataManager : Singleton<GameDataManager>
     }
     
 
-    public void UpdateLevelData(int level, SLevelData levelData)
+    public void AddCustomLevelData(SLevelData levelData)
     {
+        int level = CustomLevelDataDic.Count;
         if (levelDataDic.ContainsKey(level))
         {
-            levelDataDic[level] = levelData;
+            Debug.LogError("이미 추가된 레벨이에요!");
         }
         else
         {
@@ -275,15 +279,21 @@ public class GameDataManager : Singleton<GameDataManager>
         names = loadFile.GetCardData<EName, SNameInfo>(data, 0);
         adjectives = loadFile.GetCardData<EAdjective, SAdjectiveInfo>(data, 1);
         
-        int contradictPriority = 0;
+        int interactionPriority = 0;
         int normalPriority = 0;
-        
+
         for (int i = 0; i < adjectives.Count; i++)
         {
             SAdjectiveInfo adjectiveInfo = adjectives[(EAdjective)i];
-            if (adjectiveInfo.adjective.GetAdjectiveType() == EAdjectiveType.Contradict)
+
+            if (adjectiveInfo.adjectiveName == EAdjective.Null)
             {
-                adjectiveInfo.uiPriority = ++contradictPriority;
+                continue;
+            }
+
+            if (adjectiveInfo.adjective.GetAdjectiveType() == EAdjectiveType.Interaction)
+            {
+                adjectiveInfo.uiPriority = ++interactionPriority;
             }
             else
             {
@@ -419,6 +429,10 @@ public class GameDataManager : Singleton<GameDataManager>
             cards.Add(cardPrefab);
         }
 
+        List<GameObject> normalAdjCards = new List<GameObject>();
+        List<GameObject> InteractionAdjCards = new List<GameObject>();
+
+        // sort adjective cards to ui priority
         for (int i = 0; i < adjectiveReads.Count; i++)
         {
             if ((int)adjectiveReads[i] > adjectives.Count - 1)
@@ -427,9 +441,19 @@ public class GameDataManager : Singleton<GameDataManager>
             }
 
             GameObject cardPrefab = Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as GameObject;
-            cards.Add(cardPrefab);
+            if (adjectives[adjectiveReads[i]].adjective.GetAdjectiveType() == EAdjectiveType.Interaction)
+            {
+                InteractionAdjCards.Add(cardPrefab);
+            }
+            else
+            {
+                normalAdjCards.Add(cardPrefab);
+            }
         }
         
+        cards.AddRange(InteractionAdjCards);
+        cards.AddRange(normalAdjCards);
+
         return cards.ToArray();
     }
 

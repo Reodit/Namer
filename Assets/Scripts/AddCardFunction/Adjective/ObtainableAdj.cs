@@ -4,7 +4,7 @@ using UnityEngine;
 public class ObtainableAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Obtainable;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Interaction;
     private int count = 0;
     
     public EAdjective GetAdjectiveName()
