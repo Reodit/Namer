@@ -358,7 +358,6 @@ public class PlayerMovement : MonoBehaviour
             float moveTime = 0;
             Vector3 target1 = new Vector3(curPos.x, curPos.y + objscale * 0.5f, curPos.z);
             yield return new WaitForSeconds(1f);
-            Debug.Log(target1);
             while (moveTime < 1)
             {
                 moveTime += Time.deltaTime * rootmotionSpeed;
@@ -388,7 +387,6 @@ public class PlayerMovement : MonoBehaviour
             curPos = transform.position;
             moveTime = 0;
             Vector3 target2 = new Vector3(curPos.x, curPos.y + objscale * 0.5f + 0.05f, curPos.z);
-            Debug.Log(target2);
 
             while (moveTime < 1f)
             {
