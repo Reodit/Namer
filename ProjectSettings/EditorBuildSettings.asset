@@ -14,9 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoadingScene.unity
     guid: c2ca953fb7e0e4bc4a5a14988e2e1988
-  - enabled: 1
-    path: Assets/Scenes/Levels/DemoPlayHJH.unity
-    guid: fe7fff380a4c244f6b94278b20226f8f
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/LevelEditor.unity
     guid: d1f1e5937375d43029a58973bcd38f80
