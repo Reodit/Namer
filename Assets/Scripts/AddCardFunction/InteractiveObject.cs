@@ -281,7 +281,7 @@ public class InteractiveObject : MonoBehaviour
         isCard = true;
         //
         
-        SubtractName(objectName);
+        SubtractNameCard(objectName);
         
         // Check Error
         if (addedName == null)
@@ -311,7 +311,7 @@ public class InteractiveObject : MonoBehaviour
 
         if (addAdjectiveTexts.Count >= maxAdjCount)
         {
-            SubtractAdjective(addAdjectiveTexts.Dequeue());
+            SubtractAdjectiveCard(addAdjectiveTexts.Dequeue());
         }
         
         if (addAdjective == EAdjective.Null)
@@ -359,7 +359,7 @@ public class InteractiveObject : MonoBehaviour
         DetectManager.GetInstance.StartDetector(target);
     }
 
-    private void SubtractName(EName subtractName)
+    public void SubtractNameCard(EName subtractName)
     {
         EAdjective[] subtractAdjectives = gameData.Names[subtractName].adjectives;
 
@@ -367,12 +367,12 @@ public class InteractiveObject : MonoBehaviour
         {
             foreach (var adjective in subtractAdjectives)
             {
-                SubtractAdjective(adjective, false);
+                SubtractAdjectiveCard(adjective, false);
             }
         }
     }
 
-    public void SubtractAdjective(EAdjective subtractAdjective, bool isAdjective = true)
+    public void SubtractAdjectiveCard(EAdjective subtractAdjective, bool isAdjective = true)
     {
         int adjIndex = (int)subtractAdjective;
         if (adjectives[adjIndex] == null)
