@@ -175,6 +175,9 @@ public class MainMenuCardController : MonoBehaviour
             case "MainCard(Clone)":
                 mainUIController.MainMenuScene();
                 break;
+            case "EditCard(Clone)":
+                mainUIController.LevelEditScene();
+                break;
             case "GameOffCard(Clone)":
                 Application.Quit();
                 break;

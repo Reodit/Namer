@@ -15,10 +15,14 @@ public class LevelSelectCardController : MonoBehaviour
     List<GameObject> startCards;
     GameObject StageCardPrefab;
     List<GameObject> levelLayoutGroups;
+
+    [SerializeField] MainUIController mainUIController;
     [SerializeField] GameObject[] levelSelectTiles;
 
     [SerializeField] float levelSelectMovingTime = 1.5f;
     [SerializeField] float cardDealingSpeed = 0.2f;
+    int startCardsCount;
+    string cardName;
 
     private void Start()
     {
@@ -33,11 +37,22 @@ public class LevelSelectCardController : MonoBehaviour
     private void StartCardsInit()
     {
         startCards.Add(mainMenuCard);
-        for (int i = 1; i < GameDataManager.GetInstance.LevelDataDic.Count + 1; i++)
+        if(mainUIController.state == MainMenuState.Level)
+        {
+            startCardsCount = GameDataManager.GetInstance.LevelDataDic.Count + 1;
+            cardName = "StageCard";
+        }
+        else
+        {
+            startCardsCount = 31;
+            cardName = "CustomCard";
+        }
+
+        for (int i = 1; i < startCardsCount; i++)
         {
             int inputNum = i;
             GameObject cardPrefab = Instantiate(StageCardPrefab);
-            cardPrefab.name = inputNum.ToString() + "StageCard";
+            cardPrefab.name = inputNum.ToString() + cardName;
             cardPrefab.GetComponent<StageNameController>().StageNumSetUp(inputNum);
             startCards.Add(cardPrefab);
         }
