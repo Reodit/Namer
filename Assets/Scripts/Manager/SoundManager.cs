@@ -269,7 +269,7 @@ public class SoundManager : Singleton<SoundManager>
         SetEndDSPTime(time);
         if (duration > dspEndTime-dspStartTime)
         {
-            StartCoroutine(AudioFadeOut(sfxSound));
+            //StartCoroutine(AudioFadeOut(sfxSound));
             // Debug.Log(duration);
             // Debug.Log(dspEndTime);
             // sfxSound.PlayScheduled(dspStartTime+duration);
@@ -287,7 +287,7 @@ public class SoundManager : Singleton<SoundManager>
         float elapsedTime = 0;
         while (remainingTime > 0)
         {
-            audio.volume = Mathf.Lerp(1, 0, (float)(dspEndTime-AudioSettings.dspTime/remainingTime));
+            audio.volume = Mathf.Lerp(1, 0, elapsedTime/10);
             remainingTime -= Time.deltaTime;
             elapsedTime += Time.deltaTime;
             yield return null;
