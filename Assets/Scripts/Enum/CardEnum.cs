@@ -16,6 +16,9 @@ public enum EName
     Sun,
     Balloon,
     Crystal,
+    SnowMan,
+    Lamp,
+    Vine,
 }
 
 public enum EAdjectiveType

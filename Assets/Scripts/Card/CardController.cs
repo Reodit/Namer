@@ -19,6 +19,7 @@ public class CardController : MonoBehaviour
     [SerializeField] GameObject highlight;
     [SerializeField] private Text UIText;
     [SerializeField] private Text NameAdjUIText;
+    [SerializeField] private Text priorityNum;
     GameObject Encyclopedia;
     CardRotate cr;
 
@@ -67,6 +68,7 @@ public class CardController : MonoBehaviour
         else if (cardType == ECardType.Adjective)
         {
             UIText.text = gameDataManager.Adjectives[adjectiveType].uiText;
+            priorityNum.text = gameDataManager.Adjectives[adjectiveType].uiPriority.ToString();
         }
 
         Text contentText = Encyclopedia.GetComponentInChildren<Text>();
@@ -226,6 +228,10 @@ public class CardController : MonoBehaviour
 
         if (target)
         {
+            if (target.name == "PlanetObj")
+            {
+                return;
+            }
             GameManager.GetInstance.localPlayerMovement.addCardTarget = target;
             GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.AddCard);
             
