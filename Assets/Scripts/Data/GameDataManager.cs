@@ -42,6 +42,9 @@ public class GameDataManager : Singleton<GameDataManager>
     private string userDataFileName;
     private string levelDataFileName;
     
+    // MapData
+    private SMapData mapData;
+    
     private void FilePathInfo()
     {
         filePath = Application.persistentDataPath + "/Data/";
@@ -54,21 +57,37 @@ public class GameDataManager : Singleton<GameDataManager>
         levelDataFileName = "levels.json";
     }
 
-#region Map(tile, object) Data 
+#region Map(tile, object) Data
+
+    public void ReadMapData()
+    {
+        MapReader mapReader = FindObjectOfType<MapReader>();
+        if (!mapReader)
+        {
+            mapReader = gameObject.AddComponent<MapReader>();
+        }
+        
+        mapData = mapReader.GetMapData();
+
+        initTiles = mapData.tiles;
+        initObjects = mapData.objects;
+    }
 
     public void CreateFile()
     {
         FilePathInfo();
 
+        if (mapData.tiles == null)
+        {
+            Debug.LogError("ReadMapData() 함수 사용했는지 확인해주세요!");
+        }
+
         string sceneName = SceneManager.GetActiveScene().name;
-        
-        MapReader mapReader = FindObjectOfType<MapReader>();
-        SMapData mapData = mapReader.GetMapData();
-        
+
         SaveLoadFile saveFile = new SaveLoadFile();
-        saveFile.CreateCsvFile(mapData.tileMapData, filePath + sceneName, tileMapFileName);
-        saveFile.CreateCsvFile(mapData.objectMapData, filePath + sceneName, objectMapFileName);
-        saveFile.CreateJsonFile(mapData.objectInfoData, filePath + sceneName, objectInfoFileName);
+        saveFile.CreateCsvFile(mapData.tileMapData, "Assets/Resources/Data/" + sceneName, tileMapFileName);
+        saveFile.CreateCsvFile(mapData.objectMapData, "Assets/Resources/Data/" + sceneName, objectMapFileName);
+        saveFile.CreateJsonFile(mapData.objectInfoData, "Assets/Resources/Data/" + sceneName, objectInfoFileName);
     }
 
     public void CreateMap(int level)
@@ -89,7 +108,11 @@ public class GameDataManager : Singleton<GameDataManager>
         StringReader objectMapData = loadFile.ReadCsvFile(filePath + sceneName, objectMapFileName);
         Dictionary<int, SObjectInfo> objectInfoDic = loadFile.ReadJsonFile<int, SObjectInfo>(filePath + sceneName, objectInfoFileName);
 
-        MapCreator mapCreator = gameObject.AddComponent<MapCreator>();
+        MapCreator mapCreator = FindObjectOfType<MapCreator>();
+        if (!mapCreator)
+        {
+            mapCreator = gameObject.AddComponent<MapCreator>();
+        }
         initTiles = mapCreator.CreateTileMap(tileMapData);
         initObjects = mapCreator.CreateObjectMap(objectMapData, objectInfoDic);
     }
@@ -118,8 +141,12 @@ public class GameDataManager : Singleton<GameDataManager>
         if (!userDataDic.ContainsKey(userID))
         {
             SUserData userData = new SUserData(userID);
+            // Test
+            userData.cardView.nameRead = new[] { (EName)1, (EName)2, (EName)3, (EName)4, (EName)5, (EName)6, (EName)7, (EName)8, (EName)9 }.ToList();
+            userData.cardView.adjectiveRead = new[] { (EAdjective)1, (EAdjective)2, (EAdjective)3, (EAdjective)4, (EAdjective)5, (EAdjective)6, (EAdjective)7, (EAdjective)8, (EAdjective)9, (EAdjective)10, (EAdjective)11, (EAdjective)12, (EAdjective)13, (EAdjective)14 }.ToList();
+            //
             userDataDic.Add(userID, userData);
-
+            
             SaveLoadFile saveFile = new SaveLoadFile();
             saveFile.UpdateDicDataToJsonFile(userDataDic, filePath + "SaveLoad", userDataFileName);
             
@@ -134,6 +161,17 @@ public class GameDataManager : Singleton<GameDataManager>
             firstUserID = userID;
         }
         //
+    }
+
+    public void ResetUserData(string userID)
+    {
+        if (UserDataDic.ContainsKey(userID))
+        {
+            Debug.LogError(userID + " 사용자 ID를 가진 사용자가 없습니다. 확인해주세요!");
+        }
+        
+        SUserData userData = new SUserData(userID);
+        userDataDic[userID] = userData;
     }
     
     public string GetUserID()

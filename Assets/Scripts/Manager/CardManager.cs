@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-using System;
 
 public class CardManager : Singleton<CardManager>
 {
@@ -143,33 +142,41 @@ public class CardManager : Singleton<CardManager>
         else
         {
             isCardDealingDone = false;
-            GameDataManager gameData = GameDataManager.GetInstance;
-            int level = GameManager.GetInstance.Level;
-            GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
 
-            for (int i = 0; i < cards.Length; i++)
+            if (GameManager.GetInstance.CurrentState == GameStates.InGame)
             {
-                if (isCardsHide)
+                GameDataManager gameData = GameDataManager.GetInstance;
+                int level = GameManager.GetInstance.Level;
+                GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
+
+                if (cards != null)
                 {
-                    cards[i].transform.GetChild(0).gameObject.SetActive(false);
+                    for (int i = 0; i < cards.Length; i++)
+                    {
+                        if (isCardsHide)
+                        {
+                            cards[i].transform.GetChild(0).gameObject.SetActive(false);
+                        }
+                        AddCard(cards[i]);
+                        SoundManager.GetInstance.Play("CardHover");
+                        yield return new WaitForSeconds(0.5f);
+                    }
                 }
-                AddCard(cards[i]);
-                SoundManager.GetInstance.Play("CardHover");
-                yield return new WaitForSeconds(0.5f);
+            }
+            else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+            {
+                // 테스트 시 위의 코드를 주석처리하고, 아래의 함수를 사용해주세요.
+                for (int i = 0; i < startCards.Length; i++)
+                {
+                    AddCard(startCards[i]);
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
 
             yield return new WaitForSeconds(1.5f);
             isCardDealingDone = true;
             topButtons.SetActive(true);
             bottomButtons.SetActive(true);
-            // 테스트 시 위의 코드를 주석처리하고, 아래의 함수를 사용해주세요.
-            // for (int i = 0; i < startCards.Length; i++)
-            // {
-            //     AddCard(startCards[i]);
-            //     yield return new WaitForSeconds(0.5f);
-            // }
-
-
         }
     }
 

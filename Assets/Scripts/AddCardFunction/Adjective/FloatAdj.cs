@@ -64,13 +64,12 @@ public class FloatAdj : IAdjective
 
     IEnumerator FloatObj(GameObject obj)
     {
-
-        if (DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.up, (int)obj.transform.lossyScale.y) == null)
+        obj.transform.position = Vector3Int.RoundToInt(obj.transform.position);
+        if (DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.up, Mathf.RoundToInt(obj.transform.lossyScale.y)) == null)
         {
             //바로 밑에 있는 타일 검사해서 있으면 전 과정 돌리기
             //바로 밑에 타일이 없으면 올라가는 코루틴 pass 둥둥 이펙트만 살리기
 
-            
             RaycastHit hit;
             if (Physics.Raycast(obj.transform.position+new Vector3(0,0.5f,0), Vector3.down, out hit))
             {
@@ -111,10 +110,21 @@ public class FloatAdj : IAdjective
 
             while (obj != null && obj.GetComponent<InteractiveObject>().CheckAdjective(adjectiveName))
             {
-                currentTime += Time.deltaTime * speed;
+                if (obj.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Bouncy) || !obj.GetComponent<InteractiveObject>().abandonBouncy)
+                {
+                    int counting = obj.GetComponent<InteractiveObject>().Adjectives[(int)EAdjective.Float].GetCount();
+                    if (obj.GetComponent<InteractiveObject>().floatDone != counting)
+                    {
+                        obj.GetComponent<InteractiveObject>().floatDone = counting;
+                    }
+                }
+                else
+                {
+                    currentTime += Time.deltaTime * speed;
 
-                obj.transform.GetChild(0).
+                    obj.transform.GetChild(0).
                     localPosition = new Vector3(obj.transform.GetChild(0).localPosition.x, currentPos.y + Mathf.Sin(currentTime) * length, obj.transform.GetChild(0).localPosition.z);
+                }
                 yield return InteractionSequencer.GetInstance.WaitUntilPlayerInteractionEnd(this);
             }
             if (obj != null)
