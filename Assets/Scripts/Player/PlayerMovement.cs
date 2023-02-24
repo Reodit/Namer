@@ -170,6 +170,14 @@ public class PlayerMovement : MonoBehaviour
         {
             Init();
         }
+        
+        if (rb.velocity.magnitude > 10 || rb.position.y < -5f)
+        {
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            GameManager.GetInstance.ResetCurrentLvl();
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            return;
+        }
     }
 
     private void FixedUpdate()
@@ -186,12 +194,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 return;
             }
-        }
-        
-        if (rb.velocity.magnitude > 5)
-        {
-            rb.velocity = Vector3.zero;
-            return;
         }
 
         if (GameManager.GetInstance.isPlayerCanInput && !GameManager.GetInstance.isPlayerDoAction)
