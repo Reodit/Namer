@@ -5,7 +5,7 @@ using UnityEngine;
 public class FloatAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Float;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Repeat;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
     private int count = 0;
     #region 둥둥 멤버변수
     private float currentTime;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ExtinguisherAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Extinguisher;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Contradict;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
     private int count = 0;
     
     public EAdjective GetAdjectiveName()
