@@ -33,9 +33,14 @@ public class CollisionEffect : MonoBehaviour
         
         else if (Physics.Raycast(pm.transform.position + Vector3.up * 0.2f, Vector3.down, out hit, 1f, layerMask))
         {
-            if (hit.transform.name.Contains("GroundTile") || hit.transform.name.Contains("GlassTile"))
+            if (hit.transform.name.Contains("GroundTile") /*|| hit.transform.name.Contains("GlassTile")*/)
             {
-                pe.currentEffectIndex = EffectIndex.Footprint;
+                pe.currentEffectIndex = EffectIndex.DesertFootprint;
+            }
+
+            else
+            {
+                pe.currentEffectIndex = EffectIndex.SnowFootprint;
             }
         }
     }
