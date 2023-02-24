@@ -141,7 +141,7 @@ public class MainMenuCardController : MonoBehaviour
 
     string CheckCardName(string cardName)
     {
-        string stageCard = "StageCard(Clone)";
+        string stageCard = "StageCard";
         if (cardName.Contains(stageCard))
         {
             return stageCard;
@@ -181,7 +181,7 @@ public class MainMenuCardController : MonoBehaviour
             case "GameOffCard(Clone)":
                 Application.Quit();
                 break;
-            case "StageCard(Clone)":
+            case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
                 //CheckClearLevel(cardName);
                 LoadingSceneController.LoadScene("DemoPlay");
@@ -202,7 +202,7 @@ public class MainMenuCardController : MonoBehaviour
     {
         if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -3)
         {
-            if (cardName == "1StageCard(Clone)")
+            if (cardName == "1StageCard")
             {
                 LoadingSceneController.LoadScene("DemoPlay");
             }

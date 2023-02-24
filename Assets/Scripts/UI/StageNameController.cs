@@ -18,6 +18,11 @@ public class StageNameController : MonoBehaviour
         NamePlateOnOff();
     }
 
+    private void Start()
+    {
+        NamePlateOnOff();
+    }
+
     string NameText()
     {
         if (GameDataManager.GetInstance.GetLevelName(stageNum) == "")
