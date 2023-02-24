@@ -21,7 +21,6 @@ public class SoundManager : Singleton<SoundManager>
     public AudioSource playerSfxSound;
     public AudioSource repeatableSfx;
     public AudioSource menuCardSfxSound;
-
     private bool isBGMSOundTrack01Playing;
 
     private double dspStartTime;

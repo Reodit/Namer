@@ -13,7 +13,6 @@ public class SoundPanelController : MonoBehaviour
     [SerializeField] Slider BGMSlider;
     [SerializeField] Slider SFXSlider;
     [SerializeField] Toggle muteToggle;
-    [SerializeField] Toggle bgToggle;
 
     void Start()
     {
@@ -29,9 +28,7 @@ public class SoundPanelController : MonoBehaviour
             SoundManager.GetInstance.bgmSound.mute = true;
             SoundManager.GetInstance.sfxSound.mute = true;
         }
-#if !UNITY_ANDROID
-        bgToggle.isOn = SoundManager.GetInstance.isBgToggleOn;
-#endif
+
         audioMixer = SoundManager.GetInstance.audioMixer;
         float mValue, bValue, sValue;
 
