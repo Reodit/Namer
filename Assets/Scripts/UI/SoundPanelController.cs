@@ -29,6 +29,11 @@ public class SoundPanelController : MonoBehaviour
             SoundManager.GetInstance.sfxSound.mute = true;
         }
 
+        // TODO PC에는 살려야한다고 합니다!
+// #if !UNITY_ANDROID
+//         bgToggle.isOn = SoundManager.GetInstance.isBgToggleOn;
+// #endif
+
         audioMixer = SoundManager.GetInstance.audioMixer;
         float mValue, bValue, sValue;
 
