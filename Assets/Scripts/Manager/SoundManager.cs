@@ -172,7 +172,7 @@ public class SoundManager : Singleton<SoundManager>
 
     public void ChangeInGameLevelBGM()
     {
-        int currentLevel = GameManager.GetInstance.Level;
+        int currentLevel = GameManager.GetInstance.Level + 1;
         string levelBGM = "Level" + currentLevel;
         var audioClip = FindBgm(levelBGM);
         bgmSound.clip = audioClip;
@@ -197,7 +197,6 @@ public class SoundManager : Singleton<SoundManager>
 
         // StartCoroutine(SmothelySwapAudio(clip));
         bgmSound.clip = clip;
-        bgmSound.loop = true;
         bgmSound.Play();
         // isBGMSOundTrack01Playing = !isBGMSOundTrack01Playing;
     }
@@ -310,7 +309,6 @@ public class SoundManager : Singleton<SoundManager>
         // if(AudioSettings.dspTime < duration)
         //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
         // sfxSound.PlayOneShot(clip);
-        // sfxSound.outputAudioMixerGroup.audioMixer.SetFloat("Pitch",1)
     }
     public void Play(AudioSource source, AudioClip clip)
     {
@@ -450,6 +448,7 @@ public class SoundManager : Singleton<SoundManager>
         }
         muteToggle.onValueChanged.AddListener(delegate {
             SetSound(); });
+
     }
 
     private void OnApplicationPause(bool pause)
