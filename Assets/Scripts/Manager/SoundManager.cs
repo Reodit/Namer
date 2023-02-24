@@ -296,15 +296,19 @@ public class SoundManager : Singleton<SoundManager>
     }
     public void Play(AudioClip clip)
     {
-        double remainingTime = dspEndTime-AudioSettings.dspTime;
-        float elapsedTime = 0;
-        while (remainingTime > 0)
-        {
-            audio.volume = Mathf.Lerp(1, 0, (float)(dspEndTime-AudioSettings.dspTime/remainingTime));
-            remainingTime -= Time.deltaTime;
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+        double duration = (double)clip.samples / clip.frequency; //  clips playTime need to get  
+        sfxSound.Stop();
+        sfxSound.clip = clip;
+        dspStartTime = AudioSettings.dspTime;
+        sfxSound.PlayScheduled(dspStartTime);
+        // SetEndDSPTime(time);
+        // if (dspEndTime > duration)
+        // {
+        //     sfxSound.PlayScheduled(dspStartTime+duration);
+        // }
+        // if(AudioSettings.dspTime < duration)
+        //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
+        // sfxSound.PlayOneShot(clip);
     }
     public void Play(AudioSource source, AudioClip clip)
     {
