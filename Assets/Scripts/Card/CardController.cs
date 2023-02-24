@@ -181,6 +181,7 @@ public class CardController : MonoBehaviour
         }
         gameObject.transform.DOMove(
             CardManager.GetInstance.target.transform.position + new Vector3(0, 0.5f, 0), 0.4f);
+        SoundManager.GetInstance.Play("CardFly");
         yield return new WaitForSeconds(0.1f);
         CardManager.GetInstance.myCards.Remove(gameObject.GetComponent<CardController>());
         GameObject particleObj =

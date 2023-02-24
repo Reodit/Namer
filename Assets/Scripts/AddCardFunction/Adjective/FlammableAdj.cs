@@ -90,8 +90,9 @@ public class FlammableAdj : IAdjective
 
         int flameIdx = (int)EAdjective.Flame;
         if (otherObject.GetComponent<InteractiveObject>().Adjectives[flameIdx] == null) yield break;
+
         fire.Play();
-        SoundManager.GetInstance.Play(EAdjective.Flammable);
+        SoundManager.GetInstance.Play(EAdjective.Flammable, 2.5f);
         yield return new WaitForSeconds(2.5f);
 
         if (thisObj == null || otherObject == null) yield break;

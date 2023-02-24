@@ -19,10 +19,8 @@ public class SoundManager : Singleton<SoundManager>
 
     public AudioSource sfxSound;
     public AudioSource playerSfxSound;
-    public AudioSource playerFootStepSound1;
-    public AudioSource playerFootStepSound2;
-    public AudioSource playerFootStepSound3;
     public AudioSource repeatableSfx;
+    public AudioSource menuCardSfxSound;
     private bool isBGMSOundTrack01Playing;
 
     private double dspStartTime;
@@ -53,6 +51,7 @@ public class SoundManager : Singleton<SoundManager>
 
     SGameSetting sGameSetting = new SGameSetting();
 
+    public AudioClip testCardHoverSfx; 
 
     private void Awake()
     {
@@ -198,7 +197,6 @@ public class SoundManager : Singleton<SoundManager>
         // StartCoroutine(SmothelySwapAudio(clip));
         bgmSound.clip = clip;
         bgmSound.Play();
-        // isBGMSOundTrack01Playing = !isBGMSOundTrack01Playing;
     }
     IEnumerator SmothelySwapAudio(AudioClip newClip)
     {
@@ -270,7 +268,7 @@ public class SoundManager : Singleton<SoundManager>
         SetEndDSPTime(time);
         if (duration > dspEndTime-dspStartTime)
         {
-            StartCoroutine(AudioFadeOut(sfxSound));
+            //StartCoroutine(AudioFadeOut(sfxSound));
             // Debug.Log(duration);
             // Debug.Log(dspEndTime);
             // sfxSound.PlayScheduled(dspStartTime+duration);
@@ -288,27 +286,11 @@ public class SoundManager : Singleton<SoundManager>
         float elapsedTime = 0;
         while (remainingTime > 0)
         {
-            audio.volume = Mathf.Lerp(1, 0, (float)(dspEndTime-AudioSettings.dspTime/remainingTime));
+            audio.volume = Mathf.Lerp(1, 0, elapsedTime/10);
             remainingTime -= Time.deltaTime;
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-    }
-    public void Play(AudioClip clip)
-    {
-        double duration = (double)clip.samples / clip.frequency; //  clips playTime need to get  
-        sfxSound.Stop();
-        sfxSound.clip = clip;
-        dspStartTime = AudioSettings.dspTime;
-        sfxSound.PlayScheduled(dspStartTime);
-        // SetEndDSPTime(time);
-        // if (dspEndTime > duration)
-        // {
-        //     sfxSound.PlayScheduled(dspStartTime+duration);
-        // }
-        // if(AudioSettings.dspTime < duration)
-        //     sfxSound.PlayScheduled(AudioSettings.dspTime + duration);
-        // sfxSound.PlayOneShot(clip);
     }
     public void Play(AudioSource source, AudioClip clip)
     {
@@ -353,6 +335,17 @@ public class SoundManager : Singleton<SoundManager>
         {
             Play(playerSfxSound, playerEffectClips[clipname]);
         }
+
+        if (clipname=="CardHover2")
+        {
+            menuCardSfxSound.clip = testCardHoverSfx;
+            menuCardSfxSound.Play();
+        }
+    }
+
+    public void MenuCardSFXPlay()
+    {
+        menuCardSfxSound.PlayOneShot(testCardHoverSfx);
     }
 
     //public void repeatPlay(string clipName)
