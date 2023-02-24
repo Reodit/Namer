@@ -34,7 +34,6 @@ public class MainUIController : MonoBehaviour
     [SerializeField] GameObject levelSelectBtnPanelLeftBtn;
     [SerializeField] GameObject levelSelectBtnPanelRightBtn;
     [SerializeField] GameObject levelSelectCards;
-    [SerializeField] GameObject levelSelectCards2th;
     GameObject levelInformationTxt;
 
     [SerializeField] float titleMovingTime = 1f;
@@ -295,19 +294,41 @@ public class MainUIController : MonoBehaviour
         levelSelectBtnPanel.SetActive(true);
     }
 
+    int pageCount = 0;
+    int maxPage = 1;
     public void LevelSelectPanelRightBtn()
     {
-        levelSelectBtnPanelLeftBtn.SetActive(true);
-        levelSelectBtnPanelRightBtn.SetActive(false);
-        levelSelectCards.SetActive(false);
-        levelSelectCards2th.SetActive(true);
+        levelSelectCards.transform.GetChild(pageCount).gameObject.SetActive(false);
+        pageCount++;
+        levelSelectCards.transform.GetChild(pageCount).gameObject.SetActive(true);
+        LevelSelectBtnController();
     }
 
     public void LevelSelectPanelLeftBtn()
     {
-        levelSelectBtnPanelRightBtn.SetActive(true);
-        levelSelectBtnPanelLeftBtn.SetActive(false);
-        levelSelectCards.SetActive(true);
-        levelSelectCards2th.SetActive(false);
+        levelSelectCards.transform.GetChild(pageCount).gameObject.SetActive(false);
+        pageCount--;
+        levelSelectCards.transform.GetChild(pageCount).gameObject.SetActive(true);
+        LevelSelectBtnController();
+    }
+
+    void LevelSelectBtnController()
+    {
+        maxPage = levelSelectCards.transform.childCount;
+        if(pageCount == 0)
+        {
+            levelSelectBtnPanelLeftBtn.SetActive(false);
+            levelSelectBtnPanelRightBtn.SetActive(true);
+        }
+        else if(pageCount == maxPage - 1)
+        {
+            levelSelectBtnPanelRightBtn.SetActive(false);
+            levelSelectBtnPanelLeftBtn.SetActive(true);
+        }
+        else
+        {
+            levelSelectBtnPanelLeftBtn.SetActive(true);
+            levelSelectBtnPanelRightBtn.SetActive(true);
+        }
     }
 }
