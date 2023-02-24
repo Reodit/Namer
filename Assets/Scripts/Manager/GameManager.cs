@@ -17,6 +17,7 @@ public enum GameStates
     LevelSelect,
     LevelEditMode,
     LevelEditorTestPlay,
+    NextLevelLoad
 }
 public class GameManager : Singleton<GameManager>
 {
@@ -250,6 +251,8 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameStates.LevelEditorTestPlay:
                 break;
+            case GameStates.NextLevelLoad:
+                break;
         }
     }
     public void ChangeGameState(GameStates newState)
@@ -385,7 +388,7 @@ public class GameManager : Singleton<GameManager>
                 sb.Append(letter);
             }
         }
-        int level = int.Parse(sb.ToString()) - 1;
+        int level = int.Parse(sb.ToString());
         // Debug.Log(level);
         //testCode
         // level = 1;        
@@ -399,6 +402,8 @@ public class GameManager : Singleton<GameManager>
         objcts = GameObject.Find("Objects");
         if (groundObjs != null && objcts != null)
         {
+            groundObjs.SetActive(false);
+            objcts.SetActive(false);
             Destroy(groundObjs);
             Destroy(objcts);
         }
@@ -439,6 +444,26 @@ public class GameManager : Singleton<GameManager>
         scenarioController.Init();
         resetLoadValue = 0f;
     }
+    
+    //다음 맵을 실행 시키는 메소드
+    [ContextMenu("Test NextLevel")]
+    public void NextLevel()
+    {
+        // ChangeGameState(GameStates.NextLevelLoad);
+        // var detectManager = GameObject.Find("DetectManager");
+        // Destroy(detectManager);
+        GetCurrentLevel(curLevel + 1);
+        // Debug.Log(curLevel);
+        DeleteCurrentMap();
+        DeleteCurrentCard();
+        LoadMap(curLevel);
+        GetNewCardDeck();
+        cameraController.Init();
+        scenarioController.Init();
+        resetLoadValue = 0f;
+        // ChangeGameState(GameStates.InGame);
+    }   
+    
 
     
     //DemoScene에서 하면 왜됌?
@@ -477,7 +502,6 @@ public class GameManager : Singleton<GameManager>
 
     private GameObject levelInfos;
 
-    [ContextMenu("TestLevelLoad")]
     public void ForTester()
     { 
         levelInfos = GameObject.Find("LevelInfos");
