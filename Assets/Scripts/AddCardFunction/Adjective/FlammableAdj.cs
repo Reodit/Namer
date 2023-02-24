@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlammableAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Flammable;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Contradict;
     private int count = 0;
 
     #region 잘타는 꾸밈 카드 맴버변수
@@ -90,8 +90,9 @@ public class FlammableAdj : IAdjective
 
         int flameIdx = (int)EAdjective.Flame;
         if (otherObject.GetComponent<InteractiveObject>().Adjectives[flameIdx] == null) yield break;
+
         fire.Play();
-        SoundManager.GetInstance.Play(EAdjective.Flammable);
+        SoundManager.GetInstance.Play(EAdjective.Flammable, 2.5f);
         yield return new WaitForSeconds(2.5f);
 
         if (thisObj == null || otherObject == null) yield break;

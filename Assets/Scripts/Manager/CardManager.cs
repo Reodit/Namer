@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-using System;
 
 public class CardManager : Singleton<CardManager>
 {
@@ -26,6 +25,7 @@ public class CardManager : Singleton<CardManager>
     public bool isEncyclopedia = false;
     public bool isCardDealingDone = false;
     public bool isCardsHide = false;
+    public bool isMenuLevel = false;
 
     //선택한 카드
     public GameObject pickCard;
@@ -133,7 +133,6 @@ public class CardManager : Singleton<CardManager>
             for (int i = 0; i < startCards.Length; i++)
             {
                 MainMenuAddCard(startCards[i]);
-                SoundManager.GetInstance.Play("CardHover");
                 yield return new WaitForSeconds(0.5f);
             }
 
@@ -149,16 +148,19 @@ public class CardManager : Singleton<CardManager>
                 GameDataManager gameData = GameDataManager.GetInstance;
                 int level = GameManager.GetInstance.Level;
                 GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
-            
-                for (int i = 0; i < cards.Length; i++)
+
+                if (cards != null)
                 {
-                    if (isCardsHide)
+                    for (int i = 0; i < cards.Length; i++)
                     {
-                        cards[i].transform.GetChild(0).gameObject.SetActive(false);
+                        if (isCardsHide)
+                        {
+                            cards[i].transform.GetChild(0).gameObject.SetActive(false);
+                        }
+                        AddCard(cards[i]);
+                        SoundManager.GetInstance.Play("CardHover");
+                        yield return new WaitForSeconds(0.5f);
                     }
-                    AddCard(cards[i]);
-                    SoundManager.GetInstance.Play("CardHover");
-                    yield return new WaitForSeconds(0.5f);
                 }
             }
             else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
@@ -169,6 +171,7 @@ public class CardManager : Singleton<CardManager>
                     AddCard(startCards[i]);
                     yield return new WaitForSeconds(0.5f);
                 }
+
             }
 
             yield return new WaitForSeconds(1.5f);
@@ -191,6 +194,7 @@ public class CardManager : Singleton<CardManager>
         }
         myCards.Add(card);
         CardAlignment();
+        SoundManager.GetInstance.Play("CardHover");
     }
 
     void MainMenuAddCard(GameObject cardPrefab)
@@ -201,6 +205,9 @@ public class CardManager : Singleton<CardManager>
         cardObject.transform.parent = GameObject.Find("MainMenuCards").transform;
         mainCards.Add(card);
         MainCardAlignment();
+        if (isMenuLevel) return;
+
+        SoundManager.GetInstance.Play("CardHover2");
     }
 
     //카드를 정렬하는 메서드 

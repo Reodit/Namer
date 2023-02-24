@@ -87,6 +87,7 @@ MonoBehaviour:
   highlight: {fileID: 7814245775451451617}
   UIText: {fileID: 6521523339953219920}
   NameAdjUIText: {fileID: 0}
+  priorityNum: {fileID: 8558731598335727379}
   currentLevelName: 
 --- !u!65 &3201817411243718055
 BoxCollider:
@@ -308,6 +309,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7277805989260689589, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
   m_PrefabInstance: {fileID: 616486125098856532}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8558731598335727379 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9099676805485242183, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
+  m_PrefabInstance: {fileID: 616486125098856532}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8780169716584442077 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8167100953595549833, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
