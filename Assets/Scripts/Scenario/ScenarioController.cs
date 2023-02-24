@@ -380,16 +380,17 @@ public class ScenarioController : MonoBehaviour
             StartCoroutine(OpenClearPanel());
             scenarioCount = -1;
         }
-        else if (GameManager.GetInstance.CurrentState == GameStates.Victory)
-        {
-            if (scenarioCount > goalScenarioCount)
-            {
-                scenarioCount = 0;
-                // 승리 ui 실행 
-                StartCoroutine(OpenClearPanel());
-                scenarioCount = -1;
-            }
-        }
+        // todo 시나리오가 진행이 안된 상태로 장미에게 말을 걸어도 깰 수 있도록 하기 
+        //else if (GameManager.GetInstance.CurrentState == GameStates.Victory)
+        //{
+        //    if (scenarioCount > goalScenarioCount)
+        //    {
+        //        scenarioCount = 0;
+        //        // 승리 ui 실행 
+        //        StartCoroutine(OpenClearPanel());
+        //        scenarioCount = -1;
+        //    }
+        //}
         return checkedValue;
     }
 
