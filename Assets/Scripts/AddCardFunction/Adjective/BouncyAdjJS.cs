@@ -41,7 +41,7 @@ using UnityEngine;
             Debug.Log(DetectManager.GetInstance.GetTilesData() == null);
             SetStartPos(gameObject);
             // CheckBouncible(gameObject);
-            InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(BounceCoroutine(gameObject));
+            StartCoroutine(BounceCoroutine(gameObject));
         }
 
         public EAdjective GetAdjectiveName()
@@ -102,16 +102,13 @@ using UnityEngine;
             // startPos = targetObj.transform.position;
             startPos=new Vector3(targetObj.transform.position.x, Mathf.RoundToInt(targetObj.transform.position.y),
                 targetObj.transform.position.z);
-            // Debug.Log(startPos);
+            Debug.Log(startPos);
             prevPos = startPos;
         }
 
         void CheckBouncible(GameObject targetObj)
         {
-            var underObject = CheckUnderGameObject(targetObj.transform.position);
-            if(underObject != null&&underObject.tag == "InteractObj"
-               &&underObject.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Movable))
-                Debug.Log(underObject.name,underObject.transform);
+            var underObject = DetectManager.GetInstance.GetAdjacentObjectWithDir(targetObj, Dir.down, targetObj.transform.lossyScale);
             var upperObject =
                 DetectManager.GetInstance.GetAdjacentObjectWithDir(targetObj, Dir.up, targetObj.transform.lossyScale);
             // if (underObject != null && upperObject == null)
@@ -121,10 +118,7 @@ using UnityEngine;
             // }
             if (underObject != null)
             {
-                
                 orignDownUnder = underObject;
-                startPos = Vector3Int.RoundToInt(underObject.transform.position);
-                Debug.Log(startPos);
                 isBouncy = true;
             }
         }
@@ -146,7 +140,6 @@ using UnityEngine;
 
             while (isBouncy)
             {
-                CheckBouncible(obj);
                 time += Time.deltaTime * bounceSpeed;
                 
                 //sin time 에대한 radian값 을보면된다. 한주기를 나머지 연산 %연산을 쓰데 나우는 디바이더가 주기로된다.
@@ -216,17 +209,12 @@ using UnityEngine;
                     //골
                     //상승
                   
-                // if (reminder % PERIOD == CREST||reminder == 0)
+                if (reminder % PERIOD == CREST||reminder == 0)
                 {
                     var upOrDown = obj.transform.position - startPos;
-                    var dir = upOrDown.normalized;
-                    if (dir.y < 0)
-                    {
-                        CheckBouncible(obj);
-                    }
                     //1 올라간다...
                     //-1 내려간다.. 
-                    // Debug.Log(upOrDown.normalized);
+                    Debug.Log(upOrDown.normalized);
                     // Debug.Log("Crest");
                     var isPlayer = CheckCharacter(obj);
                     // Debug.Log(isPlayer);
@@ -237,17 +225,14 @@ using UnityEngine;
                     // var underPositionedGameObject= objectsData[Mathf.FloorToInt(obj.transform.position.x),
                     //     Mathf.FloorToInt(startPos.y-1f),Mathf.FloorToInt(obj.transform.position.z)];
                     int peckHeight = Mathf.RoundToInt(obj.transform.position.y);
-                    Debug.Log(peckHeight+" --> PeakHeight");    
-                    Debug.Log(obj.transform.position+"-----------------------");
-                    Debug.Log(DetectManager.GetInstance.FindObjectInArray(obj));
                     if (peckHeight - startPos.y <= .5f)
                     {
-                        // Debug.Log("4 should be here");
+                        Debug.Log("4 should be here");
                         var test=DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.down);
-                        // Debug.Log(obj.transform.position);
-                        // Debug.Log(obj.transform.position.y);
-                        // Debug.Log(Mathf.RoundToInt(obj.transform.position.y));
-                        // Debug.Log(test);
+                        Debug.Log(obj.transform.position);
+                        Debug.Log(obj.transform.position.y);
+                        Debug.Log(Mathf.RoundToInt(obj.transform.position.y));
+                        Debug.Log(test);
                     }
                         
                     
@@ -257,26 +242,19 @@ using UnityEngine;
                     // var upperPositionedGameObject= objectsData[Mathf.FloorToInt(obj.transform.position.x),
                     //     Mathf.FloorToInt(startPos.y+1f),Mathf.FloorToInt(obj.transform.position.z)];
                     
-                    // Debug.Log(obj.transform.position);
-                   
+                    Debug.Log(obj.transform.position);
+                    //문제 1. 여기서 현재 물체 위치가 배열상의 위치가 달라서 문제가 발생 --> 다시 배열의 위치를 바꾸어 버린다.
                     // 올라가고 있을때랑, 내려가는 중일 때를 정확히 파악해야한다. -> 이거 해도 뭘해야할지 모르겟네;;
-                    //문제 1. 다른 물체가 밀림으로 들어올때 땅으로 박아버린다.
-                    // 이거 없는게 체크 되고 들어간후 -> 물체를 밑으로 내렸다. 
-                    
-                    // 문제 2. 자기자신이 밀림으로 밀려도, 제자리로 돌아온다.
-                    if (obj.transform.position.x != startPos.x || obj.transform.position.z != startPos.z)
-                    {
-                        // Debug.Log("It moved");
-                    }
                     
                     // var underPositionedGameObject = DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.down,obj.transform.lossyScale);
                     var underPositionedGameObject = CheckUnderGameObject(obj.transform.position);
-                    // Debug.Log(underPositionedGameObject);
+                    Debug.Log(underPositionedGameObject);
                     var upperPositionedGameObject = DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.up, obj.transform.lossyScale);
                     
                     if (upperPositionedGameObject != null && upperPositionedGameObject != obj &&
                         underPositionedGameObject != null && underPositionedGameObject != obj)
                     {
+                        Debug.Log("Ayy?");
                         whenStuck = 0;
                     }
                     else
@@ -297,9 +275,8 @@ using UnityEngine;
                             // Debug.Log(underTileObject);
                             
                             var ChangedVact = new Vector3(obj.transform.position.x, Mathf.RoundToInt(startPos.y+1f), obj.transform.position.z);
-                            // Debug.Log(Vector3Int.RoundToInt(obj.transform.position)+Vector3.up);
-                            // Debug.Log(ChangedVact);
-                            // Debug.Log(startPos);
+                            Debug.Log(ChangedVact);
+                            Debug.Log(startPos);
                             DetectManager.GetInstance.SwapBlockInMap(ChangedVact, startPos);
                             DetectAndInteract(obj);
                         }
@@ -310,8 +287,6 @@ using UnityEngine;
                        
                         if (underPositionedGameObject)
                         {
-                            Debug.Log("something is under here"+DetectManager.GetInstance.FindObjectInArray(obj));
-                            Debug.Log(obj.transform.position);
                             var newStartPosition = new Vector3(startPos.x, Mathf.FloorToInt(underPositionedGameObject.transform.position.y+1f),
                                 startPos.z); // 4,2,2 -> rockobj 존재 한다. 이거 납두어야 하지않나? 그담음에 다시 올라갈떄 어캄?
                             startPos = newStartPosition;
@@ -346,9 +321,8 @@ using UnityEngine;
                             // Debug.Log(obj.transform.position);
                             Debug.Log(4);
                             var newStartPosition = new Vector3(startPos.x, startPos.y - 1f, startPos.z);
-                            // Debug.Log(newStartPosition);
-                            // Debug.Log(startPos);
-                            // Debug.Log(Vector3Int.RoundToInt(transform.position) - Vector3Int.down);
+                            Debug.Log(newStartPosition);
+                            Debug.Log(startPos);
                             // Debug.Log(newStartPosition);
                             DetectManager.GetInstance.SwapBlockInMap(startPos,newStartPosition);
                             startPos = newStartPosition;
@@ -358,8 +332,8 @@ using UnityEngine;
                         {
                             Debug.Log(5);
                             var ChangedVact = new Vector3(obj.transform.position.x, startPos.y+1f, obj.transform.position.z);
-                            // Debug.Log(ChangedVact);
-                            // Debug.Log(startPos);
+                            Debug.Log(ChangedVact);
+                            Debug.Log(startPos);
                             DetectManager.GetInstance.SwapBlockInMap(startPos, ChangedVact);
                         
                             DetectAndInteract(obj);
@@ -584,8 +558,7 @@ using UnityEngine;
              
                 // 어느정도 올라가면
                 y = y * whenStuck;
-                startPos = new Vector3(obj.transform.position.x, startPos.y, obj.transform.position.z);
-                obj.transform.position = Vector3.Lerp(obj.transform.position, startPos+ new Vector3(0, y, 0), Time.deltaTime * bounciness);
+                obj.transform.position = Vector3.Lerp(obj.transform.position, startPos + new Vector3(0, y, 0), Time.deltaTime * bounciness);
                 preRemainder = reminder;
 
                 #region 움직인 후 타일맵에 경신하는 코드
@@ -655,7 +628,7 @@ using UnityEngine;
         GameObject CheckUnderGameObject(Vector3 targetPos)
         {
             Vector3 interPos = new Vector3(targetPos.x, Mathf.RoundToInt(targetPos.y) - 1, targetPos.z);
-            // Debug.Log(interPos);
+            Debug.Log(interPos);
             Vector3Int underPos = Vector3Int.RoundToInt(interPos);
             var objectsMap = DetectManager.GetInstance.GetObjectsData();
             var underObj = objectsMap[underPos.x, underPos.y, underPos.z];
