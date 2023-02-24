@@ -2479,6 +2479,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 939952318327770158}
     m_Modifications:
+    - target: {fileID: 3764540353768383881, guid: 72705c83eff6a4f7794af9e82184939f, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3927745087724823541, guid: 72705c83eff6a4f7794af9e82184939f, type: 3}
       propertyPath: m_Name
       value: PlayerSnowFootprint
@@ -2546,6 +2550,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 939952318327770158}
     m_Modifications:
+    - target: {fileID: 3764540353768383881, guid: 225fa914a546dbb458315853d50d700b, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3927745087724823541, guid: 225fa914a546dbb458315853d50d700b, type: 3}
       propertyPath: m_Name
       value: PlayerDust
@@ -2613,6 +2621,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 939952318327770158}
     m_Modifications:
+    - target: {fileID: 3764540353768383881, guid: 8688d10a82762403ebc96d92419dfeca, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3764540353768383881, guid: 8688d10a82762403ebc96d92419dfeca, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 2
@@ -2791,6 +2803,10 @@ PrefabInstance:
     - target: {fileID: 1830082725270985571, guid: 8b7e38e57bc085d4aaa3b4b689677d9c, type: 3}
       propertyPath: ShapeModule.radiusThickness
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830082725270985571, guid: 8b7e38e57bc085d4aaa3b4b689677d9c, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1830082725270985571, guid: 8b7e38e57bc085d4aaa3b4b689677d9c, type: 3}
       propertyPath: InitialModule.startSize.scalar
@@ -3012,6 +3028,10 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 198006683868144142, guid: ffccc620584224269a0a2de9d8d383af, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 198006683868144142, guid: ffccc620584224269a0a2de9d8d383af, type: 3}
       propertyPath: ShapeModule.randomPositionAmount
       value: 0.05
       objectReference: {fileID: 0}
@@ -3113,6 +3133,10 @@ PrefabInstance:
     - target: {fileID: 4798298888107177922, guid: eb9dcd0feb3444db194444eafe51408b, type: 3}
       propertyPath: SizeModule.enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4798298888107177922, guid: eb9dcd0feb3444db194444eafe51408b, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4798298888107177922, guid: eb9dcd0feb3444db194444eafe51408b, type: 3}
       propertyPath: InitialModule.startSize.scalar
