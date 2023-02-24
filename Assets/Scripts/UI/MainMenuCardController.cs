@@ -106,6 +106,7 @@ public class MainMenuCardController : MonoBehaviour
         gameObject.transform.DOScale(new Vector3(0.5f, 0.5f, 0.5f), 0.3f);
         gameObject.transform.DOMove(
             CardManager.GetInstance.target.transform.position + new Vector3(0, 0.5f, 0), 0.4f);
+        SoundManager.GetInstance.Play("CardFly");
         yield return new WaitForSeconds(0.1f);
         GameObject particleObj =
             Instantiate(Resources.Load<GameObject>("Prefabs/Interaction/Effect/CardCastEffect"),

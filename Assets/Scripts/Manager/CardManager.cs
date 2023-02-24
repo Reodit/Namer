@@ -25,6 +25,7 @@ public class CardManager : Singleton<CardManager>
     public bool isEncyclopedia = false;
     public bool isCardDealingDone = false;
     public bool isCardsHide = false;
+    public bool isMenuLevel = false;
 
     //선택한 카드
     public GameObject pickCard;
@@ -132,7 +133,6 @@ public class CardManager : Singleton<CardManager>
             for (int i = 0; i < startCards.Length; i++)
             {
                 MainMenuAddCard(startCards[i]);
-                SoundManager.GetInstance.Play("CardHover");
                 yield return new WaitForSeconds(0.5f);
             }
 
@@ -171,6 +171,7 @@ public class CardManager : Singleton<CardManager>
                     AddCard(startCards[i]);
                     yield return new WaitForSeconds(0.5f);
                 }
+
             }
 
             yield return new WaitForSeconds(1.5f);
@@ -193,6 +194,7 @@ public class CardManager : Singleton<CardManager>
         }
         myCards.Add(card);
         CardAlignment();
+        SoundManager.GetInstance.Play("CardHover");
     }
 
     void MainMenuAddCard(GameObject cardPrefab)
@@ -203,6 +205,9 @@ public class CardManager : Singleton<CardManager>
         cardObject.transform.parent = GameObject.Find("MainMenuCards").transform;
         mainCards.Add(card);
         MainCardAlignment();
+        if (isMenuLevel) return;
+
+        SoundManager.GetInstance.Play("CardHover2");
     }
 
     //카드를 정렬하는 메서드 
