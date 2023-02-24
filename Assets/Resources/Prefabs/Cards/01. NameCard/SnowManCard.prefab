@@ -48,13 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardType: 0
-  nameType: 3
+  nameType: 10
   adjectiveType: 0
   frontCover: {fileID: 4230330137778533953}
   bc: {fileID: 453746082420174526}
   highlight: {fileID: 3395023830973034109}
   UIText: {fileID: 7636341369278244097}
   NameAdjUIText: {fileID: 8594268537692688563}
+  priorityNum: {fileID: 0}
   currentLevelName: 
 --- !u!65 &453746082420174526
 BoxCollider:

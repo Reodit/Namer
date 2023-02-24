@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlammableAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Flammable;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Contradict;
     private int count = 0;
 
     #region 잘타는 꾸밈 카드 맴버변수

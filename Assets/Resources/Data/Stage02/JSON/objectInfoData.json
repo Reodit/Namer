@@ -5,7 +5,6 @@
             "objectID": 0,
             "nameType": 4,
             "adjectives": [
-                5
             ]
         },
         {
@@ -19,6 +18,13 @@
             "objectID": 2,
             "nameType": 3,
             "adjectives": []
+        },
+        {
+            "prefabName": "RoseObj",
+            "objectID": 3,
+            "nameType": 1,
+            "adjectives": [
+            ]
         }
     ]
 }

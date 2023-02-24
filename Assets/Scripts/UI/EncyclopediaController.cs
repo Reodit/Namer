@@ -16,7 +16,7 @@ public class EncyclopediaController : MonoBehaviour
     Touch touch;
     float wheelInput;
     Vector2 startPos;
-    float scrollSpeed = 0.0001f;
+    float scrollSpeed = 0.0003f;
 
     private void Start()
     {

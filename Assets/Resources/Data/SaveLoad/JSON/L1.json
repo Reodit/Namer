@@ -1,0 +1,676 @@
+{
+    "dataList": [
+        {
+            "type": 0,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:앗! 혹시 어린 왕자야?",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": -2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "나:…",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:아..뭐야. 아니잖아. ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": -2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "나:(궁금한 표정으로 장미를 보는중) ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:어린 왕자와 어떤 일이 있었는지 궁금하다고? ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:흠.. 설명하자면 긴데.. ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:흠.. 설명하자면 긴데.. ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 0.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:얘기하기에 너무 머니까 일단 가까이 와줄래? ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 5,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.10000000149011612,
+            "isDialog": true,
+            "message": "[System]조이스틱을 이용해서 화살표까지 가세요. ",
+            "funcName": "",
+            "isFocus": false,
+            "canSkip": false,
+            "showArrow": false
+        },
+        {
+            "type": 0,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "[System]인터렉션 버튼을 눌러서 장미와 대화하세요. ",
+            "funcName": "",
+            "isFocus": false,
+            "canSkip": false,
+            "showArrow": true
+        },
+        {
+            "type": 3,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:어린 왕자는 내 가장 중요한 친구인데.. ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:1년 전에 나때문에 다른 별로 가버렸어. ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:아직도 돌아오지 않는데 너무 걱정돼.. ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": -2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "나:(같이 어린 왕자를 찾아보자고 얘기중) ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:정말이야? 너무 고마워! ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:대신 너한테 ‘어린’이라는 꾸밈을 선물해줄게! ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": -2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "나:(상상력이 풍부해진 느낌이 듭니다.) ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:자, 너한테 네이머의 힘을 좀 나눠줬어! ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:이제부터 너가 이름을 붙이는대로 모든 바뀌게 될거야. ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 2,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": true,
+            "message": "장미:우선, 떠나기 전에 이 별부터 이름을 지어주겠니? ",
+            "funcName": "",
+            "isFocus": true,
+            "canSkip": true,
+            "showArrow": false
+        },
+        {
+            "type": 3,
+            "destinationPos": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetPos": {
+                "x": 2.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "prePos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "nextPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "requiredName": "",
+            "key": -1,
+            "time": 0.0,
+            "isDialog": false,
+            "message": "",
+            "funcName": "",
+            "isFocus": false,
+            "canSkip": false,
+            "showArrow": false
+        }
+    ]
+}
