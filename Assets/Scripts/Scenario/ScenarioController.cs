@@ -176,13 +176,21 @@ public class ScenarioController : MonoBehaviour
             goalScenarioCount = 1;
         }
         player = GameObject.Find("Player").transform;
-
+        
         StartCoroutine(WaitDealing());
     }
 
     private IEnumerator WaitDealing()
     {
-        yield return new WaitForSeconds(delayDealingTime);
+        if (GameManager.GetInstance.Level == 1)
+        {
+            yield return new WaitForSeconds(0.5f);  
+        }
+        else
+        {
+            yield return new WaitForSeconds(delayDealingTime);  
+        }
+        
         isStart = true;
         GameManager.GetInstance.isPlayerCanInput = true;
         NextScenario();
