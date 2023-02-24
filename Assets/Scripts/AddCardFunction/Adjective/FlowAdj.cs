@@ -150,7 +150,7 @@ public class FlowAdj : IAdjective
         SoundManager.GetInstance.Play(adjectiveName);
         yield return null;
         obj.gameObject.layer = 0;
-        obj.SubtractAdjective(EAdjective.Flow);
+        obj.SubtractAdjectiveCard(EAdjective.Flow);
         RepairMat(obj);
     }
 
@@ -185,8 +185,8 @@ public class FlowAdj : IAdjective
 
         yield return new WaitForSeconds(.5f);
 
-        obj.SubtractAdjective(EAdjective.Flow);
-        obj.SubtractAdjective(EAdjective.Extinguisher);
+        obj.SubtractAdjectiveCard(EAdjective.Flow);
+        obj.SubtractAdjectiveCard(EAdjective.Extinguisher);
     }
 
     public static void changeRenderMode(Material standardShaderMaterial, BlendMode mode)

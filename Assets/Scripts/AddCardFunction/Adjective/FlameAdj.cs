@@ -93,7 +93,7 @@ public class FlameAdj : IAdjective
     }
     void EradicateFlame(InteractiveObject thisObject)
     {
-        thisObject.SubtractAdjective(EAdjective.Flame);
+        thisObject.SubtractAdjectiveCard(EAdjective.Flame);
     }
     void SetSprayDirection(GameObject otherObject, GameObject thisObject)
     {
