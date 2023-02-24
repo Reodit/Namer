@@ -116,8 +116,10 @@ public class FlammableAdj : IAdjective
     {
         if (thisObject.transform.Find("FireEffect")) return;
 
-        fireEffect = FindEffect("Fire effect2");
+        fireEffect = FindEffect("FireEffect03");
         GameObject effect = GameObject.Instantiate(fireEffect, thisObject.transform);
+        effect.transform.localPosition = Vector3.zero;
+        effect.transform.localScale = new Vector3(.5f, .5f, .5f);
         effect.name = "FireEffect";
         fire = thisObject.gameObject.GetComponentInChildren<ParticleSystem>();
         fire.Stop();
