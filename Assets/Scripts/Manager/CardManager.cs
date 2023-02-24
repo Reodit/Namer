@@ -134,7 +134,6 @@ public class CardManager : Singleton<CardManager>
             for (int i = 0; i < startCards.Length; i++)
             {
                 MainMenuAddCard(startCards[i]);
-                //SoundManager.GetInstance.Play("CardHover");
                 yield return new WaitForSeconds(0.5f);
             }
 
@@ -158,7 +157,6 @@ public class CardManager : Singleton<CardManager>
                         cards[i].transform.GetChild(0).gameObject.SetActive(false);
                     }
                     AddCard(cards[i]);
-                    SoundManager.GetInstance.Play("CardHover");
                     yield return new WaitForSeconds(0.5f);
                 }
             }
@@ -206,7 +204,7 @@ public class CardManager : Singleton<CardManager>
         MainCardAlignment();
         if (isMenuLevel) return;
 
-        SoundManager.GetInstance.Play("CardHover");
+        SoundManager.GetInstance.Play("CardHover2");
     }
 
     //카드를 정렬하는 메서드 

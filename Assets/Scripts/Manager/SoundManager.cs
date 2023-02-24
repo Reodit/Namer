@@ -19,10 +19,9 @@ public class SoundManager : Singleton<SoundManager>
 
     public AudioSource sfxSound;
     public AudioSource playerSfxSound;
-    public AudioSource playerFootStepSound1;
-    public AudioSource playerFootStepSound2;
-    public AudioSource playerFootStepSound3;
     public AudioSource repeatableSfx;
+    public AudioSource menuCardSfxSound;
+
     private bool isBGMSOundTrack01Playing;
 
     private double dspStartTime;
@@ -53,6 +52,7 @@ public class SoundManager : Singleton<SoundManager>
 
     SGameSetting sGameSetting = new SGameSetting();
 
+    public AudioClip testCardHoverSfx; 
 
     private void Awake()
     {
@@ -336,6 +336,17 @@ public class SoundManager : Singleton<SoundManager>
         {
             Play(playerSfxSound, playerEffectClips[clipname]);
         }
+
+        if (clipname=="CardHover2")
+        {
+            menuCardSfxSound.clip = testCardHoverSfx;
+            menuCardSfxSound.Play();
+        }
+    }
+
+    public void MenuCardSFXPlay()
+    {
+        menuCardSfxSound.PlayOneShot(testCardHoverSfx);
     }
 
     //public void repeatPlay(string clipName)
