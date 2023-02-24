@@ -529,7 +529,9 @@ public partial class DetectManager : Singleton<DetectManager>
         int x = (int) block.x;
         int y = (int) block.y;
         int z = (int) block.z;
-
+        // Debug.Log($"{currentObjects.GetLength(0)} {currentObjects.GetLength(1)} {currentObjects.GetLength(2)}");
+        // Debug.Log(curObject,curObject.transform);
+        // Debug.Log($"{x} {y} {z}");
         if (currentObjects[x, y, z] != curObject)
         {
             Vector3 preVec = FindObjectInArray(curObject);
@@ -554,8 +556,10 @@ public partial class DetectManager : Singleton<DetectManager>
         }
     }
 
-    private Vector3 FindObjectInArray(GameObject target)
+    public Vector3 FindObjectInArray(GameObject target)
     {
+        // Debug.Log($"{ currentObjects.GetLength(0)} { currentObjects.GetLength(1)} { currentObjects.GetLength(2)}");
+        // Debug.Log((target.transform.position));
         for (int x = 0; x < currentObjects.GetLength(0); x++)
         {
             for (int y = 0; y < currentObjects.GetLength(1); y++)
