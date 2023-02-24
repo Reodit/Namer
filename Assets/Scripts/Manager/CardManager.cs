@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-using System;
 
 public class CardManager : Singleton<CardManager>
 {
@@ -149,15 +148,19 @@ public class CardManager : Singleton<CardManager>
                 GameDataManager gameData = GameDataManager.GetInstance;
                 int level = GameManager.GetInstance.Level;
                 GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
-            
-                for (int i = 0; i < cards.Length; i++)
+
+                if (cards != null)
                 {
-                    if (isCardsHide)
+                    for (int i = 0; i < cards.Length; i++)
                     {
-                        cards[i].transform.GetChild(0).gameObject.SetActive(false);
+                        if (isCardsHide)
+                        {
+                            cards[i].transform.GetChild(0).gameObject.SetActive(false);
+                        }
+                        AddCard(cards[i]);
+                        SoundManager.GetInstance.Play("CardHover");
+                        yield return new WaitForSeconds(0.5f);
                     }
-                    AddCard(cards[i]);
-                    yield return new WaitForSeconds(0.5f);
                 }
             }
             else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)

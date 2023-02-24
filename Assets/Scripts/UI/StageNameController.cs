@@ -2,16 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class StageNameController : MonoBehaviour
 {
     [SerializeField] Text nameTxt;
+    [SerializeField] Text nameAdjTxt;
+    [SerializeField] TextMeshProUGUI stageText;
     [SerializeField] GameObject namePlate;
-    [SerializeField] int stageNum;
+    int stageNum = 1;
 
     private void OnEnable()
     {
         nameTxt.text = NameText();
+        NamePlateOnOff();
+    }
+
+    private void Start()
+    {
         NamePlateOnOff();
     }
 
@@ -37,8 +45,12 @@ public class StageNameController : MonoBehaviour
         {
             namePlate.SetActive(false);
         }
- 
-       
     }
 
+    public void StageNumSetUp(int inputStageNum)
+    {
+        stageNum = inputStageNum;
+        nameAdjTxt.text = "Stage " + inputStageNum.ToString();
+        stageText.text = inputStageNum.ToString();
+    }
 }

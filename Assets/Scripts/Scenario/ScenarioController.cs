@@ -176,13 +176,21 @@ public class ScenarioController : MonoBehaviour
             goalScenarioCount = 1;
         }
         player = GameObject.Find("Player").transform;
-
+        
         StartCoroutine(WaitDealing());
     }
 
     private IEnumerator WaitDealing()
     {
-        yield return new WaitForSeconds(delayDealingTime);
+        if (GameManager.GetInstance.Level == 1)
+        {
+            yield return new WaitForSeconds(0.5f);  
+        }
+        else
+        {
+            yield return new WaitForSeconds(delayDealingTime);  
+        }
+        
         isStart = true;
         GameManager.GetInstance.isPlayerCanInput = true;
         NextScenario();
@@ -380,16 +388,17 @@ public class ScenarioController : MonoBehaviour
             StartCoroutine(OpenClearPanel());
             scenarioCount = -1;
         }
-        else if (GameManager.GetInstance.CurrentState == GameStates.Victory)
-        {
-            if (scenarioCount > goalScenarioCount)
-            {
-                scenarioCount = 0;
-                // 승리 ui 실행 
-                StartCoroutine(OpenClearPanel());
-                scenarioCount = -1;
-            }
-        }
+        // todo 시나리오가 진행이 안된 상태로 장미에게 말을 걸어도 깰 수 있도록 하기 
+        //else if (GameManager.GetInstance.CurrentState == GameStates.Victory)
+        //{
+        //    if (scenarioCount > goalScenarioCount)
+        //    {
+        //        scenarioCount = 0;
+        //        // 승리 ui 실행 
+        //        StartCoroutine(OpenClearPanel());
+        //        scenarioCount = -1;
+        //    }
+        //}
         return checkedValue;
     }
 
@@ -609,6 +618,7 @@ public class ScenarioController : MonoBehaviour
     private void Update()
     {
         if (!isStart) return;
+        if (stageClearPanel.activeSelf) return;
         if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
         if (nextSenarioTime != -3f) nextSenarioTime -= Time.deltaTime;
         if (restartTime > 0) restartTime -= Time.deltaTime;
