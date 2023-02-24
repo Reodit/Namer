@@ -29,7 +29,8 @@ namespace PlayerOwnedStates
         }
 
         public void Execute(PlayerEntity entity)
-		{
+        {
+            float scalar = entity.pAnimator.GetFloat("scalar");
         }
 
         public void Exit(PlayerEntity entity)
@@ -84,7 +85,10 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
         {
-            entity.pAnimator.SetBool("isObtain", false);
+            if (GameManager.GetInstance.isPlayerDoAction != true)
+            {
+                entity.pAnimator.SetBool("isObtain", false);
+            }
         }
     }
     
@@ -109,6 +113,7 @@ namespace PlayerOwnedStates
         public void Exit(PlayerEntity entity)
         {
             entity.pAnimator.SetBool("isClimb", false);
+            entity.pAnimator.SetFloat("scalar", 0);
         }
     }
     
@@ -133,6 +138,7 @@ namespace PlayerOwnedStates
         public void Exit(PlayerEntity entity)
         {
             entity.pAnimator.SetBool("isPush", false);
+            entity.pAnimator.SetFloat("scalar", 0);
         }
     }
 
@@ -158,6 +164,7 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
         {
+            GameManager.GetInstance.isPlayerDoAction = false;
             entity.pAnimator.SetBool("isAddCard", false);
             CardManager.GetInstance.ableCardCtr = true;
         }
