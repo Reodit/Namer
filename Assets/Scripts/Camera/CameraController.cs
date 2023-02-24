@@ -42,6 +42,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera playerNormalViewCamZoomIn;
     [SerializeField] CinemachineVirtualCamera playerNormalViewCamZoomOut;
     [SerializeField] CinemachineVirtualCamera targetCam;
+    [SerializeField] CinemachineVirtualCamera playerFocusCam;
 
     CinemachineVirtualCamera curCam;
 
@@ -93,11 +94,29 @@ public class CameraController : MonoBehaviour
         FocusOff();
     }
 
+    public void FocusOn(bool canMove = true)
+    {
+        playerFocusCam.Priority = (int)PriorityOrder.FrontAtAll;
+        targetCam.Priority = (int)PriorityOrder.BehindAtAll;
+
+        // zoom in 상태에서는 카드가 안 보이도록 함 
+        CardManager.GetInstance.CardsDown();
+
+        if (!canMove)
+        {
+            GameManager.GetInstance.isPlayerCanInput = false;
+            GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Move);
+        }
+
+        isFocused = true;
+    }
+
     public void FocusOn(Transform target, bool canMove = true)
     {
         targetCam.LookAt = target;
         targetCam.Follow = target;
         targetCam.Priority = (int)PriorityOrder.FrontAtAll;
+        playerFocusCam.Priority = (int)PriorityOrder.BehindAtAll;
 
         // zoom in 상태에서는 카드가 안 보이도록 함 
         CardManager.GetInstance.CardsDown();
@@ -113,12 +132,14 @@ public class CameraController : MonoBehaviour
 
     public void FocusOff()
     {
+        playerFocusCam.Priority = (int)PriorityOrder.BehindAtAll;
         targetCam.Priority = (int)PriorityOrder.BehindAtAll;
         targetCam.LookAt = null;
         targetCam.Follow = null;
 
-        // zoom in 상태에서는 카드가 안 보이도록 함 
-        CardManager.GetInstance.CardsUp();
+        // zoom in 상태에서는 카드가 안 보이도록 함
+        if (GameManager.GetInstance.CurrentState != GameStates.Encyclopedia)
+            CardManager.GetInstance.CardsUp();
 
         GameManager.GetInstance.isPlayerCanInput = true;
 

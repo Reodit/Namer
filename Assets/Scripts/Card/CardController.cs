@@ -100,7 +100,7 @@ public class CardController : MonoBehaviour
     private void OnMouseDown()
     {
         if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
-        if (!CardManager.GetInstance.ableCardCtr) return;
+        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
 
         //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경 
         if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
@@ -136,7 +136,7 @@ public class CardController : MonoBehaviour
         SoundManager.GetInstance.Play("CardHover");
     }
 
-    void CardSelectOff()
+    public void CardSelectOff()
     {
         if (CardManager.GetInstance.pickCard != this.gameObject) return;
         highlight.SetActive(false);
@@ -184,6 +184,7 @@ public class CardController : MonoBehaviour
         GameObject particleObj =
             Instantiate(Resources.Load<GameObject>("Prefabs/Interaction/Effect/CardCastEffect"),
             CardManager.GetInstance.target.transform.position + new Vector3(0, 1.1f, 0), Quaternion.identity);
+        SoundManager.GetInstance.Play("CardSFX");
         CardManager.GetInstance.CardAlignment();
         yield return new WaitForSeconds(0.3f);
         CastCard(CardManager.GetInstance.target);
@@ -230,11 +231,11 @@ public class CardController : MonoBehaviour
             
             if (cardType == ECardType.Name)
             {
-                target.GetComponent<InteractiveObject>().AddName(nameType);
+                target.GetComponent<InteractiveObject>().AddNameCard(nameType);
             }
             else if (cardType == ECardType.Adjective)
             {
-                target.GetComponent<InteractiveObject>().AddAdjective(adjectiveType);
+                target.GetComponent<InteractiveObject>().AddAdjectiveCard(adjectiveType);
             }
         }
     }

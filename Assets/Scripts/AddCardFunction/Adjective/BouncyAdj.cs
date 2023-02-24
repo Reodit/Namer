@@ -22,7 +22,8 @@ public class BouncyAdj : IAdjective
 
     private Transform player;   // 플레이어 transform 
     private float playerRadius; // 플레이어 capsule collider의 반지름 값 
-    Vector3[] playerTiles;      // 플레이어가 차지하고 있는 공간들 
+    Vector3[] playerTiles;      // 플레이어가 차지하고 있는 공간들
+    int downY = 0;
     #endregion
 
     public EAdjective GetAdjectiveName()
@@ -47,6 +48,8 @@ public class BouncyAdj : IAdjective
 
     public void Execute(InteractiveObject thisObject)
     {
+        thisObject.abandonBouncy = true;
+        downY = (int)thisObject.transform.position.y;
         InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(BounceObj(thisObject.gameObject));
     }
 
@@ -79,7 +82,11 @@ public class BouncyAdj : IAdjective
         if (dir == Dir.up)
             checkedObj = DetectManager.GetInstance.GetAdjacentObjectWithDir(thisObj, dir, (int)thisObj.transform.lossyScale.y + length);
         else
-            checkedObj = DetectManager.GetInstance.GetAdjacentObjectWithDir(thisObj, dir, 1);
+        {
+            InteractiveObject Iobj = thisObj.GetComponent<InteractiveObject>();
+            int countingAdj = Iobj.Adjectives[(int)EAdjective.Float] == null ? 0 : Iobj.Adjectives[(int)EAdjective.Float].GetCount();
+            checkedObj = DetectManager.GetInstance.GetAdjacentObjectWithDir(thisObj, dir, countingAdj + 1);
+        }
 
         // null이 아니면, true
         // null이면, false
@@ -161,6 +168,7 @@ public class BouncyAdj : IAdjective
             // 위가 안 막혀있다면...
             if (CheckExistPlayer(obj, Dir.up) ? !CheckExistBlock(obj, Dir.up, 1) : !CheckExistBlock(obj, Dir.up))
             {
+                downY = (int)obj.transform.position.y;
                 // 위로(bouncyDir = 1) 이동하기 
                 bouncyDir = 1;
                 // 최대 위로 1칸까지 이동하기 때문에 다시 0으로 초기화 
@@ -197,15 +205,16 @@ public class BouncyAdj : IAdjective
         player = GameObject.Find("Player").transform;
         playerRadius = player.lossyScale.x * player.GetComponent<CapsuleCollider>().radius;
 
+        InteractiveObject Iobj = obj.GetComponent<InteractiveObject>();
+        while (Iobj.CheckAdjective(EAdjective.Float) && Iobj.floatDone != Iobj.Adjectives[(int)EAdjective.Float].GetCount())
+        {
+            yield return InteractionSequencer.GetInstance.WaitUntilPlayerInteractionEnd(this);
+        }
+
         // 변수 초기화 
         addValue = 0;
         bouncyDir = 1;
         isBouncy = true;
-
-        while (obj.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Float))
-        {
-            yield return new WaitForEndOfFrame();
-        }
 
         // 처음부터 bounce가 안 되는 상황일 수 있으므로 TryBouncy로 체크 후 bounce 시작 
         TryBouncy(obj);
@@ -225,7 +234,8 @@ public class BouncyAdj : IAdjective
                 yield return null;
             }
 
-            if (obj != null && !obj.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Float))
+            if (obj != null && (!obj.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Float))
+                || Iobj.Adjectives[(int)EAdjective.Float].GetCount() == Iobj.floatDone)
             {
                 // 위로 혹은 아래로 1칸만큼 도달했을 때에 검출 시작
                 // (= 배열로 먼저 이동시킨 지점에 도달했을 때)
@@ -280,6 +290,12 @@ public class BouncyAdj : IAdjective
                 if (obj != null) obj.transform.position = Vector3.Lerp(obj.transform.position, obj.transform.position + new Vector3(0, addValue * bouncyDir, 0), Time.deltaTime * bounciness);
 
             }
+            else
+            {
+                // 변수 초기화 
+                addValue = 0;
+                bouncyDir = 1;
+            }
             // 계속 반복 (repeat Adj)
             yield return InteractionSequencer.GetInstance.WaitUntilPlayerInteractionEnd(this);
         }
@@ -295,6 +311,23 @@ public class BouncyAdj : IAdjective
             var rb = thisObject.GetComponent<Rigidbody>();
             rb.isKinematic = false;
             rb.useGravity = true;
+        }
+        else
+        {
+            Vector3 targetPos = new Vector3(thisObject.transform.position.x, downY, thisObject.transform.position.z);
+            float dis = Vector3.Distance(thisObject.transform.position, targetPos);
+            float movePercent = (dis / 10f) / dis;
+            while (thisObject != null && dis > 0.2f)
+            {
+                thisObject.transform.position = Vector3.Lerp(thisObject.transform.position, targetPos, movePercent);
+                dis = Vector3.Distance(thisObject.transform.position, targetPos);
+                yield return new WaitForEndOfFrame();
+            }
+            if (thisObject != null)
+            {
+                thisObject.transform.position = targetPos;
+                thisObject.abandonBouncy = true;
+            }
         }
 
         yield return null;

@@ -1,11 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class InteractiveObject : MonoBehaviour
 {
-    [ReadOnly][SerializeField] private EName objectName;
+    [SerializeField] private EName objectName;
     [Range(0, 2)][SerializeField] private int[] countAdj = new int[20];
     [SerializeField] GameObject popUpName;
 
@@ -14,17 +14,23 @@ public class InteractiveObject : MonoBehaviour
 
     // Todo 테스트 완료 후, Test 관련 코드 삭제 예정
     #region [Test] Change Count To Inspector
-    
+
         private int[] initCountAdj = new int[20];
         private bool isCard = false;
 
     #endregion
+    #region
+        public int floatDone = 0;
+        public bool abandonBouncy = false;
+    #endregion
 
+    // Level Edit Mode
+    private bool isFinishMapSetting = false;
+    
     // object's name = adjective card's ui texts + name card's ui text
     private string addNameText;
-    private string[] addAdjectiveTexts;
+    private Queue<EAdjective> addAdjectiveTexts;
     private int[] countNameAdj;
-    private int addAdjectiveCount;
     
     // Max Value of Adjective Count
     private int maxAdjCount = 2;
@@ -34,7 +40,7 @@ public class InteractiveObject : MonoBehaviour
     public IAdjective[] Adjectives { get { return  adjectives; } }
     
     // object's information
-    public SObjectInfo objectInfo;
+    [HideInInspector] public SObjectInfo objectInfo;
     public int GetObjectID()
     {
         return objectInfo.objectID;
@@ -53,28 +59,33 @@ public class InteractiveObject : MonoBehaviour
         {
             Debug.LogError("태그를 InteractObj로 설정해주세요!");
         }
-        
+
         gameData = GameDataManager.GetInstance;
-        addAdjectiveTexts = new string[gameData.Adjectives.Count];
+        addAdjectiveTexts = new Queue<EAdjective>();
         countNameAdj = new int[gameData.Adjectives.Count];
         adjectives = new IAdjective[gameData.Adjectives.Count];
+
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+        {
+            // objectName = EName.Null;
+            isFinishMapSetting = false;
+        }
     }
 
     private void Start()
     {
-        // Delete IF After Finish Test
-        if (!FindObjectOfType<MapReader>())
+        if (GameManager.GetInstance.CurrentState == GameStates.InGame)
         {
             objectName = objectInfo.nameType;
-            addNameText = gameData.Names[objectName].uiText;
 
             SetAdjectiveFromData(gameData.Names[objectName].adjectives, false);
             SetAdjectiveFromData(objectInfo.adjectives);
-
-            // Test
-            countAdj.CopyTo(initCountAdj, 0);
-            //
         }
+        addNameText = gameData.Names[objectName].uiText;
+        
+        // Test
+        countAdj.CopyTo(initCountAdj, 0);
+        //
     }
 
     private void SetAdjectiveFromData(EAdjective[] addedAdjectives, bool isAdjective = true)
@@ -86,10 +97,9 @@ public class InteractiveObject : MonoBehaviour
 
         for (int i = 0; i < addedAdjectives.Length; i++)
         {
-            int adjIndex = (int)addedAdjectives[i];
-            if (isAdjective && countAdj[adjIndex] - countNameAdj[adjIndex] >= maxAdjCount)
+            if (isAdjective && countAdj.Sum() - countNameAdj.Sum() >= maxAdjCount)
             {
-                Debug.LogError("같은 꾸밈 성질은 2개만 부여할 수 있어요");
+                Debug.LogError("꾸밈 성질은 2개만 부여할 수 있어요");
             }
             
             SetAdjective(addedAdjectives[i], isAdjective);
@@ -100,8 +110,12 @@ public class InteractiveObject : MonoBehaviour
     private void Update()
     {
         // todo 후에 배열 포지션 체크하는 로직이 이동하면, 수정 예정
-        if (GameManager.GetInstance.CurrentState != GameStates.InGame) return;
-        if (objectPos != Vector3Int.RoundToInt(this.gameObject.transform.position))
+        if (!(GameManager.GetInstance.CurrentState == GameStates.InGame || GameManager.GetInstance.CurrentState == GameStates.LevelEditMode || GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay))
+        {
+            return;
+        }
+        
+        if (DetectManager.GetInstance.GetObjectsData() != null && objectPos != Vector3Int.RoundToInt(this.gameObject.transform.position))
         {
             DetectManager.GetInstance.CheckValueInMap(this.gameObject);
             objectPos = Vector3Int.RoundToInt(this.gameObject.transform.position);
@@ -112,8 +126,14 @@ public class InteractiveObject : MonoBehaviour
 
         AllPopUpNameCtr();
         AdjectiveTest();
+        
+        if (DetectManager.GetInstance.GetObjectsData() != null && GameManager.GetInstance.CurrentState == GameStates.LevelEditMode && !isFinishMapSetting)
+        {
+            isFinishMapSetting = true;
+            SetCard();
+        }
     }
-
+    
     private void AdjectiveTest()
     {
         if (!isCard && countAdj.Sum() != initCountAdj.Sum())
@@ -136,6 +156,13 @@ public class InteractiveObject : MonoBehaviour
                     int diff = countAdj[i] - initCountAdj[i];
                     while (diff > 0)
                     {
+                        if (initCountAdj.Sum() - countNameAdj.Sum() >= maxAdjCount)
+                        {
+                            EAdjective subtractAdjective = addAdjectiveTexts.Dequeue();
+                            TestSubtractAdjective(subtractAdjective);
+                            countAdj[(int)subtractAdjective]--;
+                        }
+                        
                         TestSetAdjective((EAdjective)i);
                         diff--;
                     }
@@ -156,21 +183,11 @@ public class InteractiveObject : MonoBehaviour
         }
 
         adjectives[adjIndex].SetCount(1);
-        addAdjectiveTexts[adjIndex] = adjectiveInfo.uiText;
-
-        adjectives[adjIndex].Execute(this);
+        addAdjectiveTexts.Enqueue(addAdjective);
 
         // Todo 다른 곳으로 이동해야하는 IAdjective 함수?
-        //switch (adjectives[adjIndex].GetAdjectiveType())
-        //{
-        //    case (EAdjectiveType.Normal): // normal
-        //    case (EAdjectiveType.Repeat): // repeat
-        //        adjectives[adjIndex].Execute(this);
-        //        break;
-        //    case (EAdjectiveType.Contradict): // contradict
-        //        break;
-        //}
-        //
+        adjectives[adjIndex].Execute(this);
+
         // todo 카드 넣었을 때에 검출 테스트
         var target = (new[] { this.gameObject }).ToList();
         DetectManager.GetInstance.StartDetector(target);
@@ -197,15 +214,73 @@ public class InteractiveObject : MonoBehaviour
             adjectives[adjIndex].SetCount(-1);
         }
         
-        if (countAdj[adjIndex] - countNameAdj[adjIndex] == 0)
+        Queue<EAdjective> temp = new Queue<EAdjective>();
+        while (true)
         {
-            addAdjectiveTexts[adjIndex] = null;
+            if (addAdjectiveTexts.Count == 0)
+            {
+                break;
+            }
+
+            EAdjective adjective = addAdjectiveTexts.Dequeue();
+            if (adjective != subtractAdjective)
+            {
+                Debug.Log(adjective);
+                temp.Enqueue(adjective);
+            }
         }
+        
+        addAdjectiveTexts = temp;
     }
 
 #endregion
 
-    public void AddName(EName? addedName)
+#region LevelEdit Mode
+    
+    public void AddName(EName addedName)
+    {
+        objectName = addedName;
+    }
+    
+    public bool AddAdjective(EAdjective addedAdjective)
+    {
+        if (countAdj.Sum() >= maxAdjCount)
+        {
+            return false;
+        }
+        
+        int adjIndex = GameDataManager.GetInstance.Adjectives[addedAdjective].priority;
+        countAdj[adjIndex]++;
+
+        return true;
+    }
+
+    private void SetCard()
+    {
+        // 테스트 완료 후 살릴 예정
+        // AddName(objectName); 
+        
+        AddNameCard(objectName);
+
+        for (int i = 0; i < GameDataManager.GetInstance.Adjectives.Count; i++)
+        {
+            if (countAdj.Sum() - countNameAdj.Sum() > 0)
+            {
+                for (int j = 0; j < countAdj[i] - countNameAdj[i]; j++)
+                {
+                    // 테스트 완료 후 살릴 예정
+                    // AddAdjective((EAdjective)i);
+                    AddAdjectiveCard((EAdjective)i);
+                }
+            }
+        }
+    }
+    
+#endregion
+
+#region  InGame Mode
+
+    public void AddNameCard(EName? addedName)
     {
         // Test
         isCard = true;
@@ -233,11 +308,16 @@ public class InteractiveObject : MonoBehaviour
         addNameText = gameData.Names[(EName)addedName].uiText;
     }
 
-    public void AddAdjective(EAdjective addAdjective)
+    public void AddAdjectiveCard(EAdjective addAdjective)
     {
         // Test
         isCard = true;
         //
+
+        if (addAdjectiveTexts.Count >= maxAdjCount)
+        {
+            SubtractAdjective(addAdjectiveTexts.Dequeue());
+        }
         
         if (addAdjective == EAdjective.Null)
         {
@@ -250,22 +330,21 @@ public class InteractiveObject : MonoBehaviour
     private void SetAdjective(EAdjective addAdjective, bool isAdjective = true)
     {
         int adjIndex = (int)addAdjective;
-
-        SAdjectiveInfo adjectiveInfo = gameData.Adjectives[addAdjective];
+        
         if (adjectives[adjIndex] == null)
         {
-            adjectives[adjIndex] = adjectiveInfo.adjective.DeepCopy();
+            adjectives[adjIndex] = gameData.Adjectives[addAdjective].adjective.DeepCopy();
         }
 
         if (isAdjective)
         {
-            addAdjectiveTexts[adjIndex] = adjectiveInfo.uiText;
+            addAdjectiveTexts.Enqueue(addAdjective);
         }
         else
         {
             ++countNameAdj[adjIndex];
         }
-        
+
         adjectives[adjIndex].SetCount(1);
         ++countAdj[adjIndex];
         // Test
@@ -273,15 +352,7 @@ public class InteractiveObject : MonoBehaviour
         //
         
         // Todo 다른 곳으로 이동해야하는 IAdjective 함수?
-        switch (adjectives[adjIndex].GetAdjectiveType())
-        {
-            case (EAdjectiveType.Normal): // normal
-            case (EAdjectiveType.Repeat): // repeat
-                adjectives[adjIndex].Execute(this);
-                break;
-            case (EAdjectiveType.Contradict): // contradict
-                break;
-        }
+        adjectives[adjIndex].Execute(this);
         //
         
         // Test
@@ -331,14 +402,7 @@ public class InteractiveObject : MonoBehaviour
             adjectives[adjIndex].SetCount(-1);
         }
         
-        if (isAdjective)
-        {
-            if (countAdj[adjIndex] - countNameAdj[adjIndex] == 0)
-            {
-                addAdjectiveTexts[adjIndex] = null;
-            }
-        }
-        else
+        if (!isAdjective)
         {
             --countNameAdj[adjIndex];
         }
@@ -358,15 +422,12 @@ public class InteractiveObject : MonoBehaviour
         return false;
     }
     
-    public bool CheckCountAdjective(EAdjective checkAdjective)
+    public int CheckCountAdjective(EAdjective checkAdjective)
     {
-        if (countAdj[(int)checkAdjective] >= 2)
-        {
-            return false;
-        }
-
-        return true;
+        return countAdj[(int)checkAdjective] - countNameAdj[(int)checkAdjective];
     }
+    
+#endregion
 
 #region Method for UI
     
@@ -374,19 +435,12 @@ public class InteractiveObject : MonoBehaviour
     public string GetCurrentName()
     {
         string currentObjectName = null;
-        addAdjectiveCount = 0;
-        
-        for (int i = 0; i < gameData.Adjectives.Count; i++)
+
+        foreach (var adjective in addAdjectiveTexts)
         {
-            if (addAdjectiveTexts[i] != null)
-            {
-                for (int j = 0; j < countAdj[i] - countNameAdj[i]; j++)
-                {
-                    currentObjectName += addAdjectiveTexts[i] + " ";
-                    addAdjectiveCount++;
-                }
-            }
+            currentObjectName += gameData.Adjectives[adjective].uiText + " ";
         }
+        
         currentObjectName += addNameText;
         
         return currentObjectName;
@@ -394,19 +448,21 @@ public class InteractiveObject : MonoBehaviour
 
     public int GetAddAdjectiveCount()
     {
-        return addAdjectiveCount;
+        return addAdjectiveTexts.Count;
     }
 
     //카드를 선택한 상태에서 오브젝트를 호버링하면 카드의 타겟으로 설정
     //오브젝트의 이름을 화면에 띄움
-    bool isTouched = false;
+
+
+    public bool isTouched = false;
     private void OnMouseDown()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Victory
-            && name != "PlanetObj") return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "PlanetObj") return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
 
-        if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null
+        //카드를 선택한 상황에서 오브젝트를 터치한 경우 
+        else if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null
             && CardManager.GetInstance.isPickCard)
         {
             CardManager.GetInstance.target = this.gameObject;
@@ -414,12 +470,19 @@ public class InteractiveObject : MonoBehaviour
         } 
         else if (!isTouched)
         {
+            //카드를 선택하지 않은 상태에서 다른 오브젝트를 선택하고 있는데 이 오브젝트를 터치한 경우 
+            if(CardManager.GetInstance.target != null && !CardManager.GetInstance.isPickCard)
+            {
+                CardManager.GetInstance.target.GetComponent<InteractiveObject>().isTouched = false;
+                CardManager.GetInstance.target = this.gameObject;
+            }
             isTouched = true;
+            CardManager.GetInstance.target = this.gameObject;
             if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
             {
                 CardManager.GetInstance.target = this.gameObject;
             
-                if (!CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()))
+                if (CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()) >= maxAdjCount)
                 {
                     CardManager.GetInstance.ableAddCard = false;
                     return;
@@ -467,11 +530,11 @@ public class InteractiveObject : MonoBehaviour
      {
          if (UIManager.GetInstance.isShowNameKeyPressed && !popUpName.activeSelf)
          {
-             PopUpNameOn();
+            PopUpNameOn();
          }
          if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isTouched)
          {
-             PopUpNameOff();
+            PopUpNameOff();
          }
      }
 #endregion
