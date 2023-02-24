@@ -228,6 +228,10 @@ public class CardController : MonoBehaviour
 
         if (target)
         {
+            if (target.name == "PlanetObj")
+            {
+                return;
+            }
             GameManager.GetInstance.localPlayerMovement.addCardTarget = target;
             GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.AddCard);
             
