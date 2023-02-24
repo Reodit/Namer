@@ -21,8 +21,7 @@ public enum EName
 public enum EAdjectiveType
 {
     Normal,
-    Contradict,
-    Repeat
+    Interaction,
 }
 
 public enum EAdjective
