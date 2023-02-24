@@ -330,10 +330,10 @@ public class ScenarioController : MonoBehaviour
                     Vector3 curScenarioPos = new Vector3(curScenario.targetPos.x, curScenario.targetPos.y, curScenario.targetPos.z);
                     Dictionary<Vector3, GameObject> objDict = DetectManager.GetInstance.GetArrayObjects(curScenarioPos);
                     Vector3 vec = Vector3Int.FloorToInt(curScenarioPos);
-                    if (objDict[vec] == null || objDict.Count == 0)
-                        cameraController.FocusOn(false);
-                    else
-                        cameraController.FocusOn(objDict[vec].transform, false);
+                    // if (objDict[vec] == null || objDict.Count == 0)
+                    //     cameraController.FocusOn(false);
+                    // else
+                    //     cameraController.FocusOn(objDict[vec].transform, false);
                 }
                 else
                 {

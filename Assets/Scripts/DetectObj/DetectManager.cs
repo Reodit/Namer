@@ -71,6 +71,26 @@ public partial class DetectManager : Singleton<DetectManager>
     //         if (player != null) player.SetActive(true);
     //     }
     // }
+    
+    public void InitTilesObjects()
+    {
+        currentObjects = null;
+        currentTiles = null;
+    }
+
+    public void Init()
+    {
+        GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(false);
+        gameDataManager = GameDataManager.GetInstance;
+
+        gameDataManager.ReadMapData();
+        SetMapData();
+        
+        GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
+        GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(0, 3, 0);
+        GameManager.GetInstance.localPlayerMovement.Init();
+    }
+    
     public void Init(int level)
     {
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(false);

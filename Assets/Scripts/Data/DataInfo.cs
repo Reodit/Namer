@@ -34,6 +34,7 @@ public struct SAdjectiveInfo
     public readonly IAdjective adjective;
     public readonly string cardPrefabName;
     public readonly string contentText;
+    public int uiPriority;
 
     public SAdjectiveInfo(int priority, string uiText, EAdjective adjectiveName, string cardPrefabName, string contentText = "")
     {
@@ -47,6 +48,7 @@ public struct SAdjectiveInfo
         
         this.cardPrefabName = cardPrefabName;
         this.contentText = contentText;
+        this.uiPriority = 0;
     }
 }
 
