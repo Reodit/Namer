@@ -11,7 +11,7 @@ public enum BlendMode
 public class FlowAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Flow;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Contradict;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
     private int count = 0;
 
     private GameObject iceShardEffect;

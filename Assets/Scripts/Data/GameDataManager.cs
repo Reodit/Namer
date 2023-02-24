@@ -279,7 +279,7 @@ public class GameDataManager : Singleton<GameDataManager>
         names = loadFile.GetCardData<EName, SNameInfo>(data, 0);
         adjectives = loadFile.GetCardData<EAdjective, SAdjectiveInfo>(data, 1);
         
-        int contradictPriority = 0;
+        int interactionPriority = 0;
         int normalPriority = 0;
 
         for (int i = 0; i < adjectives.Count; i++)
@@ -291,9 +291,9 @@ public class GameDataManager : Singleton<GameDataManager>
                 continue;
             }
 
-            if (adjectiveInfo.adjective.GetAdjectiveType() == EAdjectiveType.Contradict)
+            if (adjectiveInfo.adjective.GetAdjectiveType() == EAdjectiveType.Interaction)
             {
-                adjectiveInfo.uiPriority = ++contradictPriority;
+                adjectiveInfo.uiPriority = ++interactionPriority;
             }
             else
             {
@@ -430,7 +430,7 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         List<GameObject> normalAdjCards = new List<GameObject>();
-        List<GameObject> contradictAdjCards = new List<GameObject>();
+        List<GameObject> InteractionAdjCards = new List<GameObject>();
 
         // sort adjective cards to ui priority
         for (int i = 0; i < adjectiveReads.Count; i++)
@@ -441,9 +441,9 @@ public class GameDataManager : Singleton<GameDataManager>
             }
 
             GameObject cardPrefab = Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as GameObject;
-            if (adjectives[adjectiveReads[i]].adjective.GetAdjectiveType() == EAdjectiveType.Contradict)
+            if (adjectives[adjectiveReads[i]].adjective.GetAdjectiveType() == EAdjectiveType.Interaction)
             {
-                contradictAdjCards.Add(cardPrefab);
+                InteractionAdjCards.Add(cardPrefab);
             }
             else
             {
@@ -451,9 +451,9 @@ public class GameDataManager : Singleton<GameDataManager>
             }
         }
         
+        cards.AddRange(InteractionAdjCards);
         cards.AddRange(normalAdjCards);
-        cards.AddRange(contradictAdjCards);
-        
+
         return cards.ToArray();
     }
 

@@ -7,7 +7,7 @@ using UnityEngine;
     public class BouncyAdjJS : MonoBehaviour,IAdjective
     {
         private EAdjective adjectiveName = EAdjective.Bouncy;
-        private EAdjectiveType adjectiveType = EAdjectiveType.Repeat;
+        private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
         private int count = 0;
 
         #region 통통 꾸밈 카드 멤버변수
