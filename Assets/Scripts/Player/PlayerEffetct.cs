@@ -1,22 +1,39 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum EffectIndex
 {
     WaterFootprint = 0, 
-    Footprint
+    DefaultFootprint,
+    SnowFootprint,
+    DesertFootprint
 }
 
 public class PlayerEffetct : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem footprint;
-    private List<string> footprintClipsName;
-    [SerializeField] private AudioClip[] footprintSoundClips;
+    #region Footprints
+    [SerializeField] private ParticleSystem glassFootprint;
+    private List<string> glassFootprintClipsName;
+    [SerializeField] private AudioClip[] glassFootprintSoundClips;
+    
+    [SerializeField] private ParticleSystem snowFootprint;
+    private List<string> snowFootprintClipsName;
+    [SerializeField] private AudioClip[] snowFootprintSoundClips;
+    
+    [SerializeField] private ParticleSystem desertFootprint;
+    private List<string> desertFootprintClipsName;
+    [SerializeField] private AudioClip[] desertFootprintSoundClips;
+    #endregion
+    
     public EffectIndex currentEffectIndex;
     private CollisionEffect ce;
+
+    #region PlayerEffects
     [SerializeField] private ParticleSystem climbEffect;
     [SerializeField] private ParticleSystem pushEffect;
+    #endregion
     
     private void Start()
     {
@@ -26,12 +43,28 @@ public class PlayerEffetct : MonoBehaviour
     void Init()
     {
         ce = transform.Find("CollisionEffect").GetComponent<CollisionEffect>();
-        
+        currentEffectIndex = EffectIndex.DefaultFootprint;
+
+        InitFootprintEffect(out glassFootprintClipsName, glassFootprintSoundClips);
+        InitFootprintEffect(out snowFootprintClipsName, snowFootprintSoundClips);
+        InitFootprintEffect(out desertFootprintClipsName, desertFootprintSoundClips);
+    }
+
+    void InitFootprintEffect(out List<string> footprintClipsName, AudioClip[] footparintClips)
+    {
         footprintClipsName = new List<string>();
-        currentEffectIndex = EffectIndex.Footprint;
-        foreach (var e in footprintSoundClips)
+
+        if (footparintClips.Length < 1)
         {
-            footprintClipsName.Add(e.name);
+            Debug.LogError("등록된 발소리 리소스가 없습니다!");
+        }
+
+        foreach (var e in footparintClips)
+        {
+            if (e)
+            {
+                footprintClipsName.Add(e.name);
+            }
         }
     }
 
@@ -40,11 +73,17 @@ public class PlayerEffetct : MonoBehaviour
     {
         switch (currentEffectIndex)
         { 
-            case EffectIndex.Footprint:
-                footprint.Play();
+            case EffectIndex.DefaultFootprint:
+                glassFootprint.Play();
                 break;
             case EffectIndex.WaterFootprint:
                 ce.WaterFootprint.Play();
+                break;
+            case EffectIndex.SnowFootprint:
+                snowFootprint.Play();
+                break;
+            case EffectIndex.DesertFootprint:
+                desertFootprint.Play();
                 break;
         }
     }
@@ -55,16 +94,23 @@ public class PlayerEffetct : MonoBehaviour
         int randomClipIdx;
         switch (currentEffectIndex)
         {
-            case EffectIndex.Footprint:
-                randomClipIdx = UnityEngine.Random.Range(0, footprintClipsName.Count);
-                SoundManager.GetInstance.repeatPlay(footprintClipsName[randomClipIdx]);
+            case EffectIndex.DefaultFootprint:
+                randomClipIdx = UnityEngine.Random.Range(0, glassFootprintClipsName.Count);
+                SoundManager.GetInstance.repeatPlay(glassFootprintClipsName[randomClipIdx]);
                 break;
             case EffectIndex.WaterFootprint:
                 randomClipIdx = UnityEngine.Random.Range(0, ce.WaterFootprintClipsName.Count);
                 SoundManager.GetInstance.repeatPlay(ce.WaterFootprintClipsName[randomClipIdx]);
                 break;
+            case EffectIndex.SnowFootprint:
+                randomClipIdx = UnityEngine.Random.Range(0, snowFootprintClipsName.Count);
+                SoundManager.GetInstance.repeatPlay(snowFootprintClipsName[randomClipIdx]);
+                break;
+            case EffectIndex.DesertFootprint:
+                randomClipIdx = UnityEngine.Random.Range(0, desertFootprintClipsName.Count);
+                SoundManager.GetInstance.repeatPlay(desertFootprintClipsName[randomClipIdx]);
+                break;
         }
-        
     }
 
     public void ClimbEffectPlay()
