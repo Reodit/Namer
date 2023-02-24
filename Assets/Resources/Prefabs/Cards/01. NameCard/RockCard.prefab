@@ -53,7 +53,7 @@ MonoBehaviour:
   frontCover: {fileID: 4230330137778533953}
   bc: {fileID: 453746082420174526}
   highlight: {fileID: 3395023830973034109}
-  Encyclopedia: {fileID: 8339162318703548566}
+  Encyclopedia: {fileID: 2155044647775482130}
   UIText: {fileID: 7636341369278244097}
   NameAdjUIText: {fileID: 8594268537692688563}
   currentLevelName: 
@@ -192,6 +192,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5886614794521977911, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
   m_PrefabInstance: {fileID: 5468066845115952840}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2155044647775482130 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6199829836609462234, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
+  m_PrefabInstance: {fileID: 5468066845115952840}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3395023830973034109 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7277805989260689589, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
@@ -218,11 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8339162318703548566 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4060239298021029470, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
-  m_PrefabInstance: {fileID: 5468066845115952840}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8594268537692688563 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4370321639461043835, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
