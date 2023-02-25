@@ -514,7 +514,7 @@ public class InteractiveObject : MonoBehaviour
     }
 
     //오브젝트 현재 이름 팝업을 띄움 
-    void PopUpNameOn()
+    public void PopUpNameOn()
     {
         if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
             return;
@@ -522,7 +522,7 @@ public class InteractiveObject : MonoBehaviour
     }
 
     //오브젝트 현재 이름 팝업을 지움 
-    void PopUpNameOff()
+    public void PopUpNameOff()
     {
         popUpName.SetActive(false);
     }
