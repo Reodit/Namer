@@ -324,7 +324,8 @@ public class LevelEditor : MonoBehaviour
             blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out target);
             if (target == null)
             {
-                // todo 타일에는 부여 불가 알림 
+                // todo 타일에는 부여 불가 알림
+                // todo 사운드나 X표시 출력 
                 return;
             }
             if (isName)
@@ -347,6 +348,16 @@ public class LevelEditor : MonoBehaviour
             {
                 SetBlockInTransform(pos, (EName)(block.idx - tilePrefabs.Count + 1));
             }
+        }
+    }
+
+    private void ResetMap()
+    {
+        Destroy(GameObject.Find("Objects"));
+        Destroy(GameObject.Find("Grounds"));
+        foreach (GameObject blankLine in blankHeights)
+        {
+            Destroy(blankLine);
         }
     }
 
@@ -540,6 +551,9 @@ public class LevelEditor : MonoBehaviour
             newBlock.position = new Vector3(x, y, z);
             newBlock.transform.parent = parentObjects.transform;
             blocks[x, y, z] = newBlock.gameObject;
+
+            InteractiveObject blockIO = newBlock.GetComponent<InteractiveObject>();
+            AddName(blockIO, EName.Null);
         }
 
         blockNum = (int)EName.Null;
@@ -665,6 +679,7 @@ public class LevelEditor : MonoBehaviour
     public void SizePanelOn()
     {
         selectSizePanel.gameObject.SetActive(true);
+        ChangeEditState(EditState.SetSize);
     }
     #endregion
 
