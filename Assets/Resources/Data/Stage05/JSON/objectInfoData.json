@@ -1,39 +1,39 @@
-{
+﻿{
     "dataList": [
         {
-            "prefabName": "BonfireObj",
+            "prefabName": "CrystalObj",
             "objectID": 0,
-            "nameType": 4,
+            "nameType": 9,
             "adjectives": []
         },
         {
-            "prefabName": "RockObj",
+            "prefabName": "CrystalObj",
             "objectID": 1,
-            "nameType": 3,
+            "nameType": 9,
             "adjectives": []
         },
         {
-            "prefabName": "BallObj",
+            "prefabName": "CrystalObj",
             "objectID": 2,
-            "nameType": 2,
+            "nameType": 9,
             "adjectives": []
         },
         {
-            "prefabName": "RockObj",
+            "prefabName": "CrystalObj",
             "objectID": 3,
-            "nameType": 3,
+            "nameType": 9,
             "adjectives": []
         },
         {
-            "prefabName": "RockObj",
+            "prefabName": "TreeObj",
             "objectID": 4,
-            "nameType": 3,
+            "nameType": 5,
             "adjectives": []
         },
         {
-            "prefabName": "RoseObj",
+            "prefabName": "TreeObj",
             "objectID": 5,
-            "nameType": 1,
+            "nameType": 5,
             "adjectives": []
         },
         {
@@ -49,9 +49,33 @@
             "adjectives": []
         },
         {
-            "prefabName": "RockObj",
+            "prefabName": "RoseObj",
             "objectID": 8,
+            "nameType": 1,
+            "adjectives": []
+        },
+        {
+            "prefabName": "BonfireObj",
+            "objectID": 9,
+            "nameType": 4,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 10,
             "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 11,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "BallObj",
+            "objectID": 12,
+            "nameType": 2,
             "adjectives": []
         }
     ]
