@@ -408,7 +408,10 @@ public class SoundManager : Singleton<SoundManager>
     public void Play(EAdjective eAdjective)
     {
         if (effectClips.ContainsKey(eAdjective))
+        {
             Play(sfxSound, effectClips[eAdjective]);
+        }
+            
     }
     public void Play(EAdjective eAdjective, double playTime)
     {
