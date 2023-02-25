@@ -61,10 +61,10 @@ public class PlayerMovement : MonoBehaviour
     public void PlayInteraction()
     {
         if (Input.GetKeyDown(GameManager.GetInstance.interactionKey) && 
-                             GameManager.GetInstance.isPlayerCanInput && 
-                             !GameManager.GetInstance.isPlayerDoAction &&
-                             interactObj &&
-                             interactObj.CompareTag("InteractObj"))
+            GameManager.GetInstance.isPlayerCanInput && 
+            !GameManager.GetInstance.isPlayerDoAction &&
+            interactObj &&
+            interactObj.CompareTag("InteractObj"))
         {
             // TODO 하드 코딩 제거
             // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
@@ -169,6 +169,22 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             Init();
+        }
+        
+        // TODO 하드 코딩 제거
+        if (GameManager.GetInstance.isPlayerCanInput &&
+            !GameManager.GetInstance.isPlayerDoAction &&
+            interactObj &&
+            interactObj.CompareTag("InteractObj"))
+        {
+            //UIManager.GetInstance.ingameCanvas.InteractionBtnOn();
+            //Debug.Log("True");
+        }
+
+        else
+        {
+            //UIManager.GetInstance.ingameCanvas.InteractionBtnOff();
+            //Debug.Log("False");
         }
     }
 
