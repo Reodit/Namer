@@ -105,7 +105,7 @@ public class CameraController : MonoBehaviour
         if (!canMove)
         {
             GameManager.GetInstance.isPlayerCanInput = false;
-            GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Move);
+            GameManager.GetInstance.localPlayerEntity.pAnimator.SetFloat("scalar", 0f);
         }
 
         isFocused = true;
