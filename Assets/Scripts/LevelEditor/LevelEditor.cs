@@ -50,8 +50,6 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] Button downBtn;
     [SerializeField] Button selectBtn;
     [SerializeField] Button cancelBtn;
-    [SerializeField] Image selectSizePanel;
-    [SerializeField] GameObject blocksPanel;
     [SerializeField] Button[] sizeButtons;
     [SerializeField] Button hideBtn;
     [SerializeField] Button cardBtn;
@@ -59,6 +57,15 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] Slider heightSlider;
     [SerializeField] Button blockLeftBtn;
     [SerializeField] Button blockRightBtn;
+    [SerializeField] Text handlerValue;
+
+    [Header("게임 창")]
+    [SerializeField] Image selectSizePanel;
+    [SerializeField] GameObject blocksPanel;
+    [SerializeField] GameObject sidePanel;
+    [SerializeField] GameObject heightPanel;
+    [SerializeField] GameObject cardPanel;
+    [SerializeField] GameObject warningPanel;
 
     [Header("맵 크기에 따른 사이즈 설정")]
     private int selectedSize = 1;
@@ -93,7 +100,7 @@ public class LevelEditor : MonoBehaviour
     private int blockLine = 0;
 
     [Header("한 라인에 나오는 블록 최대 개수")]
-    [SerializeField] private int maxBlock = 8;
+    [SerializeField] private int maxBlock = 7;
 
     [Header("set blocks")]
     [SerializeField] Transform blocksParent;
@@ -101,6 +108,9 @@ public class LevelEditor : MonoBehaviour
 
     GameObject[,,] blocks;
     EditState curState = EditState.SetSize;
+    GameObject parentGrounds;
+    GameObject parentObjects;
+
     #endregion
 
     #region Init
@@ -192,10 +202,13 @@ public class LevelEditor : MonoBehaviour
 
     private void MakeBlanks(int size)
     {
+        parentGrounds = new GameObject("Grounds");
+        parentObjects = new GameObject("Objects");
         for (int y = 0; y < maxY[selectedSize]; y++)
         {
             GameObject newY = new GameObject("Blank " + y.ToString() + "F");
-            GameObject blockY = new GameObject("Block " + y.ToString() + "F");
+            GameObject blockY = new GameObject(y.ToString() + "F");
+            blockY.transform.parent = parentGrounds.transform;
             blankHeights[y] = newY;
             heights[y] = blockY;
             for (int x = 0; x < maxX[selectedSize]; x++)
@@ -274,7 +287,7 @@ public class LevelEditor : MonoBehaviour
                 // no function in this state
                 break;
             case (EditState.MakeStage):
-                
+                SwapBlockORCard();
                 break;
             case (EditState.TestPlay):
                 // todo testPlay
@@ -307,7 +320,13 @@ public class LevelEditor : MonoBehaviour
         if (isCard)
         {
             bool isName = block.type == EBlockType.NameCard;
-            InteractiveObject target = blocks[curX, curY, curZ].GetComponent<InteractiveObject>();
+            InteractiveObject target = null;
+            blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out target);
+            if (target == null)
+            {
+                // todo 타일에는 부여 불가 알림 
+                return;
+            }
             if (isName)
             {
                 AddName(target, (EName)block.idx);
@@ -519,7 +538,7 @@ public class LevelEditor : MonoBehaviour
             Destroy(newBlock.GetComponent<BoxCollider>());
             newBlock.gameObject.SetActive(true);
             newBlock.position = new Vector3(x, y, z);
-            newBlock.transform.parent = heights[y].transform;
+            newBlock.transform.parent = parentObjects.transform;
             blocks[x, y, z] = newBlock.gameObject;
         }
 
@@ -545,7 +564,7 @@ public class LevelEditor : MonoBehaviour
             Destroy(newBlock.GetComponent<BoxCollider>());
             newBlock.gameObject.SetActive(true);
             newBlock.position = new Vector3(x, y, z);
-            newBlock.transform.parent = heights[y].transform;
+            newBlock.transform.parent = heights[curY].transform;
             blocks[x, y, z] = newBlock.gameObject;
         }
 
@@ -594,6 +613,59 @@ public class LevelEditor : MonoBehaviour
     {
 
     }
+
+    public void SwapBlockORCard()
+    {
+        isCard = !isCard;
+
+    }
+    #endregion
+
+    #region
+    public void SizePanelOnOff()
+    {
+        if (sidePanel.activeSelf)
+        {
+            sidePanel.SetActive(false);
+        }
+        else
+        {
+            sidePanel.SetActive(true);
+            cardPanel.SetActive(false);
+            heightPanel.SetActive(true);
+        }
+    }
+
+    public void CardPanelOnOff()
+    {
+        if (sidePanel.activeSelf)
+        {
+            sidePanel.SetActive(false);
+        }
+        else
+        {
+            sidePanel.SetActive(true);
+            cardPanel.SetActive(true);
+            heightPanel.SetActive(false);
+        }
+    }
+
+    public void WarningPanelOnOff()
+    {
+        if (!warningPanel.activeSelf)
+        {
+            warningPanel.SetActive(false);
+        }
+        else
+        {
+            warningPanel.SetActive(true);
+        }
+    }
+
+    public void SizePanelOn()
+    {
+        selectSizePanel.gameObject.SetActive(true);
+    }
     #endregion
 
     #region StateMachine
@@ -631,6 +703,6 @@ public class LevelEditor : MonoBehaviour
 
     void Update()
     {
-        
+        handlerValue.text = curY.ToString() + "F";
     }
 }

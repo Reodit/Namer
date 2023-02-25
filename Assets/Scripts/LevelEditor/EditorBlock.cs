@@ -9,7 +9,6 @@ public class EditorBlock : MonoBehaviour
     public int idx = 0;
     public EBlockType type = EBlockType.Object;
     private Button thisButton;
-    private Image highLight;
 
     int objectCount;
     int tileCount;
@@ -24,7 +23,6 @@ public class EditorBlock : MonoBehaviour
         thisButton = this.gameObject.GetComponent<Button>();
         idx = transform.GetSiblingIndex();
         levelEditor = GameObject.FindObjectOfType<LevelEditor>() as LevelEditor;
-        highLight = transform.Find("HighLight").GetComponent<Image>();
     }
 
     private void Start()
@@ -49,11 +47,6 @@ public class EditorBlock : MonoBehaviour
 
     void Update()
     {
-        if (levelEditor.blockNum != this.idx && highLight.gameObject.activeSelf)
-            highLight.gameObject.SetActive(false);
-        else if (levelEditor.blockNum == this.idx && !highLight.gameObject.activeSelf)
-            highLight.gameObject.SetActive(true);
-
         if (levelEditor.isCard)
         {
             if (idx > cardCount)
@@ -65,13 +58,13 @@ public class EditorBlock : MonoBehaviour
             if (idx < nameCardCount)
             {
                 type = EBlockType.NameCard;
-                // todo image 변화
             }
             else
             {
                 type = EBlockType.AdjCard;
-                // todo image 변화
             }
+            this.transform.GetChild(1).gameObject.SetActive(false);
+            this.transform.GetChild(0).gameObject.SetActive(true);
         }
         else
         {
@@ -84,12 +77,13 @@ public class EditorBlock : MonoBehaviour
             if (idx < tileCount)
             {
                 type = EBlockType.Tile;
-                // todo image 변화
             }
             else
             {
                 type = EBlockType.Object;
             }
+            this.transform.GetChild(1).gameObject.SetActive(true);
+            this.transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 }
