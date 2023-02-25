@@ -1,0 +1,274 @@
+{
+    "dataList": [
+        {
+            "prefabName": "RockObj",
+            "objectID": 0,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 1,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 2,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 3,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "BonfireObj",
+            "objectID": 4,
+            "nameType": 4,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 5,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 6,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "BallObj",
+            "objectID": 7,
+            "nameType": 2,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 8,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "BallObj",
+            "objectID": 9,
+            "nameType": 2,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 10,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 11,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 12,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 13,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 14,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 15,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 16,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 17,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 18,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 19,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 20,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 21,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 22,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 23,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 24,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RockObj",
+            "objectID": 25,
+            "nameType": 3,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 26,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 27,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 28,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 29,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 30,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 31,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "RoseObj",
+            "objectID": 32,
+            "nameType": 1,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 33,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 34,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 35,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 36,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 37,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 38,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 39,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "CrystalObj",
+            "objectID": 40,
+            "nameType": 9,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 41,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 42,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 43,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 44,
+            "nameType": 5,
+            "adjectives": []
+        }
+    ]
+}
