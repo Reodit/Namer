@@ -85,10 +85,8 @@ namespace PlayerOwnedStates
 
         public void Exit(PlayerEntity entity)
         {
-            if (GameManager.GetInstance.isPlayerDoAction != true)
-            {
-                entity.pAnimator.SetBool("isObtain", false);
-            }
+            entity.pAnimator.SetBool("isObtain", false);
+            entity.pAnimator.SetFloat("scalar", 0);
         }
     }
     
