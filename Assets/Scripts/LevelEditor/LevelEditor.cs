@@ -566,7 +566,6 @@ public class LevelEditor : MonoBehaviour
         {
             Transform newBlock = GameObject.Instantiate(objPrefabs[(int)block]).transform;
             Destroy(newBlock.GetComponent<Rigidbody>());
-            Destroy(newBlock.GetComponent<BoxCollider>());
             newBlock.gameObject.SetActive(true);
             newBlock.position = new Vector3(x, y, z);
             newBlock.transform.parent = parentObjects.transform;
@@ -595,7 +594,6 @@ public class LevelEditor : MonoBehaviour
         {
             Transform newBlock = GameObject.Instantiate(tilePrefabs[(int)block]).transform;
             Destroy(newBlock.GetComponent<Rigidbody>());
-            Destroy(newBlock.GetComponent<BoxCollider>());
             newBlock.gameObject.SetActive(true);
             newBlock.position = new Vector3(x, y, z);
             newBlock.transform.parent = heights[curY].transform;
