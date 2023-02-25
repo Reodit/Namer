@@ -15,6 +15,8 @@ public class MainMenuCardController : MonoBehaviour
     GameObject levelSelectCardHolder;
     Vector3 originPos;
     Vector3 originRot;
+
+    bool isTouching;
     private void Start()
     {
         cr = this.gameObject.GetComponent<CardRotate>();
@@ -91,10 +93,12 @@ public class MainMenuCardController : MonoBehaviour
     }
     public void TouchInteractObj()
     {
+        if (isTouching) return;
         StartCoroutine(CastCardDealing());
     }
     IEnumerator CastCardDealing()
     {
+        isTouching = true;
         originPos = gameObject.transform.position;
         originRot = gameObject.transform.localRotation.eulerAngles;
         highlight.SetActive(false);
@@ -121,6 +125,7 @@ public class MainMenuCardController : MonoBehaviour
         Destroy(particleObj);
         AllPopUpNameOff();
         yield return new WaitForSeconds(1f);
+        isTouching = false;
         if (this.name != "OptionCard(Clone)" && name != "EncyclopediaCard(Clone)")
         {
             CardReturn();
