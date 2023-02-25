@@ -35,10 +35,11 @@ public class MainUIController : MonoBehaviour
     [SerializeField] GameObject levelSelectBtnPanel;
     [SerializeField] GameObject levelSelectBtnPanelLeftBtn;
     [SerializeField] GameObject levelSelectBtnPanelRightBtn;
+    [SerializeField] GameObject levelSelectCards;
     [SerializeField] GameObject levelEditBtnPanel;
     [SerializeField] GameObject levelEditBtnPanelLeftBtn;
-    [SerializeField] GameObject levelEdittBtnPanelRightBtn;
-    [SerializeField] GameObject levelSelectCards;
+    [SerializeField] GameObject levelEditBtnPanelRightBtn;
+    [SerializeField] GameObject levelEditCards;
     GameObject levelInformationTxt;
 
     [SerializeField] float titleMovingTime = 1f;
@@ -80,8 +81,6 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
-        Invoke("LevelSelectPanelOn", 1f);
-
         CardManager.GetInstance.isMenuLevel = true;
     }
 
@@ -181,12 +180,6 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelEditCardHolder.SetActive(true);
-        Invoke("LevelEditPanelOn", 1f);
-    }
-
-    void LevelEditPanelOn()
-    {
-        levelEditBtnPanel.SetActive(true);
     }
 
     //레벨 셀렉트 화면으로 넘어감 
@@ -199,7 +192,6 @@ public class MainUIController : MonoBehaviour
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
         SoundManager.GetInstance.ChangeMainBGM(state);
-        Invoke("LevelSelectPanelOn", 1f);
     }
 
     //메인 메뉴 화면으로 넘어감
@@ -316,13 +308,20 @@ public class MainUIController : MonoBehaviour
         optionPanel.SetActive(false);
     }
 
-    void LevelSelectPanelOn()
+
+    #region Level&EditButtonPanel
+    public void LevelEditPanelOn()
+    {
+        levelEditBtnPanel.SetActive(true);
+    }
+
+    public void LevelSelectPanelOn()
     {
         levelSelectBtnPanel.SetActive(true);
     }
 
     int selectPageCount = 0;
-    int selectMaxPage = 1;
+    int selectMaxPage = 0;
     public void LevelSelectPanelRightBtn()
     {
         levelSelectCards.transform.GetChild(selectPageCount).gameObject.SetActive(false);
@@ -342,12 +341,18 @@ public class MainUIController : MonoBehaviour
     void LevelSelectBtnController()
     {
         selectMaxPage = levelSelectCards.transform.childCount;
-        if(selectPageCount == 0)
+
+        if (selectPageCount == 0 && selectMaxPage == 1)
+        {
+            levelEditBtnPanelLeftBtn.SetActive(false);
+            levelEditBtnPanelRightBtn.SetActive(false);
+        }
+        if (selectPageCount <= 0)
         {
             levelSelectBtnPanelLeftBtn.SetActive(false);
             levelSelectBtnPanelRightBtn.SetActive(true);
         }
-        else if(selectPageCount == selectMaxPage - 1)
+        else if(selectPageCount >= selectMaxPage - 1)
         {
             levelSelectBtnPanelRightBtn.SetActive(false);
             levelSelectBtnPanelLeftBtn.SetActive(true);
@@ -358,4 +363,50 @@ public class MainUIController : MonoBehaviour
             levelSelectBtnPanelRightBtn.SetActive(true);
         }
     }
+
+    int editPageCount = 0;
+    int editMaxPage = 0;
+    public void LevelEditPanelRightBtn()
+    {
+        levelEditCards.transform.GetChild(editPageCount).gameObject.SetActive(false);
+        editPageCount++;
+        levelEditCards.transform.GetChild(editPageCount).gameObject.SetActive(true);
+        LevelEditBtnController();
+    }
+
+    public void LevelEditPanelLeftBtn()
+    {
+        levelEditCards.transform.GetChild(editPageCount).gameObject.SetActive(false);
+        editPageCount--;
+        levelEditCards.transform.GetChild(editPageCount).gameObject.SetActive(true);
+        LevelEditBtnController();
+    }
+
+    void LevelEditBtnController()
+    {
+        editMaxPage = levelEditCards.transform.childCount;
+
+        if (editPageCount == 0 && editMaxPage == 1)
+        {
+            levelEditBtnPanelLeftBtn.SetActive(false);
+            levelEditBtnPanelRightBtn.SetActive(false);
+        }
+        else if (editPageCount == 0)
+        {
+            levelEditBtnPanelLeftBtn.SetActive(false);
+            levelEditBtnPanelRightBtn.SetActive(true);
+        }
+        else if (editPageCount == editMaxPage - 1)
+        {
+            levelEditBtnPanelRightBtn.SetActive(false);
+            levelEditBtnPanelLeftBtn.SetActive(true);
+        }
+        else
+        {
+            levelEditBtnPanelLeftBtn.SetActive(true);
+            levelEditBtnPanelRightBtn.SetActive(true);
+        }
+    }
+
+    #endregion
 }

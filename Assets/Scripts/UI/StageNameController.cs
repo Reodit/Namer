@@ -10,7 +10,13 @@ public class StageNameController : MonoBehaviour
     [SerializeField] Text nameAdjTxt;
     [SerializeField] TextMeshProUGUI stageText;
     [SerializeField] GameObject namePlate;
+    MainUIController mainUIController;
     int stageNum = 1;
+
+    private void Awake()
+    {
+        mainUIController = GameObject.Find("MainCanvas").GetComponent<MainUIController>();
+    }
 
     private void OnEnable()
     {
@@ -50,7 +56,16 @@ public class StageNameController : MonoBehaviour
     public void StageNumSetUp(int inputStageNum)
     {
         stageNum = inputStageNum;
-        nameAdjTxt.text = "Stage " + inputStageNum.ToString();
+
+        if (mainUIController.state == MainMenuState.Level)
+        {
+            nameAdjTxt.text = "Stage " + inputStageNum.ToString();
+        }
+        else
+        {
+            nameAdjTxt.text = "Custom " + inputStageNum.ToString();
+        }
+
         stageText.text = inputStageNum.ToString();
     }
 }
