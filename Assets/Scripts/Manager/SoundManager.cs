@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
+using System.Text;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
+
 public class SoundManager : Singleton<SoundManager>
 {
     public AudioMixer audioMixer;
@@ -21,6 +21,7 @@ public class SoundManager : Singleton<SoundManager>
     public AudioSource playerSfxSound;
     public AudioSource repeatableSfx;
     public AudioSource menuCardSfxSound;
+    private AudioListener audioListener;
     private bool isBGMSOundTrack01Playing;
 
     private double dspStartTime;
@@ -31,6 +32,14 @@ public class SoundManager : Singleton<SoundManager>
     public Slider SFXSlider;
     public Toggle muteToggle;
 
+    #region BGM Variables
+    private int min = int.MaxValue;
+    private int max = int.MinValue;
+    private AudioClip[] mainSceneBgmClips;
+    private AudioClip[] inGameBGMClips;
+    private AudioClip[] itemToSuffle;
+    private List<AudioClip> shuffledItem;
+    #endregion
     // public List<AudioClip> effectClips = new List<AudioClip> ();
     /*
      * 1. enum -> main, credit , ....
@@ -42,7 +51,6 @@ public class SoundManager : Singleton<SoundManager>
     private Dictionary<string, AudioClip> uiEffectClips = new Dictionary<string, AudioClip>();
     Dictionary<string, AudioClip> playerEffectClips = new Dictionary<string, AudioClip>();
 
-    private AudioClip[] bgmClips;
 
 
     public bool isMuteToggleOn;
@@ -55,6 +63,7 @@ public class SoundManager : Singleton<SoundManager>
 
     private void Awake()
     {
+        // var audioListeners = Resources.FindObjectsOfTypeAll<AudioListener>();
         SetObjectSFXClips();
         SetUISFXClips();
         SetPlayerSFXClips();
@@ -110,18 +119,42 @@ public class SoundManager : Singleton<SoundManager>
 
     private void SetBGM()
     {
-        bgmClips = Resources.LoadAll<AudioClip>("BGM");
+        mainSceneBgmClips = Resources.LoadAll<AudioClip>("BGM/MainSceneBGM");
+        inGameBGMClips = Resources.LoadAll<AudioClip>("BGM/InGameBgm");
+        shuffledItem = new List<AudioClip>(inGameBGMClips.Length);
+        SetItemToShuffle();
+        
+        // SetTotalTrackVolume();
+    }
 
-        // Debug.Log(bgmClips.Length);
-        foreach (var clip in bgmClips)
+    private void SetItemToShuffle()
+    {
+        itemToSuffle = (AudioClip[])inGameBGMClips.Clone();
+        // itemToSuffle = inGameBGMClips.Select(x => x);
+    }
+
+    private void SetTotalTrackVolume()
+    {
+        foreach (var clip in inGameBGMClips)
         {
-            // Debug.Log(clip.name);
+            StringBuilder sb = new StringBuilder();
+            var trackName = clip.name;
+            for (int i = 0; i < trackName.Length; i++)
+            {
+                if (trackName[i] >= '0' && trackName[i] <= '9')
+                {
+                    sb.Append(trackName[i]);
+                }
+            }
+
+            min = Math.Min(min, int.Parse(sb.ToString()));
+            max = Math.Max(max, int.Parse(sb.ToString()));
         }
     }
 
     AudioClip FindBgm(string BGMName)
     {
-        foreach (var clip in bgmClips)
+        foreach (var clip in mainSceneBgmClips)
         {
             if (clip.name == BGMName)
             {
@@ -171,10 +204,19 @@ public class SoundManager : Singleton<SoundManager>
 
     public void ChangeInGameLevelBGM()
     {
-        int currentLevel = GameManager.GetInstance.Level + 1;
-        string levelBGM = "Level" + currentLevel;
-        var audioClip = FindBgm(levelBGM);
-        bgmSound.clip = audioClip;
+        if (itemToSuffle.Length == 0)
+        {
+            SetItemToShuffle();
+            shuffledItem.Clear();
+        }
+        Random.InitState((int)System.DateTime.Now.Ticks);
+        int randIdx = Random.Range(0, itemToSuffle.Length - 1);
+        bgmSound.clip = itemToSuffle[randIdx];
+        
+        shuffledItem.Add(itemToSuffle[randIdx]);
+        itemToSuffle[randIdx] = itemToSuffle[itemToSuffle.Length - 1];
+        Array.Resize(ref itemToSuffle, itemToSuffle.Length-1);
+
         bgmSound.loop = true;
         bgmSound.Play();
     }
@@ -196,6 +238,7 @@ public class SoundManager : Singleton<SoundManager>
 
         // StartCoroutine(SmothelySwapAudio(clip));
         bgmSound.clip = clip;
+        bgmSound.loop = true;
         bgmSound.Play();
     }
     IEnumerator SmothelySwapAudio(AudioClip newClip)
@@ -264,6 +307,7 @@ public class SoundManager : Singleton<SoundManager>
         sfxSound.volume = 1f;
         dspStartTime = AudioSettings.dspTime;
         sfxSound.PlayScheduled(dspStartTime);
+        // StartCoroutine(AdjustAudioMixerVolume(sfxSound));
         
         SetEndDSPTime(time);
         if (duration > dspEndTime-dspStartTime)
@@ -280,6 +324,53 @@ public class SoundManager : Singleton<SoundManager>
         // sfxSound.PlayOneShot(clip);
     }
 
+    #region ObjectSFX audio volume Adjust TestCode
+
+    private IEnumerator AdjustAudioMixerVolume(AudioSource audioSource)
+    {
+        
+        int sampleSize = 1024;
+        float[] spectrumData = new float[sampleSize];
+
+        while (audioSource.isPlaying)
+        {
+            // Get the spectrum data for the audio clip
+            audioSource.GetSpectrumData(spectrumData, 0, FFTWindow.Hamming);
+            // Calculate the average amplitude in each frequency band
+            int numBands = 10;
+            float[] bandAverages = new float[numBands];
+            int samplesPerBand = sampleSize / numBands;
+            for (int i = 0; i < numBands; i++)
+            {
+                float sum = 0f;
+                for (int j = 0; j < samplesPerBand; j++)
+                {
+                    int index = i * samplesPerBand + j;
+                    sum += spectrumData[index];
+                }
+                bandAverages[i] = sum / samplesPerBand;
+            }
+
+            // Calculate the overall volume level based on the average band amplitudes
+            float volume = 0f;
+            for (int i = 0; i < numBands; i++)
+            {
+                volume += bandAverages[i];
+            }
+            volume /= numBands;
+            volume = Mathf.Log10(volume) * 20f; // Convert to decibels
+            // Set the volume of the corresponding audio mixer
+            audioMixer.SetFloat("SFX", volume);
+            yield return new WaitForEndOfFrame();
+        }
+       
+        
+    }
+
+    #endregion
+
+    
+
     IEnumerator AudioFadeOut(AudioSource audio)
     {
         double remainingTime = dspEndTime-AudioSettings.dspTime;
@@ -292,6 +383,7 @@ public class SoundManager : Singleton<SoundManager>
             yield return null;
         }
     }
+
     public void Play(AudioSource source, AudioClip clip)
     {
         source.PlayOneShot(clip);
@@ -441,7 +533,6 @@ public class SoundManager : Singleton<SoundManager>
         }
         muteToggle.onValueChanged.AddListener(delegate {
             SetSound(); });
-
     }
 
     private void OnApplicationPause(bool pause)
