@@ -188,9 +188,11 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         
-        if (rb.velocity.magnitude > 5)
+        if (transform.position.y < -3f)
         {
-            rb.velocity = Vector3.zero;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            GameManager.GetInstance.ResetCurrentLvl();
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
             return;
         }
 
