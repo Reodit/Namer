@@ -71,6 +71,8 @@ public class ScenarioController : MonoBehaviour
     [Header("필수로 등록해야 하는 부분")]
     [SerializeField] GameObject logBox;
     [SerializeField] Text logText;
+    [SerializeField] GameObject logErrorBox;
+    [SerializeField] Text logErrorText;
     [SerializeField] GameObject dialogBox;
     [SerializeField] Text dialogText;
     [SerializeField] GameObject stageClearPanel;
@@ -86,6 +88,7 @@ public class ScenarioController : MonoBehaviour
     [System.NonSerialized] public bool dialogOpened = false;
     [System.NonSerialized] public bool isUI = false;
     private bool[] keyPressed;
+    private bool preVictory = false;
 
     [Header("조정값")]
     [SerializeField] private float delayWinUI = 2f;
@@ -150,7 +153,9 @@ public class ScenarioController : MonoBehaviour
         restartTime = 20f;
 
         cameraController = Camera.main.transform.parent.GetComponent<CameraController>();
-        if (GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level))
+        bool isExist = GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level);
+        bool isNull = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.Count() == 0;
+        if (isExist && !isNull)
         {
             bool existGoal = false;
             foreach (Scenario scenario in GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario)
@@ -158,6 +163,7 @@ public class ScenarioController : MonoBehaviour
                 if (!existGoal && scenario.type == ERequireType.Victory)
                 {
                     goalScenarioCount = scenarioCount;
+                    existGoal = true;
                 }
                 scenarios.Enqueue(scenario);
                 scenarioCount++;
@@ -228,10 +234,23 @@ public class ScenarioController : MonoBehaviour
         restartTime = 20f;
     }
 
+    private void SystemLogOff()
+    {
+        logBox.SetActive(false);
+    }
+
     private void LogError(string message)
     {
         string errorText = $"<color=red>{message}</color>";
-        SystemLog(errorText);
+
+        if (message.Contains("#"))
+        {
+            message = ChangeIDinPlatform(message);
+        }
+        logErrorBox.SetActive(true);
+        logErrorText.text = message;
+        logErrorBox.GetComponent<LogText>().SetTime();
+        restartTime = 20f;
     }
 
     private void Log(string message, string objName, bool isClick = false)
@@ -281,6 +300,11 @@ public class ScenarioController : MonoBehaviour
     #endregion
 
     #region Scenario Functions
+    public int GetRemainScenarioCount()
+    {
+        return scenarioCount;
+    }
+
     [ContextMenu("SaveNewScenario")]
     public void SaveScenario()
     {
@@ -389,16 +413,17 @@ public class ScenarioController : MonoBehaviour
             scenarioCount = -1;
         }
         // todo 시나리오가 진행이 안된 상태로 장미에게 말을 걸어도 깰 수 있도록 하기 
-        //else if (GameManager.GetInstance.CurrentState == GameStates.Victory)
-        //{
-        //    if (scenarioCount > goalScenarioCount)
-        //    {
-        //        scenarioCount = 0;
-        //        // 승리 ui 실행 
-        //        StartCoroutine(OpenClearPanel());
-        //        scenarioCount = -1;
-        //    }
-        //}
+        else if (GameManager.GetInstance.CurrentState == GameStates.Victory && preVictory != true)
+        {
+            if (scenarioCount > goalScenarioCount)
+            {
+                scenarioCount = goalScenarioCount;
+                // 승리 ui 실행 
+                StartCoroutine(OpenClearPanel());
+                scenarioCount = -1;
+            }
+            preVictory = true;
+        }
         return checkedValue;
     }
 
