@@ -98,25 +98,24 @@ public class FlameAdj : IAdjective
     void SetSprayDirection(GameObject otherObject, GameObject thisObject)
     {
         var direction = thisObject.transform.position- otherObject.transform.position;
-        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z) && direction.x > 0)
+        var dir = Vector3.Normalize(direction);
+    
+        //1. 문제 x랑 z 가 같이 들어올때가 있음
+        if (dir.x < 0&& dir.z ==0) // left
         {
-            sprayObj.transform.Rotate(new Vector3(0f,90f,0f));
-            // sprayObj.transform.rotation = Quaternion.Euler(new Vector3(0f,90f,0f));
+            sprayObj.transform.rotation = Quaternion.Euler(new Vector3(0f,-90f,0f));
         }
-        else if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z) && direction.x < 0)
+        else if (dir.x > 0 && dir.z ==0) // right
         {
-            sprayObj.transform.Rotate(new Vector3(0f, -90f, 0f));
-            // sprayObj.transform.rotation = Quaternion.Euler(new Vector3(0f,-90f,0f));
+            sprayObj.transform.rotation = Quaternion.Euler(new Vector3(0f,90f,0f));
         }
-        else if (Mathf.Abs(direction.x) < Mathf.Abs(direction.z) && direction.z > 0)
+        else if (dir.z < 0 && dir.x == 0) // forward
         {
-            sprayObj.transform.Rotate(new Vector3(0f,0f,0f));
-            // sprayObj.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,0f));
+            sprayObj.transform.rotation = Quaternion.Euler(new Vector3(180f,0f,0f));
         }
-        else if (Mathf.Abs(direction.x) < Mathf.Abs(direction.z) && direction.z < 0)
+        else if (dir.z > 0 && dir.x == 0 ) // backward
         {
-            sprayObj.transform.Rotate(new Vector3(180f,0f,0f));
-            // sprayObj.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,180f));
+            sprayObj.transform.rotation = Quaternion.Euler(new Vector3(0f,0f,0f));
         }
     }
 
