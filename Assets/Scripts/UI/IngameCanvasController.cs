@@ -19,6 +19,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     [SerializeField] GameObject cardBtnImg;
     [SerializeField] GameObject tutorialArrow;
     [SerializeField] Text stageName;
+    [SerializeField] Image interactionImg;
     PlayerMovement playerMovement;
     Canvas canvas;
 
@@ -190,9 +191,18 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         playerMovement.PlayInteraction();
     }
 
+    public void InteractionBtnOn()
+    {
+        interactionImg.gameObject.SetActive(true);
+    }
+
+    public void InteractionBtnOff()
+    {
+        interactionImg.gameObject.SetActive(false);
+    }
+
     public void BtnPressedSound()
     {
         SoundManager.GetInstance.Play("BtnPress");
     }
-
 }

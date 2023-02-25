@@ -357,6 +357,7 @@ MonoBehaviour:
   cardHolderLeft: {fileID: 1979228942}
   cardHolderRight: {fileID: 1131331472}
   mainMenuCard: {fileID: 6591964947668748173, guid: 86ddebb5fc5b84788bdc80288f6904bb, type: 3}
+  mapEditCard: {fileID: 6591964947668748173, guid: 305e61d3daea04f5db975b55371abd8d, type: 3}
   mainCards: []
   mainUIController: {fileID: 552226260}
   levelSelectTiles:
@@ -2666,6 +2667,7 @@ MonoBehaviour:
   cardHolderLeft: {fileID: 2094282940}
   cardHolderRight: {fileID: 1010834774}
   mainMenuCard: {fileID: 6591964947668748173, guid: 86ddebb5fc5b84788bdc80288f6904bb, type: 3}
+  mapEditCard: {fileID: 6591964947668748173, guid: 305e61d3daea04f5db975b55371abd8d, type: 3}
   mainCards: []
   mainUIController: {fileID: 552226260}
   levelSelectTiles:
@@ -3494,10 +3496,11 @@ MonoBehaviour:
   levelSelectBtnPanel: {fileID: 1612767814}
   levelSelectBtnPanelLeftBtn: {fileID: 971117022}
   levelSelectBtnPanelRightBtn: {fileID: 1193286670}
+  levelSelectCards: {fileID: 1478440007}
   levelEditBtnPanel: {fileID: 1698198967}
   levelEditBtnPanelLeftBtn: {fileID: 1441289420}
-  levelEdittBtnPanelRightBtn: {fileID: 1674321405}
-  levelSelectCards: {fileID: 1478440007}
+  levelEditBtnPanelRightBtn: {fileID: 1674321405}
+  levelEditCards: {fileID: 1641241754}
   titleMovingTime: 3
   cameraMovingTime: 3
   levelSelectMovingTime: 1
@@ -9416,7 +9419,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1441289423}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 552226260}
+        m_TargetAssemblyTypeName: MainUIController, Assembly-CSharp
+        m_MethodName: LevelEditPanelLeftBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1441289423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11369,7 +11384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1641241755}
   m_Layer: 0
-  m_Name: LevelEdittCards
+  m_Name: LevelEditCards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11451,6 +11466,7 @@ MonoBehaviour:
   isEncyclopedia: 0
   isCardDealingDone: 0
   isCardsHide: 0
+  isMenuLevel: 0
   pickCard: {fileID: 0}
   ableAddCard: 1
 --- !u!64 &1651018103
@@ -11734,7 +11750,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1674321407}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 552226260}
+        m_TargetAssemblyTypeName: MainUIController, Assembly-CSharp
+        m_MethodName: LevelEditPanelRightBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1674321407
 MonoBehaviour:
   m_ObjectHideFlags: 0

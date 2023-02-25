@@ -63,11 +63,7 @@ public class LoadingSceneController : MonoBehaviour
 
     private void OnDestroy()
     {
-        UIManager.GetInstance.ingameCanvas = GameObject.Find("IngameCanvas");
-        UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
-        
         var scene = SceneManager.GetActiveScene();
-
         if (scene.name == "LevelDesign")
         {
             GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
@@ -76,6 +72,12 @@ public class LoadingSceneController : MonoBehaviour
         {
             GameManager.GetInstance.ChangeGameState(GameStates.InGame);
         }
+
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode) return;
+
+        UIManager.GetInstance.ingameCanvas = GameObject.Find("IngameCanvas");
+        UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
+        
         
         GameManager.GetInstance.LoadMap();
     }
