@@ -18,7 +18,7 @@ public class FunctionComparer : IComparer<IEnumerator>
         FloatObj,
         BounceObj,
         FlowObj,
-        FreezeObj
+        FreezeObj,
     }
 
     public int Compare(IEnumerator functionA, IEnumerator functionB)
@@ -81,9 +81,10 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
         CoroutineQueue = new Queue<IEnumerator>();
         SequentialQueue = new Queue<IEnumerator>();
         PlayerActionQueue = new Queue<IEnumerator>();
+
         StartCoroutine(SequentialCoroutine());
     }
-
+    
     public IEnumerator WaitUntilPlayerInteractionEnd(IAdjective currentInteractiveAdjectiveObject)
     {
         // 변수 2개 필요
@@ -102,7 +103,16 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
         // DetectManager.GetInstance.StartDetector();
         //수정한 부분 
     }
-    
+
+    private string ExtractFunctionName(IEnumerator func)
+    {
+        string funcName = func.GetType().Name.Substring
+        (func.GetType().Name.IndexOf('<') + 1, 
+            func.GetType().Name.IndexOf('>') - 1);
+
+        return funcName;
+    }
+
     // PlayerInteraction OR Addcard로 인한 Coroutine 제어
     private IEnumerator SequentialCoroutine()
     {
@@ -141,10 +151,46 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
                     // Queue Sorting
                     Queue<IEnumerator> sortedSequentialQueue =
                         new Queue<IEnumerator>(SequentialQueue.OrderBy(x => x, new FunctionComparer()));
-                    yield return StartCoroutine(sortedSequentialQueue.Dequeue());
+
+                    IEnumerator sCoroutine = sortedSequentialQueue.Peek();
+                    string front = ExtractFunctionName(sCoroutine);
+                    
+                    while (sortedSequentialQueue.Count > 0)
+                    {
+                        if (sortedSequentialQueue.Count == 1)
+                        {
+                            sortedSequentialQueue.Dequeue();
+                        }
+
+                        else
+                        {
+                            if (front == ExtractFunctionName(sortedSequentialQueue.Peek()))
+                            {
+                                if (front == ExtractFunctionName(sortedSequentialQueue.ElementAtOrDefault(1)) || 
+                                    ExtractFunctionName(sortedSequentialQueue.ElementAtOrDefault(1)) == null)
+                                {
+                                    StartCoroutine(sortedSequentialQueue.Dequeue());
+                                }
+                                
+                                else
+                                {
+                                    yield return StartCoroutine(sortedSequentialQueue.Dequeue());
+                                }
+                            }
+
+                            else
+                            {
+                                front = ExtractFunctionName(sortedSequentialQueue.Peek());
+                            }
+                        }
+                        
+                        yield return null;
+                    }
+                    
                 }
-                
-                yield return StartCoroutine(SequentialQueue.Dequeue());
+
+                StartCoroutine(SequentialQueue.Dequeue());
+                yield return null;
             }
             yield return null;
         }
