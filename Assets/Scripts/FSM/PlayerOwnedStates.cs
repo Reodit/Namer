@@ -87,6 +87,7 @@ namespace PlayerOwnedStates
         {
             entity.pAnimator.SetBool("isObtain", false);
             entity.pAnimator.SetFloat("scalar", 0);
+            GameManager.GetInstance.isPlayerDoAction = false;
         }
     }
     
