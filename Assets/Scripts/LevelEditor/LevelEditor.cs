@@ -242,6 +242,7 @@ public class LevelEditor : MonoBehaviour
                 {
                     GameObject blank = GameObject.Instantiate(blankBlock, newY.transform);
                     blank.transform.position = new Vector3(x, y + 0.5f, z);
+                    blank.SetActive(true);
                 }
             }
         }
@@ -932,7 +933,7 @@ public class LevelEditor : MonoBehaviour
 
     void Update()
     {
-        handlerValue.text = curY.ToString() + "F";
+        handlerValue.text = (curY + 1).ToString() + "F";
 
         if (isCard && blocks[curX, curY, curZ] != null)
         {

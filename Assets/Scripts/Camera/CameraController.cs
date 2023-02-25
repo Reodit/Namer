@@ -97,12 +97,12 @@ public class CameraController : MonoBehaviour
     public void SetPriorityBySize()
     {
         int mapSize = DetectManager.GetInstance.GetMaxX;
-        if (mapSize > 10)
+        if (mapSize > 12)
         {
             zoomValue = 2;
             SetPriority();
         }
-        else if (mapSize > 5)
+        else if (mapSize > 8)
         {
             zoomValue = 1;
             SetPriority();
