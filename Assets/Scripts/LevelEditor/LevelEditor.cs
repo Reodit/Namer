@@ -107,6 +107,7 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] private EditorBlock[] blockBtns;
 
     GameObject[,,] blocks;
+    List<InteractiveObject> objects = new List<InteractiveObject>();
     EditState curState = EditState.SetSize;
     GameObject parentGrounds;
     GameObject parentObjects;
@@ -570,6 +571,7 @@ public class LevelEditor : MonoBehaviour
             newBlock.position = new Vector3(x, y, z);
             newBlock.transform.parent = parentObjects.transform;
             blocks[x, y, z] = newBlock.gameObject;
+            objects.Add(newBlock.GetComponent<InteractiveObject>());
 
             //InteractiveObject blockIO = newBlock.GetComponent<InteractiveObject>();
             //AddName(blockIO, EName.Null);
@@ -738,9 +740,26 @@ public class LevelEditor : MonoBehaviour
     {
         handlerValue.text = curY.ToString() + "F";
 
-        if (isCard)
+        if (isCard && blocks[curX, curY, curZ] != null)
         {
+            foreach (InteractiveObject ioObj in objects)
+            {
+                ioObj.PopUpNameOff();
+            }
 
+            InteractiveObject io;
+            blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out io);
+            if (io != null)
+            {
+                io.PopUpNameOn();
+            }
+        }
+        else
+        {
+            foreach (InteractiveObject ioObj in objects)
+            {
+                ioObj.PopUpNameOff();
+            }
         }
     }
 }
