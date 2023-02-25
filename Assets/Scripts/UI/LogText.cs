@@ -48,7 +48,7 @@ public class LogText : MonoBehaviour
 
     void Update()
     {
-        if (!isSystemlog) return;
+        if (isSystemlog) return;
 
         curTime -= Time.unscaledDeltaTime;
         if (curTime <= 0)

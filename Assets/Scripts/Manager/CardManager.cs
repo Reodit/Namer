@@ -12,7 +12,7 @@ public class CardManager : Singleton<CardManager>
     [SerializeField] Transform cardHolderRight;
     public List<CardController> myCards;
     public List<MainMenuCardController> mainCards;
-    [SerializeField] GameObject[] startCards;
+    public GameObject[] startCards;
     private Coroutine dealCardCoroutine;
     //타겟 상호작용 오브젝트 
     //[HideInInspector]

@@ -5,7 +5,7 @@ using UnityEngine;
 public class MovableAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Movable;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Interaction;
     private int count = 0;
 
     private float currentTime;
