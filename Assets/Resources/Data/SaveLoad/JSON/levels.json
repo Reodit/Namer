@@ -881,14 +881,14 @@
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
-                    "message": "[System]카드를 클릭 후 물체를 클릭하면, 꾸밈이나 이름을 붙일 수 있습니다. ",
+                    "message": "[System]타는 카드를 클릭 후, 바위를 눌러서 태우세요!",
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,
                     "showArrow": false
                 },
                 {
-                    "type": 2,
+                    "type": 1,
                     "destinationPos": {
                         "x": 0.0,
                         "y": 1.0,
@@ -897,7 +897,7 @@
                     "targetPos": {
                         "x": 3.0,
                         "y": 1.0,
-                        "z": 2.0
+                        "z": 1.0
                     },
                     "prePos": {
                         "x": 3.0,
@@ -909,11 +909,11 @@
                         "y": 1.0,
                         "z": 2.0
                     },
-                    "requiredName": "",
+                    "requiredName": "타는",
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
-                    "message": "[System]꾸밈은 물체에 성질을 추가합니다. ",
+                    "message": "[System]꾸밈은 물체에 성질을 추가합니다.",
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,

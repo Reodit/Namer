@@ -80,6 +80,8 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] GameObject skipBtn;
     [SerializeField] Camera uiCam;
     [SerializeField] RectTransform canvasRect;
+    [SerializeField] GameObject lightingPoint;
+    [SerializeField] GameObject lightingParticle;
 
     [Header("안드로이드 버전만 등록 (Q,E,R,Space,Esc,도감순)")]
     [SerializeField] Button[] MButtons;
@@ -435,19 +437,33 @@ public class ScenarioController : MonoBehaviour
                 Vector3 playerPos = new Vector3(Mathf.Round(player.position.x), Mathf.Round(player.position.y), Mathf.Round(player.position.z));
                 Vector3 requireScenarioPos = new Vector3(curScenario.destinationPos.x, curScenario.destinationPos.y, curScenario.destinationPos.z);
                 if (curScenario.showArrow)
-                    SetArrowPos(requireScenarioPos + (Vector3.up * 0.5f));
+                    LightingPointOnOff(requireScenarioPos, true);
+                //ShowPointer(requireScenarioPos + (Vector3.up * 0.5f));
                 if (playerPos == requireScenarioPos)
                 {
+                    LightingPointOnOff(Vector3.one, false);
                     StartScenario();
                 }
                 break;
             case (ERequireType.AddCard):
                 InteractiveObject tarObj = GetIObj();
                 if (tarObj == null) return;
+                LightingParticleOnOff(tarObj.transform.position + new Vector3(0, tarObj.transform.lossyScale.y, 0), true);
                 string objName = tarObj.GetCurrentName();
+                CardController[] cards = CardManager.GetInstance.myCards.ToArray();
+                foreach (CardController card in cards)
+                {
+                    if (card.UIText.text.Contains(curScenario.requiredName))
+                    {
+                        ShowPointer(card.transform.position);
+                        break;
+                    }
+                }
                 if (objName == null) return;
                 if (objName.Contains(curScenario.requiredName))
                 {
+                    LightingParticleOnOff(Vector3.one, false);
+                    arrow.gameObject.SetActive(false);
                     StartScenario();
                 }
                 break;
@@ -560,7 +576,34 @@ public class ScenarioController : MonoBehaviour
         }
     }
 
-    private void SetArrowPos(Vector3 targetObj)
+    private void LightingParticleOnOff(Vector3 targetPos, bool show)
+    {
+        if (show)
+        {
+            lightingParticle.transform.position = targetPos;
+            lightingParticle.SetActive(true);
+        }
+        else
+        {
+            lightingParticle.SetActive(false);
+        }
+    }
+
+    private void LightingPointOnOff(Vector3 targetPos, bool show)
+    {
+        if (show)
+        {
+            lightingPoint.transform.position = targetPos;
+            lightingPoint.SetActive(true);
+        }
+        else
+        {
+            lightingPoint.SetActive(false);
+        }
+    }
+
+    // pointer를 화살표로 해서 가야하는 위치 표시하려 했으나.. 채택X
+    private void ShowPointer(Vector3 targetObj)
     {
         arrow.gameObject.SetActive(true);
 
