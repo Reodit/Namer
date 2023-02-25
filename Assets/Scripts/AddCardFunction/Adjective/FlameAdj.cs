@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlameAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Flame;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Contradict;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
     private int count = 0;
     
     private GameObject sprayObj;
@@ -93,7 +93,7 @@ public class FlameAdj : IAdjective
     }
     void EradicateFlame(InteractiveObject thisObject)
     {
-        thisObject.SubtractAdjective(EAdjective.Flame);
+        thisObject.SubtractAdjectiveCard(EAdjective.Flame);
     }
     void SetSprayDirection(GameObject otherObject, GameObject thisObject)
     {

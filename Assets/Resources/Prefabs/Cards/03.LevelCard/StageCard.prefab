@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.31}
+  m_AnchoredPosition: {x: -0.01, y: 0.31}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8937988586639942208
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: 111
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ffd0ae8aa64a74bceaf6cf34c299b92b, type: 2}
   m_sharedMaterial: {fileID: 9004548681602695470, guid: ffd0ae8aa64a74bceaf6cf34c299b92b, type: 2}
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -325,6 +325,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameTxt: {fileID: 6482159346683279859}
+  nameAdjTxt: {fileID: 5136359925576289345}
+  stageText: {fileID: 5338115298783705313}
   namePlate: {fileID: 3540396304338158314}
   stageNum: 0
 --- !u!1 &6900775212142575446
@@ -577,6 +579,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5389832308665577680, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
   m_PrefabInstance: {fileID: 8930220537788101178}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5136359925576289345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4370321639461043835, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}
+  m_PrefabInstance: {fileID: 8930220537788101178}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6482159346683279859 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2457775549880798153, guid: fe4a27cc58c5b4998b897f6262cfeda1, type: 3}

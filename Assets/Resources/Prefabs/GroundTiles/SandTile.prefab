@@ -123,7 +123,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: SandGroundBottom
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6103109248946244700, guid: 96dabb4460aa44787ab92a525062cc38, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 96dabb4460aa44787ab92a525062cc38, type: 3}
 --- !u!4 &2235971541466495274 stripped
 Transform:
@@ -197,7 +198,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: SandGroundTop
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6103109248946244700, guid: 96dabb4460aa44787ab92a525062cc38, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 96dabb4460aa44787ab92a525062cc38, type: 3}
 --- !u!4 &6121870423263623431 stripped
 Transform:

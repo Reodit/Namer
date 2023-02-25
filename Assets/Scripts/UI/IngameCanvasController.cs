@@ -151,7 +151,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
         if (currentName == "")
         {
-            stageName.text = $"{(GameManager.GetInstance.Level) + 1}" + " Stage";
+            stageName.text = $"{(GameManager.GetInstance.Level)}" + " Stage";
         }
         else if (currentName != "")
         {

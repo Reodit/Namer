@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlammableAdj : IAdjective
 {
     private EAdjective adjectiveName = EAdjective.Flammable;
-    private EAdjectiveType adjectiveType = EAdjectiveType.Contradict;
+    private EAdjectiveType adjectiveType = EAdjectiveType.Normal;
     private int count = 0;
 
     #region 잘타는 꾸밈 카드 맴버변수
@@ -90,8 +90,9 @@ public class FlammableAdj : IAdjective
 
         int flameIdx = (int)EAdjective.Flame;
         if (otherObject.GetComponent<InteractiveObject>().Adjectives[flameIdx] == null) yield break;
+
         fire.Play();
-        SoundManager.GetInstance.Play(EAdjective.Flammable);
+        SoundManager.GetInstance.Play(EAdjective.Flammable, 2.5f);
         yield return new WaitForSeconds(2.5f);
 
         if (thisObj == null || otherObject == null) yield break;
@@ -115,8 +116,10 @@ public class FlammableAdj : IAdjective
     {
         if (thisObject.transform.Find("FireEffect")) return;
 
-        fireEffect = FindEffect("Fire effect2");
+        fireEffect = FindEffect("FireEffect03");
         GameObject effect = GameObject.Instantiate(fireEffect, thisObject.transform);
+        effect.transform.localPosition = Vector3.zero;
+        effect.transform.localScale = new Vector3(.5f, .5f, .5f);
         effect.name = "FireEffect";
         fire = thisObject.gameObject.GetComponentInChildren<ParticleSystem>();
         fire.Stop();

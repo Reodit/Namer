@@ -106,6 +106,7 @@ public class MainMenuCardController : MonoBehaviour
         gameObject.transform.DOScale(new Vector3(0.5f, 0.5f, 0.5f), 0.3f);
         gameObject.transform.DOMove(
             CardManager.GetInstance.target.transform.position + new Vector3(0, 0.5f, 0), 0.4f);
+        SoundManager.GetInstance.Play("CardFly");
         yield return new WaitForSeconds(0.1f);
         GameObject particleObj =
             Instantiate(Resources.Load<GameObject>("Prefabs/Interaction/Effect/CardCastEffect"),
@@ -141,7 +142,7 @@ public class MainMenuCardController : MonoBehaviour
 
     string CheckCardName(string cardName)
     {
-        string stageCard = "StageCard(Clone)";
+        string stageCard = "StageCard";
         if (cardName.Contains(stageCard))
         {
             return stageCard;
@@ -175,7 +176,13 @@ public class MainMenuCardController : MonoBehaviour
             case "MainCard(Clone)":
                 mainUIController.MainMenuScene();
                 break;
-            case "StageCard(Clone)":
+            case "EditCard(Clone)":
+                mainUIController.LevelEditScene();
+                break;
+            case "GameOffCard(Clone)":
+                Application.Quit();
+                break;
+            case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
                 //CheckClearLevel(cardName);
                 LoadingSceneController.LoadScene("DemoPlay");
@@ -196,7 +203,7 @@ public class MainMenuCardController : MonoBehaviour
     {
         if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -3)
         {
-            if (cardName == "1StageCard(Clone)")
+            if (cardName == "1StageCard")
             {
                 LoadingSceneController.LoadScene("DemoPlay");
             }

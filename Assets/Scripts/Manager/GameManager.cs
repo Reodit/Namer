@@ -385,7 +385,7 @@ public class GameManager : Singleton<GameManager>
                 sb.Append(letter);
             }
         }
-        int level = int.Parse(sb.ToString()) - 1;
+        int level = int.Parse(sb.ToString());
         // Debug.Log(level);
         //testCode
         // level = 1;        
