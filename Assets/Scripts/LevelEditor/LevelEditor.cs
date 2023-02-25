@@ -390,6 +390,26 @@ public class LevelEditor : MonoBehaviour
         pointer.position = new Vector3(curX, curY + 0.5f, curZ);
     }
 
+    public void ShowPointer(bool show)
+    {
+        pointer.gameObject.SetActive(show);
+    }
+
+    public void ShowBlanks(bool show)
+    {
+        if (show)
+        {
+            ViewCurY();
+        }
+        else
+        {
+            foreach (GameObject blank in blankHeights)
+            {
+                blank.SetActive(false);
+            }
+        }
+    }
+
     #region GetPrefabs
     private void SetPrefabs(EBlockType type)
     {
