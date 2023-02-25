@@ -2620,8 +2620,12 @@
             },
             "cardView": {
                 "nameRead": [
+                    10
                 ],
                 "adjectiveRead": [
+                    9,
+                    12,
+                    13
                 ]
             }
         }
