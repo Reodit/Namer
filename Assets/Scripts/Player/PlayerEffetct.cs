@@ -115,7 +115,11 @@ public class PlayerEffetct : MonoBehaviour
 
     public void ClimbEffectPlay()
     {
-        climbEffect.Play();
+        if (climbEffect)
+        {
+            climbEffect.Play();
+        }
+        
     }
 
     public void PushEffectPlay()
