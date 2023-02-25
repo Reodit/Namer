@@ -571,8 +571,8 @@ public class LevelEditor : MonoBehaviour
             newBlock.transform.parent = parentObjects.transform;
             blocks[x, y, z] = newBlock.gameObject;
 
-            InteractiveObject blockIO = newBlock.GetComponent<InteractiveObject>();
-            AddName(blockIO, EName.Null);
+            //InteractiveObject blockIO = newBlock.GetComponent<InteractiveObject>();
+            //AddName(blockIO, EName.Null);
         }
 
         blockNum = (int)EName.Null;
@@ -737,5 +737,10 @@ public class LevelEditor : MonoBehaviour
     void Update()
     {
         handlerValue.text = curY.ToString() + "F";
+
+        if (isCard)
+        {
+
+        }
     }
 }

@@ -81,8 +81,6 @@ public class CameraController : MonoBehaviour
         playerTopCams = new CinemachineVirtualCamera[] { playerTopViewCamZoomOut, playerTopViewCam, playerTopViewCamZoomIn };
         playerNormalCams = new CinemachineVirtualCamera[] { playerNormalViewCamZoomOut, playerNormalViewCam, playerNormalViewCamZoomIn };
 
-        SetPriority();
-
         // 모든 팔로우 캠이 플레이어를 따라다니도록 설정
         //player = GameObject.Find("Player").transform;
         //playerNormalViewCam.Follow = player;
@@ -91,7 +89,29 @@ public class CameraController : MonoBehaviour
         isTopView = false;
         canZoom = true;
 
+        SetPriorityBySize();
+
         FocusOff();
+    }
+
+    public void SetPriorityBySize()
+    {
+        int mapSize = DetectManager.GetInstance.GetMaxX;
+        if (mapSize > 10)
+        {
+            zoomValue = 2;
+            SetPriority();
+        }
+        else if (mapSize > 5)
+        {
+            zoomValue = 1;
+            SetPriority();
+        }
+        else
+        {
+            zoomValue = 0;
+            SetPriority();
+        }
     }
 
     public void FocusOn(bool canMove = true)
@@ -180,6 +200,18 @@ public class CameraController : MonoBehaviour
         canZoom = true;
     }
 
+    public void ZoomOut()
+    {
+        zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
+        StartCoroutine(ZoomInOut());
+    }
+
+    public void ZoomIn()
+    {
+        zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
+        StartCoroutine(ZoomInOut());
+    }
+
     void Update()
     {
         if (GameManager.GetInstance.CurrentState != GameStates.InGame) return;
@@ -197,15 +229,11 @@ public class CameraController : MonoBehaviour
             fDis = (m_touchDis - m_touchOldDis) * 0.01f;
             if (canZoom && fDis < -zoomDis)
             {
-                // zoom out
-                zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
-                StartCoroutine(ZoomInOut());
+                ZoomIn();
             }
             else if (canZoom && fDis > zoomDis)
             {
-                // zoom in
-                zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
-                StartCoroutine(ZoomInOut());
+                ZoomOut();
             }
 
             m_touchOldDis = m_touchDis;
