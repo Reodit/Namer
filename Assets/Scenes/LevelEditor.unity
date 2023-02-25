@@ -939,7 +939,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2917080154686001765, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000006584597
+      value: -0.000000006584596
       objectReference: {fileID: 0}
     - target: {fileID: 3776172339434556567, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
@@ -2888,7 +2888,7 @@ MonoBehaviour:
   blocksPanel: {fileID: 1168691998}
   sidePanel: {fileID: 989744827}
   heightPanel: {fileID: 9214123954098409913}
-  cardPanel: {fileID: 9214123954098409912}
+  cardPanel: {fileID: 1168691998}
   warningPanel: {fileID: 0}
   maxX: 0a0000000f00000014000000
   maxY: 05000000080000000a000000
@@ -4331,11 +4331,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b28376b50d75d4c3ba972bafc9407827, type: 3}
---- !u!1 &9214123954098409912 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1796662661975444147, guid: b28376b50d75d4c3ba972bafc9407827, type: 3}
-  m_PrefabInstance: {fileID: 9214123954098409911}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9214123954098409913 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2162413238752537152, guid: b28376b50d75d4c3ba972bafc9407827, type: 3}
@@ -4357,7 +4352,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5923837186480678604, guid: b28376b50d75d4c3ba972bafc9407827, type: 3}
   m_PrefabInstance: {fileID: 9214123954098409911}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9214123954098409912}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
