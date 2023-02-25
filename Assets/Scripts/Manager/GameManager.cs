@@ -458,6 +458,7 @@ public class GameManager : Singleton<GameManager>
         DeleteCurrentCard();
         LoadMap(curLevel);
         GetNewCardDeck();
+        SoundManager.GetInstance.ChangeInGameLevelBGM();
         cameraController.Init();
         scenarioController.Init();
         resetLoadValue = 0f;
