@@ -21,7 +21,7 @@ public class InteractiveObject : MonoBehaviour
     #endregion
     #region
         public int floatDone = 0;
-        public bool abandonBouncy = false;
+        public bool abandonBouncy = true;
     #endregion
 
     // Level Edit Mode
@@ -70,6 +70,8 @@ public class InteractiveObject : MonoBehaviour
             // objectName = EName.Null;
             isFinishMapSetting = false;
         }
+
+        abandonBouncy = true;
     }
 
     private void Start()
