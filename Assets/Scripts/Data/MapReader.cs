@@ -83,7 +83,7 @@ public class MapReader : MonoBehaviour
             }
         }
         
-        return new SMapData(tiles, objects, CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
+        return new SMapData((GameObject[,,])tiles.Clone(), (GameObject[,,])objects.Clone(), CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
     }
 
     private string GetPrefabName(Transform[] prefabs, string colliderName)

@@ -74,8 +74,8 @@ public class GameDataManager : Singleton<GameDataManager>
         
         mapData = mapReader.GetMapData();
         // Test
-        initTiles = mapData.tiles;
-        initObjects = mapData.objects;
+        initTiles = (GameObject[,,])mapData.tiles.Clone();
+        initObjects = (GameObject[,,])mapData.objects.Clone();
         // 
     }
 
@@ -192,7 +192,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void ResetUserData(string userID)
     {
-        if (UserDataDic.ContainsKey(userID))
+        if (!UserDataDic.ContainsKey(userID))
         {
             Debug.LogError(userID + " 사용자 ID를 가진 사용자가 없습니다. 확인해주세요!");
         }
