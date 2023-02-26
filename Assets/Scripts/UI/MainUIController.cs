@@ -356,6 +356,7 @@ public class MainUIController : MonoBehaviour
 
     public void GameResetConfirm()
     {
+        CardManager.GetInstance.ableCardCtr = false;
         infoPopUpTxt.text = "게임 데이터를\n정말 삭제하시겠습니까?\n";
         infoPopUp.SetActive(true);
         infoPopUp.transform.Find("Buttons").gameObject.SetActive(true);
@@ -363,9 +364,16 @@ public class MainUIController : MonoBehaviour
 
     public void InfoStagePopUp()
     {
+        CardManager.GetInstance.ableCardCtr = false;
         infoPopUpTxt.text = "이전 스테이지를\n클리어해주세요";
         infoPopUp.SetActive(true);
         infoPopUp.transform.Find("Buttons").gameObject.SetActive(false);
+    }
+
+    public void InfoPopUpOff()
+    {
+        CardManager.GetInstance.ableCardCtr = true;
+        infoPopUp.SetActive(false);
     }
 
     public void GameReset()
