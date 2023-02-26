@@ -55,7 +55,7 @@ public class LevelTestPlay : MonoBehaviour
     private void CancelCustomLevelMap()
     {
         GameDataManager.GetInstance.DeleteCustomLevelData(currentLevel + 1);
-        
-        // TODO 레벨 에디터로 이동
+
+        SceneBehaviorManager.LoadScene(Scenes.LevelEditor, LoadSceneMode.Single);
     }
 }
