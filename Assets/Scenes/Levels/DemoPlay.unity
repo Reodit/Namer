@@ -213,7 +213,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 126893548, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
   m_PrefabInstance: {fileID: 1145747097}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 799230360}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -539,6 +539,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8bca947fad045748aa4277c8380841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &799230359 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1513337967, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+  m_PrefabInstance: {fileID: 1145747097}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &799230360 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 126893545, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+  m_PrefabInstance: {fileID: 1145747097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &860033196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,7 +1172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1630722970, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000006584596
+      value: 0.000000006584597
       objectReference: {fileID: 0}
     - target: {fileID: 1630722971, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
@@ -1332,6 +1348,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 330459395, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+      propertyPath: tutorialArrow
+      value: 
+      objectReference: {fileID: 799230360}
+    - target: {fileID: 330459395, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+      propertyPath: interactionImg
+      value: 
+      objectReference: {fileID: 799230359}
     - target: {fileID: 643284761, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

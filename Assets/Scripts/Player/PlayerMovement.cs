@@ -47,11 +47,11 @@ public class PlayerMovement : MonoBehaviour
         
         #region Init Variable
         GameManager.GetInstance.localPlayerMovement = this;
+        ingameCanvasController = UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>();
         rootmotionSpeed = 1f;
         interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
-        ingameCanvasController = UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>();
         #endregion
     }
     
@@ -172,7 +172,6 @@ public class PlayerMovement : MonoBehaviour
         {
             Init();
         }
-        
         // TODO 하드 코딩 제거
         if (GameManager.GetInstance.isPlayerCanInput &&
             !GameManager.GetInstance.isPlayerDoAction &&
