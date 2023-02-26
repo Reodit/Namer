@@ -629,6 +629,4 @@ public class SoundManager : Singleton<SoundManager>
         Pause(testClipName);
     }
     #endregion
-
-
 }

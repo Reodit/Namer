@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public enum MainMenuState
 {
@@ -41,6 +42,8 @@ public class MainUIController : MonoBehaviour
     [SerializeField] GameObject levelEditBtnPanelLeftBtn;
     [SerializeField] GameObject levelEditBtnPanelRightBtn;
     [SerializeField] GameObject levelEditCards;
+    [SerializeField] GameObject infoPopUp;
+    [SerializeField] Text infoPopUpTxt;
     GameObject levelInformationTxt;
 
     [SerializeField] float titleMovingTime = 1f;
@@ -88,6 +91,7 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelEditCardHolder.SetActive(true);
+        SettingBtnOn();
         CardManager.GetInstance.isMenuLevel = true;
     }
 
@@ -106,6 +110,7 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
+        SettingBtnOn();
         CardManager.GetInstance.isMenuLevel = true;
     }
 
@@ -339,10 +344,6 @@ public class MainUIController : MonoBehaviour
     public void OptionPanelClose()
     {
         CardManager.GetInstance.ableCardCtr = true;
-        MainMenuCardController card =
-            GameObject.Find("MainMenuCards").transform.Find("OptionCard(Clone)").
-            GetComponent<MainMenuCardController>();
-        card.CardReturn();
         optionPanel.SetActive(false);
     }
 
@@ -351,9 +352,18 @@ public class MainUIController : MonoBehaviour
         Application.Quit();
     }
 
+    public void GameResetConfirm()
+    {
+        infoPopUp.SetActive(true);
+        infoPopUpTxt.text = "게임 데이터를 \n정말 삭제하시겠습니까?\n";
+        infoPopUp.transform.Find("Buttons").gameObject.SetActive(true);
+    }
+
     public void GameReset()
     {
         GameDataManager.GetInstance.ResetUserData(GameManager.GetInstance.userId);
+        infoPopUp.transform.Find("Buttons").gameObject.SetActive(false);
+        infoPopUpTxt.text = "게임 데이터가 \n초기화됐습니다.";
     }
 
     #region Level&EditButtonPanel

@@ -208,7 +208,6 @@ public class CardManager : Singleton<CardManager>
         mainCards.Add(card);
         MainCardAlignment();
         if (isMenuLevel) return;
-
         SoundManager.GetInstance.Play("CardHover2");
     }
 

@@ -121,18 +121,18 @@ public class MainMenuCardController : MonoBehaviour
         CardManager.GetInstance.myCards.Remove(gameObject.GetComponent<CardController>());
         CardManager.GetInstance.CardAlignment();
         yield return new WaitForSeconds(0.6f);
-        MainCastCard(gameObject.name);
         CardManager.GetInstance.target = null;
         CardManager.GetInstance.pickCard = null;
         Destroy(particleObj);
         AllPopUpNameOff();
-        yield return new WaitForSeconds(1.5f);
+        CardManager.GetInstance.isCasting = false;
+        MainCastCard(gameObject.name);
         isTouching = false;
+        yield return new WaitForSeconds(1.5f);
         if (this.name != "OptionCard(Clone)" && name != "EncyclopediaCard(Clone)")
         {
             CardReturn();
         }
-        CardManager.GetInstance.isCasting = false;
     }
     public void CardReturn()
     {

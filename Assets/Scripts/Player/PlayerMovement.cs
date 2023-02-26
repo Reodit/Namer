@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Dir targetDir;
     private int objscale;
     private Rigidbody climbRb;
+    private IngameCanvasController ingameCanvasController;
 
     [SerializeField] [Range(0.1f, 5f)] private float rootmotionSpeed;
     [SerializeField] [Range(0.5f, 5f)] private float interactionDelay;
@@ -50,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
         interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
+        ingameCanvasController = UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>();
         #endregion
     }
     
@@ -177,13 +179,13 @@ public class PlayerMovement : MonoBehaviour
             interactObj &&
             interactObj.CompareTag("InteractObj"))
         {
-            //UIManager.GetInstance.ingameCanvas.InteractionBtnOn();
+            ingameCanvasController.InteractionBtnOn();
             //Debug.Log("True");
         }
 
         else
         {
-            //UIManager.GetInstance.ingameCanvas.InteractionBtnOff();
+            ingameCanvasController.InteractionBtnOff();
             //Debug.Log("False");
         }
     }
