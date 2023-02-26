@@ -124,12 +124,14 @@ public class LevelEditor : MonoBehaviour
     GameObject parentGrounds;
     GameObject parentObjects;
     GameObject parentBlanks;
+    static bool isSaved = false;
 
     #endregion
 
     #region Init
     void Awake()
     {
+        Destroy(DetectManager.GetInstance);
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
 
         SetAllBtnListener();
@@ -183,18 +185,69 @@ public class LevelEditor : MonoBehaviour
         SetPrefabs(EBlockType.NameCard);
         SetPrefabs(EBlockType.AdjCard);
 
-        curState = EditState.SetSize;
-        UpdateValuesInNewState(curState);
+        if (isSaved)
+        {
+            LoadPreMap();
+        }
+        else
+        {
+            curState = EditState.SetSize;
+            UpdateValuesInNewState(curState);
+        }
     }
     #endregion
-    
+
+    public void LoadPreMap()
+    {
+        GameObject[,,] objects = GameDataManager.GetInstance.InitObjects;
+        GameObject[,,] tiles = GameDataManager.GetInstance.InitTiles;
+
+        LoadArray(objects, true);
+        LoadArray(tiles, false);
+
+        isSaved = false;
+
+        curState = EditState.MakeStage;
+        //UpdateValuesInNewState(curState);
+    }
+
+    private void LoadArray(GameObject[,,] mapArray, bool isObj)
+    {
+        for (int x = 0; x < mapArray.GetLength(0); x++)
+        {
+            for (int y = 0; y < mapArray.GetLength(1); y++)
+            {
+                for (int z = 0; z < mapArray.GetLength(2); z++)
+                {
+                    if (mapArray[x, y, z] == null)
+                        continue;
+
+                    Debug.Log(mapArray[x, y, z].name);
+                    GameObject block = GameObject.Instantiate(mapArray[x, y, z]);
+                    Debug.Log(block.name);
+                    block.transform.position = new Vector3(x, y, z);
+                    block.SetActive(true);
+                    if (isObj)
+                    {
+                        objects.Add(block.GetComponent<InteractiveObject>());
+                    }
+                    else
+                    {
+                        tiles.Add(block.transform);
+                    }
+                }
+            }
+        }
+    }
+
     public void GoTestPlay()
     {
         if (objects.Count == 0 || tiles.Count == 0)
         {
             return;
         }
-        
+
+        isSaved = true;
         ShowPointer(false);
         ShowBlanks(false);
         GameDataManager.GetInstance.ReadMapData();
