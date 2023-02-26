@@ -22,7 +22,7 @@ public class CardController : MonoBehaviour
     [SerializeField] private Text priorityNum;
     GameObject Encyclopedia;
     CardRotate cr;
-
+    bool isTouching;
     public EAdjective GetAdjectiveTypeOfCard()
     {
         return adjectiveType;
@@ -98,10 +98,12 @@ public class CardController : MonoBehaviour
         }
 
     }
-    //카드를 누르면 하이라이트 표시를하고 카트를 회전시킨다
-    private void OnMouseDown()
+     private void OnMouseDown()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "NamingCard"
+            && !CardManager.GetInstance.isEncyclopedia) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || CardManager.GetInstance.isCasting) return;
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
 
         //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경 
@@ -110,6 +112,7 @@ public class CardController : MonoBehaviour
             CardManager.GetInstance.pickCard.GetComponent<CardController>().CardSelectOff();
             CardSelectOn();
         }
+        //카드를 터치하면 하이라이트 표시를하고 카트를 회전시킨다
         else if (!CardManager.GetInstance.isPickCard)
         {
             CardSelectOn();
@@ -158,12 +161,14 @@ public class CardController : MonoBehaviour
     //오브젝트 아닌곳에서는 기본 커서로 다시 변경하고 카드를 다시 보이게,
     public void TouchInteractObj()
     {
+        if (isTouching) return;
         StartCoroutine(CastCardDealing());
-
     }
 
     IEnumerator CastCardDealing()
     {
+        CardManager.GetInstance.isCasting = true;
+        isTouching = true;
         highlight.SetActive(false);
         bc.enabled = false;
         cr.enabled = false;
@@ -195,6 +200,8 @@ public class CardController : MonoBehaviour
         CardManager.GetInstance.target = null;
         Destroy(particleObj);
         AllPopUpNameOff();
+        isTouching = false;
+        CardManager.GetInstance.isCasting = false;
         Destroy(gameObject);
     }
 

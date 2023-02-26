@@ -38,7 +38,7 @@ public class FloatAdj : IAdjective
 
     public void Execute(InteractiveObject thisObject)
     {
-        //Debug.Log("this is Float");
+        //Debug.Log("this is Execute");
         InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(FloatObj(thisObject.gameObject));
     }
 
@@ -64,11 +64,13 @@ public class FloatAdj : IAdjective
 
     IEnumerator FloatObj(GameObject obj)
     {
+        //Debug.Log("This is FloatCoroutineStart");
         obj.transform.position = Vector3Int.RoundToInt(obj.transform.position);
         if (DetectManager.GetInstance.GetAdjacentObjectWithDir(obj, Dir.up, Mathf.RoundToInt(obj.transform.lossyScale.y)) == null)
         {
             //바로 밑에 있는 타일 검사해서 있으면 전 과정 돌리기
             //바로 밑에 타일이 없으면 올라가는 코루틴 pass 둥둥 이펙트만 살리기
+            //Float 2번 들어갈때의 로직이 없는 상태 - 만들어야함
 
             RaycastHit hit;
             if (Physics.Raycast(obj.transform.position+new Vector3(0,0.5f,0), Vector3.down, out hit))
@@ -91,9 +93,11 @@ public class FloatAdj : IAdjective
 
                 while (obj != null && obj.GetComponent<InteractiveObject>().CheckAdjective(adjectiveName) && currentTime < movingSpeed)
                 {
+                    //Debug.Log("FloatStart");
                     currentTime += Time.deltaTime;
                     obj.transform.localPosition = Vector3.Lerp(startPos, startObj.transform.position + Vector3.up + Vector3.up, currentTime / movingSpeed);
                     yield return InteractionSequencer.GetInstance.WaitUntilPlayerInteractionEnd(this);
+                    //yield return null;
                 }
 
                 DetectManager.GetInstance.StartDetector();
@@ -102,8 +106,21 @@ public class FloatAdj : IAdjective
                 if (obj != null) yield return null;
             }
 
-            float yPos = groundObj.transform.position.y + 2;
-            
+            else if (obj.GetComponent<InteractiveObject>().CheckAdjective(adjectiveName))
+            {
+                DetectManager.GetInstance.SwapBlockInMap(startPos, startPos + Vector3.up);
+
+                while (obj != null && obj.GetComponent<InteractiveObject>().CheckAdjective(adjectiveName) && currentTime < movingSpeed)
+                {
+                    currentTime += Time.deltaTime;
+                    obj.transform.localPosition = Vector3.Lerp(startPos, startPos + Vector3.up, currentTime / movingSpeed);
+                    yield return InteractionSequencer.GetInstance.WaitUntilPlayerInteractionEnd(this);
+                    //yield return null;
+                }
+            }
+
+            float yPos = startPos.y + 1;
+            //Debug.Log(yPos);
             obj.transform.localPosition = new Vector3(startPos.x, yPos, startPos.z);
 
             Vector3 currentPos = obj.transform.GetChild(0).localPosition;
@@ -112,6 +129,7 @@ public class FloatAdj : IAdjective
             {
                 if (obj.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Bouncy) || !obj.GetComponent<InteractiveObject>().abandonBouncy)
                 {
+                    //Debug.Log("BouncyMethod");
                     int counting = obj.GetComponent<InteractiveObject>().Adjectives[(int)EAdjective.Float].GetCount();
                     if (obj.GetComponent<InteractiveObject>().floatDone != counting)
                     {
@@ -120,6 +138,7 @@ public class FloatAdj : IAdjective
                 }
                 else
                 {
+                    //Debug.Log("floateffect" + obj.name);
                     currentTime += Time.deltaTime * speed;
 
                     obj.transform.GetChild(0).
@@ -136,11 +155,12 @@ public class FloatAdj : IAdjective
         {
             yield break;
         }
+        //Debug.Log("coroutineStop");
     }
 
     IEnumerator GravityOn(GameObject gameObject)
     {
-        yield return null;
+        Vector3 startPos = gameObject.transform.position;
         if (gameObject != null)
         {
             //abandon 시 mesh의 위치를 되돌리는 코드
@@ -148,10 +168,37 @@ public class FloatAdj : IAdjective
 
             if (!gameObject.GetComponent<InteractiveObject>().CheckAdjective(EAdjective.Bouncy))
             {
-                var rb = gameObject.GetComponent<Rigidbody>();
-                rb.isKinematic = false;
-                rb.useGravity = true;
+                //Debug.Log("name : " + gameObject.name);
+                // Debug.Log("Count : " + gameObject.GetComponent<InteractiveObject>().CheckCountAdjective(adjectiveName));
+
+                if (gameObject.GetComponent<InteractiveObject>().CheckCountAdjective(adjectiveName) < 1)
+                {
+                    //Debug.Log("Count1 : " + count);
+                    var rb = gameObject.GetComponent<Rigidbody>();
+                    rb.isKinematic = false;
+                    rb.useGravity = true;
+                }
+
+                else if (gameObject.GetComponent<InteractiveObject>().CheckCountAdjective(adjectiveName) < 2)
+                {
+                    //Debug.Log("Count2 : " + count);
+                    //Debug.Log("name1 : " + gameObject.name);
+                    //var rb = gameObject.GetComponent<Rigidbody>();
+                    //Debug.Log("wndfuf : " + rb.useGravity + " : " + rb.isKinematic);
+
+                    DetectManager.GetInstance.SwapBlockInMap(gameObject.transform.position, gameObject.transform.position - Vector3.up);
+                    currentTime = 0;
+                    while (gameObject != null && gameObject.GetComponent<InteractiveObject>().CheckAdjective(adjectiveName) && currentTime < movingSpeed)
+                    {
+                        currentTime += Time.deltaTime;
+                        gameObject.transform.localPosition = Vector3.Lerp(startPos, startPos - Vector3.up, currentTime / movingSpeed);
+                        yield return InteractionSequencer.GetInstance.WaitUntilPlayerInteractionEnd(this);
+                    }
+                }
+               
+                
             }
         }
+        yield return null;
     }
 }

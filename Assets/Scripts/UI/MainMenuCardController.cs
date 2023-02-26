@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,8 @@ public class MainMenuCardController : MonoBehaviour
     GameObject levelSelectCardHolder;
     Vector3 originPos;
     Vector3 originRot;
+
+    bool isTouching;
     private void Start()
     {
         cr = this.gameObject.GetComponent<CardRotate>();
@@ -51,7 +54,8 @@ public class MainMenuCardController : MonoBehaviour
     //카드 영역에서 마우스 누르면 카드 선택 커서로 변경, 카드를 숨김
     private void OnMouseDown()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || CardManager.GetInstance.isCasting) return;
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
         //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경
         if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
@@ -91,10 +95,13 @@ public class MainMenuCardController : MonoBehaviour
     }
     public void TouchInteractObj()
     {
+        if (isTouching) return;
         StartCoroutine(CastCardDealing());
     }
     IEnumerator CastCardDealing()
     {
+        CardManager.GetInstance.isCasting = true;
+        isTouching = true;
         originPos = gameObject.transform.position;
         originRot = gameObject.transform.localRotation.eulerAngles;
         highlight.SetActive(false);
@@ -115,12 +122,14 @@ public class MainMenuCardController : MonoBehaviour
         CardManager.GetInstance.myCards.Remove(gameObject.GetComponent<CardController>());
         CardManager.GetInstance.CardAlignment();
         yield return new WaitForSeconds(0.6f);
-        MainCastCard(gameObject.name);
         CardManager.GetInstance.target = null;
         CardManager.GetInstance.pickCard = null;
         Destroy(particleObj);
         AllPopUpNameOff();
-        yield return new WaitForSeconds(1f);
+        CardManager.GetInstance.isCasting = false;
+        MainCastCard(gameObject.name);
+        isTouching = false;
+        yield return new WaitForSeconds(1.5f);
         if (this.name != "OptionCard(Clone)" && name != "EncyclopediaCard(Clone)")
         {
             CardReturn();
@@ -187,8 +196,8 @@ public class MainMenuCardController : MonoBehaviour
                 break;
             case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                //CheckClearLevel(cardName);
-                LoadingSceneController.LoadScene("DemoPlay");
+                CheckClearLevel(cardName);
+                //LoadingSceneController.LoadScene("DemoPlay");
                 // 레벨 디자인 시 활성화
                 // DetectManager.GetInstance.InitTilesObjects();
                 // GameManager.GetInstance.SetLevelFromCard("LevelDesign");
@@ -204,7 +213,17 @@ public class MainMenuCardController : MonoBehaviour
 
     private void CheckClearLevel(string cardName)
     {
-        if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -3)
+
+        StringBuilder sb = new StringBuilder();
+        foreach (var letter in cardName)
+        {
+            if (letter >= '0' && letter <= '9')
+            {
+                sb.Append(letter);
+            }
+        }
+        int level = int.Parse(sb.ToString());
+        if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -1)
         {
             if (cardName == "1StageCard")
             {
@@ -213,15 +232,17 @@ public class MainMenuCardController : MonoBehaviour
             else
             {
                 CardReturn();
+                mainUIController.InfoStagePopUp();
             }
         }
-        else if (int.Parse(cardName.Substring(0, 1)) <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel + 2)
+        else if (level <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel + 1)
         {
             LoadingSceneController.LoadScene("DemoPlay");
         }
         else
         {
             CardReturn();
+            mainUIController.InfoStagePopUp();
         }
     }
 }

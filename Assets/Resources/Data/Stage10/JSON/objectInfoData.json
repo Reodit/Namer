@@ -37,9 +37,9 @@
             "adjectives": []
         },
         {
-            "prefabName": "TreeObj",
+            "prefabName": "RockObj",
             "objectID": 6,
-            "nameType": 5,
+            "nameType": 3,
             "adjectives": []
         },
         {
@@ -70,12 +70,6 @@
             "prefabName": "RoseObj",
             "objectID": 11,
             "nameType": 1,
-            "adjectives": []
-        },
-        {
-            "prefabName": "RockObj",
-            "objectID": 12,
-            "nameType": 3,
             "adjectives": []
         },
         {

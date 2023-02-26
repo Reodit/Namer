@@ -133,10 +133,12 @@ public class LevelSelectCardController : MonoBehaviour
         if (mainUIController.state == MainMenuState.Level)
         {
             mainUIController.LevelSelectPanelOn();
+            mainUIController.isSelectStart = true;
         }
         else
         {
             mainUIController.LevelEditPanelOn();
+            mainUIController.isEditStart = true;
         }
     }
 

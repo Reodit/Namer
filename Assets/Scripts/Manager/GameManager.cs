@@ -134,7 +134,11 @@ public class GameManager : Singleton<GameManager>
         }
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
-        GameDataManager.GetInstance.AddUserData("111111");
+        if (!GameDataManager.GetInstance.UserDataDic.ContainsKey("111111"))
+        {
+            GameDataManager.GetInstance.AddUserData("111111");
+        }
+        
         GameDataManager.GetInstance.GetCardData();
         #endregion
 
@@ -243,6 +247,7 @@ public class GameManager : Singleton<GameManager>
                 HandleLost();
                 break;
             case GameStates.Encyclopedia:
+                UIManager.GetInstance.isShowNameKeyPressed = false;
                 HandleEncyclopedia();
                 break;
             case GameStates.LevelSelect:
@@ -346,7 +351,7 @@ public class GameManager : Singleton<GameManager>
     }
      #region JSCODE
 
-    int curLevel = -3;
+    int curLevel = -1;
     public int Level { get { return curLevel; } }
     private GameObject groundObjs;
     private GameObject objcts;
@@ -444,7 +449,7 @@ public class GameManager : Singleton<GameManager>
     [ContextMenu("ResetMap")]
     public void ResetCurrentLvl()
     {
-        if (curLevel == -3)
+        if (curLevel == -1)
         {
             Debug.LogError("There are no level Data!!!");
             return;
@@ -467,16 +472,19 @@ public class GameManager : Singleton<GameManager>
         // ChangeGameState(GameStates.NextLevelLoad);
         // var detectManager = GameObject.Find("DetectManager");
         // Destroy(detectManager);
+        GameDataManager.GetInstance.UpdateUserData(true);
         GetCurrentLevel(curLevel + 1);
+        // SceneBehaviorManager.LoadScene((Scenes)SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
+        LoadingSceneController.LoadScene(SceneManager.GetActiveScene().name);
         // Debug.Log(curLevel);
-        DeleteCurrentMap();
-        DeleteCurrentCard();
-        LoadMap(curLevel);
-        GetNewCardDeck();
-        SoundManager.GetInstance.ChangeInGameLevelBGM();
-        cameraController.Init();
-        scenarioController.Init();
-        resetLoadValue = 0f;
+        // DeleteCurrentMap();
+        // DeleteCurrentCard();
+        // LoadMap(curLevel);
+        // GetNewCardDeck();
+        // SoundManager.GetInstance.ChangeInGameLevelBGM();
+        // cameraController.Init();
+        // scenarioController.Init();
+        // resetLoadValue = 0f;
         // ChangeGameState(GameStates.InGame);
     }   
     
@@ -494,7 +502,7 @@ public class GameManager : Singleton<GameManager>
         }
         
         // LoadPlayerPrefabs();
-        if(curLevel == -3)
+        if(curLevel == -1)
             curLevel=GetCurrentLevel();
 
         DetectManager.GetInstance.Init(curLevel);

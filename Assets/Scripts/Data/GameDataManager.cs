@@ -168,10 +168,6 @@ public class GameDataManager : Singleton<GameDataManager>
         if (!userDataDic.ContainsKey(userID))
         {
             SUserData userData = new SUserData(userID);
-            // Test
-            userData.cardView.nameRead = new[] { (EName)1, (EName)2, (EName)3, (EName)4, (EName)5, (EName)6, (EName)7, (EName)8, (EName)9, (EName)10, (EName)11, (EName)12 }.ToList();
-            userData.cardView.adjectiveRead = new[] { (EAdjective)1, (EAdjective)2, (EAdjective)3, (EAdjective)4, (EAdjective)5, (EAdjective)6, (EAdjective)7, (EAdjective)8, (EAdjective)9, (EAdjective)10, (EAdjective)11, (EAdjective)12, (EAdjective)13}.ToList();
-            //
             userDataDic.Add(userID, userData);
             
             SaveLoadFile saveFile = new SaveLoadFile();
@@ -400,6 +396,22 @@ public class GameDataManager : Singleton<GameDataManager>
         return GetCardPrefabs(UserDataDic[GameManager.GetInstance.userId].cardView);
     }
 
+    public int GetRewardCardCount()
+    {
+        int level = GameManager.GetInstance.Level;
+        string userID = GameManager.GetInstance.userId;
+
+        int count = 0;
+
+        SCardView mainCards = UserDataDic[userID].cardView;
+        SCardView ingameCards = CardEncyclopedia[level];
+
+        int nameCount = ingameCards.nameRead.Except(mainCards.nameRead).Concat(mainCards.nameRead.Except(ingameCards.nameRead)).Count();
+        int adjCount = ingameCards.adjectiveRead.Except(mainCards.adjectiveRead).Concat(mainCards.adjectiveRead.Except(ingameCards.adjectiveRead)).Count();
+
+        return nameCount + adjCount;
+    }
+
     public GameObject[] GetRewardCardEncyclopedia()
     {
         int level = GameManager.GetInstance.Level;
@@ -407,7 +419,7 @@ public class GameDataManager : Singleton<GameDataManager>
         
         HashSet<EName> nameReads = new HashSet<EName>();
         HashSet<EAdjective> adjectiveReads = new HashSet<EAdjective>();
-
+        
         foreach (EName name in CardEncyclopedia[level].nameRead)
         {
             if (!UserDataDic[userID].cardView.nameRead.Contains(name))

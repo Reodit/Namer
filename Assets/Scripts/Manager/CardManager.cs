@@ -26,6 +26,7 @@ public class CardManager : Singleton<CardManager>
     public bool isCardDealingDone = false;
     public bool isCardsHide = false;
     public bool isMenuLevel = false;
+    public bool isCasting = false;
 
     //선택한 카드
     public GameObject pickCard;
@@ -53,7 +54,8 @@ public class CardManager : Singleton<CardManager>
 
     private void ClearCheck()
     {
-        if (!isPickCard && CardManager.GetInstance.target == null) return;
+        if (!isPickCard && CardManager.GetInstance.target == null ||
+            CardManager.GetInstance.isCasting) return;
 
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
@@ -207,7 +209,6 @@ public class CardManager : Singleton<CardManager>
         mainCards.Add(card);
         MainCardAlignment();
         if (isMenuLevel) return;
-
         SoundManager.GetInstance.Play("CardHover2");
     }
 
