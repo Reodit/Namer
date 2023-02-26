@@ -455,15 +455,17 @@ public class GameManager : Singleton<GameManager>
         // var detectManager = GameObject.Find("DetectManager");
         // Destroy(detectManager);
         GetCurrentLevel(curLevel + 1);
+        // SceneBehaviorManager.LoadScene((Scenes)SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
+        LoadingSceneController.LoadScene(SceneManager.GetActiveScene().name);
         // Debug.Log(curLevel);
-        DeleteCurrentMap();
-        DeleteCurrentCard();
-        LoadMap(curLevel);
-        GetNewCardDeck();
-        SoundManager.GetInstance.ChangeInGameLevelBGM();
-        cameraController.Init();
-        scenarioController.Init();
-        resetLoadValue = 0f;
+        // DeleteCurrentMap();
+        // DeleteCurrentCard();
+        // LoadMap(curLevel);
+        // GetNewCardDeck();
+        // SoundManager.GetInstance.ChangeInGameLevelBGM();
+        // cameraController.Init();
+        // scenarioController.Init();
+        // resetLoadValue = 0f;
         // ChangeGameState(GameStates.InGame);
     }   
     
