@@ -45,6 +45,17 @@ public class StageClearPanelController : MonoBehaviour
         topButtons.SetActive(false);
         bottomButtons.SetActive(false);
         joyButtons.SetActive(false);
+
+        CheckRewardExist();
+    }
+
+    private void CheckRewardExist()
+    {
+        if (GameDataManager.GetInstance.GetRewardCardCount() <= 0)
+        {
+            isRewardDone = true;
+            rewardBtn.SetActive(false);
+        }
     }
 
     public void NamingProcess()

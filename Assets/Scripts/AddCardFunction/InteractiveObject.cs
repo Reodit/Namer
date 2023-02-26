@@ -23,7 +23,7 @@ public class InteractiveObject : MonoBehaviour
         public int floatDone = 0;
         public bool abandonBouncy = false;
     #endregion
-    
+
     // object's name = adjective card's ui texts + name card's ui text
     private string addNameText;
     [HideInInspector] public LinkedList<EAdjective> addAdjectiveTexts;
@@ -61,6 +61,8 @@ public class InteractiveObject : MonoBehaviour
         addAdjectiveTexts = new LinkedList<EAdjective>();
         countNameAdj = new int[gameData.Adjectives.Count];
         adjectives = new IAdjective[gameData.Adjectives.Count];
+
+        abandonBouncy = true;
     }
 
     private void Start()
