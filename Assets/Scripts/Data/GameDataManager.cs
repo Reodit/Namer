@@ -168,10 +168,6 @@ public class GameDataManager : Singleton<GameDataManager>
         if (!userDataDic.ContainsKey(userID))
         {
             SUserData userData = new SUserData(userID);
-            // Test
-            userData.cardView.nameRead = new[] { (EName)1, (EName)2, (EName)3, (EName)4, (EName)5, (EName)6, (EName)7, (EName)8, (EName)9, (EName)10, (EName)11, (EName)12 }.ToList();
-            userData.cardView.adjectiveRead = new[] { (EAdjective)1, (EAdjective)2, (EAdjective)3, (EAdjective)4, (EAdjective)5, (EAdjective)6, (EAdjective)7, (EAdjective)8, (EAdjective)9, (EAdjective)10, (EAdjective)11, (EAdjective)12, (EAdjective)13}.ToList();
-            //
             userDataDic.Add(userID, userData);
             
             SaveLoadFile saveFile = new SaveLoadFile();

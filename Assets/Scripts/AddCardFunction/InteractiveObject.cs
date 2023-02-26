@@ -120,12 +120,6 @@ public class InteractiveObject : MonoBehaviour
 
         AllPopUpNameCtr();
         AdjectiveTest();
-        
-        // if (DetectManager.GetInstance.GetObjectsData() != null && GameManager.GetInstance.CurrentState == GameStates.LevelEditMode && !isFinishMapSetting)
-        // {
-        //     isFinishMapSetting = true;
-        //     SetAttribute();
-        // }
     }
     
     private void AdjectiveTest()
