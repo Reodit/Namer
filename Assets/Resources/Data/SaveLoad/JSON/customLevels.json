@@ -5,17 +5,13 @@
             "sceneName": "CustomLevel1",
             "scenario": [],
             "playerPosition": {
-                "x": 0.0,
+                "x": 4.0,
                 "y": 1.0,
-                "z": 2.0
+                "z": 1.0
             },
             "cardView": {
-                "nameRead": [
-                    2
-                ],
-                "adjectiveRead": [
-                    7
-                ]
+                "nameRead": [],
+                "adjectiveRead": []
             }
         }
     ]

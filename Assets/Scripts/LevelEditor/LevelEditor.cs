@@ -39,6 +39,19 @@ public enum EBlockType
     Player
 }
 
+[System.Serializable]
+public struct Block
+{
+    public EBlockType type;
+    public int idx;
+
+    public Block (EBlockType type, int idx)
+    {
+        this.type = type;
+        this.idx = idx;
+    }
+}
+
 public class LevelEditor : MonoBehaviour
 {
     #region values
@@ -99,6 +112,7 @@ public class LevelEditor : MonoBehaviour
     private GameObject[] blankHeights;
     private List<EditorBlock> setCards = new List<EditorBlock>();
     private SCardView startCards;
+    [SerializeField] public static Block[,,] preBlocks;
     private int curY = 0;
     private int curX = 0;
     private int curZ = 0;
@@ -187,6 +201,8 @@ public class LevelEditor : MonoBehaviour
 
         if (isSaved)
         {
+            curState = EditState.SetSize;
+            UpdateValuesInNewState(curState);
             LoadPreMap();
         }
         else
@@ -199,41 +215,48 @@ public class LevelEditor : MonoBehaviour
 
     public void LoadPreMap()
     {
-        GameObject[,,] objects = GameDataManager.GetInstance.InitObjects;
-        GameObject[,,] tiles = GameDataManager.GetInstance.InitTiles;
-
-        LoadArray(objects, true);
-        LoadArray(tiles, false);
+        LoadArray();
 
         isSaved = false;
-
-        curState = EditState.MakeStage;
-        //UpdateValuesInNewState(curState);
     }
 
-    private void LoadArray(GameObject[,,] mapArray, bool isObj)
+    private void LoadArray()
     {
-        for (int x = 0; x < mapArray.GetLength(0); x++)
+        int maxLength = preBlocks.GetLength(0);
+        selectedSize = maxLength <= maxX[0] ? 0 : (maxLength <= maxX[1] ? 1 : 2);
+        SetSize((EMapSize)selectedSize);
+        ViewCurY();
+
+        for (int x = 0; x < preBlocks.GetLength(0); x++)
         {
-            for (int y = 0; y < mapArray.GetLength(1); y++)
+            for (int y = 0; y < preBlocks.GetLength(1); y++)
             {
-                for (int z = 0; z < mapArray.GetLength(2); z++)
+                for (int z = 0; z < preBlocks.GetLength(2); z++)
                 {
-                    if (mapArray[x, y, z] == null)
+                    if (preBlocks[x, y, z].type == EBlockType.Null)
                         continue;
 
-                    Debug.Log(mapArray[x, y, z].name);
-                    GameObject block = GameObject.Instantiate(mapArray[x, y, z]);
-                    Debug.Log(block.name);
-                    block.transform.position = new Vector3(x, y, z);
-                    block.SetActive(true);
-                    if (isObj)
+                    int idx = preBlocks[x, y, z].idx;
+                    if (idx == 0)
+                        continue;
+                    
+                    if (preBlocks[x, y, z].type == EBlockType.Object)
                     {
+                        GameObject block = GameObject.Instantiate(objPrefabs[idx]);
                         objects.Add(block.GetComponent<InteractiveObject>());
+                        block.transform.position = new Vector3(x, y, z);
+                        block.SetActive(true);
+                        block.transform.parent = parentObjects.transform;
+                        blocks[x, y, z] = block;
                     }
                     else
                     {
+                        GameObject block = GameObject.Instantiate(tilePrefabs[idx]);
                         tiles.Add(block.transform);
+                        block.transform.position = new Vector3(x, y, z);
+                        block.SetActive(true);
+                        block.transform.parent = heights[y].transform;
+                        blocks[x, y, z] = block;
                     }
                 }
             }
@@ -660,6 +683,7 @@ public class LevelEditor : MonoBehaviour
         heights = new GameObject[maxY[selectedSize]];
         blankHeights = new GameObject[maxY[selectedSize]];
         blocks = new GameObject[maxX[selectedSize], maxY[selectedSize], maxZ[selectedSize]];
+        if (!isSaved) preBlocks = new Block[maxX[selectedSize], maxY[selectedSize], maxZ[selectedSize]];
 
         MakeBlanks(selectedSize);
         blankBlock.SetActive(false);
@@ -681,6 +705,7 @@ public class LevelEditor : MonoBehaviour
             DeleteBlockInArray((blockT));
             
             Destroy(blocks[x, y, z]);
+            preBlocks[x, y, z] = new Block(EBlockType.Null, 0);
         }
 
         blockNum = (int)EName.Null;
@@ -710,6 +735,8 @@ public class LevelEditor : MonoBehaviour
             newBlock.transform.parent = parentObjects.transform;
             blocks[x, y, z] = newBlock.gameObject;
             objects.Add(newBlock.GetComponent<InteractiveObject>());
+
+            preBlocks[x, y, z] = new Block(EBlockType.Object, (int)block);
 
             //InteractiveObject blockIO = newBlock.GetComponent<InteractiveObject>();
             //AddName(blockIO, EName.Null);
@@ -746,6 +773,8 @@ public class LevelEditor : MonoBehaviour
             newBlock.transform.parent = heights[curY].transform;
             blocks[x, y, z] = newBlock.gameObject;
             tiles.Add(newBlock);
+
+            preBlocks[x, y, z] = new Block(EBlockType.Tile, (int)block);
         }
         else
         {
@@ -1043,9 +1072,6 @@ public class LevelEditor : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("object : " + objects.Count);
-        Debug.Log("tile : " + tiles.Count);
-        
         handlerValue.text = (curY + 1).ToString() + "F";
 
         if (isCard && blocks[curX, curY, curZ] != null)
