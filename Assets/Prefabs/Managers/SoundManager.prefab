@@ -432,6 +432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 04307301639f31d498c473f487464529, type: 2}
+  sfxGroup: {fileID: -186350567075165165, guid: 04307301639f31d498c473f487464529, type: 2}
   bgmSound: {fileID: 448975938}
   newAudioSource: {fileID: 0}
   curBGMSoundTrack: {fileID: 0}
