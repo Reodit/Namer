@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -108,15 +109,13 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         FilePathInfo();
         
-        string sceneName = levelDataDic[level].sceneName;
+        string sceneName = levelDataDic[GameManager.GetInstance.Level].sceneName;
         if (sceneName == null || sceneName == "")
         {
             Debug.LogError("Load Level를 입력해주세요");
             return;
         }
-        
-        SetCardEncyclopedia(levelDataDic[level].cardView);
-        
+
         SaveLoadFile loadFile = new SaveLoadFile();
         StringReader tileMapData = loadFile.ReadCsvFile(filePath + sceneName, tileMapFileName);
         StringReader objectMapData = loadFile.ReadCsvFile(filePath + sceneName, objectMapFileName);
@@ -129,6 +128,8 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         initTiles = mapCreator.CreateTileMap(tileMapData);
         initObjects = mapCreator.CreateObjectMap(objectMapData, objectInfoDic);
+        
+        SetCardEncyclopedia(levelDataDic[GameManager.GetInstance.Level].cardView);
     }
 
     public void CreateCustomLevelMap()
@@ -369,11 +370,10 @@ public class GameDataManager : Singleton<GameDataManager>
             }
         }
         
-        if (adjectiveReads.Count > 0)
+        if (cardView.adjectiveRead.Count > 0)
         {
-            adjectiveReads.AddRange(cardView.adjectiveRead); 
+            adjectiveReads.AddRange(cardView.adjectiveRead);
             adjectiveReads.Distinct().ToList();
-            adjectiveReads.OrderBy(item => Adjectives[item].priority).ToList();
         }
         
         for (int i = 0; i < adjectiveReads.Count; i++)
@@ -388,7 +388,7 @@ public class GameDataManager : Singleton<GameDataManager>
     // Create Card Prefabs
     public GameObject[] GetIngameCardEncyclopedia()
     {
-        return GetCardPrefabs(CardEncyclopedia[GameManager.GetInstance.Level]);
+        return GetCardPrefabs(cardEncyclopedia[GameManager.GetInstance.Level]);
     }
 
     public GameObject[] GetMainCardEncyclopedia()
@@ -406,10 +406,46 @@ public class GameDataManager : Singleton<GameDataManager>
         SCardView mainCards = UserDataDic[userID].cardView;
         SCardView ingameCards = CardEncyclopedia[level];
 
-        int nameCount = ingameCards.nameRead.Except(mainCards.nameRead).Concat(mainCards.nameRead.Except(ingameCards.nameRead)).Count();
-        int adjCount = ingameCards.adjectiveRead.Except(mainCards.adjectiveRead).Concat(mainCards.adjectiveRead.Except(ingameCards.adjectiveRead)).Count();
+        List<EName> nameCards = new List<EName>();
+        List<EAdjective> adjectiveCards = new List<EAdjective>();
 
-        return nameCount + adjCount;
+        for (int i = 0; i < ingameCards.nameRead.Count; i++)
+        {
+            bool isCheck = false;
+            for (int j = 0; j < mainCards.nameRead.Count; j++)
+            {
+                if (mainCards.nameRead[j] == ingameCards.nameRead[i])
+                {
+                    isCheck = true;
+                    break;
+                }
+            }
+
+            if (!isCheck)
+            {
+                nameCards.Add(ingameCards.nameRead[i]);
+            }
+        }
+        
+        for (int i = 0; i < ingameCards.adjectiveRead.Count; i++)
+        {
+            bool isCheck = false;
+            for (int j = 0; j < mainCards.adjectiveRead.Count; j++)
+            {
+                if (mainCards.adjectiveRead[j] == ingameCards.adjectiveRead[i])
+                {
+                    isCheck = true;
+                    break;
+                }
+            }
+
+            if (!isCheck)
+            {
+                adjectiveCards.Add(ingameCards.adjectiveRead[i]);
+            }
+        }
+        
+        return nameCards.Count + adjectiveCards.Count;
     }
 
     public GameObject[] GetRewardCardEncyclopedia()
@@ -457,7 +493,7 @@ public class GameDataManager : Singleton<GameDataManager>
         userData.cardView.adjectiveRead.AddRange(adjectiveReads);
         userData.cardView.adjectiveRead.OrderBy(item => Adjectives[item].priority).ToList();
         // 
-
+        
         return GetCardPrefabs(new SCardView(nameReads.ToList(), adjectiveReads.ToList()));
     }
     
@@ -494,7 +530,9 @@ public class GameDataManager : Singleton<GameDataManager>
                 Debug.LogError("입력할 수 있는 꾸밈 성질 카드 번호를 벗어났어요!");
             }
 
-            GameObject cardPrefab = Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as GameObject;
+            GameObject cardPrefab =
+                Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as
+                    GameObject;
             if (adjectives[adjectiveReads[i]].adjective.GetAdjectiveType() == EAdjectiveType.Interaction)
             {
                 InteractionAdjCards.Add(cardPrefab);
@@ -504,7 +542,7 @@ public class GameDataManager : Singleton<GameDataManager>
                 normalAdjCards.Add(cardPrefab);
             }
         }
-        
+
         cards.AddRange(InteractionAdjCards);
         cards.AddRange(normalAdjCards);
 
