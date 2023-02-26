@@ -41,6 +41,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
             Camera.main.transform.Find("UICamera").gameObject.GetComponent<Camera>();
         StageNameSetUp();
         encyclopedia = Camera.main.gameObject.transform.GetChild(2).gameObject;
+        UIManager.GetInstance.isShowNameKeyPressed = false;
     }
 
     bool isArrowOff;

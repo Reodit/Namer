@@ -381,6 +381,7 @@ public class MainUIController : MonoBehaviour
         GameDataManager.GetInstance.ResetUserData(GameManager.GetInstance.userId);
         infoPopUp.transform.Find("Buttons").gameObject.SetActive(false);
         infoPopUpTxt.text = "게임 데이터가 \n초기화됐습니다.";
+        LoadingSceneController.LoadScene("MainScene");
     }
 
     #region Level&EditButtonPanel
