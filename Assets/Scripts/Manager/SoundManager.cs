@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 public class SoundManager : Singleton<SoundManager>
 {
     public AudioMixer audioMixer;
+    public AudioMixerGroup sfxGroup;
     public AudioSource bgmSound;
     [SerializeField] private AudioSource newAudioSource;
     // public AudioSource bGMSoundTrack02;
@@ -428,7 +429,7 @@ public class SoundManager : Singleton<SoundManager>
 
         if (playerEffectClips.ContainsKey(clipname))
         {
-            Play(playerSfxSound, playerEffectClips[clipname]);
+            Play(sfxSound, playerEffectClips[clipname]);
         }
 
         if (clipname=="CardHover2")
@@ -456,6 +457,7 @@ public class SoundManager : Singleton<SoundManager>
     {
         GameObject soundObject = new GameObject(clipName + " clip");
         AudioSource repeatAudio = soundObject.AddComponent<AudioSource>();
+        repeatAudio.outputAudioMixerGroup = sfxGroup;
         repeatAudio.clip = uiEffectClips[clipName];
         repeatAudio.Play();
         Destroy(soundObject, uiEffectClips[clipName].length);
