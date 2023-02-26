@@ -535,6 +535,7 @@ public class ScenarioController : MonoBehaviour
 
     IEnumerator OpenClearPanel()
     {
+        GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Victory);
         yield return new WaitForSeconds(delayWinUI);
         stageClearPanel.SetActive(true);
     }

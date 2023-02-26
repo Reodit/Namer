@@ -456,6 +456,8 @@ public class GameManager : Singleton<GameManager>
         cameraController.Init();
         scenarioController.Init();
         resetLoadValue = 0f;
+        isPlayerCanInput = true;
+        isPlayerDoAction = false;
     }
     
     //다음 맵을 실행 시키는 메소드

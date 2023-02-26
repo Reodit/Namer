@@ -42,7 +42,14 @@ public class EditorBlock : MonoBehaviour
     {
         levelEditor.blockNum = idx;
 
-        levelEditor.CreateBlock();
+        if (levelEditor.selectedStartCard != -1)
+        {
+            levelEditor.AddStartCard(levelEditor.selectedStartCard, this);
+        }
+        else
+        {
+            levelEditor.CreateBlock();
+        }
     }
 
     void Update()

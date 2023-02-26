@@ -18,14 +18,9 @@ public class StageNameController : MonoBehaviour
         mainUIController = GameObject.Find("MainCanvas").GetComponent<MainUIController>();
     }
 
-    private void OnEnable()
-    {
-        nameTxt.text = NameText();
-        NamePlateOnOff();
-    }
-
     private void Start()
     {
+        nameTxt.text = NameText();
         NamePlateOnOff();
     }
 
