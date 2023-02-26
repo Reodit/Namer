@@ -11,7 +11,7 @@ public class UniAndroidPermission : MonoBehaviour
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
     }
 
     public static bool IsPermitted(AndroidPermission permission)
