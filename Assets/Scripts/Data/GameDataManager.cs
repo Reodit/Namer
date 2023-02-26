@@ -354,6 +354,22 @@ public class GameDataManager : Singleton<GameDataManager>
         return GetCardPrefabs(UserDataDic[GameManager.GetInstance.userId].cardView);
     }
 
+    public int GetRewardCardCount()
+    {
+        int level = GameManager.GetInstance.Level;
+        string userID = GameManager.GetInstance.userId;
+
+        int count = 0;
+
+        SCardView mainCards = UserDataDic[userID].cardView;
+        SCardView ingameCards = CardEncyclopedia[level];
+
+        int nameCount = ingameCards.nameRead.Except(mainCards.nameRead).Concat(mainCards.nameRead.Except(ingameCards.nameRead)).Count();
+        int adjCount = ingameCards.adjectiveRead.Except(mainCards.adjectiveRead).Concat(mainCards.adjectiveRead.Except(ingameCards.adjectiveRead)).Count();
+
+        return nameCount + adjCount;
+    }
+
     public GameObject[] GetRewardCardEncyclopedia()
     {
         int level = GameManager.GetInstance.Level;
@@ -361,7 +377,7 @@ public class GameDataManager : Singleton<GameDataManager>
         
         HashSet<EName> nameReads = new HashSet<EName>();
         HashSet<EAdjective> adjectiveReads = new HashSet<EAdjective>();
-
+        
         foreach (EName name in CardEncyclopedia[level].nameRead)
         {
             if (!UserDataDic[userID].cardView.nameRead.Contains(name))
