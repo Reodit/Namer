@@ -274,6 +274,7 @@ public class MainUIController : MonoBehaviour
         titlePanel.SetActive(false);
         mainMenucards.SetActive(false);
         mainRose.SetActive(false);
+        settingBtn.SetActive(false);
         mainRose.transform.GetChild(0).gameObject.SetActive(false);
         CardManager.GetInstance.isEncyclopedia = true;
         SoundManager.GetInstance.ChangeMainBGM(state);
@@ -304,6 +305,7 @@ public class MainUIController : MonoBehaviour
         titlePanel.SetActive(true);
         mainMenucards.SetActive(true);
         mainRose.SetActive(true);
+        settingBtn.SetActive(true);
         MainMenuCardController card =
         GameObject.Find("MainMenuCards").transform.Find("EncyclopediaCard(Clone)").
         GetComponent<MainMenuCardController>();
