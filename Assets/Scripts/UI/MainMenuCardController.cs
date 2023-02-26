@@ -53,7 +53,8 @@ public class MainMenuCardController : MonoBehaviour
     //카드 영역에서 마우스 누르면 카드 선택 커서로 변경, 카드를 숨김
     private void OnMouseDown()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || CardManager.GetInstance.isCasting) return;
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
         //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경
         if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
@@ -98,6 +99,7 @@ public class MainMenuCardController : MonoBehaviour
     }
     IEnumerator CastCardDealing()
     {
+        CardManager.GetInstance.isCasting = true;
         isTouching = true;
         originPos = gameObject.transform.position;
         originRot = gameObject.transform.localRotation.eulerAngles;
@@ -124,12 +126,13 @@ public class MainMenuCardController : MonoBehaviour
         CardManager.GetInstance.pickCard = null;
         Destroy(particleObj);
         AllPopUpNameOff();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         isTouching = false;
         if (this.name != "OptionCard(Clone)" && name != "EncyclopediaCard(Clone)")
         {
             CardReturn();
         }
+        CardManager.GetInstance.isCasting = false;
     }
     public void CardReturn()
     {

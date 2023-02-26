@@ -22,6 +22,7 @@ public class MainUIController : MonoBehaviour
     [SerializeField] GameObject informationTxt;
     [SerializeField] GameObject levelSelectCardHolder;
     [SerializeField] GameObject levelEditCardHolder;
+    [SerializeField] GameObject settingBtn;
     [SerializeField] GameObject returnBtn;
     [SerializeField] GameObject pauseBtn;
     [SerializeField] GameObject goBtn;
@@ -47,6 +48,7 @@ public class MainUIController : MonoBehaviour
     [SerializeField] float levelSelectMovingTime = 1.5f;
     [SerializeField] float menuTileMovingTime = 1f;
     bool isPressAnyKey;
+    public bool isSelectStart, isEditStart;
     float currentTime;
     float speed = 2f;
     float length = 15f;
@@ -64,6 +66,29 @@ public class MainUIController : MonoBehaviour
         {
             DirectLevelSelect();
         }
+
+        if(GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        {
+            DirectEditSelect();
+        }
+    }
+
+    private void DirectEditSelect()
+    {
+        isPressAnyKey = true;
+        TitleMove(0f);
+        pressAnyKeyTxt.SetActive(false);
+        StartCoroutine(MainMenuGroudsSetUp());
+        Invoke("CardholderStart", 0.1f);
+
+        Camera.main.transform.position = new Vector3(-10, 7, -3.17f);
+        Camera.main.transform.rotation = Quaternion.Euler(60, -90, 0);
+
+        state = MainMenuState.Edit;
+        title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
+        title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
+        levelEditCardHolder.SetActive(true);
+        CardManager.GetInstance.isMenuLevel = true;
     }
 
     private void DirectLevelSelect()
@@ -117,12 +142,17 @@ public class MainUIController : MonoBehaviour
         {
             isPressAnyKey = true;
             TitleMove(titleMovingTime);
-            pressAnyKeyTxt.SetActive(false);
+            Destroy(pressAnyKeyTxt);
             CameraMoving(cameraMovingTime);
             StartCoroutine(MainMenuGroudsSetUp());
             Invoke("CardholderStart", 0.1f);
-
+            Invoke("SettingBtnOn", titleMovingTime);
         }
+    }
+
+    void SettingBtnOn()
+    {
+        settingBtn.SetActive(true);
     }
 
     // 게임 타이틀을 메인메뉴에 알맞게 이동
@@ -146,7 +176,7 @@ public class MainUIController : MonoBehaviour
     IEnumerator PressAnyKeyFloat()
     {
         Vector3 currentPos = pressAnyKeyTxt.transform.localPosition;
-        while (true)
+        while (!isPressAnyKey)
         {
             currentTime += Time.deltaTime * speed;
             pressAnyKeyTxt.transform.
@@ -174,6 +204,10 @@ public class MainUIController : MonoBehaviour
     //레벨 에디트 화면으로 넘어감
     public void LevelEditScene()
     {
+        if (isEditStart)
+        {
+            LevelEditPanelOn();
+        }
         state = MainMenuState.Edit;
         Camera.main.transform.DOMove(new Vector3(-10f, 7f, -3.17f), levelSelectMovingTime);
         Camera.main.transform.DORotate(new Vector3(60f, -90f, 0f), levelSelectMovingTime);
@@ -185,6 +219,10 @@ public class MainUIController : MonoBehaviour
     //레벨 셀렉트 화면으로 넘어감 
     public void LevelSelectScene()
     {
+        if (isSelectStart)
+        {
+            LevelSelectPanelOn();
+        }
         state = MainMenuState.Level;
         Camera.main.transform.DOMove(new Vector3(10f, 7f, -3.17f), levelSelectMovingTime);
         Camera.main.transform.DORotate(new Vector3(60f, 90f, 0f), levelSelectMovingTime);
@@ -308,6 +346,15 @@ public class MainUIController : MonoBehaviour
         optionPanel.SetActive(false);
     }
 
+    public void GameOff()
+    {
+        Application.Quit();
+    }
+
+    public void GameReset()
+    {
+        GameDataManager.GetInstance.ResetUserData(GameManager.GetInstance.userId);
+    }
 
     #region Level&EditButtonPanel
     public void LevelEditPanelOn()
