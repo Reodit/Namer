@@ -51,7 +51,7 @@ public class StageClearPanelController : MonoBehaviour
 
     private void CheckRewardExist()
     {
-        if (GameDataManager.GetInstance.GetRewardCardEncyclopedia() == null)
+        if (GameDataManager.GetInstance.GetRewardCardCount() <= 0)
         {
             isRewardDone = true;
             rewardBtn.SetActive(false);
