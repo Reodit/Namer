@@ -100,7 +100,8 @@ public class CardController : MonoBehaviour
     }
      private void OnMouseDown()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "NamingCard") return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "NamingCard"
+            && !CardManager.GetInstance.isEncyclopedia) return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause
             || CardManager.GetInstance.isCasting) return;
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;

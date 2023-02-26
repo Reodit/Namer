@@ -40,7 +40,8 @@ public class UIManager : Singleton<UIManager>
     {
         #region PauseKeyCheck
         if (GameManager.GetInstance.CurrentState == GameStates.InGame
-            || GameManager.GetInstance.CurrentState == GameStates.Pause)
+            || GameManager.GetInstance.CurrentState == GameStates.Pause ||
+            GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
             if (Input.GetKeyDown(GameManager.GetInstance.pauseKey))
             {

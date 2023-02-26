@@ -247,6 +247,7 @@ public class GameManager : Singleton<GameManager>
                 HandleLost();
                 break;
             case GameStates.Encyclopedia:
+                UIManager.GetInstance.isShowNameKeyPressed = false;
                 HandleEncyclopedia();
                 break;
             case GameStates.LevelSelect:

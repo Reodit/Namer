@@ -62,6 +62,11 @@ public class MainUIController : MonoBehaviour
 
     private void Start()
     {
+        Init();
+    }
+
+    private void Init()
+    {
         StartCoroutine(PressAnyKeyFloat());
         state = MainMenuState.Title;
         SoundManager.GetInstance.ChangeMainBGM(state);
@@ -70,10 +75,15 @@ public class MainUIController : MonoBehaviour
             DirectLevelSelect();
         }
 
-        if(GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
         {
             DirectEditSelect();
         }
+
+        UIManager.GetInstance.isShowNameKeyPressed = false;
+        CardManager.GetInstance.pickCard = null;
+        CardManager.GetInstance.isPickCard = false;
+        CardManager.GetInstance.target = null;
     }
 
     private void DirectEditSelect()
