@@ -128,10 +128,10 @@ public class GameManager : Singleton<GameManager>
 
         #region Get User, Level and Card Data & Set UserID "111111"
         // Test
-        // if (Directory.Exists(Application.persistentDataPath + "/Data"))
-        // {
-        //     Directory.Delete(Application.persistentDataPath + "/Data", true);
-        // }
+        if (Directory.Exists(Application.persistentDataPath + "/Data"))
+        {
+            Directory.Delete(Application.persistentDataPath + "/Data", true);
+        }
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
         if (!GameDataManager.GetInstance.UserDataDic.ContainsKey("111111"))

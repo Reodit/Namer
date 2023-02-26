@@ -24,9 +24,6 @@ public class InteractiveObject : MonoBehaviour
         public bool abandonBouncy = true;
     #endregion
 
-    // Level Edit Mode
-    private bool isFinishMapSetting = false;
-    
     // object's name = adjective card's ui texts + name card's ui text
     private string addNameText;
     private Queue<EAdjective> addAdjectiveTexts;
@@ -64,12 +61,6 @@ public class InteractiveObject : MonoBehaviour
         addAdjectiveTexts = new Queue<EAdjective>();
         countNameAdj = new int[gameData.Adjectives.Count];
         adjectives = new IAdjective[gameData.Adjectives.Count];
-
-        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
-        {
-            // objectName = EName.Null;
-            isFinishMapSetting = false;
-        }
 
         abandonBouncy = true;
     }
