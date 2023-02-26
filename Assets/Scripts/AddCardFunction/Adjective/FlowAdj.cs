@@ -185,7 +185,6 @@ public class FlowAdj : IAdjective
         yield return new WaitForSeconds(.5f);
 
         obj.SubtractAdjectiveCard(EAdjective.Flow);
-        obj.SubtractAdjectiveCard(EAdjective.Extinguisher);
     }
 
     public static void changeRenderMode(Material standardShaderMaterial, BlendMode mode)

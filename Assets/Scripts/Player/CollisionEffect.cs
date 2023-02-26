@@ -47,6 +47,8 @@ public class CollisionEffect : MonoBehaviour
             {
                 pe.currentEffectIndex = EffectIndex.DesertFootprint;
             }
+            
+            // TODO 오브젝트 밟았을 때 구름 나오게 하기
         }
     }
 
@@ -70,8 +72,7 @@ public class CollisionEffect : MonoBehaviour
     {
         InteractiveObject io;
 
-        if (other.TryGetComponent<InteractiveObject>(out io) ||
-            GameManager.GetInstance.isPlayerDoAction)
+        if (other.TryGetComponent<InteractiveObject>(out io))
         {
             if (io.Adjectives[12] != null)
             {

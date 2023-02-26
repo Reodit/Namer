@@ -1999,6 +1999,45 @@
         {
             "level": 5,
             "sceneName": "Stage05",
+            "scenario": [],
+            "playerPosition": {
+                "x": 0.0,
+                "y": 3.0,
+                "z": 0.0
+            },
+            "cardView": {
+                "nameRead": [
+                    2
+                ],
+                "adjectiveRead": [
+                    6,
+                    7
+                ]
+            }
+        },
+        {
+            "level": 6,
+            "sceneName": "Stage06",
+            "scenario": [],
+            "playerPosition": {
+                "x": 0.0,
+                "y": 3.0,
+                "z": 0.0
+            },
+            "cardView": {
+                "nameRead": [
+                    2,
+                    12
+                ],
+                "adjectiveRead": [
+                    6,
+                    7
+                ]
+            }
+        },
+        {
+            "level": 7,
+            "sceneName": "Stage07",
             "scenario": [
                 {
                     "type": 0,
@@ -2368,8 +2407,8 @@
             }
         },
         {
-            "level": 6,
-            "sceneName": "Stage06",
+            "level": 8,
+            "sceneName": "Stage08",
             "scenario": [
                 {
                     "type": 0,
@@ -2610,8 +2649,8 @@
             }
         },
         {
-            "level": 7,
-            "sceneName": "Stage07",
+            "level": 9,
+            "sceneName": "Stage09",
             "scenario": [],
             "playerPosition": {
                 "x": 0.0,
@@ -2624,8 +2663,47 @@
                 ],
                 "adjectiveRead": [
                     9,
+                    12
+                    ,13
+                ]
+            }
+        },
+        {
+            "level": 10,
+            "sceneName": "Stage10",
+            "scenario": [],
+            "playerPosition": {
+                "x": 0.0,
+                "y": 3.0,
+                "z": 0.0
+            },
+            "cardView": {
+                "nameRead": [
+                    
+                ],
+                "adjectiveRead": [
+                    7,
+                    10
+                ]
+            }
+        },
+        {
+            "level": 11,
+            "sceneName": "Stage11",
+            "scenario": [],
+            "playerPosition": {
+                "x": 0.0,
+                "y": 3.0,
+                "z": 0.0
+            },
+            "cardView": {
+                "nameRead": [
+                    8
+                ],
+                "adjectiveRead": [
+                    13,
                     12,
-                    13
+                    9
                 ]
             }
         }

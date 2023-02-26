@@ -1,21 +1,21 @@
 {
     "dataList": [
         {
-            "prefabName": "WaterObj",
+            "prefabName": "RockObj",
             "objectID": 0,
-            "nameType": 6,
+            "nameType": 3,
             "adjectives": []
         },
         {
-            "prefabName": "WaterObj",
+            "prefabName": "RockObj",
             "objectID": 1,
-            "nameType": 6,
+            "nameType": 3,
             "adjectives": []
         },
         {
-            "prefabName": "WaterObj",
+            "prefabName": "RockObj",
             "objectID": 2,
-            "nameType": 6,
+            "nameType": 3,
             "adjectives": []
         },
         {
@@ -25,9 +25,9 @@
             "adjectives": []
         },
         {
-            "prefabName": "WaterObj",
+            "prefabName": "RockObj",
             "objectID": 4,
-            "nameType": 6,
+            "nameType": 3,
             "adjectives": []
         },
         {
@@ -43,45 +43,45 @@
             "adjectives": []
         },
         {
-            "prefabName": "BallObj",
+            "prefabName": "RoseObj",
             "objectID": 7,
+            "nameType": 1,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 8,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 9,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "TreeObj",
+            "objectID": 10,
+            "nameType": 5,
+            "adjectives": []
+        },
+        {
+            "prefabName": "BallObj",
+            "objectID": 11,
             "nameType": 2,
             "adjectives": []
         },
         {
             "prefabName": "BonfireObj",
-            "objectID": 8,
-            "nameType": 4,
-            "adjectives": []
-        },
-        {
-            "prefabName": "RockObj",
-            "objectID": 9,
-            "nameType": 3,
-            "adjectives": []
-        },
-        {
-            "prefabName": "BonfireObj",
-            "objectID": 10,
-            "nameType": 4,
-            "adjectives": []
-        },
-        {
-            "prefabName": "RoseObj",
-            "objectID": 11,
-            "nameType": 1,
-            "adjectives": []
-        },
-        {
-            "prefabName": "RockObj",
             "objectID": 12,
-            "nameType": 3,
+            "nameType": 4,
             "adjectives": []
         },
         {
-            "prefabName": "TreeObj",
+            "prefabName": "RockObj",
             "objectID": 13,
-            "nameType": 5,
+            "nameType": 3,
             "adjectives": []
         },
         {
@@ -91,19 +91,10 @@
             "adjectives": []
         },
         {
-            "prefabName": "TreeObj",
+            "prefabName": "WaterObj",
             "objectID": 15,
-            "nameType": 5,
+            "nameType": 6,
             "adjectives": []
-        },
-        {
-            "prefabName": "CardObj",
-            "objectID": 16,
-            "nameType": 0,
-            "adjectives": [
-                2,
-                14
-            ]
         }
     ]
 }
