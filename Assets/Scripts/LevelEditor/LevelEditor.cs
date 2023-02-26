@@ -687,7 +687,7 @@ public class LevelEditor : MonoBehaviour
     public void CreateBlock()
     {
         Vector3 pos = new Vector3(curX, curY, curZ);
-        EditorBlock block = blockBtns[blockNum];
+        EditorBlock block = isCard? cardBtns[blockNum] : blockBtns[blockNum];
         if (isCard)
         {
             bool isName = block.type == EBlockType.NameCard;
@@ -739,12 +739,12 @@ public class LevelEditor : MonoBehaviour
 
     public void AddAdjective(InteractiveObject block, EAdjective adjective)
     {
-        block.AddAdjective(adjective);
+        block.AddAdjectiveCard(adjective);
     }
 
     public void AddName(InteractiveObject block, EName name)
     {
-        block.AddName(name);
+        block.AddNameCard(name);
     }
 
     public void ClearName(InteractiveObject block)
@@ -937,17 +937,16 @@ public class LevelEditor : MonoBehaviour
 
         if (isCard && blocks[curX, curY, curZ] != null)
         {
-            foreach (InteractiveObject ioObj in objects)
-            {
-                if (ioObj != null)
-                    ioObj.PopUpNameOff();
-            }
-
             InteractiveObject io;
             blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out io);
-            if (io != null)
+
+            foreach (InteractiveObject ioObj in objects)
             {
-                io.PopUpNameOn();
+                if (ioObj == null) continue;
+                if (ioObj != io)
+                    ioObj.PopUpNameOff();
+                else
+                    ioObj.PopUpNameOn();
             }
         }
         else

@@ -190,7 +190,8 @@ public class InteractiveObject : MonoBehaviour
 
         // todo 카드 넣었을 때에 검출 테스트
         var target = (new[] { this.gameObject }).ToList();
-        DetectManager.GetInstance.StartDetector(target);
+        if (GameManager.GetInstance.CurrentState != GameStates.LevelEditMode) 
+            DetectManager.GetInstance.StartDetector(target);
     }
     
     private void TestSubtractAdjective(EAdjective subtractAdjective)
@@ -361,7 +362,8 @@ public class InteractiveObject : MonoBehaviour
 
         // todo 카드 넣었을 때에 검출 테스트
         var target = (new[] { this.gameObject }).ToList();
-        DetectManager.GetInstance.StartDetector(target);
+        if (GameManager.GetInstance.CurrentState != GameStates.LevelEditMode)
+            DetectManager.GetInstance.StartDetector(target);
     }
 
     public void SubtractNameCard(EName subtractName)
@@ -460,6 +462,7 @@ public class InteractiveObject : MonoBehaviour
     {
         if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "PlanetObj") return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode) return;
 
         //카드를 선택한 상황에서 오브젝트를 터치한 경우 
         else if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null
@@ -467,7 +470,7 @@ public class InteractiveObject : MonoBehaviour
         {
             CardManager.GetInstance.target = this.gameObject;
             CardManager.GetInstance.pickCard.GetComponent<CardController>().TouchInteractObj();
-        } 
+        }
         else if (!isTouched)
         {
             //카드를 선택하지 않은 상태에서 다른 오브젝트를 선택하고 있는데 이 오브젝트를 터치한 경우 
@@ -482,7 +485,7 @@ public class InteractiveObject : MonoBehaviour
             if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
             {
                 CardManager.GetInstance.target = this.gameObject;
-            
+
                 if (CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()) >= maxAdjCount)
                 {
                     CardManager.GetInstance.ableAddCard = false;
@@ -536,7 +539,8 @@ public class InteractiveObject : MonoBehaviour
          }
          if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isTouched)
          {
-            PopUpNameOff();
+            if (GameManager.GetInstance.CurrentState != GameStates.LevelEditMode)
+                PopUpNameOff();
          }
      }
 #endregion
