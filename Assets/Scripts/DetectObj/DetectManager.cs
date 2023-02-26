@@ -83,11 +83,22 @@ public partial class DetectManager : Singleton<DetectManager>
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(false);
         gameDataManager = GameDataManager.GetInstance;
 
-        gameDataManager.ReadMapData();
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+        {
+            gameDataManager.ReadMapData();
+        }
         SetMapData();
         
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
-        GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(0, 3, 0);
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        {
+            SPosition position = GameDataManager.GetInstance.CustomLevelDataDic[GameManager.GetInstance.CustomLevel + 1].playerPosition;
+            GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(position.x, position.y, position.z);
+        }
+        else
+        {
+            GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(0, 3, 0);
+        }
         GameManager.GetInstance.localPlayerMovement.Init();
     }
     

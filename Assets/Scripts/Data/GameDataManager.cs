@@ -44,6 +44,7 @@ public class GameDataManager : Singleton<GameDataManager>
     private string objectInfoFileName;
     private string userDataFileName;
     private string levelDataFileName;
+    private string customLevelDataFileName;
     
     // MapData
     private SMapData mapData;
@@ -58,6 +59,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
         userDataFileName = "user.json";
         levelDataFileName = "levels.json";
+        customLevelDataFileName = "customLevels.json";
     }
 
 #region Map(tile, object) Data
@@ -71,9 +73,10 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         
         mapData = mapReader.GetMapData();
-
+        // Test
         initTiles = mapData.tiles;
         initObjects = mapData.objects;
+        // 
     }
 
     public void CreateFile()
@@ -119,8 +122,21 @@ public class GameDataManager : Singleton<GameDataManager>
         initTiles = mapCreator.CreateTileMap(tileMapData);
         initObjects = mapCreator.CreateObjectMap(objectMapData, objectInfoDic);
     }
-    
-#endregion
+
+    public void CreateLevelTestMap()
+    {
+        MapCreator mapCreator = FindObjectOfType<MapCreator>();
+        if (!mapCreator)
+        {
+            mapCreator = gameObject.AddComponent<MapCreator>();
+        }
+
+        initTiles = mapCreator.CreateTileMap(new StringReader(mapData.tileMapData.ToString()));
+        initObjects = mapCreator.CreateObjectMap(new StringReader(mapData.objectMapData.ToString()),
+            mapData.objectInfoData.ToDictionary(item => item.objectID, item => item));
+    }
+
+    #endregion
 
 #region User And Level Data
 
@@ -253,10 +269,10 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void AddCustomLevelData(SLevelData levelData)
     {
-        int level = CustomLevelDataDic.Count;
+        int level = GameManager.GetInstance.CustomLevel;
         if (levelDataDic.ContainsKey(level))
         {
-            Debug.LogError("이미 추가된 레벨이에요!");
+            levelDataDic[level] = levelData;
         }
         else
         {
@@ -264,7 +280,7 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         
         SaveLoadFile saveFile = new SaveLoadFile();
-        saveFile.UpdateDicDataToJsonFile(levelDataDic, filePath + "SaveLoad", levelDataFileName);
+        saveFile.UpdateDicDataToJsonFile(customLevelDataDic, "Assets/Resources/Data/" + "SaveLoad", customLevelDataFileName);
     }
 
 #endregion

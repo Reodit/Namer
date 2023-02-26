@@ -74,13 +74,15 @@ public class InteractiveObject : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.InGame)
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
-            objectName = objectInfo.nameType;
-
-            SetAdjectiveFromData(gameData.Names[objectName].adjectives, false);
-            SetAdjectiveFromData(objectInfo.adjectives);
+            return;
         }
+        
+        objectName = objectInfo.nameType;
+        SetAdjectiveFromData(gameData.Names[objectName].adjectives, false);
+        SetAdjectiveFromData(objectInfo.adjectives);
+        
         addNameText = gameData.Names[objectName].uiText;
         
         // Test
@@ -127,11 +129,11 @@ public class InteractiveObject : MonoBehaviour
         AllPopUpNameCtr();
         AdjectiveTest();
         
-        if (DetectManager.GetInstance.GetObjectsData() != null && GameManager.GetInstance.CurrentState == GameStates.LevelEditMode && !isFinishMapSetting)
-        {
-            isFinishMapSetting = true;
-            SetAttribute();
-        }
+        // if (DetectManager.GetInstance.GetObjectsData() != null && GameManager.GetInstance.CurrentState == GameStates.LevelEditMode && !isFinishMapSetting)
+        // {
+        //     isFinishMapSetting = true;
+        //     SetAttribute();
+        // }
     }
     
     private void AdjectiveTest()
@@ -185,12 +187,15 @@ public class InteractiveObject : MonoBehaviour
         adjectives[adjIndex].SetCount(1);
         addAdjectiveTexts.AddLast(addAdjective);
 
-        // Todo 다른 곳으로 이동해야하는 IAdjective 함수?
-        adjectives[adjIndex].Execute(this);
-
-        // todo 카드 넣었을 때에 검출 테스트
-        var target = (new[] { this.gameObject }).ToList();
-        DetectManager.GetInstance.StartDetector(target);
+        if (GameManager.GetInstance.CurrentState == GameStates.InGame)
+        {
+            // Todo 다른 곳으로 이동해야하는 IAdjective 함수?
+            adjectives[adjIndex].Execute(this);
+            
+            // todo 카드 넣었을 때에 검출 테스트
+            var target = (new[] { this.gameObject }).ToList();
+            DetectManager.GetInstance.StartDetector(target);
+        }
     }
     
     private void TestSubtractAdjective(EAdjective subtractAdjective)

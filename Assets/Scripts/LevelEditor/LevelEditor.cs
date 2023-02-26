@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -120,7 +121,6 @@ public class LevelEditor : MonoBehaviour
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
 
         SetAllBtnListener();
-
         Init();
     }
 
@@ -146,6 +146,8 @@ public class LevelEditor : MonoBehaviour
             curY = Mathf.RoundToInt(v);
             ViewCurY();
         });
+        
+        playBtn.onClick.AddListener(() => GoTestPlay());
     }
 
     void Init()
@@ -164,6 +166,19 @@ public class LevelEditor : MonoBehaviour
         UpdateValuesInNewState(curState);
     }
     #endregion
+
+    public void GoTestPlay()
+    {
+        ShowPointer(false);
+        ShowBlanks(false);
+        GameDataManager.GetInstance.ReadMapData();
+        
+        SLevelData customLevelData = new SLevelData(GameManager.GetInstance.CustomLevel + 1,
+            new SPosition(new Vector3(0f, 5f, 0f)), new SCardView());
+        GameDataManager.GetInstance.AddCustomLevelData(customLevelData);
+
+        SceneBehaviorManager.LoadScene(Scenes.LevelDesign, LoadSceneMode.Single);
+    }
 
     public int GetCount(EBlockType type)
     {

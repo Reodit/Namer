@@ -131,6 +131,15 @@ public struct SLevelData
     public Scenario[] scenario;
     public SPosition playerPosition;
     public SCardView cardView;
+
+    public SLevelData(int level, SPosition playerPosition, SCardView cardView)
+    {
+        this.level = level;
+        this.sceneName = "???";
+        this.scenario = null;
+        this.playerPosition = playerPosition;
+        this.cardView = cardView;
+    }
 }
 
 [Serializable]
