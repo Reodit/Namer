@@ -82,7 +82,8 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] GameObject cardPanel;
     [SerializeField] GameObject warningResetPanel;
     [SerializeField] GameObject warningPlayPanel;
-    [SerializeField] Text[] startCardTexts; 
+    [SerializeField] Text[] startCardTexts;
+    [SerializeField] GameObject encyclopedia;
 
     [Header("맵 크기에 따른 사이즈 설정")]
     private int selectedSize = 1;
@@ -460,6 +461,29 @@ public class LevelEditor : MonoBehaviour
         }
 
         ShowBlockLine(preLine, blockLine);
+    }
+
+    public void OnClickEncyclopediaBtn()
+    {
+        GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
+        encyclopedia.SetActive(true);
+    }
+
+    public void ReturnLobby()
+    {
+        SoundManager.GetInstance.Play("BtnPress");
+        GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        SceneManager.LoadScene("MainScene");
+    }
+
+    public void ShowInfos()
+    {
+
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     private void ShowBlockLine(int preLine, int curLine)
