@@ -458,8 +458,8 @@ public class GameManager : Singleton<GameManager>
         // ChangeGameState(GameStates.NextLevelLoad);
         // var detectManager = GameObject.Find("DetectManager");
         // Destroy(detectManager);
-        GetCurrentLevel(curLevel + 1);
         GameDataManager.GetInstance.UpdateUserData(true);
+        GetCurrentLevel(curLevel + 1);
         // SceneBehaviorManager.LoadScene((Scenes)SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
         LoadingSceneController.LoadScene(SceneManager.GetActiveScene().name);
         // Debug.Log(curLevel);
