@@ -42,6 +42,9 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         StageNameSetUp();
         encyclopedia = Camera.main.gameObject.transform.GetChild(2).gameObject;
         UIManager.GetInstance.isShowNameKeyPressed = false;
+        CardManager.GetInstance.pickCard = null;
+        CardManager.GetInstance.isPickCard = false;
+        CardManager.GetInstance.target = null;
     }
 
     bool isArrowOff;
