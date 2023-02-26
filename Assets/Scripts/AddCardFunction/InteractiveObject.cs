@@ -467,7 +467,8 @@ public class InteractiveObject : MonoBehaviour
         else if (!isTouched)
         {
             //카드를 선택하지 않은 상태에서 다른 오브젝트를 선택하고 있는데 이 오브젝트를 터치한 경우 
-            if(CardManager.GetInstance.target != null && !CardManager.GetInstance.isPickCard)
+            if (GameManager.GetInstance.CurrentState == GameStates.Victory && name == "PlanetObj") return;
+            if (CardManager.GetInstance.target != null && !CardManager.GetInstance.isPickCard)
             {
                 CardManager.GetInstance.target.GetComponent<InteractiveObject>().isTouched = false;
                 CardManager.GetInstance.target = this.gameObject;
@@ -496,6 +497,7 @@ public class InteractiveObject : MonoBehaviour
         }
         else
         {
+            if (GameManager.GetInstance.CurrentState == GameStates.Victory && name == "PlanetObj") return;
             isTouched = false;
             CardManager.GetInstance.target = null;
             popUpName.SetActive(false);

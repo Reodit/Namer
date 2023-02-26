@@ -521,6 +521,7 @@ public class SoundManager : Singleton<SoundManager>
         {
             muteToggle =
             GameObject.Find("MainCanvas").transform.
+            Find("MainOptionPanel").transform.
             Find("OptionPanel").transform.
             Find("SoundPanel").transform.
             Find("MutePanel").transform.
@@ -573,6 +574,7 @@ public class SoundManager : Singleton<SoundManager>
         {
             masterSlider =
                 GameObject.Find("MainCanvas").transform.
+                Find("MainOptionPanel").transform.
                 Find("OptionPanel").transform.
                 Find("SoundPanel").transform.
                 Find("FullVolume Panel").transform.
@@ -580,6 +582,7 @@ public class SoundManager : Singleton<SoundManager>
 
             BGMSlider =
                 GameObject.Find("MainCanvas").transform.
+                Find("MainOptionPanel").transform.
                 Find("OptionPanel").transform.
                 Find("SoundPanel").transform.
                 Find("BGMVolume Panel").transform.
@@ -587,6 +590,7 @@ public class SoundManager : Singleton<SoundManager>
 
             SFXSlider =
                 GameObject.Find("MainCanvas").transform.
+                Find("MainOptionPanel").transform.
                 Find("OptionPanel").transform.
                 Find("SoundPanel").transform.
                 Find("SfxVolume Panel").transform.
@@ -625,6 +629,4 @@ public class SoundManager : Singleton<SoundManager>
         Pause(testClipName);
     }
     #endregion
-
-
 }

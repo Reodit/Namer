@@ -11,6 +11,7 @@ public class LevelSelectCardController : MonoBehaviour
     [SerializeField] Transform cardHolderLeft;
     [SerializeField] Transform cardHolderRight;
     [SerializeField] GameObject mainMenuCard;
+    [SerializeField] GameObject mapEditCard;
     public List<MainMenuCardController> mainCards;
     List<GameObject> startCards;
     GameObject StageCardPrefab;
@@ -41,21 +42,30 @@ public class LevelSelectCardController : MonoBehaviour
         {
             startCardsCount = GameDataManager.GetInstance.LevelDataDic.Count + 1;
             cardName = "StageCard";
+            for (int i = 1; i < startCardsCount; i++)
+            {
+                int inputNum = i;
+                GameObject cardPrefab = Instantiate(StageCardPrefab);
+                cardPrefab.name = inputNum.ToString() + cardName;
+                cardPrefab.GetComponent<StageNameController>().StageNumSetUp(inputNum);
+                startCards.Add(cardPrefab);
+            }
         }
         else
         {
+            startCards.Add(mapEditCard);
             startCardsCount = 31;
             cardName = "CustomCard";
+            for (int i = 1; i < startCardsCount; i++)
+            {
+                int inputNum = i;
+                GameObject cardPrefab = Instantiate(StageCardPrefab);
+                cardPrefab.name = inputNum.ToString() + cardName;
+                cardPrefab.GetComponent<StageNameController>().StageNumSetUp(inputNum);
+                startCards.Add(cardPrefab);
+            }
         }
 
-        for (int i = 1; i < startCardsCount; i++)
-        {
-            int inputNum = i;
-            GameObject cardPrefab = Instantiate(StageCardPrefab);
-            cardPrefab.name = inputNum.ToString() + cardName;
-            cardPrefab.GetComponent<StageNameController>().StageNumSetUp(inputNum);
-            startCards.Add(cardPrefab);
-        }
     }
 
     void CardStart()
@@ -71,7 +81,14 @@ public class LevelSelectCardController : MonoBehaviour
             {
                 string objName = ((i / 5) + 1).ToString() + "page";
                 GameObject levelLayoutGroup = new GameObject(objName);
-                levelLayoutGroup.transform.parent = GameObject.Find("LevelSelectCards").transform;
+                if (mainUIController.state == MainMenuState.Level)
+                {
+                    levelLayoutGroup.transform.parent = GameObject.Find("LevelSelectCards").transform;
+                }
+                else
+                {
+                    levelLayoutGroup.transform.parent = GameObject.Find("LevelEditCards").transform;
+                }
                 levelLayoutGroups.Add(levelLayoutGroup);
                 levelLayoutGroup.SetActive(false);
             }
@@ -112,6 +129,17 @@ public class LevelSelectCardController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         SetUpStageCards();
         CardManager.GetInstance.isCardDealingDone = true;
+
+        if (mainUIController.state == MainMenuState.Level)
+        {
+            mainUIController.LevelSelectPanelOn();
+            mainUIController.isSelectStart = true;
+        }
+        else
+        {
+            mainUIController.LevelEditPanelOn();
+            mainUIController.isEditStart = true;
+        }
     }
 
 
@@ -119,12 +147,19 @@ public class LevelSelectCardController : MonoBehaviour
     //카드를 생성하는 메서드 
     void MainMenuAddCard(GameObject cardPrefab)
     {
-        if (cardPrefab.name == "MainCard")
+        if (cardPrefab.name == "MainCard" || cardPrefab.name == "MapEditCard")
         {
             var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Quaternion.identity);
             var card = cardObject.GetComponent<MainMenuCardController>();
             mainCards.Add(card);
-            cardObject.transform.parent = GameObject.Find("LevelSelectCards").transform.GetChild(0).transform;
+            if (mainUIController.state == MainMenuState.Level)
+            {
+                cardObject.transform.parent = GameObject.Find("LevelSelectCards").transform.GetChild(0).transform;
+            }
+            else
+            {
+                cardObject.transform.parent = GameObject.Find("LevelEditCards").transform.GetChild(0).transform;
+            }
         }
         else
         {
@@ -133,7 +168,14 @@ public class LevelSelectCardController : MonoBehaviour
             cardObject.transform.rotation = Quaternion.identity;
             var card = cardObject.GetComponent<MainMenuCardController>();
             mainCards.Add(card);
-            cardObject.transform.parent = GameObject.Find("LevelSelectCards").transform.GetChild(0).transform;
+            if (mainUIController.state == MainMenuState.Level)
+            {
+                cardObject.transform.parent = GameObject.Find("LevelSelectCards").transform.GetChild(0).transform;
+            }
+            else
+            {
+                cardObject.transform.parent = GameObject.Find("LevelEditCards").transform.GetChild(0).transform;
+            }
         }
         MainCardAlignment();
         SoundManager.GetInstance.Play("CardHover2");
