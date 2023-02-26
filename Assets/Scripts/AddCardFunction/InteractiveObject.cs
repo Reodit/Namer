@@ -23,9 +23,6 @@ public class InteractiveObject : MonoBehaviour
         public int floatDone = 0;
         public bool abandonBouncy = false;
     #endregion
-
-    // Level Edit Mode
-    private bool isFinishMapSetting = false;
     
     // object's name = adjective card's ui texts + name card's ui text
     private string addNameText;
@@ -64,18 +61,13 @@ public class InteractiveObject : MonoBehaviour
         addAdjectiveTexts = new LinkedList<EAdjective>();
         countNameAdj = new int[gameData.Adjectives.Count];
         adjectives = new IAdjective[gameData.Adjectives.Count];
-
-        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
-        {
-            // objectName = EName.Null;
-            isFinishMapSetting = false;
-        }
     }
 
     private void Start()
     {
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
+            addNameText = "???";
             return;
         }
         
@@ -229,6 +221,7 @@ public class InteractiveObject : MonoBehaviour
     public void AddName(EName addedName)
     {
         objectName = addedName;
+        addNameText = gameData.Names[objectName].uiText;
     }
     
     public void AddAdjective(EAdjective addedAdjective)

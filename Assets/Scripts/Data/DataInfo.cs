@@ -107,6 +107,7 @@ public struct SUserData
     public string nickName;
     public int clearLevel;
     public List<SLevelName> levelNames;
+    public List<SLevelName> customLevelNames;
     public SCardView cardView;
     public SGameSetting gameSetting;
 
@@ -116,6 +117,7 @@ public struct SUserData
         this.nickName = "";
         this.clearLevel = -1;
         this.levelNames = new List<SLevelName>();
+        this.customLevelNames = new List<SLevelName>();
         this.cardView = new SCardView(new[] { EName.Rose }.ToList(), new[] { EAdjective.Win }.ToList());
         this.gameSetting = new SGameSetting(0, 0, 
             0.5f, 0.5f, 0.5f, 
@@ -132,10 +134,10 @@ public struct SLevelData
     public SPosition playerPosition;
     public SCardView cardView;
 
-    public SLevelData(int level, SPosition playerPosition, SCardView cardView)
+    public SLevelData(int level, string sceneName, SPosition playerPosition, SCardView cardView)
     {
         this.level = level;
-        this.sceneName = "???";
+        this.sceneName = sceneName;
         this.scenario = null;
         this.playerPosition = playerPosition;
         this.cardView = cardView;

@@ -117,6 +117,7 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] private EditorBlock[] cardBtns;
 
     GameObject[,,] blocks;
+    List<Transform> tiles = new List<Transform>();
     List<InteractiveObject> objects = new List<InteractiveObject>();
     Vector3 stageStartPoint;
     EditState curState = EditState.SetSize;
@@ -186,6 +187,23 @@ public class LevelEditor : MonoBehaviour
         UpdateValuesInNewState(curState);
     }
     #endregion
+    
+    public void GoTestPlay()
+    {
+        if (objects.Count == 0 || tiles.Count == 0)
+        {
+            return;
+        }
+        
+        ShowPointer(false);
+        ShowBlanks(false);
+        GameDataManager.GetInstance.ReadMapData();
+
+        int level = GameManager.GetInstance.CustomLevel + 1;
+        SLevelData customLevelData = new SLevelData(level, "CustomLevel" + level, new SPosition(stageStartPoint), SetStartCards()); GameDataManager.GetInstance.AddCustomLevelData(level, customLevelData);
+        
+        SceneBehaviorManager.LoadScene(Scenes.LevelDesign, LoadSceneMode.Single);
+    }
 
     public int GetCount(EBlockType type)
     {
@@ -606,6 +624,9 @@ public class LevelEditor : MonoBehaviour
 
         if (blocks[x, y, z] != null)
         {
+            Transform blockT = blocks[x, y, z].transform;
+            DeleteBlockInArray((blockT));
+            
             Destroy(blocks[x, y, z]);
         }
 
@@ -621,6 +642,9 @@ public class LevelEditor : MonoBehaviour
 
         if (blocks[x, y, z] != null)
         {
+            Transform blockT = blocks[x, y, z].transform;
+            DeleteBlockInArray((blockT));
+            
             Destroy(blocks[x, y, z]);
         }
 
@@ -654,6 +678,9 @@ public class LevelEditor : MonoBehaviour
 
         if (blocks[x, y, z] != null)
         {
+            Transform blockT = blocks[x, y, z].transform;
+            DeleteBlockInArray((blockT));
+            
             Destroy(blocks[x, y, z]);
         }
 
@@ -665,6 +692,7 @@ public class LevelEditor : MonoBehaviour
             newBlock.position = new Vector3(x, y, z);
             newBlock.transform.parent = heights[curY].transform;
             blocks[x, y, z] = newBlock.gameObject;
+            tiles.Add(newBlock);
         }
         else
         {
@@ -672,6 +700,20 @@ public class LevelEditor : MonoBehaviour
         }
 
         blockNum = (int)ETile.Null;
+    }
+
+    private void DeleteBlockInArray(Transform blockT)
+    {
+        InteractiveObject io;
+        blockT.TryGetComponent<InteractiveObject>(out io);
+        if (tiles.Contains(blockT))
+        {
+            tiles.Remove(blockT);
+        }
+        else if (io != null && objects.Contains(io))
+        {
+            objects.Remove(io);
+        }
     }
 
     public void SetStartPoint(Vector3 pos)
@@ -739,27 +781,27 @@ public class LevelEditor : MonoBehaviour
 
     public void AddAdjective(InteractiveObject block, EAdjective adjective)
     {
-        block.AddAdjectiveCard(adjective);
+        block.AddAdjective(adjective);
     }
 
     public void AddName(InteractiveObject block, EName name)
     {
-        block.AddNameCard(name);
+        block.AddName(name);
     }
 
     public void ClearName(InteractiveObject block)
     {
-        block.SubtractNameCard(block.GetObjectName());
-        for (int i = 1; i < GetCount(EBlockType.AdjCard); i++)
+        block.AddName(EName.Null);
+
+        while (true)
         {
-            int count = block.CheckCountAdjective((EAdjective)i);
-            if (count > 0)
+            if (block.addAdjectiveTexts.Count == 0)
             {
-                for (int cur = 0; cur < count; cur++)
-                {
-                    block.SubtractAdjectiveCard((EAdjective)i);
-                }
+                break;
             }
+            
+            block.SubtractAdjective(block.addAdjectiveTexts.First());
+            block.addAdjectiveTexts.RemoveFirst();
         }
     }
 
@@ -780,15 +822,26 @@ public class LevelEditor : MonoBehaviour
         startCardTexts[idx].text = name;
     }
 
-    public void SetStartCards()
+    public SCardView SetStartCards()
     {
         foreach (EditorBlock card in setCards)
         {
             int nameCount = GetCount(EBlockType.NameCard);
-            bool isName = card.idx < nameCount;
+            bool isName;
+            int idx = 0;
+            if (card == null)
+            {
+                isName = true;
+                idx = 0;
+            }
+            else
+            {
+                isName = card.idx < nameCount;
+                idx = card.idx;
+            }
+
             if (isName)
             {
-                int idx = card.idx;
                 if (idx == (int)EName.Null)
                 {
                     continue;
@@ -797,10 +850,12 @@ public class LevelEditor : MonoBehaviour
             }
             else
             {
-                int idx = card.idx - nameCount + 1;
-                startCards.adjectiveRead.Add((EAdjective)idx);
+                int id = card.idx - nameCount + 1;
+                startCards.adjectiveRead.Add((EAdjective)id);
             }
         }
+
+        return startCards;
     }
 
     public void AddCommand()
@@ -921,6 +976,8 @@ public class LevelEditor : MonoBehaviour
                 ShowBlockLine(preLine, blockLine);
                 setCards = new List<EditorBlock>(4) { null, null, null, null };
                 selectedStartCard = -1;
+                objects = new List<InteractiveObject>();
+                tiles = new List<Transform>();
                 break;
             case (EditState.TestPlay):
                 // ??
@@ -933,6 +990,9 @@ public class LevelEditor : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("object : " + objects.Count);
+        Debug.Log("tile : " + tiles.Count);
+        
         handlerValue.text = (curY + 1).ToString() + "F";
 
         if (isCard && blocks[curX, curY, curZ] != null)
