@@ -123,6 +123,22 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &254063271 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1513337967, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+  m_PrefabInstance: {fileID: 1145747097}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &254063272 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 126893545, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+  m_PrefabInstance: {fileID: 1145747097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &334616143
 GameObject:
   m_ObjectHideFlags: 0
@@ -1304,6 +1320,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 330459395, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+      propertyPath: tutorialArrow
+      value: 
+      objectReference: {fileID: 254063272}
+    - target: {fileID: 330459395, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
+      propertyPath: interactionImg
+      value: 
+      objectReference: {fileID: 254063271}
     - target: {fileID: 1381482275, guid: 060dff4be628445d0b067bbc6a203f12, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -1800,7 +1824,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1976396110}
-  m_LocalRotation: {x: 0.38268343, y: -0.000000015896621, z: 0.000000006584596, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268343, y: 0.000000015896623, z: -0.000000006584596, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 5, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

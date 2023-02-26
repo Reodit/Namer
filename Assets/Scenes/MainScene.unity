@@ -13408,6 +13408,7 @@ MonoBehaviour:
   mainCards: []
   startCards:
   - {fileID: 6591964947668748173, guid: b7377f445e81645f9868cd09c7684b83, type: 3}
+  - {fileID: 6591964947668748173, guid: 95866b6b522334006beeca72d05c5ee2, type: 3}
   - {fileID: 6591964947668748173, guid: 1aadb96750976408ea8ed31efdea359e, type: 3}
   - {fileID: 6591964947668748173, guid: 0bd57f39d48004c5494aafb4cdfdc0f8, type: 3}
   - {fileID: 6591964947668748173, guid: 7d279ab81ca9e4d999a9e6a1973ccaf6, type: 3}
