@@ -163,7 +163,7 @@ public class CardManager : Singleton<CardManager>
                     }
                 }
             }
-            else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+            else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode || GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
             {
                 if (startCards != null)
                 {
