@@ -48,7 +48,7 @@ public class BouncyAdj : IAdjective
 
     public void Execute(InteractiveObject thisObject)
     {
-        thisObject.abandonBouncy = true;
+        thisObject.abandonBouncy = false;
         downY = (int)thisObject.transform.position.y;
         InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(BounceObj(thisObject.gameObject));
     }
@@ -311,23 +311,16 @@ public class BouncyAdj : IAdjective
             var rb = thisObject.GetComponent<Rigidbody>();
             rb.isKinematic = false;
             rb.useGravity = true;
+            thisObject.abandonBouncy = true;
         }
         else
         {
             Vector3 targetPos = new Vector3(thisObject.transform.position.x, downY, thisObject.transform.position.z);
             float dis = Vector3.Distance(thisObject.transform.position, targetPos);
             float movePercent = (dis / 10f) / dis;
-            while (thisObject != null && dis > 0.2f)
-            {
-                thisObject.transform.position = Vector3.Lerp(thisObject.transform.position, targetPos, movePercent);
-                dis = Vector3.Distance(thisObject.transform.position, targetPos);
-                yield return new WaitForEndOfFrame();
-            }
-            if (thisObject != null)
-            {
+            
                 thisObject.transform.position = targetPos;
                 thisObject.abandonBouncy = true;
-            }
         }
 
         yield return null;
