@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -195,8 +196,8 @@ public class MainMenuCardController : MonoBehaviour
                 break;
             case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                //CheckClearLevel(cardName);
-                LoadingSceneController.LoadScene("DemoPlay");
+                CheckClearLevel(cardName);
+                //LoadingSceneController.LoadScene("DemoPlay");
                 // 레벨 디자인 시 활성화
                 // DetectManager.GetInstance.InitTilesObjects();
                 // GameManager.GetInstance.SetLevelFromCard("LevelDesign");
@@ -212,7 +213,17 @@ public class MainMenuCardController : MonoBehaviour
 
     private void CheckClearLevel(string cardName)
     {
-        if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -3)
+
+        StringBuilder sb = new StringBuilder();
+        foreach (var letter in cardName)
+        {
+            if (letter >= '0' && letter <= '9')
+            {
+                sb.Append(letter);
+            }
+        }
+        int level = int.Parse(sb.ToString());
+        if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -1)
         {
             if (cardName == "1StageCard")
             {
@@ -221,15 +232,17 @@ public class MainMenuCardController : MonoBehaviour
             else
             {
                 CardReturn();
+                mainUIController.InfoStagePopUp();
             }
         }
-        else if (int.Parse(cardName.Substring(0, 1)) <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel + 2)
+        else if (level <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel + 1)
         {
             LoadingSceneController.LoadScene("DemoPlay");
         }
         else
         {
             CardReturn();
+            mainUIController.InfoStagePopUp();
         }
     }
 }

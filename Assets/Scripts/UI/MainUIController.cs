@@ -274,6 +274,7 @@ public class MainUIController : MonoBehaviour
         titlePanel.SetActive(false);
         mainMenucards.SetActive(false);
         mainRose.SetActive(false);
+        settingBtn.SetActive(false);
         mainRose.transform.GetChild(0).gameObject.SetActive(false);
         CardManager.GetInstance.isEncyclopedia = true;
         SoundManager.GetInstance.ChangeMainBGM(state);
@@ -304,6 +305,7 @@ public class MainUIController : MonoBehaviour
         titlePanel.SetActive(true);
         mainMenucards.SetActive(true);
         mainRose.SetActive(true);
+        settingBtn.SetActive(true);
         MainMenuCardController card =
         GameObject.Find("MainMenuCards").transform.Find("EncyclopediaCard(Clone)").
         GetComponent<MainMenuCardController>();
@@ -354,9 +356,16 @@ public class MainUIController : MonoBehaviour
 
     public void GameResetConfirm()
     {
+        infoPopUpTxt.text = "게임 데이터를\n정말 삭제하시겠습니까?\n";
         infoPopUp.SetActive(true);
-        infoPopUpTxt.text = "게임 데이터를 \n정말 삭제하시겠습니까?\n";
         infoPopUp.transform.Find("Buttons").gameObject.SetActive(true);
+    }
+
+    public void InfoStagePopUp()
+    {
+        infoPopUpTxt.text = "이전 스테이지를\n클리어해주세요";
+        infoPopUp.SetActive(true);
+        infoPopUp.transform.Find("Buttons").gameObject.SetActive(false);
     }
 
     public void GameReset()

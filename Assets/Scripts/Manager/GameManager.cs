@@ -350,7 +350,7 @@ public class GameManager : Singleton<GameManager>
     }
      #region JSCODE
 
-    int curLevel = -3;
+    int curLevel = -1;
     public int Level { get { return curLevel; } }
     private GameObject groundObjs;
     private GameObject objcts;
@@ -435,7 +435,7 @@ public class GameManager : Singleton<GameManager>
     [ContextMenu("ResetMap")]
     public void ResetCurrentLvl()
     {
-        if (curLevel == -3)
+        if (curLevel == -1)
         {
             Debug.LogError("There are no level Data!!!");
             return;
@@ -487,7 +487,7 @@ public class GameManager : Singleton<GameManager>
         }
         
         // LoadPlayerPrefabs();
-        if(curLevel == -3)
+        if(curLevel == -1)
             curLevel=GetCurrentLevel();
 
         DetectManager.GetInstance.Init(curLevel);

@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
     private Dir targetDir;
     private int objscale;
     private Rigidbody climbRb;
-    private IngameCanvasController ingameCanvasController;
 
     [SerializeField] [Range(0.1f, 5f)] private float rootmotionSpeed;
     [SerializeField] [Range(0.5f, 5f)] private float interactionDelay;
@@ -51,7 +50,6 @@ public class PlayerMovement : MonoBehaviour
         interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
-        ingameCanvasController = UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>();
         #endregion
     }
     
@@ -172,20 +170,19 @@ public class PlayerMovement : MonoBehaviour
         {
             Init();
         }
-        
         // TODO 하드 코딩 제거
         if (GameManager.GetInstance.isPlayerCanInput &&
             !GameManager.GetInstance.isPlayerDoAction &&
             interactObj &&
             interactObj.CompareTag("InteractObj"))
         {
-            ingameCanvasController.InteractionBtnOn();
+            UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOn();
             //Debug.Log("True");
         }
 
         else
         {
-            ingameCanvasController.InteractionBtnOff();
+            UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOff();
             //Debug.Log("False");
         }
     }
