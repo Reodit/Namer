@@ -27,6 +27,7 @@ public class CardManager : Singleton<CardManager>
     public bool isCardsHide = false;
     public bool isMenuLevel = false;
     public bool isCasting = false;
+    public bool isAligning = false;
 
     //선택한 카드
     public GameObject pickCard;
@@ -214,6 +215,7 @@ public class CardManager : Singleton<CardManager>
     //카드를 정렬하는 메서드 
     public void CardAlignment(float time = 2f)
     {
+        isAligning = true;
         List<PRS> originCardPRSs = new List<PRS>();
         originCardPRSs = RoundAlignment(cardHolderLeft, cardHolderRight, myCards.Count, new Vector3(1f, 1f, 1f));
 
@@ -225,6 +227,12 @@ public class CardManager : Singleton<CardManager>
             targetCard.originPRS.rot = cardHolderPoint.transform.rotation;
             targetCard.MoveTransform(targetCard.originPRS, true, time);
         }
+        Invoke("IsAligningDone", time);
+    }
+
+    void IsAligningDone()
+    {
+        isAligning = false;
     }
 
     public void SetInputTrue()

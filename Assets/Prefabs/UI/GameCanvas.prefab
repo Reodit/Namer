@@ -6200,6 +6200,7 @@ MonoBehaviour:
   tutorialArrow: {fileID: 126893545}
   stageName: {fileID: 198966485}
   interactionImg: {fileID: 1513337967}
+  cameraViewImg: {fileID: 1779133860}
   LoadingImg: {fileID: 1291289589}
 --- !u!1 &3262066694611464171
 GameObject:
