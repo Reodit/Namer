@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/GoogleLoginScene.unity
+    guid: a5e30c736c9904298bf7ce12b56f68e7
+  - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: be01b4231a9d84a788838992c3c55e74
   - enabled: 1

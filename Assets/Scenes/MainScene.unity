@@ -13446,6 +13446,7 @@ MonoBehaviour:
   isCardsHide: 0
   isMenuLevel: 0
   isCasting: 0
+  isAligning: 0
   pickCard: {fileID: 0}
   ableAddCard: 1
 --- !u!64 &1651018103

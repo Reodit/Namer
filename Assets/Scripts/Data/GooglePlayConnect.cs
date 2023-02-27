@@ -1,12 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+using UnityEngine.SceneManagement;
+using System;
+using System.Collections;
 
 public class GooglePlayConnect : MonoBehaviour
 {
+    [SerializeField] public string userID;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+        GooglePlayLogin();
+    }
+
     public void GooglePlayLogin()
     {
-        PlayGamesPlatform.InitializeInstance(new PlayGamesClientConfiguration.Builder().Build());
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
         GetGooglePlayUserID();
@@ -14,22 +24,28 @@ public class GooglePlayConnect : MonoBehaviour
 
     public void GetGooglePlayUserID()
     {
-        if (PlayGamesPlatform.Instance.localUser.authenticated == false)
+        Social.localUser.Authenticate((bool success) =>
         {
-            Social.localUser.Authenticate((bool success) =>
+            if (success)
             {
-                if (success)
-                {
-                    GameManager.GetInstance.userId = Social.localUser.id;
-                    Debug.Log("Success Login " + Social.localUser.id);
-                }
-                else
-                {
-                    GameManager.GetInstance.userId = "111111";
-                    Debug.Log("Failed Login");
-                }
-            });
+                userID = Social.localUser.id;
+                
+                StartCoroutine(GetID());
+            }
+            else
+            {
+                Application.Quit();
+            }
+        });
+    }
+
+    private IEnumerator GetID()
+    {
+        while (userID == null)
+        {
+            yield return new WaitForEndOfFrame();
         }
+        SceneManager.LoadScene("MainScene");
     }
 
     public void GooglePlayLogout()

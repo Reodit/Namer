@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using GooglePlayGames;
 
 public enum GameStates
 {
@@ -62,17 +63,23 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Manager Prefabs")]
     [SerializeField] private List<GameObject> managerPrefabs;
+    [SerializeField] private MainUIController mainUI;
 
     public float CurTimeScale { get; private set; }
 
     private void Awake()
     {
+        GooglePlayConnect gc = GameObject.Find("GooglePlay").GetComponent<GooglePlayConnect>();
+        userId = gc.userID;
+        Debug.Log(userId);
+        Destroy(gc);
         if (GameObject.FindObjectsOfType<GameManager>().Length > 1)
         {
             Destroy(this.gameObject);
             return;
         }
         DontDestroyOnLoad(this.gameObject);
+
         Init();
     }
 
