@@ -78,7 +78,7 @@ public class LongAdj : IAdjective
         if (flag)
         {
             SetGrowScale(targetObj.gameObject);
-            // DetectManager.GetInstance.OnObjectScaleChanged(targetScale,targetObj.transform);
+            DetectManager.GetInstance.OnObjectScaleChanged(targetScale,targetObj.transform);
             InteractionSequencer.GetInstance.CoroutineQueue.Enqueue(ScaleObj(targetObj.gameObject));
             // targetObj.StartCoroutine(WrapperCoroutine(flag,targetObj));
         }
