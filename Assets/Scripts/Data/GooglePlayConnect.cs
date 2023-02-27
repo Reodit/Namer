@@ -29,14 +29,11 @@ public class GooglePlayConnect : MonoBehaviour
             if (success)
             {
                 userID = Social.localUser.id;
-
                 SceneManager.LoadScene("MainScene");
             }
             else
             {
-                userID = "111111";
-                StartCoroutine(GetID());
-                // Application.Quit();
+                Application.Quit();
             }
         });
     }
