@@ -20,6 +20,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     [SerializeField] GameObject tutorialArrow;
     [SerializeField] Text stageName;
     [SerializeField] Image interactionImg;
+    [SerializeField] Image cameraViewImg;
     PlayerMovement playerMovement;
     Canvas canvas;
 
@@ -32,6 +33,11 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     void Start()
     {
         Init();
+    }
+
+    void Update()
+    {
+        CameraViewBtnOnOff();
     }
 
     void Init()
@@ -87,6 +93,8 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         topPanel.SetActive(true);
         GameManager.GetInstance.ChangeGameState(GameStates.InGame);
         CardManager.GetInstance.CardsUp();
+        isCardVisible = true;
+        cardBtnImg.transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void OptionBtn()
@@ -104,6 +112,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     public void RestartBtn()
     {
         SoundManager.GetInstance.Play("BtnPress");
+        bottomButtons.SetActive(false);
         UIManager.GetInstance.UIOff();
         GameManager.GetInstance.ResetCurrentLvl();
     }
@@ -176,7 +185,12 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         return;
         GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         SoundManager.GetInstance.Play("BtnPress");
-        CardManager.GetInstance.CardsDown();
+        if (isCardVisible)
+        {
+            CardManager.GetInstance.CardsDown();
+            isCardVisible = false;
+            cardBtnImg.transform.localScale = new Vector3(1, -1, 1);
+        }
         Invoke("EncyclopediaOpen", 0.5f);
     }
 
@@ -216,5 +230,17 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     public void BtnPressedSound()
     {
         SoundManager.GetInstance.Play("BtnPress");
+    }
+
+    void CameraViewBtnOnOff()
+    {
+        if (CardManager.GetInstance.isAligning)
+        {
+            cameraViewImg.gameObject.SetActive(false);
+        }
+        else
+        {
+            cameraViewImg.gameObject.SetActive(true);
+        }
     }
 }

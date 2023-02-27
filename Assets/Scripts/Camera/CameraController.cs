@@ -183,7 +183,8 @@ public class CameraController : MonoBehaviour
 
     private void M_SwitchCam()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia ||
+            CardManager.GetInstance.isAligning) return;
         curCam.Priority = (int)PriorityOrder.BehingByNormal;
         isTopView = !isTopView;
         SetPriority();
@@ -236,6 +237,7 @@ public class CameraController : MonoBehaviour
             preZoomValue = zoomValue;
             SetPriority();
         }
+#endif
 #if UNITY_ANDROID
         if (!CheckCanZoom()) return;
         int touchCount = Input.touchCount;
