@@ -365,6 +365,14 @@ public class MainUIController : MonoBehaviour
         Application.Quit();
     }
 
+    public void GameUpdateInfo()
+    {
+        CardManager.GetInstance.ableCardCtr = false;
+        infoPopUpTxt.text = "다음 스테이지는\n곧 업데이트 됩니다.";
+        infoPopUp.SetActive(true);
+        infoPopUp.transform.Find("Buttons").gameObject.SetActive(false);
+    }
+
     public void GameResetConfirm()
     {
         CardManager.GetInstance.ableCardCtr = false;

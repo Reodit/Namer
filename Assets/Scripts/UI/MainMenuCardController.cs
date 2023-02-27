@@ -194,6 +194,10 @@ public class MainMenuCardController : MonoBehaviour
             case "GameOffCard(Clone)":
                 Application.Quit();
                 break;
+            case "ComingSoonCard":
+                mainUIController.GameUpdateInfo();
+                break;
+
             case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
                 CheckClearLevel(cardName);
