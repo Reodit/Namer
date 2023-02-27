@@ -419,7 +419,19 @@ public class ScenarioController : MonoBehaviour
         {
             if (scenarioCount >= goalScenarioCount)
             {
-                scenarioCount = goalScenarioCount - 1;
+                while (scenarioCount >= goalScenarioCount)
+                {
+                    scenarioCount--;
+                    Scenario scen = scenarios.Dequeue();
+                    if (scenarioCount == goalScenarioCount)
+                    {
+                        curScenario = scen;
+                        break;
+                    }
+                }
+
+                DoScenario();
+                
                 // 승리 ui 실행 
                 //StartCoroutine(OpenClearPanel());
             }
