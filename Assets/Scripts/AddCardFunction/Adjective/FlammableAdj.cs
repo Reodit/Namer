@@ -87,13 +87,18 @@ public class FlammableAdj : IAdjective
     IEnumerator OnFire(GameObject thisObj, GameObject otherObject)
     {
         if (thisObj == null || otherObject == null) yield break;
-
+        
         int flameIdx = (int)EAdjective.Flame;
         if (otherObject.GetComponent<InteractiveObject>().Adjectives[flameIdx] == null) yield break;
 
         fire.Play();
         SoundManager.GetInstance.Play(EAdjective.Flammable, 2.5f);
-        yield return new WaitForSeconds(2.5f);
+        
+        float startTime1 = Time.time;
+        while (Time.time < startTime1 + 2.5f)
+        {
+            yield return null;
+        }
 
         if (thisObj == null || otherObject == null) yield break;
 
@@ -105,8 +110,12 @@ public class FlammableAdj : IAdjective
 
         DetectManager.GetInstance.ChangeValueInMap(pos,null);
 
-        yield return new WaitForSeconds(1.5f);
-
+        float startTime2 = Time.time;
+        while (Time.time < startTime2 + 1.5f)
+        {
+            yield return null;
+        }
+        
         if (thisObj == null || otherObject == null) yield break;
 
         GameObject.Destroy(thisObj);
