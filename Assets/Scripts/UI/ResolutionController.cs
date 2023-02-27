@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class ResolutionController : MonoBehaviour
 {
-    Camera camera;
+    Camera cameraView;
 
     private void Start()
     {
-        camera = GetComponent<Camera>();
+        cameraView = GetComponent<Camera>();
         SetResolution();
         CameraView();
     }
@@ -25,18 +25,18 @@ public class ResolutionController : MonoBehaviour
         if ((float)setWidth / setHeight < (float)deviceWidth / deviceHeight)
         {
             float newWidth = ((float)setWidth / setHeight) / ((float)deviceWidth / deviceHeight);
-            camera.rect = new Rect((1f - newWidth) / 2f, 0f, newWidth, 1f);
+            cameraView.rect = new Rect((1f - newWidth) / 2f, 0f, newWidth, 1f);
         }
         else
         {
             float newHeight = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight);
-            camera.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight);
+            cameraView.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight);
         }
     }
 
     public void CameraView()
     {
-        Rect rt = camera.rect;
+        Rect rt = cameraView.rect;
 
         float scale_height = ((float)Screen.width / Screen.height) / ((float)19 / 9);
         float scale_width = 1f / scale_height;
@@ -52,12 +52,12 @@ public class ResolutionController : MonoBehaviour
             rt.x = (1f - scale_width) / 2f;
         }
 
-        camera.rect = rt;
+        cameraView.rect = rt;
     }
 
     void OnPreCull()
     {
-        if(camera.gameObject.name == "TitleCamera" || camera.gameObject.name == "Main Camera")
+        if(cameraView.gameObject.name == "TitleCamera" || cameraView.gameObject.name == "Main Camera")
         {
             GL.Clear(true, true, Color.black);
         }

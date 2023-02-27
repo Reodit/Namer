@@ -281,6 +281,7 @@ public class MainUIController : MonoBehaviour
     public void EncyclopediaScene()
     {
         state = MainMenuState.Encyclopedia;
+        informationTxt.SetActive(false);
         encyclopedia.SetActive(true);
         titlePanel.SetActive(false);
         mainMenucards.SetActive(false);

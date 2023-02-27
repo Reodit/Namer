@@ -1,8 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 using GooglePlayGames;
 using UnityEngine.SceneManagement;
-using System;
 using System.Collections;
 using GooglePlayGames.BasicApi;
 
@@ -36,7 +34,9 @@ public class GooglePlayConnect : MonoBehaviour
             }
             else
             {
-                Application.Quit();
+                userID = "111111";
+                StartCoroutine(GetID());
+                // Application.Quit();
             }
         });
     }
