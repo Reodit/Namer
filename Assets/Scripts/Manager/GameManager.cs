@@ -134,11 +134,8 @@ public class GameManager : Singleton<GameManager>
         //}
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
-        if (!GameDataManager.GetInstance.UserDataDic.ContainsKey("111111"))
-        {
-            GameDataManager.GetInstance.AddUserData("111111");
-        }
-        
+        GameDataManager.GetInstance.AddUserData(userId);
+
         GameDataManager.GetInstance.GetCardData();
         #endregion
 
