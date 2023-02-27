@@ -460,12 +460,17 @@ public class GameDataManager : Singleton<GameDataManager>
             return null;
         }
         
-        List<EName> nameReads = cardView.nameRead;
-        List<EAdjective> adjectiveReads = cardView.adjectiveRead;
+        List<EName> nameReads = cardView.nameRead.OrderBy(item => names[item].priority).ToList();
+        List<EAdjective> adjectiveReads = cardView.adjectiveRead.OrderBy(item => adjectives[item].priority).ToList();
         
         List<GameObject> cards = new List<GameObject>();
         for (int i = 0; i < nameReads.Count; i++)
         {
+            if (names[nameReads[i]].name == EName.Null)
+            {
+                continue;   
+            }
+            
             if ((int)nameReads[i] > names.Count - 1)
             {
                 Debug.LogError("입력할 수 있는 네임 카드 번호를 벗어났어요!");
@@ -481,14 +486,17 @@ public class GameDataManager : Singleton<GameDataManager>
         // sort adjective cards to ui priority
         for (int i = 0; i < adjectiveReads.Count; i++)
         {
+            if (adjectives[adjectiveReads[i]].adjectiveName == EAdjective.Null)
+            {
+                continue;   
+            }
+            
             if ((int)adjectiveReads[i] > adjectives.Count - 1)
             {
                 Debug.LogError("입력할 수 있는 꾸밈 성질 카드 번호를 벗어났어요!");
             }
 
-            GameObject cardPrefab =
-                Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as
-                    GameObject;
+            GameObject cardPrefab = Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as GameObject;
             if (adjectives[adjectiveReads[i]].adjective.GetAdjectiveType() == EAdjectiveType.Interaction)
             {
                 InteractionAdjCards.Add(cardPrefab);
