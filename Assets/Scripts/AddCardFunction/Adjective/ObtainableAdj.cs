@@ -35,6 +35,7 @@ public class ObtainableAdj : IAdjective
     public void Execute(InteractiveObject thisObject, GameObject player)
     {
         InteractionSequencer.GetInstance.PlayerActionQueue.Enqueue(ObtainableObj(thisObject, player));
+        thisObject.SubtractAdjectiveCard(adjectiveName);
     }
 
     public void Execute(InteractiveObject thisObject, InteractiveObject otherObject)
