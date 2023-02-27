@@ -83,8 +83,7 @@ public partial class DetectManager : Singleton<DetectManager>
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(false);
         gameDataManager = GameDataManager.GetInstance;
 
-        gameDataManager.ReadMapData();
-        SetMapData();
+        GameManager.GetInstance.cameraController.SetZoomInStart();
         
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
         GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(0, 3, 0);
@@ -109,6 +108,8 @@ public partial class DetectManager : Singleton<DetectManager>
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
         GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(position.x, position.y, position.z);
         GameManager.GetInstance.localPlayerMovement.Init();
+
+        GameManager.GetInstance.cameraController.SetZoomInStart();
     }
 
     // 맵을 로드할 때에 한 번 배열을 가져오는 메서드로 따로 사용하면 안 됨

@@ -413,6 +413,7 @@ public class ScenarioController : MonoBehaviour
             // 승리 ui 실행 
             StartCoroutine(OpenClearPanel());
             scenarioCount = -1;
+            isStart = false;
         }
         // todo 시나리오가 진행이 안된 상태로 장미에게 말을 걸어도 깰 수 있도록 하기 
         else if (GameManager.GetInstance.CurrentState == GameStates.Victory && preVictory != true)
@@ -421,7 +422,7 @@ public class ScenarioController : MonoBehaviour
             {
                 while (scenarioCount >= goalScenarioCount)
                 {
-                    scenarioCount--;
+                    scenarioCount = scenarioCount == 0 ? 0 : scenarioCount - 1;
                     Scenario scen = scenarios.Dequeue();
                     if (scenarioCount == goalScenarioCount)
                     {

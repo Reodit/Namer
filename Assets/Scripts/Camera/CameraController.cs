@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -48,6 +49,7 @@ public class CameraController : MonoBehaviour
 
     [Header("Zoom settings")]
     [SerializeField][Range(0, 2)] int zoomValue = 1;
+    int preZoomValue = 1;
     bool canZoom = true;
 
     void Awake()
@@ -80,8 +82,6 @@ public class CameraController : MonoBehaviour
 
         playerTopCams = new CinemachineVirtualCamera[] { playerTopViewCamZoomOut, playerTopViewCam, playerTopViewCamZoomIn };
         playerNormalCams = new CinemachineVirtualCamera[] { playerNormalViewCamZoomOut, playerNormalViewCam, playerNormalViewCamZoomIn };
-
-        SetPriority();
 
         // 모든 팔로우 캠이 플레이어를 따라다니도록 설정
         //player = GameObject.Find("Player").transform;
@@ -152,6 +152,24 @@ public class CameraController : MonoBehaviour
         curCam.Priority = (int)PriorityOrder.normal;
     }
 
+    public void SetZoomInStart()
+    {
+        int mapSize = DetectManager.GetInstance.GetMaxX;
+        if (mapSize > 15)
+        {
+            zoomValue = 0;
+        }
+        else if (mapSize > 10)
+        {
+            zoomValue = 1;
+        }
+        else
+        {
+            zoomValue = 2;
+        }
+        SetPriority();
+    }
+
     private void CheckCameraSwitch()
     {
         if (Input.GetKeyDown(GameManager.GetInstance.cameraKey) && GameManager.GetInstance.CurrentState != GameStates.Encyclopedia)
@@ -180,11 +198,46 @@ public class CameraController : MonoBehaviour
         canZoom = true;
     }
 
+    bool CheckCanZoom()
+    {
+        if (Input.touchCount > 0) // 터치가 1개 이상
+        {
+            // UI요소를 터치하고 있는가?
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            {
+                Debug.Log("Touch ui");
+                return false;
+            }
+            if (Input.touchCount >= 2)
+            {
+                if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(1).fingerId))
+                {
+                    Debug.Log("Touch ui");
+                    return false;
+                }
+                else
+                {
+                    Debug.Log("not Touch ui");
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     void Update()
     {
         if (GameManager.GetInstance.CurrentState != GameStates.InGame) return;
 
+#if UNITY_EDITOR
+        if (preZoomValue != zoomValue)
+        {
+            preZoomValue = zoomValue;
+            SetPriority();
+        }
 #if UNITY_ANDROID
+        if (!CheckCanZoom()) return;
         int touchCount = Input.touchCount;
         if (touchCount == 2 && (Input.touches[0].phase == TouchPhase.Began || Input.touches[1].phase == TouchPhase.Began))
         {
