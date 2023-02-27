@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public enum Scenes
 {
+  GoogleLogin,
   Main,
   DemoPlay,
   LoadingScene,
