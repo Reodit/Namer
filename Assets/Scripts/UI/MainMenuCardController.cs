@@ -89,9 +89,13 @@ public class MainMenuCardController : MonoBehaviour
         highlight.SetActive(false);
         cr.enabled = false;
         transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
-        CardManager.GetInstance.isPickCard = false;
-        CardManager.GetInstance.pickCard = null;
-        UIManager.GetInstance.isShowNameKeyPressed = false;
+
+        if(CardManager.GetInstance.pickCard == gameObject)
+        {
+            CardManager.GetInstance.isPickCard = false;
+            CardManager.GetInstance.pickCard = null;
+            UIManager.GetInstance.isShowNameKeyPressed = false;
+        }
     }
     public void TouchInteractObj()
     {
@@ -107,7 +111,6 @@ public class MainMenuCardController : MonoBehaviour
         highlight.SetActive(false);
         bc.enabled = false;
         cr.enabled = false;
-        CardManager.GetInstance.isPickCard = false;
         gameObject.transform.DOLocalRotate(new Vector3(originRot.x * -1, originRot.y + 180, 0), 0.3f);
         yield return new WaitForSeconds(0.3f);
         gameObject.transform.DOScale(new Vector3(0.5f, 0.5f, 0.5f), 0.3f);
@@ -126,6 +129,7 @@ public class MainMenuCardController : MonoBehaviour
         CardManager.GetInstance.pickCard = null;
         Destroy(particleObj);
         AllPopUpNameOff();
+        CardManager.GetInstance.isPickCard = false;
         CardManager.GetInstance.isCasting = false;
         MainCastCard(gameObject.name);
         isTouching = false;
@@ -194,6 +198,10 @@ public class MainMenuCardController : MonoBehaviour
             case "GameOffCard(Clone)":
                 Application.Quit();
                 break;
+            case "ComingSoonCard":
+                mainUIController.GameUpdateInfo();
+                break;
+
             case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
                 CheckClearLevel(cardName);

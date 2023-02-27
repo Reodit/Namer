@@ -113,6 +113,17 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
         return funcName;
     }
 
+    IEnumerator WaitForSeconds(float seconds)
+    {
+        float startTime = Time.time;
+        while (Time.time < startTime + seconds)
+        {
+
+            Debug.Log(Time.time);
+            yield return null;
+        }
+    }
+    
     // PlayerInteraction OR Addcard로 인한 Coroutine 제어
     private IEnumerator SequentialCoroutine()
     {
@@ -120,7 +131,7 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
         {
             // Player Action이 진행되면 다른 Coroutine을 잠시 멈추게 한다. (PlayerActionQueue이외의 다른 Queue를 Dequeue 하지 않음)
             while (PlayerActionQueue.Count > 0)
-            {
+            {   
                 if (PlayerActionQueue.Count > 1)
                 {
                     Queue<IEnumerator> paQueue =
@@ -143,13 +154,14 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
                 yield return null;
             }
             
+            
             // 2. 순차 코루틴 꺼내기 
             while (SequentialQueue.Count > 0)
             {
                 if (SequentialQueue.Count > 1)
                 {
                     // Queue Sorting
-                    Queue<IEnumerator> sortedSequentialQueue =
+                    Queue<IEnumerator> sortedSequentialQueue = 
                         new Queue<IEnumerator>(SequentialQueue.OrderBy(x => x, new FunctionComparer()));
 
                     IEnumerator sCoroutine = sortedSequentialQueue.Peek();
@@ -159,7 +171,7 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
                     {
                         if (sortedSequentialQueue.Count == 1)
                         {
-                            sortedSequentialQueue.Dequeue();
+                            StartCoroutine(sortedSequentialQueue.Dequeue());
                         }
 
                         else
