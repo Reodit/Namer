@@ -45,6 +45,7 @@ public class GameDataManager : Singleton<GameDataManager>
     private string objectInfoFileName;
     private string userDataFileName;
     private string levelDataFileName;
+    private string customLevelDataFileName;
     
     // MapData
     private SMapData mapData;
@@ -59,6 +60,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
         userDataFileName = "user.json";
         levelDataFileName = "levels.json";
+        customLevelDataFileName = "customLevels.json";
     }
 
 #region Map(tile, object) Data
@@ -72,9 +74,10 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         
         mapData = mapReader.GetMapData();
-
-        initTiles = mapData.tiles;
-        initObjects = mapData.objects;
+        // Test
+        initTiles = (GameObject[,,])mapData.tiles.Clone();
+        initObjects = (GameObject[,,])mapData.objects.Clone();
+        // 
     }
 
     public void CreateFile()
@@ -86,7 +89,15 @@ public class GameDataManager : Singleton<GameDataManager>
             Debug.LogError("ReadMapData() 함수 사용했는지 확인해주세요!");
         }
 
-        string sceneName = SceneManager.GetActiveScene().name;
+        string sceneName = "";
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        {
+            sceneName = GameManager.GetInstance.userId + "/" + CustomLevelDataDic[GameManager.GetInstance.CustomLevel].sceneName;
+        }
+        else
+        {
+            sceneName = SceneManager.GetActiveScene().name;
+        }
 
         SaveLoadFile saveFile = new SaveLoadFile();
         saveFile.CreateCsvFile(mapData.tileMapData, "Assets/Resources/Data/" + sceneName, tileMapFileName);
@@ -120,8 +131,21 @@ public class GameDataManager : Singleton<GameDataManager>
         
         SetCardEncyclopedia(levelDataDic[GameManager.GetInstance.Level].cardView);
     }
-    
-#endregion
+
+    public void CreateCustomLevelMap()
+    {
+        MapCreator mapCreator = FindObjectOfType<MapCreator>();
+        if (!mapCreator)
+        {
+            mapCreator = gameObject.AddComponent<MapCreator>();
+        }
+
+        initTiles = mapCreator.CreateTileMap(new StringReader(mapData.tileMapData.ToString()));
+        initObjects = mapCreator.CreateObjectMap(new StringReader(mapData.objectMapData.ToString()),
+            mapData.objectInfoData.ToDictionary(item => item.objectID, item => item));
+    }
+
+    #endregion
 
 #region User And Level Data
 
@@ -182,25 +206,39 @@ public class GameDataManager : Singleton<GameDataManager>
     public void SetLevelName(string levelName)
     {
         string userID = GameManager.GetInstance.userId;
-        int level = GameManager.GetInstance.Level;
-        bool hasLevelName = false;
 
-        if (userDataDic[userID].levelNames.Count > 0)
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
         {
-            for (int i = 0; i < UserDataDic[userID].levelNames.Count; i++)
+            List<SLevelName> levelNames = userDataDic[userID].customLevelNames;
+            SetLevelNameByState(GameManager.GetInstance.CustomLevel, levelName, ref levelNames);
+        }
+        else
+        {
+            List<SLevelName> levelNames = userDataDic[userID].levelNames;
+            SetLevelNameByState(GameManager.GetInstance.Level, levelName, ref levelNames);
+        }
+    }
+
+    private void SetLevelNameByState(int level, string levelName, ref List<SLevelName> levelNames)
+    {
+        bool hasLevelName = false;
+        
+        if (levelNames != null)
+        {
+            for (int i = 0; i < levelNames.Count; i++)
             {
-                if (UserDataDic[userID].levelNames[i].level == level)
+                if (levelNames[i].level == level)
                 {
-                    UserDataDic[userID].levelNames[i] = new SLevelName(level, levelName);
+                    levelNames[i] = new SLevelName(level, levelName);
                     hasLevelName = true;
                     break;
                 }
             }
         }
-        
+
         if (!hasLevelName)
         {
-            UserDataDic[userID].levelNames.Add(new SLevelName(level, levelName));
+            levelNames.Add(new SLevelName(level, levelName));
         }
     }
 
@@ -248,20 +286,24 @@ public class GameDataManager : Singleton<GameDataManager>
     }
     
 
-    public void AddCustomLevelData(SLevelData levelData)
+    public void AddCustomLevelData(int level, SLevelData levelData)
     {
-        int level = CustomLevelDataDic.Count;
-        if (levelDataDic.ContainsKey(level))
+        if (CustomLevelDataDic.ContainsKey(level))
         {
-            Debug.LogError("이미 추가된 레벨이에요!");
+            CustomLevelDataDic[level] = levelData;
         }
         else
         {
-            levelDataDic.Add(level, levelData);
+            CustomLevelDataDic.Add(level, levelData);
         }
-        
+
         SaveLoadFile saveFile = new SaveLoadFile();
-        saveFile.UpdateDicDataToJsonFile(levelDataDic, filePath + "SaveLoad", levelDataFileName);
+        saveFile.UpdateDicDataToJsonFile(customLevelDataDic, "Assets/Resources/Data/" + "SaveLoad", customLevelDataFileName);
+    }
+
+    public void DeleteCustomLevelData(int level)
+    {
+        CustomLevelDataDic.Remove(level);
     }
 
 #endregion

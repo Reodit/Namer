@@ -166,15 +166,16 @@ public class CardManager : Singleton<CardManager>
                     }
                 }
             }
-            else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+            else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode || GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
             {
-                // 테스트 시 위의 코드를 주석처리하고, 아래의 함수를 사용해주세요.
-                for (int i = 0; i < startCards.Length; i++)
+                if (startCards != null)
                 {
-                    AddCard(startCards[i]);
-                    yield return new WaitForSeconds(0.5f);
+                    for (int i = 0; i < startCards.Length; i++)
+                    {
+                        AddCard(startCards[i]);
+                        yield return new WaitForSeconds(0.5f);
+                    }
                 }
-
             }
 
             yield return new WaitForSeconds(1.5f);

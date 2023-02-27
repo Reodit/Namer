@@ -4,8 +4,11 @@ using UnityEngine.SceneManagement;
 
 public enum Scenes
 {
-  Lobby,
-  InGame
+  Main,
+  DemoPlay,
+  LoadingScene,
+  LevelEditor,
+  LevelDesign
 }
 
 public static class SceneBehaviorManager 

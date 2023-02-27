@@ -91,7 +91,29 @@ public class CameraController : MonoBehaviour
         isTopView = false;
         canZoom = true;
 
+        SetPriorityBySize();
+
         FocusOff();
+    }
+
+    public void SetPriorityBySize()
+    {
+        int mapSize = DetectManager.GetInstance.GetMaxX;
+        if (mapSize > 12)
+        {
+            zoomValue = 2;
+            SetPriority();
+        }
+        else if (mapSize > 8)
+        {
+            zoomValue = 1;
+            SetPriority();
+        }
+        else
+        {
+            zoomValue = 0;
+            SetPriority();
+        }
     }
 
     public void FocusOn(bool canMove = true)
@@ -105,7 +127,7 @@ public class CameraController : MonoBehaviour
         if (!canMove)
         {
             GameManager.GetInstance.isPlayerCanInput = false;
-            GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Move);
+            GameManager.GetInstance.localPlayerEntity.pAnimator.SetFloat("scalar", 0f);
         }
 
         isFocused = true;
@@ -227,6 +249,18 @@ public class CameraController : MonoBehaviour
         return false;
     }
 
+    public void ZoomOut()
+    {
+        zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
+        StartCoroutine(ZoomInOut());
+    }
+
+    public void ZoomIn()
+    {
+        zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
+        StartCoroutine(ZoomInOut());
+    }
+
     void Update()
     {
         if (GameManager.GetInstance.CurrentState != GameStates.InGame) return;
@@ -252,15 +286,11 @@ public class CameraController : MonoBehaviour
             fDis = (m_touchDis - m_touchOldDis) * 0.01f;
             if (canZoom && fDis < -zoomDis)
             {
-                // zoom out
-                zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
-                StartCoroutine(ZoomInOut());
+                ZoomIn();
             }
             else if (canZoom && fDis > zoomDis)
             {
-                // zoom in
-                zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
-                StartCoroutine(ZoomInOut());
+                ZoomOut();
             }
 
             m_touchOldDis = m_touchDis;

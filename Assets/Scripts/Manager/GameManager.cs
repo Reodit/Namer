@@ -361,7 +361,20 @@ public class GameManager : Singleton<GameManager>
     private GameObject objcts;
     public string userId = "000000";
 
-     GameObject player;
+    GameObject player;
+    
+#region LevelEditMode
+    private int customLevel = 0;
+    public int CustomLevel { get { return customLevel; }}
+
+    public void PlusCustomLevel()
+    {
+        customLevel++;
+    }
+    
+#endregion
+    
+    
     void LoadMap(int level)
     {
         // DetectManager.GetInstance.Init(level);

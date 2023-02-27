@@ -38,6 +38,19 @@ public enum EBlockType
     Player
 }
 
+[System.Serializable]
+public struct Block
+{
+    public EBlockType type;
+    public int idx;
+
+    public Block (EBlockType type, int idx)
+    {
+        this.type = type;
+        this.idx = idx;
+    }
+}
+
 public class LevelEditor : MonoBehaviour
 {
     #region values
@@ -58,6 +71,7 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] Button blockLeftBtn;
     [SerializeField] Button blockRightBtn;
     [SerializeField] Text handlerValue;
+    [SerializeField] Button[] startCardBtns;
 
     [Header("게임 창")]
     [SerializeField] Image selectSizePanel;
@@ -65,7 +79,10 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] GameObject sidePanel;
     [SerializeField] GameObject heightPanel;
     [SerializeField] GameObject cardPanel;
-    [SerializeField] GameObject warningPanel;
+    [SerializeField] GameObject warningResetPanel;
+    [SerializeField] GameObject warningPlayPanel;
+    [SerializeField] Text[] startCardTexts;
+    [SerializeField] GameObject encyclopedia;
 
     [Header("맵 크기에 따른 사이즈 설정")]
     private int selectedSize = 1;
@@ -83,6 +100,9 @@ public class LevelEditor : MonoBehaviour
     [SerializeField] private string nameCardPrefabPath;
     [SerializeField] private string adjCardPrefabPath;
 
+    [Header("플레이어 프리팹")]
+    [SerializeField] private GameObject playerPrefab;
+
     private List<GameObject> tilePrefabs = new List<GameObject>();
     private List<GameObject> objPrefabs = new List<GameObject>();
     private List<GameObject> nameCardPrefabs = new List<GameObject>();
@@ -90,11 +110,14 @@ public class LevelEditor : MonoBehaviour
 
     private GameObject[] heights;
     private GameObject[] blankHeights;
-    private List<GameObject> startCards = new List<GameObject>();
+    private List<EditorBlock> setCards = new List<EditorBlock>();
+    private SCardView startCards;
+    [SerializeField] public static Block[,,] preBlocks;
     private int curY = 0;
     private int curX = 0;
     private int curZ = 0;
     public int blockNum = 0;
+    public int selectedStartCard = 0;
     private int preNum = 0;
     public bool isCard = false;
     private int blockLine = 0;
@@ -105,17 +128,24 @@ public class LevelEditor : MonoBehaviour
     [Header("set blocks")]
     [SerializeField] Transform blocksParent;
     [SerializeField] private EditorBlock[] blockBtns;
+    [SerializeField] private EditorBlock[] cardBtns;
 
     GameObject[,,] blocks;
+    List<Transform> tiles = new List<Transform>();
+    List<InteractiveObject> objects = new List<InteractiveObject>();
+    Vector3 stageStartPoint;
     EditState curState = EditState.SetSize;
     GameObject parentGrounds;
     GameObject parentObjects;
+    GameObject parentBlanks;
+    static bool isSaved = false;
 
     #endregion
 
     #region Init
     void Awake()
     {
+        Destroy(DetectManager.GetInstance);
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
 
         SetAllBtnListener();
@@ -145,11 +175,21 @@ public class LevelEditor : MonoBehaviour
             curY = Mathf.RoundToInt(v);
             ViewCurY();
         });
+
+        for (int i = 0; i < startCardBtns.Length; i++)
+        {
+            int idx = i;
+            startCardBtns[idx].onClick.AddListener(() =>
+            {
+                selectedStartCard = idx;
+            });
+        }
     }
 
     void Init()
     {
-        startCards = new List<GameObject>();
+        stageStartPoint = new Vector3(0, 2, 0);
+        startCards = new SCardView(new List<EName>(), new List<EAdjective>());
         tilePrefabs = new List<GameObject>();
         objPrefabs = new List<GameObject>();
         nameCardPrefabs = new List<GameObject>();
@@ -159,10 +199,87 @@ public class LevelEditor : MonoBehaviour
         SetPrefabs(EBlockType.NameCard);
         SetPrefabs(EBlockType.AdjCard);
 
-        curState = EditState.SetSize;
-        UpdateValuesInNewState(curState);
+        if (isSaved)
+        {
+            curState = EditState.SetSize;
+            UpdateValuesInNewState(curState);
+            LoadPreMap();
+        }
+        else
+        {
+            curState = EditState.SetSize;
+            UpdateValuesInNewState(curState);
+        }
     }
     #endregion
+
+    public void LoadPreMap()
+    {
+        LoadArray();
+
+        isSaved = false;
+    }
+
+    private void LoadArray()
+    {
+        int maxLength = preBlocks.GetLength(0);
+        selectedSize = maxLength <= maxX[0] ? 0 : (maxLength <= maxX[1] ? 1 : 2);
+        SetSize((EMapSize)selectedSize);
+        ViewCurY();
+
+        for (int x = 0; x < preBlocks.GetLength(0); x++)
+        {
+            for (int y = 0; y < preBlocks.GetLength(1); y++)
+            {
+                for (int z = 0; z < preBlocks.GetLength(2); z++)
+                {
+                    if (preBlocks[x, y, z].type == EBlockType.Null)
+                        continue;
+
+                    int idx = preBlocks[x, y, z].idx;
+                    if (idx == 0)
+                        continue;
+                    
+                    if (preBlocks[x, y, z].type == EBlockType.Object)
+                    {
+                        GameObject block = GameObject.Instantiate(objPrefabs[idx]);
+                        objects.Add(block.GetComponent<InteractiveObject>());
+                        block.transform.position = new Vector3(x, y, z);
+                        block.SetActive(true);
+                        block.transform.parent = parentObjects.transform;
+                        blocks[x, y, z] = block;
+                    }
+                    else
+                    {
+                        GameObject block = GameObject.Instantiate(tilePrefabs[idx]);
+                        tiles.Add(block.transform);
+                        block.transform.position = new Vector3(x, y, z);
+                        block.SetActive(true);
+                        block.transform.parent = heights[y].transform;
+                        blocks[x, y, z] = block;
+                    }
+                }
+            }
+        }
+    }
+
+    public void GoTestPlay()
+    {
+        if (objects.Count == 0 || tiles.Count == 0)
+        {
+            return;
+        }
+
+        isSaved = true;
+        ShowPointer(false);
+        ShowBlanks(false);
+        GameDataManager.GetInstance.ReadMapData();
+
+        int level = GameManager.GetInstance.CustomLevel + 1;
+        SLevelData customLevelData = new SLevelData(level, "CustomLevel" + level, new SPosition(stageStartPoint), SetStartCards()); GameDataManager.GetInstance.AddCustomLevelData(level, customLevelData);
+        
+        SceneBehaviorManager.LoadScene(Scenes.LevelDesign, LoadSceneMode.Single);
+    }
 
     public int GetCount(EBlockType type)
     {
@@ -202,12 +319,14 @@ public class LevelEditor : MonoBehaviour
 
     private void MakeBlanks(int size)
     {
+        parentBlanks = new GameObject("Blanks");
         parentGrounds = new GameObject("Grounds");
         parentObjects = new GameObject("Objects");
         for (int y = 0; y < maxY[selectedSize]; y++)
         {
             GameObject newY = new GameObject("Blank " + y.ToString() + "F");
             GameObject blockY = new GameObject(y.ToString() + "F");
+            newY.transform.parent = parentBlanks.transform;
             blockY.transform.parent = parentGrounds.transform;
             blankHeights[y] = newY;
             heights[y] = blockY;
@@ -217,6 +336,7 @@ public class LevelEditor : MonoBehaviour
                 {
                     GameObject blank = GameObject.Instantiate(blankBlock, newY.transform);
                     blank.transform.position = new Vector3(x, y + 0.5f, z);
+                    blank.SetActive(true);
                 }
             }
         }
@@ -271,7 +391,24 @@ public class LevelEditor : MonoBehaviour
 
                 break;
             case (EditState.MakeStage):
-                SetBlockInTransform(new Vector3(curX, curY, curZ), EName.Null);
+                if (isCard)
+                {
+                    if (selectedStartCard == -1)
+                    {
+                        InteractiveObject io;
+                        blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out io);
+                        if (io != null)
+                            ClearName(io);
+                    }
+                    else
+                    {
+                        AddStartCard(selectedStartCard, null);
+                    }
+                }
+                else
+                {
+                    SetNullInTransform(new Vector3(curX, curY, curZ));
+                }
                 break;
             case (EditState.TestPlay):
                 // todo testPlay
@@ -299,7 +436,19 @@ public class LevelEditor : MonoBehaviour
     {
         int preLine = blockLine;
         blockLine += dir;
-        int maxLineNum = Mathf.RoundToInt((float)(blockBtns.Length) / (float)maxBlock) - 1;
+        int maxLineNum;
+        if (isCard)
+        {
+            maxLineNum = Mathf.FloorToInt((float)(cardBtns.Length) / (float)maxBlock) - 1;
+            if (Mathf.RoundToInt((float)(cardBtns.Length) % (float)maxBlock) > 0)
+                maxLineNum += 1;
+        }
+        else
+        {
+            maxLineNum = Mathf.FloorToInt((float)(blockBtns.Length) / (float)maxBlock) - 1;
+            if (Mathf.RoundToInt((float)(blockBtns.Length) % (float)maxBlock) > 0)
+                maxLineNum += 1;
+        }
 
         if (blockLine > maxLineNum)
         {
@@ -313,64 +462,79 @@ public class LevelEditor : MonoBehaviour
         ShowBlockLine(preLine, blockLine);
     }
 
-    public void CreateBlock()
+    public void OnClickEncyclopediaBtn()
     {
-        Vector3 pos = new Vector3(curX, curY, curZ);
-        EditorBlock block = blockBtns[blockNum];
-        if (isCard)
-        {
-            bool isName = block.type == EBlockType.NameCard;
-            InteractiveObject target = null;
-            blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out target);
-            if (target == null)
-            {
-                // todo 타일에는 부여 불가 알림
-                // todo 사운드나 X표시 출력 
-                return;
-            }
-            if (isName)
-            {
-                AddName(target, (EName)block.idx);
-            }
-            else
-            {
-                AddAdjective(target, (EAdjective)(block.idx - nameCardPrefabs.Count + 1));
-            }
-        }
-        else
-        {
-            bool isTile = block.type == EBlockType.Tile;
-            if (isTile)
-            {
-                SetBlockInTransform(pos, (ETile)block.idx);
-            }
-            else
-            {
-                SetBlockInTransform(pos, (EName)(block.idx - tilePrefabs.Count + 1));
-            }
-        }
+        GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
+        encyclopedia.SetActive(true);
     }
 
-    private void ResetMap()
+    public void ReturnLobby()
     {
-        Destroy(GameObject.Find("Objects"));
-        Destroy(GameObject.Find("Grounds"));
-        foreach (GameObject blankLine in blankHeights)
-        {
-            Destroy(blankLine);
-        }
+        SoundManager.GetInstance.Play("BtnPress");
+        GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        SceneManager.LoadScene("MainScene");
+    }
+
+    public void ShowInfos()
+    {
+
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     private void ShowBlockLine(int preLine, int curLine)
     {
         for (int i = (preLine * maxBlock); i < ((preLine + 1) * maxBlock); i++)
         {
-            blockBtns[i].gameObject.SetActive(false);
+            if (isCard)
+            {
+                if (cardBtns.Length > i)
+                    cardBtns[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                if (blockBtns.Length > i)
+                    blockBtns[i].gameObject.SetActive(false);
+            }
         }
 
         for (int i = (curLine * maxBlock); i < ((curLine + 1) * maxBlock); i++)
         {
-            blockBtns[i].gameObject.SetActive(true);
+            if (isCard)
+            {
+                if (cardBtns.Length > i)
+                    cardBtns[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                if (blockBtns.Length > i)
+                    blockBtns[i].gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void ShowBlockLine(int curLine)
+    {
+        for (int i = 0; i < blocksParent.childCount; i++)
+        {
+            blocksParent.GetChild(i).gameObject.SetActive(false);
+        }
+
+        for (int i = (curLine * maxBlock); i < ((curLine + 1) * maxBlock); i++)
+        {
+            if (isCard)
+            {
+                if (cardBtns.Length > i)
+                    cardBtns[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                if (blockBtns.Length > i)
+                    blockBtns[i].gameObject.SetActive(true);
+            }
         }
     }
 
@@ -388,6 +552,26 @@ public class LevelEditor : MonoBehaviour
             }
         }
         pointer.position = new Vector3(curX, curY + 0.5f, curZ);
+    }
+
+    public void ShowPointer(bool show)
+    {
+        pointer.gameObject.SetActive(show);
+    }
+
+    public void ShowBlanks(bool show)
+    {
+        if (show)
+        {
+            ViewCurY();
+        }
+        else
+        {
+            foreach (GameObject blank in blankHeights)
+            {
+                blank.SetActive(false);
+            }
+        }
     }
 
     #region GetPrefabs
@@ -522,12 +706,32 @@ public class LevelEditor : MonoBehaviour
         heights = new GameObject[maxY[selectedSize]];
         blankHeights = new GameObject[maxY[selectedSize]];
         blocks = new GameObject[maxX[selectedSize], maxY[selectedSize], maxZ[selectedSize]];
+        if (!isSaved) preBlocks = new Block[maxX[selectedSize], maxY[selectedSize], maxZ[selectedSize]];
 
         MakeBlanks(selectedSize);
         blankBlock.SetActive(false);
 
         selectSizePanel.gameObject.SetActive(false);
         ChangeEditState(EditState.MakeStage);
+    }
+
+    public void SetNullInTransform(Vector3 pos)
+    {
+        pos = Vector3Int.RoundToInt(pos);
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        int z = (int)pos.z;
+
+        if (blocks[x, y, z] != null)
+        {
+            Transform blockT = blocks[x, y, z].transform;
+            DeleteBlockInArray((blockT));
+            
+            Destroy(blocks[x, y, z]);
+            preBlocks[x, y, z] = new Block(EBlockType.Null, 0);
+        }
+
+        blockNum = (int)EName.Null;
     }
 
     public void SetBlockInTransform(Vector3 pos, EName block)
@@ -539,6 +743,9 @@ public class LevelEditor : MonoBehaviour
 
         if (blocks[x, y, z] != null)
         {
+            Transform blockT = blocks[x, y, z].transform;
+            DeleteBlockInArray((blockT));
+            
             Destroy(blocks[x, y, z]);
         }
 
@@ -546,14 +753,20 @@ public class LevelEditor : MonoBehaviour
         {
             Transform newBlock = GameObject.Instantiate(objPrefabs[(int)block]).transform;
             Destroy(newBlock.GetComponent<Rigidbody>());
-            Destroy(newBlock.GetComponent<BoxCollider>());
             newBlock.gameObject.SetActive(true);
             newBlock.position = new Vector3(x, y, z);
             newBlock.transform.parent = parentObjects.transform;
             blocks[x, y, z] = newBlock.gameObject;
+            objects.Add(newBlock.GetComponent<InteractiveObject>());
 
-            InteractiveObject blockIO = newBlock.GetComponent<InteractiveObject>();
-            AddName(blockIO, EName.Null);
+            preBlocks[x, y, z] = new Block(EBlockType.Object, (int)block);
+
+            //InteractiveObject blockIO = newBlock.GetComponent<InteractiveObject>();
+            //AddName(blockIO, EName.Null);
+        }
+        else
+        {
+            SetStartPoint(pos);
         }
 
         blockNum = (int)EName.Null;
@@ -568,6 +781,9 @@ public class LevelEditor : MonoBehaviour
 
         if (blocks[x, y, z] != null)
         {
+            Transform blockT = blocks[x, y, z].transform;
+            DeleteBlockInArray((blockT));
+            
             Destroy(blocks[x, y, z]);
         }
 
@@ -575,14 +791,97 @@ public class LevelEditor : MonoBehaviour
         {
             Transform newBlock = GameObject.Instantiate(tilePrefabs[(int)block]).transform;
             Destroy(newBlock.GetComponent<Rigidbody>());
-            Destroy(newBlock.GetComponent<BoxCollider>());
             newBlock.gameObject.SetActive(true);
             newBlock.position = new Vector3(x, y, z);
             newBlock.transform.parent = heights[curY].transform;
             blocks[x, y, z] = newBlock.gameObject;
+            tiles.Add(newBlock);
+
+            preBlocks[x, y, z] = new Block(EBlockType.Tile, (int)block);
+        }
+        else
+        {
+            SetStartPoint(pos);
         }
 
         blockNum = (int)ETile.Null;
+    }
+
+    private void DeleteBlockInArray(Transform blockT)
+    {
+        InteractiveObject io;
+        blockT.TryGetComponent<InteractiveObject>(out io);
+        if (tiles.Contains(blockT))
+        {
+            tiles.Remove(blockT);
+        }
+        else if (io != null && objects.Contains(io))
+        {
+            objects.Remove(io);
+        }
+    }
+
+    public void SetStartPoint(Vector3 pos)
+    {
+        Vector3Int posInt = Vector3Int.RoundToInt(pos);
+        Transform sPoint = GameObject.Instantiate(playerPrefab).transform;
+        sPoint.gameObject.SetActive(true);
+        sPoint.position = posInt;
+        stageStartPoint = posInt;
+        blocks[posInt.x, posInt.y, posInt.z] = sPoint.gameObject;
+    }
+
+    public void CreateBlock()
+    {
+        Vector3 pos = new Vector3(curX, curY, curZ);
+        EditorBlock block = isCard? cardBtns[blockNum] : blockBtns[blockNum];
+        if (isCard)
+        {
+            bool isName = block.type == EBlockType.NameCard;
+            InteractiveObject target = null;
+            if (blocks[curX, curY, curZ] != null)
+                blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out target);
+            if (target == null)
+            {
+                // todo 타일에는 부여 불가 알림
+                // todo 사운드나 X표시 출력 
+                return;
+            }
+            if (isName)
+            {
+                AddName(target, (EName)block.idx);
+            }
+            else if (blockNum != 0)
+            {
+                AddAdjective(target, (EAdjective)(block.idx - nameCardPrefabs.Count + 1));
+            }
+            else
+            {
+                AddName(target, (EName)0);
+            }
+        }
+        else
+        {
+            bool isTile = block.type == EBlockType.Tile;
+            if (isTile)
+            {
+                SetBlockInTransform(pos, (ETile)block.idx);
+            }
+            else
+            {
+                SetBlockInTransform(pos, (EName)(block.idx - tilePrefabs.Count + 1));
+            }
+        }
+    }
+
+    public void ClearMap()
+    {
+        if (parentBlanks != null) Destroy(parentBlanks);
+        if (parentGrounds != null) Destroy(parentGrounds);
+        if (parentObjects != null) Destroy(parentObjects);
+        Vector3Int playerPos = Vector3Int.RoundToInt(stageStartPoint);
+        if (blocks != null && blocks[playerPos.x, playerPos.y, playerPos.z] != null)
+            Destroy(blocks[playerPos.x, playerPos.y, playerPos.z]);
     }
 
     public void AddAdjective(InteractiveObject block, EAdjective adjective)
@@ -595,32 +894,73 @@ public class LevelEditor : MonoBehaviour
         block.AddName(name);
     }
 
+    public void ClearName(InteractiveObject block)
+    {
+        block.AddName(EName.Null);
+
+        while (true)
+        {
+            if (block.addAdjectiveTexts.Count == 0)
+            {
+                break;
+            }
+            
+            block.SubtractAdjective(block.addAdjectiveTexts.First());
+            block.addAdjectiveTexts.RemoveFirst();
+        }
+    }
+
     public void ChangeEditState(EditState state)
     {
         curState = state;
         UpdateValuesInNewState(state);
     }
 
-    public void AddStartCard(int idx, GameObject card)
+    public void AddStartCard(int idx, EditorBlock card)
     {
-        if (startCards.Count - 1 < idx)
+        setCards[idx] = card;
+        int nameCount = GetCount(EBlockType.NameCard);
+        //string name = (card.idx >= nameCount ? ((EAdjective)(card.idx - nameCount + 1)).ToString() : ((EName)card.idx).ToString());
+        Text textComponent = null;
+        if (card != null) card.transform.GetChild(0).GetChild(0).TryGetComponent<Text>(out textComponent);
+        string name = textComponent == null ? "???" : textComponent.text;
+        startCardTexts[idx].text = name;
+    }
+
+    public SCardView SetStartCards()
+    {
+        foreach (EditorBlock card in setCards)
         {
-            int count = startCards.Count;
-            for (int i = (count - 1); i < idx; i++)
+            int nameCount = GetCount(EBlockType.NameCard);
+            bool isName;
+            int idx = 0;
+            if (card == null)
             {
-                startCards.Add(null);
+                isName = true;
+                idx = 0;
             }
-            startCards.Add(card);
-        }
-        else
-        {
-            if (startCards[idx] != null)
+            else
             {
-                // todo ui에 기존 카드 제거 
+                isName = card.idx < nameCount;
+                idx = card.idx;
             }
-            startCards[idx] = card;
+
+            if (isName)
+            {
+                if (idx == (int)EName.Null)
+                {
+                    continue;
+                }
+                startCards.nameRead.Add((EName)idx);
+            }
+            else
+            {
+                int id = card.idx - nameCount + 1;
+                startCards.adjectiveRead.Add((EAdjective)id);
+            }
         }
-        // todo ui에 추가된 카드 표시 
+
+        return startCards;
     }
 
     public void AddCommand()
@@ -631,7 +971,9 @@ public class LevelEditor : MonoBehaviour
     public void SwapBlockORCard()
     {
         isCard = !isCard;
-
+        blockLine = 0;
+        selectedStartCard = -1;
+        ShowBlockLine(blockLine);
     }
     #endregion
 
@@ -640,6 +982,7 @@ public class LevelEditor : MonoBehaviour
     {
         if (sidePanel.activeSelf)
         {
+            selectedStartCard = -1;
             sidePanel.SetActive(false);
         }
         else
@@ -647,6 +990,9 @@ public class LevelEditor : MonoBehaviour
             sidePanel.SetActive(true);
             cardPanel.SetActive(false);
             heightPanel.SetActive(true);
+            warningResetPanel.SetActive(false);
+            warningPlayPanel.SetActive(false);
+            selectedStartCard = -1;
         }
     }
 
@@ -654,6 +1000,7 @@ public class LevelEditor : MonoBehaviour
     {
         if (sidePanel.activeSelf)
         {
+            selectedStartCard = -1;
             sidePanel.SetActive(false);
         }
         else
@@ -661,18 +1008,42 @@ public class LevelEditor : MonoBehaviour
             sidePanel.SetActive(true);
             cardPanel.SetActive(true);
             heightPanel.SetActive(false);
+            warningResetPanel.SetActive(false);
+            warningPlayPanel.SetActive(false);
+
+            if (!isCard)
+            {
+                SwapBlockORCard();
+                selectedStartCard = 0;
+            }
         }
     }
 
-    public void WarningPanelOnOff()
+    public void WarningResetPanelOnOff()
     {
-        if (!warningPanel.activeSelf)
+        if (warningResetPanel.activeSelf)
         {
-            warningPanel.SetActive(false);
+            warningResetPanel.SetActive(false);
         }
         else
         {
-            warningPanel.SetActive(true);
+            warningResetPanel.SetActive(true);
+            warningPlayPanel.SetActive(false);
+            selectedStartCard = -1;
+        }
+    }
+
+    public void WarningPlayPanelOnOff()
+    {
+        if (warningPlayPanel.activeSelf)
+        {
+            warningPlayPanel.SetActive(false);
+        }
+        else
+        {
+            warningPlayPanel.SetActive(true);
+            warningResetPanel.SetActive(false);
+            selectedStartCard = -1;
         }
     }
 
@@ -693,12 +1064,14 @@ public class LevelEditor : MonoBehaviour
                 selectSizePanel.gameObject.SetActive(true);
                 blocksPanel.SetActive(false);
                 blockNum = 0;
+                ClearMap();
                 break;
             case (EditState.MakeStage):
                 // play values init
                 curX = 0;
                 curY = 0;
                 curZ = 0;
+                stageStartPoint = new Vector3(0, 2, 0);
                 ViewCurY();
                 pointer.position = new Vector3(curX, curY + 0.5f, curZ);
                 blocksPanel.SetActive(true);
@@ -706,6 +1079,10 @@ public class LevelEditor : MonoBehaviour
                 int preLine = blockLine;
                 blockLine = 0;
                 ShowBlockLine(preLine, blockLine);
+                setCards = new List<EditorBlock>(4) { null, null, null, null };
+                selectedStartCard = -1;
+                objects = new List<InteractiveObject>();
+                tiles = new List<Transform>();
                 break;
             case (EditState.TestPlay):
                 // ??
@@ -718,6 +1095,29 @@ public class LevelEditor : MonoBehaviour
 
     void Update()
     {
-        handlerValue.text = curY.ToString() + "F";
+        handlerValue.text = (curY + 1).ToString() + "F";
+
+        if (isCard && blocks[curX, curY, curZ] != null)
+        {
+            InteractiveObject io;
+            blocks[curX, curY, curZ].TryGetComponent<InteractiveObject>(out io);
+
+            foreach (InteractiveObject ioObj in objects)
+            {
+                if (ioObj == null) continue;
+                if (ioObj != io)
+                    ioObj.PopUpNameOff();
+                else
+                    ioObj.PopUpNameOn();
+            }
+        }
+        else
+        {
+            foreach (InteractiveObject ioObj in objects)
+            {
+                if (ioObj != null)
+                    ioObj.PopUpNameOff();
+            }
+        }
     }
 }
