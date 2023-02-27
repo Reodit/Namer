@@ -73,6 +73,11 @@ public class GameManager : Singleton<GameManager>
             return;
         }
         DontDestroyOnLoad(this.gameObject);
+
+        GooglePlayConnect googlePlay = gameObject.AddComponent<GooglePlayConnect>();
+        googlePlay.GooglePlayLogin();
+        Debug.Log("userID : " + userId);
+        
         Init();
     }
 
@@ -134,9 +139,9 @@ public class GameManager : Singleton<GameManager>
         //}
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
-        if (!GameDataManager.GetInstance.UserDataDic.ContainsKey("111111"))
+        if (!GameDataManager.GetInstance.UserDataDic.ContainsKey(userId))
         {
-            GameDataManager.GetInstance.AddUserData("111111");
+            GameDataManager.GetInstance.AddUserData(userId);
         }
         
         GameDataManager.GetInstance.GetCardData();
