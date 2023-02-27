@@ -60,100 +60,12 @@ public class PlayerMovement : MonoBehaviour
     
     public void PlayInteraction()
     {
-        if (Input.GetKeyDown(GameManager.GetInstance.interactionKey) && 
-            GameManager.GetInstance.isPlayerCanInput && 
-            !GameManager.GetInstance.isPlayerDoAction &&
-            interactObj &&
-            interactObj.CompareTag("InteractObj"))
+        if (Input.GetKeyDown(GameManager.GetInstance.interactionKey))
         {
-            // TODO 하드 코딩 제거
-            // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
-            {
-                targetDir = DetectManager.GetInstance.objDir;
-                InteractionSequencer.GetInstance.playerActionTargetObject =
-                    interactObj.GetComponent<InteractiveObject>();
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
-                {
-                    climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
-                    var targetTransform = InteractionSequencer.GetInstance
-                        .playerActionTargetObject.transform;
-                    objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - (int)targetTransform.position.y);
-
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-            }
+            CheckInteraction();
         }
         #if UNITY_ANDROID
-        if (GameManager.GetInstance.isPlayerCanInput && 
-            !GameManager.GetInstance.isPlayerDoAction &&
-            interactObj &&
-            interactObj.CompareTag("InteractObj"))
-        {
-            // TODO 하드 코딩 제거
-            // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
-            {
-                targetDir = DetectManager.GetInstance.objDir;
-                InteractionSequencer.GetInstance.playerActionTargetObject =
-                    interactObj.GetComponent<InteractiveObject>();
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
-                {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
-                {
-                    climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
-                    var targetTransform = InteractionSequencer.GetInstance
-                        .playerActionTargetObject.transform;
-                    objscale = (int)targetTransform.localScale.y
-                               - ((int)transform.position.y - (int)targetTransform.position.y);
-
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
-                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
-                    return;
-                }
-            }
-        }
+        CheckInteraction();
         #endif
     }
 
@@ -170,20 +82,35 @@ public class PlayerMovement : MonoBehaviour
         {
             Init();
         }
+        
         // TODO 하드 코딩 제거
-        if (GameManager.GetInstance.isPlayerCanInput &&
-            !GameManager.GetInstance.isPlayerDoAction &&
-            interactObj &&
-            interactObj.CompareTag("InteractObj"))
+        if (UIManager.GetInstance.ingameCanvas)
         {
-            UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOn();
-            //Debug.Log("True");
-        }
+            if (GameManager.GetInstance.isPlayerCanInput &&
+                !GameManager.GetInstance.isPlayerDoAction &&
+                interactObj &&
+                interactObj.CompareTag("InteractObj") &&
+                interactObj.TryGetComponent<InteractiveObject>(out InteractiveObject io))
+            {
+                targetDir = DetectManager.GetInstance.objDir;
+                if (io.Adjectives[(int)EAdjective.Win] != null ||
+                    io.Adjectives[(int)EAdjective.Obtainable] != null ||
+                    io.Adjectives[(int)EAdjective.Climbable] != null ||
+                    io.Adjectives[(int)EAdjective.Movable] != null)
+                {
+                    UIManager.GetInstance.ingameCanvas.TryGetComponent<IngameCanvasController>(
+                        out IngameCanvasController ic);
+                    ic.InteractionBtnOn();
+                }
+            }
 
-        else
-        {
-            UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOff();
-            //Debug.Log("False");
+            else
+            {
+                if (UIManager.GetInstance.ingameCanvas.TryGetComponent<IngameCanvasController>(out IngameCanvasController ic))
+                {
+                    ic.InteractionBtnOff();
+                }
+            }
         }
     }
 
@@ -234,6 +161,56 @@ public class PlayerMovement : MonoBehaviour
                 {
                     rb.rotation = Quaternion.Lerp(rb.rotation, Quaternion.LookRotation(pInputVector),
                         Time.deltaTime * rotateSpeed);
+                }
+            }
+        }
+    }
+
+    private void CheckInteraction()
+    {
+        if (GameManager.GetInstance.isPlayerCanInput && 
+            !GameManager.GetInstance.isPlayerDoAction &&
+            interactObj &&
+            interactObj.CompareTag("InteractObj"))
+        {
+            // TODO 하드 코딩 제거
+            // :: Queuing 중 Delay주는 부분에서 버그 발생하여 잠시 하드 코딩으로 임시 처리합니다.
+            {
+                targetDir = DetectManager.GetInstance.objDir;
+                InteractionSequencer.GetInstance.playerActionTargetObject =
+                    interactObj.GetComponent<InteractiveObject>();
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Win] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Win].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
+
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Obtainable] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Obtainable].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
+
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Movable] != null)
+                {
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Movable].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
+                }
+
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Climbable] != null)
+                {
+                    climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
+                    var targetTransform = InteractionSequencer.GetInstance
+                        .playerActionTargetObject.transform;
+                    objscale = (int)targetTransform.localScale.y
+                               - ((int)transform.position.y - (int)targetTransform.position.y);
+
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Climbable].Execute(
+                        InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
+                    return;
                 }
             }
         }

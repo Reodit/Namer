@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum MainMenuState
 {
@@ -391,7 +392,7 @@ public class MainUIController : MonoBehaviour
         GameDataManager.GetInstance.ResetUserData(GameManager.GetInstance.userId);
         infoPopUp.transform.Find("Buttons").gameObject.SetActive(false);
         infoPopUpTxt.text = "게임 데이터가 \n초기화됐습니다.";
-        LoadingSceneController.LoadScene("MainScene");
+        SceneManager.LoadScene("MainScene");
     }
 
     #region Level&EditButtonPanel
