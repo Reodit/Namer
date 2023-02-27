@@ -1045,11 +1045,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1630722970, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000015896623
+      value: -0.000000015896621
       objectReference: {fileID: 0}
     - target: {fileID: 1630722970, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000006584596
+      value: 0.000000006584596
       objectReference: {fileID: 0}
     - target: {fileID: 1630722971, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
