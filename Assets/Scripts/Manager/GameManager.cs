@@ -140,7 +140,6 @@ public class GameManager : Singleton<GameManager>
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
         GameDataManager.GetInstance.AddUserData(userId);
-        
         GameDataManager.GetInstance.GetCardData();
         #endregion
 
