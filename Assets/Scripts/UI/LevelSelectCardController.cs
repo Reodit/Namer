@@ -12,6 +12,7 @@ public class LevelSelectCardController : MonoBehaviour
     [SerializeField] Transform cardHolderRight;
     [SerializeField] GameObject mainMenuCard;
     [SerializeField] GameObject mapEditCard;
+    [SerializeField] GameObject comingSoonCard;
     public List<MainMenuCardController> mainCards;
     List<GameObject> startCards;
     GameObject StageCardPrefab;
@@ -50,6 +51,9 @@ public class LevelSelectCardController : MonoBehaviour
                 cardPrefab.GetComponent<StageNameController>().StageNumSetUp(inputNum);
                 startCards.Add(cardPrefab);
             }
+            GameObject comingSoonCardPrefab = Instantiate(comingSoonCard);
+            comingSoonCardPrefab.name = "ComingSoonCard";
+            startCards.Add(comingSoonCardPrefab);
         }
         else
         {
@@ -75,6 +79,7 @@ public class LevelSelectCardController : MonoBehaviour
 
     private void SetUpStageCards()
     {
+
         for (int i = 5; i < startCards.Count; i++)
         {
             if( i % 5 == 0)
