@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OptionPanelController : MonoBehaviour
@@ -124,6 +125,14 @@ public class OptionPanelController : MonoBehaviour
     public void OptionPanelClose()
     {
         SoundManager.GetInstance.Play("BtnPress");
-        this.gameObject.SetActive(false);
+        GameDataManager.GetInstance.UpdateUserData(false);
+        if(SceneManager.GetActiveScene().name == "MainScene")
+        {
+            return;
+        }
+        else
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 }
