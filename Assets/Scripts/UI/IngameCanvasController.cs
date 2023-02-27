@@ -50,7 +50,12 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     bool isArrowOff;
     public void EncyclopediaOpen()
     {
-        if(tutorialArrow.activeInHierarchy)
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory ||
+            CardManager.GetInstance.isCasting)
+        {
+            EncyclopediaClose();
+        }
+        if (tutorialArrow.activeInHierarchy)
         {
             tutorialArrow.SetActive(false);
             isArrowOff = true;
@@ -166,6 +171,9 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void PediaButton()
     {
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory ||
+        CardManager.GetInstance.isCasting)
+        return;
         GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         SoundManager.GetInstance.Play("BtnPress");
         CardManager.GetInstance.CardsDown();
