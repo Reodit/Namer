@@ -400,7 +400,7 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         int level = GameManager.GetInstance.Level;
         string userID = GameManager.GetInstance.userId;
-
+        
         SCardView mainCards = UserDataDic[userID].cardView;
         SCardView ingameCards = CardEncyclopedia[level];
 
@@ -538,7 +538,9 @@ public class GameDataManager : Singleton<GameDataManager>
                 Debug.LogError("입력할 수 있는 꾸밈 성질 카드 번호를 벗어났어요!");
             }
 
-            GameObject cardPrefab = Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as GameObject;
+            GameObject cardPrefab =
+                Resources.Load("Prefabs/Cards/02. AdjustCard/" + adjectives[adjectiveReads[i]].cardPrefabName) as
+                    GameObject;
             if (adjectives[adjectiveReads[i]].adjective.GetAdjectiveType() == EAdjectiveType.Interaction)
             {
                 InteractionAdjCards.Add(cardPrefab);
