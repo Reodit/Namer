@@ -284,7 +284,7 @@
                     },
                     "requiredName": "",
                     "key": -1,
-                    "time": 0.10000000149011612,
+                    "time": 0.2,
                     "isDialog": true,
                     "message": "[System]조이스틱을 이용해서 화살표까지 가세요. ",
                     "funcName": "",
@@ -354,7 +354,7 @@
                     "funcName": "",
                     "isFocus": true,
                     "canSkip": true,
-                    "showArrow": false
+                    "showArrow": true
                 },
                 {
                     "type": 2,
@@ -684,10 +684,10 @@
             },
             "cardView": {
                 "nameRead": [
-                    
+
                 ],
                 "adjectiveRead": [
-                    
+
                 ]
             }
         },
@@ -849,7 +849,7 @@
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
-                    "message": "[System]카드를 클릭하면, 모든 물체에 대한 이름을 볼 수 있습니다. ",
+                    "message": "[System]카드를 터치하면, 모든 물체에 대한 이름을 볼 수 있습니다. ",
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,
@@ -881,14 +881,14 @@
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
-                    "message": "[System]카드를 클릭 후 물체를 클릭하면, 꾸밈이나 이름을 붙일 수 있습니다. ",
+                    "message": "[System]카드를 터치 후 물체를 터치하면, 꾸밈이나 이름을 붙일 수 있습니다. ",
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,
                     "showArrow": false
                 },
                 {
-                    "type": 2,
+                    "type": 1,
                     "destinationPos": {
                         "x": 0.0,
                         "y": 1.0,
@@ -897,7 +897,7 @@
                     "targetPos": {
                         "x": 3.0,
                         "y": 1.0,
-                        "z": 2.0
+                        "z": 1.0
                     },
                     "prePos": {
                         "x": 3.0,
@@ -909,7 +909,7 @@
                         "y": 1.0,
                         "z": 2.0
                     },
-                    "requiredName": "",
+                    "requiredName": "타는",
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
@@ -917,7 +917,7 @@
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,
-                    "showArrow": false
+                    "showArrow": true
                 },
                 {
                     "type": 5,
@@ -1013,7 +1013,7 @@
                     "funcName": "",
                     "isFocus": true,
                     "canSkip": true,
-                    "showArrow": false
+                    "showArrow": true
                 },
                 {
                     "type": 2,
@@ -1247,7 +1247,7 @@
             },
             "cardView": {
                 "nameRead": [
-                    
+
                 ],
                 "adjectiveRead": [
                     4
@@ -2663,8 +2663,8 @@
                 ],
                 "adjectiveRead": [
                     9,
-                    12
-                    ,13
+                    12,
+                    13
                 ]
             }
         },
@@ -2679,7 +2679,7 @@
             },
             "cardView": {
                 "nameRead": [
-                    
+
                 ],
                 "adjectiveRead": [
                     7,

@@ -77,6 +77,8 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] Text dialogText;
     [SerializeField] GameObject stageClearPanel;
     [SerializeField] Image arrow;
+    [SerializeField] GameObject questionMark;
+    [SerializeField] GameObject moveLight;
     [SerializeField] GameObject skipBtn;
     [SerializeField] Camera uiCam;
     [SerializeField] RectTransform canvasRect;
@@ -415,12 +417,11 @@ public class ScenarioController : MonoBehaviour
         // todo 시나리오가 진행이 안된 상태로 장미에게 말을 걸어도 깰 수 있도록 하기 
         else if (GameManager.GetInstance.CurrentState == GameStates.Victory && preVictory != true)
         {
-            if (scenarioCount > goalScenarioCount)
+            if (scenarioCount >= goalScenarioCount)
             {
-                scenarioCount = goalScenarioCount;
+                scenarioCount = goalScenarioCount - 1;
                 // 승리 ui 실행 
-                StartCoroutine(OpenClearPanel());
-                scenarioCount = -1;
+                //StartCoroutine(OpenClearPanel());
             }
             preVictory = true;
         }
@@ -435,9 +436,10 @@ public class ScenarioController : MonoBehaviour
                 Vector3 playerPos = new Vector3(Mathf.Round(player.position.x), Mathf.Round(player.position.y), Mathf.Round(player.position.z));
                 Vector3 requireScenarioPos = new Vector3(curScenario.destinationPos.x, curScenario.destinationPos.y, curScenario.destinationPos.z);
                 if (curScenario.showArrow)
-                    SetArrowPos(requireScenarioPos + (Vector3.up * 0.5f));
+                    SetPointerOnGameObject(moveLight, requireScenarioPos + (Vector3.up * 0.5f));
                 if (playerPos == requireScenarioPos)
                 {
+                    effectOff(moveLight);
                     StartScenario();
                 }
                 break;
@@ -446,8 +448,17 @@ public class ScenarioController : MonoBehaviour
                 if (tarObj == null) return;
                 string objName = tarObj.GetCurrentName();
                 if (objName == null) return;
+                SetPointerOnGameObject(questionMark, tarObj.transform.position + (Vector3.up * 0.5f));
+                foreach (CardController card in CardManager.GetInstance.myCards)
+                {
+                    if (card.UIText.text.Contains(curScenario.requiredName))
+                    {
+                        SetArrowPos(card.gameObject.transform.position);
+                    }
+                }
                 if (objName.Contains(curScenario.requiredName))
                 {
+                    effectOff(questionMark);
                     StartScenario();
                 }
                 break;
@@ -458,8 +469,13 @@ public class ScenarioController : MonoBehaviour
                 }
                 break;
             case (ERequireType.Victory):
+                if (curScenario.showArrow)
+                {
+                    SetArrowPos(MButtons[(int)EKeyType.Space].GetComponent<RectTransform>(), true);
+                }
                 if (GameManager.GetInstance.CurrentState == GameStates.Victory)
                 {
+                    ClearKeyPressed();
                     StartScenario();
                 }
                 break;
@@ -470,8 +486,8 @@ public class ScenarioController : MonoBehaviour
                 SetArrowPos(MButtons[idx].GetComponent<RectTransform>());
                 if (GetButton(curScenario.key))
                 {
-                    StartScenario();
                     ClearKeyPressed();
+                    StartScenario();
                 }
 #else
                 if (GetKeyCode(curScenario.key))
@@ -524,12 +540,20 @@ public class ScenarioController : MonoBehaviour
         stageClearPanel.SetActive(true);
     }
 
-    private void SetArrowPos(RectTransform targetUI)
+    private void SetArrowPos(RectTransform targetUI, bool isVictory = false)
     {
         arrow.gameObject.SetActive(true);
         arrow.rectTransform.position = targetUI.position;
-
         RectTransform childRect = arrow.transform.GetChild(0).GetComponent<RectTransform>();
+
+        if (isVictory)
+        {
+            childRect.localRotation = Quaternion.Euler(0, 0, -15);
+            childRect.anchorMin = new Vector2(0f, 2f);
+            childRect.anchorMax = new Vector2(0f, 2f);
+            return;
+        }
+
         switch (curScenario.key)
         {
             case (EKeyType.Q):
@@ -575,6 +599,17 @@ public class ScenarioController : MonoBehaviour
         ((ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)));
 
         arrow.rectTransform.anchoredPosition = WorldObject_ScreenPosition;
+    }
+
+    private void SetPointerOnGameObject(GameObject effect, Vector3 pos)
+    {
+        effect.SetActive(true);
+        effect.transform.position = pos;
+    }
+
+    private void effectOff(GameObject effect)
+    {
+        effect.SetActive(false);
     }
 
     private bool GetKeyCode(EKeyType Ekey)

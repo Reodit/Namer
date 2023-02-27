@@ -17,7 +17,7 @@ public class CardController : MonoBehaviour
     [SerializeField] GameObject frontCover;
     [SerializeField] BoxCollider bc;
     [SerializeField] GameObject highlight;
-    [SerializeField] private Text UIText;
+    [SerializeField] public Text UIText;
     [SerializeField] private Text NameAdjUIText;
     [SerializeField] private Text priorityNum;
     GameObject Encyclopedia;
