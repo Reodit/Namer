@@ -359,8 +359,6 @@ public class GameDataManager : Singleton<GameDataManager>
         int level = GameManager.GetInstance.Level;
         string userID = GameManager.GetInstance.userId;
 
-        int count = 0;
-
         SCardView mainCards = UserDataDic[userID].cardView;
         SCardView ingameCards = CardEncyclopedia[level];
 
