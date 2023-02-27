@@ -12,6 +12,7 @@ public class LevelTestPlay : MonoBehaviour
     
     private void Awake()
     {
+        Debug.Log("Play");
         currentLevel = GameManager.GetInstance.CustomLevel;
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditorTestPlay);
     }
