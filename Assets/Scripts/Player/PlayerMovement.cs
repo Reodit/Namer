@@ -119,28 +119,28 @@ public class PlayerMovement : MonoBehaviour
                 targetDir = DetectManager.GetInstance.objDir;
                 InteractionSequencer.GetInstance.playerActionTargetObject =
                     interactObj.GetComponent<InteractiveObject>();
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1] != null)
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Win] != null)
                 {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[1].Execute(
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Win].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
                     return;
                 }
 
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2] != null)
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Obtainable] != null)
                 {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[2].Execute(
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Obtainable].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
                     return;
                 }
 
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6] != null)
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Movable] != null)
                 {
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[6].Execute(
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Movable].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
                     return;
                 }
 
-                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7] != null)
+                if (InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Climbable] != null)
                 {
                     climbRb = InteractionSequencer.GetInstance.playerActionTargetObject.GetComponent<Rigidbody>();
                     var targetTransform = InteractionSequencer.GetInstance
@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
                     objscale = (int)targetTransform.localScale.y
                                - ((int)transform.position.y - (int)targetTransform.position.y);
 
-                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[7].Execute(
+                    InteractionSequencer.GetInstance.playerActionTargetObject.Adjectives[(int)EAdjective.Climbable].Execute(
                         InteractionSequencer.GetInstance.playerActionTargetObject, this.gameObject);
                     return;
                 }
@@ -171,19 +171,21 @@ public class PlayerMovement : MonoBehaviour
             Init();
         }
         // TODO 하드 코딩 제거
-        if (GameManager.GetInstance.isPlayerCanInput &&
+        if (UIManager.GetInstance.ingameCanvas &&
+            GameManager.GetInstance.isPlayerCanInput &&
             !GameManager.GetInstance.isPlayerDoAction &&
             interactObj &&
             interactObj.CompareTag("InteractObj"))
         {
             UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOn();
-            //Debug.Log("True");
         }
 
         else
         {
-            UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOff();
-            //Debug.Log("False");
+            if (UIManager.GetInstance.ingameCanvas.TryGetComponent<IngameCanvasController>(out IngameCanvasController ic))
+            {
+                ic.InteractionBtnOff();
+            }
         }
     }
 

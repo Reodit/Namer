@@ -24,7 +24,7 @@ public class CollisionEffect : MonoBehaviour
         {
             if (hit.transform.TryGetComponent<InteractiveObject>(out io))
             {
-                if (io.Adjectives[12] != null)
+                if (io.Adjectives[(int)EAdjective.Flow] != null)
                 {
                     pe.currentEffectIndex = EffectIndex.WaterFootprint;
                 }
@@ -74,7 +74,7 @@ public class CollisionEffect : MonoBehaviour
 
         if (other.TryGetComponent<InteractiveObject>(out io))
         {
-            if (io.Adjectives[12] != null)
+            if (io.Adjectives[(int)EAdjective.Flow] != null)
             {
                 return;
             }
