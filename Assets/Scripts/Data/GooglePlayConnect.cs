@@ -24,18 +24,26 @@ public class GooglePlayConnect : MonoBehaviour
 
     public void GetGooglePlayUserID()
     {
-        Social.localUser.Authenticate((bool success) =>
+        if (!Social.localUser.authenticated)
         {
-            if (success)
+            Social.localUser.Authenticate((bool success) =>
             {
-                userID = Social.localUser.id;
-                SceneManager.LoadScene("MainScene");
-            }
-            else
-            {
-                Application.Quit();
-            }
-        });
+                if (success)
+                {
+                    userID = Social.localUser.id;
+                    SceneManager.LoadScene("MainScene");
+                }
+                else
+                {
+#if UNITY_EDITOR
+                    userID = "111111";
+                    SceneManager.LoadScene("MainScene");
+#elif UNITY_ANDROID
+                    Application.Quit();
+#endif
+                }
+            });
+        }
     }
 
     public void GooglePlayLogout()
