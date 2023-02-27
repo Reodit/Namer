@@ -2,10 +2,11 @@ using UnityEngine;
 using GooglePlayGames;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using GooglePlayGames.BasicApi;
 
 public class GooglePlayConnect : MonoBehaviour
 {
-    [SerializeField] public string userID;
+    public string userID;
 
     private void Awake()
     {
@@ -15,6 +16,7 @@ public class GooglePlayConnect : MonoBehaviour
 
     public void GooglePlayLogin()
     {
+        PlayGamesPlatform.InitializeInstance(new PlayGamesClientConfiguration.Builder().Build());
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
         GetGooglePlayUserID();
@@ -22,30 +24,26 @@ public class GooglePlayConnect : MonoBehaviour
 
     public void GetGooglePlayUserID()
     {
-        Social.localUser.Authenticate((bool success) =>
+        if (!Social.localUser.authenticated)
         {
-            if (success)
+            Social.localUser.Authenticate((bool success) =>
             {
-                userID = Social.localUser.id;
-                
-                StartCoroutine(GetID());
-            }
-            else
-            {
-                userID = "111111";
-                StartCoroutine(GetID());
-                // Application.Quit();
-            }
-        });
-    }
-
-    private IEnumerator GetID()
-    {
-        while (userID == null)
-        {
-            yield return new WaitForEndOfFrame();
+                if (success)
+                {
+                    userID = Social.localUser.id;
+                    SceneManager.LoadScene("MainScene");
+                }
+                else
+                {
+#if UNITY_EDITOR
+                    userID = "111111";
+                    SceneManager.LoadScene("MainScene");
+#elif UNITY_ANDROID
+                    Application.Quit();
+#endif
+                }
+            });
         }
-        SceneManager.LoadScene("MainScene");
     }
 
     public void GooglePlayLogout()
