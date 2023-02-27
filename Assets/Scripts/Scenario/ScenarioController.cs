@@ -520,6 +520,7 @@ public class ScenarioController : MonoBehaviour
     IEnumerator OpenClearPanel()
     {
         yield return new WaitForSeconds(delayWinUI);
+        CardManager.GetInstance.CardsDown();
         stageClearPanel.SetActive(true);
     }
 
