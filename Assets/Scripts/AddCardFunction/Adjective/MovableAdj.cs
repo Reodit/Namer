@@ -47,13 +47,15 @@ public class MovableAdj : IAdjective
         int maxX = detectManager.GetMaxX;
         int maxZ = detectManager.GetMaxZ;
         var neihbors =detectManager.GetAdjacentsDictionary(thisObject.gameObject,thisObject.transform.lossyScale);
-
+        // down tile and object check code need to extract as method later 
+        
+        
         var prevLocatio = thisObject.gameObject.transform.position;
             Vector3 direction = (thisObject.transform.position - player.transform.position);
         if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z) && direction.x > 0)
         {
             // if (check.GetTransformsAtDirOrNull(thisObject.gameObject, Dir.right) !=null ) return;
-            if (neihbors.ContainsKey(Dir.right) || thisObject.transform.position.x >= maxX)
+            if (neihbors.ContainsKey(Dir.right) || thisObject.transform.position.x >= maxX ||!(CheckAnyBlockDown(thisObject.gameObject,Dir.right)))
             {
                 return;
             }
@@ -69,7 +71,7 @@ public class MovableAdj : IAdjective
         else if (Mathf.Abs(direction.x) > Mathf.Abs(direction.z) && direction.x < 0)
         {
             // if (check.GetTransformsAtDirOrNull(thisObject.gameObject, Dir.left) != null) return;
-            if (neihbors.ContainsKey(Dir.left) || thisObject.transform.position.x <= 0)
+            if (neihbors.ContainsKey(Dir.left) || thisObject.transform.position.x <= 0 || !CheckAnyBlockDown(thisObject.gameObject,Dir.left))
             {
                 return;
             }
@@ -85,7 +87,7 @@ public class MovableAdj : IAdjective
         else if (Mathf.Abs(direction.x) < Mathf.Abs(direction.z) && direction.z > 0)
         {
             // if (check.GetTransformsAtDirOrNull(thisObject.gameObject, Dir.forward) != null) return;
-            if (neihbors.ContainsKey(Dir.forward) || thisObject.transform.position.z >= maxZ)
+            if (neihbors.ContainsKey(Dir.forward) || thisObject.transform.position.z >= maxZ|| !CheckAnyBlockDown(thisObject.gameObject,Dir.forward))
             {
                 return;
             }
@@ -100,7 +102,7 @@ public class MovableAdj : IAdjective
         else if (Mathf.Abs(direction.x) < Mathf.Abs(direction.z) && direction.z < 0)
         {
             // if (check.GetTransformsAtDirOrNull(thisObject.gameObject, Dir.back) != null) return;
-            if (neihbors.ContainsKey(Dir.back) || thisObject.transform.position.z <= 0)
+            if (neihbors.ContainsKey(Dir.back) || thisObject.transform.position.z <= 0|| !CheckAnyBlockDown(thisObject.gameObject,Dir.back))
             {
                 return;
             }
@@ -113,6 +115,46 @@ public class MovableAdj : IAdjective
 
             return;
         }
+    }
+
+    bool CheckAnyBlockDown(GameObject targetObj, Dir direction)
+    {
+        var tilesData = DetectManager.GetInstance.GetTilesData();
+        var objectData = DetectManager.GetInstance.GetObjectsData();
+        var underObject = DetectManager.GetInstance.GetAdjacentObjectWithDir(targetObj, Dir.down);
+        int maxY = Mathf.RoundToInt(underObject.transform.position.y);
+        int xAxis = Mathf.RoundToInt(underObject.transform.position.x);
+        int zAxis = Mathf.RoundToInt(underObject.transform.position.z);
+        switch (direction)
+        {
+            case Dir.back: zAxis -= 1;
+                break;
+            case Dir.forward: zAxis += 1;
+                break;
+            case Dir.left: xAxis -= 1;
+                break;
+            case Dir.right: xAxis += 1;
+                break;
+        }
+        GameObject underGameObject;
+        for (int i = 0; i <= maxY; i++)
+        {
+             underGameObject = objectData[xAxis, i, zAxis];
+            if (underGameObject == null)
+            {
+                 underGameObject=tilesData[xAxis, i, zAxis];
+            }
+            Debug.Log(underGameObject);
+            Debug.Log($"{xAxis} {i} {zAxis}");
+            if (underGameObject)
+            {
+                Debug.Log(underGameObject,underGameObject.transform);
+            }
+
+            if (underGameObject) return true;
+        }
+
+        return false;
     }
 
 
