@@ -144,13 +144,8 @@ public class MovableAdj : IAdjective
             {
                  underGameObject=tilesData[xAxis, i, zAxis];
             }
-            Debug.Log(underGameObject);
-            Debug.Log($"{xAxis} {i} {zAxis}");
-            if (underGameObject)
-            {
-                Debug.Log(underGameObject,underGameObject.transform);
-            }
-
+            // Debug.Log(underGameObject);
+            // Debug.Log($"{xAxis} {i} {zAxis}");
             if (underGameObject) return true;
         }
 
