@@ -171,20 +171,22 @@ public class PlayerMovement : MonoBehaviour
             Init();
         }
         // TODO 하드 코딩 제거
-        if (UIManager.GetInstance.ingameCanvas &&
-            GameManager.GetInstance.isPlayerCanInput &&
-            !GameManager.GetInstance.isPlayerDoAction &&
-            interactObj &&
-            interactObj.CompareTag("InteractObj"))
+        if (UIManager.GetInstance.ingameCanvas)
         {
-            UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOn();
-        }
-
-        else
-        {
-            if (UIManager.GetInstance.ingameCanvas.TryGetComponent<IngameCanvasController>(out IngameCanvasController ic))
+            if (GameManager.GetInstance.isPlayerCanInput &&
+                !GameManager.GetInstance.isPlayerDoAction &&
+                interactObj &&
+                interactObj.CompareTag("InteractObj"))
             {
-                ic.InteractionBtnOff();
+                UIManager.GetInstance.ingameCanvas.GetComponent<IngameCanvasController>().InteractionBtnOn();
+            }
+
+            else
+            {
+                if (UIManager.GetInstance.ingameCanvas.TryGetComponent<IngameCanvasController>(out IngameCanvasController ic))
+                {
+                    ic.InteractionBtnOff();
+                }
             }
         }
     }
