@@ -25,8 +25,8 @@ public class GooglePlayConnect : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Login Failed");
-                    
+                    GameManager.GetInstance.userId = "111111";
+                    Debug.Log("Failed Login");
                 }
             });
         }
