@@ -43,7 +43,7 @@ public class MapCreator : MonoBehaviour
 
             if (line.Contains("Layer"))
             {
-                y = line[line.Length - 1] - '0';
+                y = int.Parse(line.Replace("Layer", ""));
                 z = 0;
             }
             else
@@ -75,7 +75,7 @@ public class MapCreator : MonoBehaviour
             {
                 for (int x = 0; x < mapX; x++)
                 {
-                    if (tileMap[x, y, z] == "-1")
+                    if (tileMap[x, y, z] == "-1" || tileMap[x, y, z] == null)
                     {
                         continue;
                     }
@@ -105,7 +105,7 @@ public class MapCreator : MonoBehaviour
             {
                 for (int x = 0; x < mapX; x++)
                 {
-                    if (objectMap[x, y, z] == "-1")
+                    if (objectMap[x, y, z] == "-1" || objectMap[x, y, z] == null)
                     {
                         continue;
                     }
