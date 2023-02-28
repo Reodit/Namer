@@ -244,6 +244,8 @@ public class CameraController : MonoBehaviour
                     return true;
                 }
             }
+
+            Debug.Log("Checking Touch");
         }
 
         return false;
