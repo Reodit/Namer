@@ -6,18 +6,12 @@
             "scenario": [],
             "playerPosition": {
                 "x": 0.0,
-                "y": 1.0,
-                "z": 1.0
+                "y": 2.0,
+                "z": 0.0
             },
             "cardView": {
-                "nameRead": [
-                    12,
-                    7,
-                    1
-                ],
-                "adjectiveRead": [
-                    8
-                ]
+                "nameRead": [],
+                "adjectiveRead": []
             }
         }
     ]

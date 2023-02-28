@@ -71,13 +71,26 @@ public class FlameAdj : IAdjective
         if(otherObject.Adjectives[extinguishIdx] == null) yield break;
         if (sprayObj == null) yield break;
         SoundManager.GetInstance.Play(adjectiveName,sprayObj.GetComponent<ParticleSystem>().main.duration);
-        var duraion = (double)SoundManager.GetInstance.sfxSound.clip.samples /
+        var duration = (double)SoundManager.GetInstance.sfxSound.clip.samples /
                       SoundManager.GetInstance.sfxSound.clip.frequency;
-        var mainModule =sprayObj.GetComponent<ParticleSystem>().main;
-        mainModule.duration = (float)duraion;
+        var mainModule = sprayObj.GetComponent<ParticleSystem>().main;
+        if(!sprayObj.GetComponent<ParticleSystem>().isPlaying)
+            mainModule.duration = (float)duration;
+
         sprayObj.GetComponent<ParticleSystem>().Play();
+        if (thisObject.name=="BonfireObj(Clone)")
+        {
+            thisObject.GetComponentInChildren<ParticleSystem>().Stop();
+        }
+        
         // SoundManager.GetInstance.SetEndDSPTime(sprayObj.GetComponent<ParticleSystem>().main.duration);
-        yield return new WaitUntil(() => sprayObj == null || !sprayObj.GetComponent<ParticleSystem>().isPlaying);
+        // yield return new WaitUntil(() => sprayObj == null || !sprayObj.GetComponent<ParticleSystem>().isPlaying);
+        float startTime = Time.time;
+        while (Time.time < startTime + duration)
+        {
+            yield return null;
+        }
+        
         EradicateFlame(thisObject);
     }
 

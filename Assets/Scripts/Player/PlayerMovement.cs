@@ -19,7 +19,6 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody climbRb;
 
     [SerializeField] [Range(0.1f, 5f)] private float rootmotionSpeed;
-    [SerializeField] [Range(0.5f, 5f)] private float interactionDelay;
 
     private void Start()
     {
@@ -47,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
         #region Init Variable
         GameManager.GetInstance.localPlayerMovement = this;
         rootmotionSpeed = 1f;
-        interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
         #endregion
@@ -310,7 +308,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(interactionDelay);
+        yield return new WaitForSeconds(0.2f);
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         playerEntity.pAnimator.SetFloat("scalar", 0);
@@ -396,7 +394,7 @@ public class PlayerMovement : MonoBehaviour
 
                 yield return null;
             }
-            yield return new WaitForSeconds(interactionDelay);
+            yield return new WaitForSeconds(0.2f);
         }
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
@@ -410,9 +408,8 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, angle + 180,0f);
         
         playerEntity.pAnimator.SetFloat("scalar", 0);
-        yield return new WaitForSeconds(interactionDelay);
+        yield return new WaitForSeconds(0.1f);
         
-        yield return null;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
     #endregion
