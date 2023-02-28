@@ -456,7 +456,8 @@ public class InteractiveObject : MonoBehaviour
         if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "PlanetObj") return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause
             || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia) return;
-        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode
+            || CardManager.GetInstance.isCasting) return;
 
         //카드를 선택한 상황에서 오브젝트를 터치한 경우 
         else if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null

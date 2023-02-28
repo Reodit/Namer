@@ -222,42 +222,10 @@
                     "key": -1,
                     "time": 0.0,
                     "isDialog": true,
-                    "message": "장미:흠.. 설명하자면 긴데.. ",
-                    "funcName": "",
-                    "isFocus": true,
-                    "canSkip": true,
-                    "showArrow": false
-                },
-                {
-                    "type": 2,
-                    "destinationPos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetPos": {
-                        "x": 2.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "prePos": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "nextPos": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "requiredName": "",
-                    "key": -1,
-                    "time": 0.0,
-                    "isDialog": true,
                     "message": "장미:얘기하기에 너무 머니까 일단 가까이 와줄래? ",
-                    "funcName": "",
-                    "isFocus": true,
-                    "canSkip": true,
+                    "funcName": "PopUpTutorial&0",
+                    "isFocus": false,
+                    "canSkip": false,
                     "showArrow": false
                 },
                 {
@@ -319,7 +287,7 @@
                     "time": 0.0,
                     "isDialog": true,
                     "message": "[System]인터렉션 버튼을 눌러서 장미와 대화하세요. ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&2 3",
                     "isFocus": false,
                     "canSkip": false,
                     "showArrow": true
@@ -639,7 +607,7 @@
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:우선, 떠나기 전에 이 별부터 이름을 지어주겠니? ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&6",
                     "isFocus": true,
                     "canSkip": true,
                     "showArrow": false
@@ -818,7 +786,7 @@
                     "time": 0.20000000298023225,
                     "isDialog": true,
                     "message": "[System]카드 키를 통해 이름, 꾸밈 카드를 숨기거나 볼 수 있습니다. ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&1",
                     "isFocus": false,
                     "canSkip": false,
                     "showArrow": false
@@ -1381,7 +1349,7 @@
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:도감에서 설명을 잘 읽고 카드를 잘 사용해서 바위를 치워봐. ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&4 5",
                     "isFocus": true,
                     "canSkip": true,
                     "showArrow": false

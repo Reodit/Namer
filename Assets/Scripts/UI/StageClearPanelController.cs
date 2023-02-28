@@ -157,8 +157,8 @@ public class StageClearPanelController : MonoBehaviour
     public void StageUIOKBtn()
     {
         GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
-        GameDataManager.GetInstance.UpdateUserData(true);
-        this.gameObject.SetActive(false);
+        GameManager.GetInstance.LevelClear();
+            this.gameObject.SetActive(false);
         SceneManager.LoadScene("MainScene");
     }
 

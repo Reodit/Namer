@@ -79,7 +79,7 @@ public class GameManager : Singleton<GameManager>
         
         GooglePlayConnect gc = GameObject.Find("GooglePlay").GetComponent<GooglePlayConnect>();
         userId = gc.userID;
-        Debug.Log(userId);
+        // Debug.Log(userId);
         Destroy(gc);
 
         Init();
@@ -145,13 +145,13 @@ public class GameManager : Singleton<GameManager>
         GameDataManager.GetInstance.GetUserAndLevelData();
         GameDataManager.GetInstance.AddUserData(userId);
         GameDataManager.GetInstance.GetCardData();
-        
+
         customLevel = GameDataManager.GetInstance.CustomLevelDataDic.Count;
         if (customLevel > 0)
         {
             customLevel = GameDataManager.GetInstance.CustomLevelDataDic.Keys.Max();
         }
-
+        
         #endregion
 
         SetTimeScale(1);
@@ -277,7 +277,6 @@ public class GameManager : Singleton<GameManager>
         if (CurrentState == newState)
         {
             UpdateGameState();
-            Debug.Log("바꾸려는 State가 이전의 State와 같습니다. 의도하신 상황이 맞나요?");
             return;
         }
         
@@ -299,14 +298,12 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleLost()
     {
-        Debug.Log("You Lost");
         //menu for reset
         throw new NotImplementedException();
     }
 
     private void HandleVictory()
     {
-        Debug.Log("You win");
         // show viectory ui
         // menu for next lever or quit
     }
@@ -326,7 +323,8 @@ public class GameManager : Singleton<GameManager>
     void HandleLobby()
     {
         // menu 
-        // start game 
+        // start game
+        LevelEditor.isSaved = false;
     }
     
     public void Reset()
@@ -482,8 +480,7 @@ public class GameManager : Singleton<GameManager>
         // ChangeGameState(GameStates.NextLevelLoad);
         // var detectManager = GameObject.Find("DetectManager");
         // Destroy(detectManager);
-        if (GameDataManager.GetInstance.UserDataDic[userId].clearLevel <= curLevel)
-            GameDataManager.GetInstance.UpdateUserData(true);
+        LevelClear();
         GetCurrentLevel(curLevel + 1);
         // SceneBehaviorManager.LoadScene((Scenes)SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
         LoadingSceneController.LoadScene(SceneManager.GetActiveScene().name);
@@ -497,7 +494,13 @@ public class GameManager : Singleton<GameManager>
         // scenarioController.Init();
         // resetLoadValue = 0f;
         // ChangeGameState(GameStates.InGame);
-    }   
+    }
+
+    public void LevelClear()
+    {
+        bool isLevelClear = GameDataManager.GetInstance.UserDataDic[userId].clearLevel < curLevel;
+        GameDataManager.GetInstance.UpdateUserData(isLevelClear);
+    }
     
 
     
@@ -599,4 +602,5 @@ public class GameManager : Singleton<GameManager>
     
 
     #endregion
+
 }
