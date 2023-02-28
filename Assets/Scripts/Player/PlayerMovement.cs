@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     #region components
     public Rigidbody rb;
     public PlayerEntity playerEntity;
+    private PlayerEffetct pe;
     #endregion
 
     [SerializeField] private GameObject interactObj;
@@ -35,7 +36,8 @@ public class PlayerMovement : MonoBehaviour
         vrJoystick.SetActive(true);
 #endif
         virtualJoystick = vrJoystick.GetComponent<VirtualJoystick>();
-#endregion
+        pe = GetComponent<PlayerEffetct>();
+        #endregion
 
 #region KeyAction Init
         GameManager.GetInstance.KeyAction += MoveKeyInput;
@@ -76,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
             DetectManager.GetInstance.CheckCharacterCurrentTile(this.gameObject);
             DetectManager.GetInstance.CheckForwardObj(this.gameObject);
             interactObj = DetectManager.GetInstance.forwardObjectInfo;
+            Debug.Log(objscale);
         }
 
         else
@@ -321,85 +324,89 @@ public class PlayerMovement : MonoBehaviour
     public IEnumerator ClimbRootmotion()
     {
         yield return SetRotationBeforeInteraction();
-        var position = transform.position;
-        position = new Vector3((float)Math.Round(position.x, 1),
-            (float)Math.Round(position.y, 1), (float)Math.Round(position.z, 1));
-        transform.position = position;
+        // var position = transform.position;
+        // position = new Vector3((float)Math.Round(position.x, 1),
+        //     (float)Math.Round(position.y, 1), (float)Math.Round(position.z, 1));
+        // transform.position = position;
+        //
+        // // TODO 애니메이션 폴리싱 예정 (오브젝트 모양이 제각각이라 일단 일괄적으로 하드코딩 처리)
+        // {
+        //     Vector3 targetPos = Vector3.zero;
+        //     var curPos = position;
+        //     climbRb.constraints = RigidbodyConstraints.FreezeAll;
+        //     rb.constraints = RigidbodyConstraints.FreezeAll;
+        //     switch (targetDir)
+        //     {
+        //         case Dir.right:
+        //             targetPos = Vector3.right;
+        //             break;
+        //         case Dir.down:
+        //             targetPos = Vector3.back;
+        //             break;
+        //         case Dir.left:
+        //             targetPos = Vector3.left;
+        //             break;
+        //         case Dir.up:
+        //             targetPos = Vector3.forward;
+        //             break;
+        //         default:
+        //             Debug.LogError("잘못된 타겟 방향값입니다...!");
+        //             break;
+        //     }
+        //
+        //     float moveTime = 0;
+        //     Vector3 target1 = new Vector3(curPos.x, curPos.y + objscale * 0.5f, curPos.z);
+        //     yield return new WaitForSeconds(1f);
+        //     while (moveTime < 1)
+        //     {
+        //         moveTime += Time.deltaTime * rootmotionSpeed;
+        //         if (transform.position.y > target1.y)
+        //         {
+        //             yield return null;
+        //         }
+        //         else
+        //         {
+        //             transform.position = Vector3.Lerp(curPos, target1, moveTime);
+        //         }
+        //
+        //         yield return null;
+        //     }
+        //
+        //     transform.position = target1;
+        //     moveTime = 0;
+        //     curPos = transform.position;
+        //
+        //     while (moveTime < 1)
+        //     {
+        //         moveTime += Time.deltaTime * rootmotionSpeed;
+        //         transform.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
+        //         yield return null;
+        //     }
+        //
+        //     curPos = transform.position;
+        //     moveTime = 0;
+        //     Vector3 target2 = new Vector3(curPos.x, curPos.y + objscale * 0.5f + 0.05f, curPos.z);
+        //
+        //     while (moveTime < 1f)
+        //     {
+        //         moveTime += Time.deltaTime * rootmotionSpeed;
+        //         if (transform.position.y > target2.y)
+        //         {
+        //             yield return null;
+        //         }
+        //         else
+        //         {
+        //             transform.position = Vector3.Lerp(curPos, target2, moveTime);
+        //         }
+        //
+        //         yield return null;
+        //     }
+        //     yield return new WaitForSeconds(0.2f);
+        // }
+        yield return StartCoroutine(pe.Fadeout());
+        transform.position = new Vector3(interactObj.transform.position.x, transform.position.y, interactObj.transform.position.z) + Vector3.up * objscale;
+        transform.localScale = Vector3.one;
         
-        // TODO 애니메이션 폴리싱 예정 (오브젝트 모양이 제각각이라 일단 일괄적으로 하드코딩 처리)
-        {
-            Vector3 targetPos = Vector3.zero;
-            var curPos = position;
-            climbRb.constraints = RigidbodyConstraints.FreezeAll;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
-            switch (targetDir)
-            {
-                case Dir.right:
-                    targetPos = Vector3.right;
-                    break;
-                case Dir.down:
-                    targetPos = Vector3.back;
-                    break;
-                case Dir.left:
-                    targetPos = Vector3.left;
-                    break;
-                case Dir.up:
-                    targetPos = Vector3.forward;
-                    break;
-                default:
-                    Debug.LogError("잘못된 타겟 방향값입니다...!");
-                    break;
-            }
-
-            float moveTime = 0;
-            Vector3 target1 = new Vector3(curPos.x, curPos.y + objscale * 0.5f, curPos.z);
-            yield return new WaitForSeconds(1f);
-            while (moveTime < 1)
-            {
-                moveTime += Time.deltaTime * rootmotionSpeed;
-                if (transform.position.y > target1.y)
-                {
-                    yield return null;
-                }
-                else
-                {
-                    transform.position = Vector3.Lerp(curPos, target1, moveTime);
-                }
-
-                yield return null;
-            }
-
-            transform.position = target1;
-            moveTime = 0;
-            curPos = transform.position;
-
-            while (moveTime < 1)
-            {
-                moveTime += Time.deltaTime * rootmotionSpeed;
-                transform.position = Vector3.Lerp(curPos, curPos + targetPos * 0.5f, moveTime);
-                yield return null;
-            }
-
-            curPos = transform.position;
-            moveTime = 0;
-            Vector3 target2 = new Vector3(curPos.x, curPos.y + objscale * 0.5f + 0.05f, curPos.z);
-
-            while (moveTime < 1f)
-            {
-                moveTime += Time.deltaTime * rootmotionSpeed;
-                if (transform.position.y > target2.y)
-                {
-                    yield return null;
-                }
-                else
-                {
-                    transform.position = Vector3.Lerp(curPos, target2, moveTime);
-                }
-
-                yield return null;
-            }
-            yield return new WaitForSeconds(0.2f);
-        }
         GameManager.GetInstance.isPlayerDoAction = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
         climbRb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
