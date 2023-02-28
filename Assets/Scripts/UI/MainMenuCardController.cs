@@ -295,8 +295,8 @@ public class MainMenuCardController : MonoBehaviour
             }
         }
 
-        //GameManager.GetInstance.SetCustomLevel(level);
-        //LoadingSceneController.LoadScene("DemoPlay", true);
+        GameManager.GetInstance.SetCustomLevel(level);
+        LoadingSceneController.LoadScene("DemoPlay", true);
     }
     
 }
