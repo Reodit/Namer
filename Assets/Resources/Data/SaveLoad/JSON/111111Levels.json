@@ -1,18 +1,4 @@
 {
     "dataList": [
-        {
-            "level": 1,
-            "sceneName": "CustomLevel1",
-            "scenario": [],
-            "playerPosition": {
-                "x": 0.0,
-                "y": 1.0,
-                "z": 0.0
-            },
-            "cardView": {
-                "nameRead": [],
-                "adjectiveRead": []
-            }
-        }
     ]
 }
