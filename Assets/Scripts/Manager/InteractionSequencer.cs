@@ -113,17 +113,6 @@ public class InteractionSequencer : Singleton<InteractionSequencer>
         return funcName;
     }
 
-    IEnumerator WaitForSeconds(float seconds)
-    {
-        float startTime = Time.time;
-        while (Time.time < startTime + seconds)
-        {
-
-            Debug.Log(Time.time);
-            yield return null;
-        }
-    }
-    
     // PlayerInteraction OR Addcard로 인한 Coroutine 제어
     private IEnumerator SequentialCoroutine()
     {

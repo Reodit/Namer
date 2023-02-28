@@ -271,7 +271,6 @@ public class GameManager : Singleton<GameManager>
         if (CurrentState == newState)
         {
             UpdateGameState();
-            Debug.Log("바꾸려는 State가 이전의 State와 같습니다. 의도하신 상황이 맞나요?");
             return;
         }
         
