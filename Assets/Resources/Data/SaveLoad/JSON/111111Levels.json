@@ -13,6 +13,20 @@
                 "nameRead": [],
                 "adjectiveRead": []
             }
+        },
+        {
+            "level": 2,
+            "sceneName": "CustomLevel2",
+            "scenario": [],
+            "playerPosition": {
+                "x": 0.0,
+                "y": 2.0,
+                "z": 0.0
+            },
+            "cardView": {
+                "nameRead": [],
+                "adjectiveRead": []
+            }
         }
     ]
 }
