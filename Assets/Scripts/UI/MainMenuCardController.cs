@@ -60,15 +60,15 @@ public class MainMenuCardController : MonoBehaviour
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
         if (mainUIController.state == MainMenuState.Main)
         {
-            //CardManager.GetInstance.target = mainUIController.mainRose;
+            CardManager.GetInstance.target = mainUIController.mainRose;
         }
         else if (mainUIController.state == MainMenuState.Level)
         {
-            //CardManager.GetInstance.target = mainUIController.levelRose;
+            CardManager.GetInstance.target = mainUIController.levelRose;
         }
         else if (mainUIController.state == MainMenuState.Edit)
         {
-            //CardManager.GetInstance.target = mainUIController.editRose;
+            CardManager.GetInstance.target = mainUIController.editRose;
         }
 
         TouchInteractObj();
