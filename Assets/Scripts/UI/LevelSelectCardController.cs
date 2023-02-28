@@ -60,7 +60,7 @@ public class LevelSelectCardController : MonoBehaviour
         else
         {
             startCards.Add(mapEditCard);
-            startCardsCount = GameDataManager.GetInstance.CustomLevelDataDic.Count + 1;
+            startCardsCount = GameDataManager.GetInstance.CustomLevelDataDic.Count + 2;
             cardName = "CustomCard";
             for (int i = 2; i < startCardsCount; i++)
             {
@@ -130,9 +130,9 @@ public class LevelSelectCardController : MonoBehaviour
         int minLength = 5;
         if (mainUIController.state == MainMenuState.Edit)
         {
-            minLength = Math.Min(5, GameDataManager.GetInstance.CustomLevelDataDic.Count + 1);
+            minLength = Math.Min(5, GameDataManager.GetInstance.CustomLevelDataDic.Count + 2);
         }
-
+        
         for (int i = 0; i < minLength; i++)
         {
             MainMenuAddCard(startCards[i]);

@@ -136,15 +136,16 @@ public class GameManager : Singleton<GameManager>
 
         #region Get User, Level and Card Data & Set UserID "111111"
         // Test
-        //if (Directory.Exists(Application.persistentDataPath + "/Data"))
-        //{
-        //    Directory.Delete(Application.persistentDataPath + "/Data", true);
-        //}
+        // if (Directory.Exists(Application.persistentDataPath + "/Data"))
+        // {
+        //     Directory.Delete(Application.persistentDataPath + "/Data", true);
+        // }
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
         GameDataManager.GetInstance.AddUserData(userId);
 
         GameDataManager.GetInstance.GetCardData();
+        customLevel = GameDataManager.GetInstance.CustomLevelDataDic.Count;
         #endregion
 
         SetTimeScale(1);
