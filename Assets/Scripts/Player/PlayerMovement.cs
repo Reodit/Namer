@@ -46,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
         #region Init Variable
         GameManager.GetInstance.localPlayerMovement = this;
         rootmotionSpeed = 1f;
-        interactionDelay = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
         #endregion
