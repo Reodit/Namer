@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class LevelSelectCardController : MonoBehaviour
 {
@@ -58,11 +60,11 @@ public class LevelSelectCardController : MonoBehaviour
         else
         {
             startCards.Add(mapEditCard);
-            startCardsCount = 31;
+            startCardsCount = GameDataManager.GetInstance.CustomLevelDataDic.Count + 1;
             cardName = "CustomCard";
-            for (int i = 1; i < startCardsCount; i++)
+            for (int i = 2; i < startCardsCount; i++)
             {
-                int inputNum = i;
+                int inputNum = i - 1;
                 GameObject cardPrefab = Instantiate(StageCardPrefab);
                 cardPrefab.name = inputNum.ToString() + cardName;
                 cardPrefab.GetComponent<StageNameController>().StageNumSetUp(inputNum);
@@ -124,7 +126,14 @@ public class LevelSelectCardController : MonoBehaviour
     {
         CardManager.GetInstance.isCardDealingDone = false;
         yield return new WaitForSeconds(0.1f);
-        for (int i = 0; i < 5; i++)
+
+        int minLength = 5;
+        if (mainUIController.state == MainMenuState.Edit)
+        {
+            minLength = Math.Min(5, GameDataManager.GetInstance.CustomLevelDataDic.Count + 1);
+        }
+
+        for (int i = 0; i < minLength; i++)
         {
             MainMenuAddCard(startCards[i]);
             //SoundManager.GetInstance.Play("CardHover");
