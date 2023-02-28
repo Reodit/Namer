@@ -295,14 +295,12 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleLost()
     {
-        Debug.Log("You Lost");
         //menu for reset
         throw new NotImplementedException();
     }
 
     private void HandleVictory()
     {
-        Debug.Log("You win");
         // show viectory ui
         // menu for next lever or quit
     }
@@ -474,8 +472,7 @@ public class GameManager : Singleton<GameManager>
         // ChangeGameState(GameStates.NextLevelLoad);
         // var detectManager = GameObject.Find("DetectManager");
         // Destroy(detectManager);
-        if (GameDataManager.GetInstance.UserDataDic[userId].clearLevel <= curLevel)
-            GameDataManager.GetInstance.UpdateUserData(true);
+        LevelClear();
         GetCurrentLevel(curLevel + 1);
         // SceneBehaviorManager.LoadScene((Scenes)SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
         LoadingSceneController.LoadScene(SceneManager.GetActiveScene().name);
@@ -587,8 +584,12 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
     }
-    
-    
 
-#endregion
+    public void LevelClear()
+    {
+        bool isLevelClear = GameDataManager.GetInstance.UserDataDic[userId].clearLevel < curLevel;
+        GameDataManager.GetInstance.UpdateUserData(isLevelClear);
+    }
+
+    #endregion
 }
