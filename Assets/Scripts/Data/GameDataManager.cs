@@ -141,9 +141,6 @@ public class GameDataManager : Singleton<GameDataManager>
         {
             mapCreator = gameObject.AddComponent<MapCreator>();
         }
-        
-        Debug.Log(mapData.tileMapData);
-        Debug.Log(mapData.objectMapData);
 
         initTiles = mapCreator.CreateTileMap(new StringReader(mapData.tileMapData.ToString()));
         initObjects = mapCreator.CreateObjectMap(new StringReader(mapData.objectMapData.ToString()),
