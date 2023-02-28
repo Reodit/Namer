@@ -69,16 +69,17 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        GooglePlayConnect gc = GameObject.Find("GooglePlay").GetComponent<GooglePlayConnect>();
-        userId = gc.userID;
-        Debug.Log(userId);
-        Destroy(gc);
         if (GameObject.FindObjectsOfType<GameManager>().Length > 1)
         {
             Destroy(this.gameObject);
             return;
         }
         DontDestroyOnLoad(this.gameObject);
+        
+        GooglePlayConnect gc = GameObject.Find("GooglePlay").GetComponent<GooglePlayConnect>();
+        userId = gc.userID;
+        Debug.Log(userId);
+        Destroy(gc);
 
         Init();
     }
@@ -367,9 +368,9 @@ public class GameManager : Singleton<GameManager>
     private int customLevel = 0;
     public int CustomLevel { get { return customLevel; }}
 
-    public void PlusCustomLevel()
+    public void SetCustomLevel(int level)
     {
-        customLevel++;
+        customLevel = level;
     }
     
 #endregion
@@ -396,12 +397,6 @@ public class GameManager : Singleton<GameManager>
 
     public void SetLevelFromCard(string CardName)
     {
-        if (CardName == "LevelDesign")
-        {
-            ChangeGameState(GameStates.LevelEditMode);
-            return;
-        }
-
         StringBuilder sb = new StringBuilder();
         foreach (var letter in CardName)
         {
@@ -498,7 +493,7 @@ public class GameManager : Singleton<GameManager>
     //DemoScene에서 하면 왜됌?
     //근데 씬불러올때는 안되네;
     [ContextMenu("LoadMapTest")]
-    public void LoadMap()
+    public void LoadMap(bool isCustomLevel = false)
     {
         if (CurrentState == GameStates.LevelEditMode)
         {
@@ -506,13 +501,22 @@ public class GameManager : Singleton<GameManager>
             return;
         }
         
-        // LoadPlayerPrefabs();
-        if(curLevel == -1)
-            curLevel=GetCurrentLevel();
-
-        DetectManager.GetInstance.Init(curLevel);
-        CardManager.GetInstance.CardStart(); // 여기서 문제네
-        scenarioController.Init();
+        if (!isCustomLevel)
+        {
+            // LoadPlayerPrefabs();
+            if (curLevel == -1)
+            {
+                curLevel=GetCurrentLevel();
+            }
+            DetectManager.GetInstance.Init(curLevel);
+        }
+        else
+        {
+            DetectManager.GetInstance.Init(customLevel, isCustomLevel);
+        }
+        
+        CardManager.GetInstance.CardStart(isCustomLevel); // 여기서 문제네
+        scenarioController.Init(isCustomLevel);
         SoundManager.GetInstance.ChangeInGameLevelBGM();
     }
     //load scene with loading card -> get level data from level card

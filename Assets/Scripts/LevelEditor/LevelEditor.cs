@@ -161,9 +161,8 @@ public class LevelEditor : MonoBehaviour
     {
         Destroy(DetectManager.GetInstance);
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
-
+        
         SetAllBtnListener();
-
         Init();
     }
 
@@ -203,6 +202,8 @@ public class LevelEditor : MonoBehaviour
 
     void Init()
     {
+        GameManager.GetInstance.SetCustomLevel(GameDataManager.GetInstance.CustomLevelDataDic.Count);
+        
         stageStartPoint = new Vector3(0, 2, 0);
         startCards = new SCardView(new List<EName>(), new List<EAdjective>());
         tilePrefabs = new List<GameObject>();
