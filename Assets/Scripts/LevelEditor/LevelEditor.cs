@@ -196,6 +196,7 @@ public class LevelEditor : MonoBehaviour
             startCardBtns[idx].onClick.AddListener(() =>
             {
                 selectedStartCard = idx;
+                OnClickStartCard(idx);
             });
         }
     }
@@ -493,6 +494,17 @@ public class LevelEditor : MonoBehaviour
     {
         GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         encyclopedia.SetActive(true);
+    }
+
+    public void OnClickStartCard(int idx)
+    {
+        for (int c = 0; c < startCardBtns.Length; c++)
+        {
+            if (c == idx)
+                startCardBtns[c].transform.Find("HighLight").gameObject.SetActive(true);
+            else
+                startCardBtns[c].transform.Find("HighLight").gameObject.SetActive(false);
+        }
     }
 
     public void ReturnLobby()
