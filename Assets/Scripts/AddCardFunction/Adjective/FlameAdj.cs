@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FlameAdj : IAdjective
@@ -74,10 +75,17 @@ public class FlameAdj : IAdjective
         var duraion = (double)SoundManager.GetInstance.sfxSound.clip.samples /
                       SoundManager.GetInstance.sfxSound.clip.frequency;
         var mainModule =sprayObj.GetComponent<ParticleSystem>().main;
-        mainModule.duration = (float)duraion;
+        if(!sprayObj.GetComponent<ParticleSystem>().isPlaying)
+            mainModule.duration = (float)duraion;
         sprayObj.GetComponent<ParticleSystem>().Play();
         // SoundManager.GetInstance.SetEndDSPTime(sprayObj.GetComponent<ParticleSystem>().main.duration);
-        yield return new WaitUntil(() => sprayObj == null || !sprayObj.GetComponent<ParticleSystem>().isPlaying);
+        // yield return new WaitUntil(() => sprayObj == null || !sprayObj.GetComponent<ParticleSystem>().isPlaying);
+        float startTime = Time.time;
+        while (Time.time < startTime + duraion)
+        {
+            yield return null;
+        }
+        
         EradicateFlame(thisObject);
     }
 
@@ -125,6 +133,7 @@ public class FlameAdj : IAdjective
     
     public void Abandon(InteractiveObject thisObject)
     {
+        Debug.Log(4444);
         if(sprayObj != null)
             GameObject.Destroy(sprayObj);
         if (fireBallEffect != null)
