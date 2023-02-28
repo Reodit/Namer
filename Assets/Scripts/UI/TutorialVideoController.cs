@@ -39,7 +39,7 @@ public class TutorialVideoController : MonoBehaviour
         OnStopVideo();
         int num = selectedVideosIdx[idx];
         title.text = titles[num];
-        Vplayer.url = clipPaths[num];
+        Vplayer.clip = Resources.Load<VideoClip>(clipPaths[num]);
 
         StartCoroutine(PrepareVideo());
     }
@@ -62,7 +62,8 @@ public class TutorialVideoController : MonoBehaviour
         OnStopVideo();
         
         title.text = titles[idx[0]];
-        Vplayer.url = clipPaths[idx[0]];
+        //Vplayer.url = clipPaths[idx[0]];
+        Vplayer.clip = Resources.Load<VideoClip>(clipPaths[idx[0]]);
 
         StartCoroutine(PrepareVideo());
     }
