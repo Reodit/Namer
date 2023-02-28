@@ -117,7 +117,7 @@ public class CardController : MonoBehaviour
         {
             CardSelectOn();
         }
-        //카드를 선택후에 한번 더 누르면 하이라이트를 끄고 회전을 멈추고 처음 상태로 되돌
+        //카드를 선택후에 한번 더 누르면 하이라이트를 끄고 회전을 멈추고 처음 상태로 되돌림 
         else
         {
             CardSelectOff();
