@@ -33,7 +33,6 @@ public class MainUIController : MonoBehaviour
     [SerializeField] GameObject encyclopedia;
     [SerializeField] GameObject mainMenucards;
     [SerializeField] GameObject titlePanel;
-    [SerializeField] GameObject mainRose;
     [SerializeField] GameObject optionPanel;
     [SerializeField] GameObject levelSelectBtnPanel;
     [SerializeField] GameObject levelSelectBtnPanelLeftBtn;
@@ -44,6 +43,9 @@ public class MainUIController : MonoBehaviour
     [SerializeField] GameObject levelEditBtnPanelRightBtn;
     [SerializeField] GameObject levelEditCards;
     [SerializeField] GameObject infoPopUp;
+    public GameObject mainRose;
+    public GameObject levelRose;
+    public GameObject editRose;
     [SerializeField] Text infoPopUpTxt;
     GameObject levelInformationTxt;
 
@@ -161,6 +163,7 @@ public class MainUIController : MonoBehaviour
             Destroy(pressAnyKeyTxt);
             CameraMoving(cameraMovingTime);
             StartCoroutine(MainMenuGroudsSetUp());
+            state = MainMenuState.Main;
             Invoke("CardholderStart", 0.1f);
             Invoke("SettingBtnOn", titleMovingTime);
         }
