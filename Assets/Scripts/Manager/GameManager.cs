@@ -78,7 +78,7 @@ public class GameManager : Singleton<GameManager>
         
         GooglePlayConnect gc = GameObject.Find("GooglePlay").GetComponent<GooglePlayConnect>();
         userId = gc.userID;
-        Debug.Log(userId);
+        // Debug.Log(userId);
         Destroy(gc);
 
         Init();
@@ -292,14 +292,12 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleLost()
     {
-        Debug.Log("You Lost");
         //menu for reset
         throw new NotImplementedException();
     }
 
     private void HandleVictory()
     {
-        Debug.Log("You win");
         // show viectory ui
         // menu for next lever or quit
     }
@@ -471,8 +469,7 @@ public class GameManager : Singleton<GameManager>
         // ChangeGameState(GameStates.NextLevelLoad);
         // var detectManager = GameObject.Find("DetectManager");
         // Destroy(detectManager);
-        if (GameDataManager.GetInstance.UserDataDic[userId].clearLevel <= curLevel)
-            GameDataManager.GetInstance.UpdateUserData(true);
+        LevelClear();
         GetCurrentLevel(curLevel + 1);
         // SceneBehaviorManager.LoadScene((Scenes)SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
         LoadingSceneController.LoadScene(SceneManager.GetActiveScene().name);
@@ -486,7 +483,13 @@ public class GameManager : Singleton<GameManager>
         // scenarioController.Init();
         // resetLoadValue = 0f;
         // ChangeGameState(GameStates.InGame);
-    }   
+    }
+
+    public void LevelClear()
+    {
+        bool isLevelClear = GameDataManager.GetInstance.UserDataDic[userId].clearLevel < curLevel;
+        GameDataManager.GetInstance.UpdateUserData(isLevelClear);
+    }
     
 
     
@@ -588,4 +591,5 @@ public class GameManager : Singleton<GameManager>
     
 
     #endregion
+
 }
