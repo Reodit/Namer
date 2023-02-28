@@ -103,7 +103,7 @@ namespace PlayerOwnedStates
         public void Execute(PlayerEntity entity)
         {
             if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("Climb") &&
-                entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.6f)
+                entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
             {
                 entity.RevertToPreviousState();
             }                

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -35,36 +34,13 @@ public class PlayerEffetct : MonoBehaviour
     [SerializeField] private ParticleSystem climbEffect;
     [SerializeField] private ParticleSystem pushEffect;
     #endregion
-
-    #region Fade-out
-    [SerializeField] private int fadeOutSpeed = 1;
-    private Vector3 originalScale = Vector3.one;
-    [SerializeField] private AudioClip fadeoutSound;
-    #endregion
     
     private void Start()
     {
         Init();
-        originalScale = transform.localScale;
-    }
-    
-    public IEnumerator Fadeout()
-    {
-        climbEffect.Play();
-        SoundManager.GetInstance.repeatPlay(fadeoutSound.name);
-        float alpha = 0f;
-        
-        while (alpha < 0.5f)
-        {
-            alpha += Time.deltaTime * fadeOutSpeed;
-            transform.localScale = originalScale * (1 - alpha);
-            yield return null;
-        }
-        
-        yield return new WaitForSeconds(0.2f);
     }
 
-    private void Init()
+    void Init()
     {
         ce = transform.Find("CollisionEffect").GetComponent<CollisionEffect>();
         currentEffectIndex = EffectIndex.DefaultFootprint;
@@ -137,10 +113,18 @@ public class PlayerEffetct : MonoBehaviour
         }
     }
 
+    public void ClimbEffectPlay()
+    {
+        if (climbEffect)
+        {
+            climbEffect.Play();
+        }
+        
+    }
+
     public void PushEffectPlay()
     {
         pushEffect.Play();
     }
-    
     #endregion
 }
