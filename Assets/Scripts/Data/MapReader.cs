@@ -30,12 +30,12 @@ public class MapReader : MonoBehaviour
         Transform[] groundChilds = GameObject.Find("Grounds").transform.GetComponentsInChildren<Transform>();
         Transform[] objectChilds = GameObject.Find("Objects").transform.GetComponentsInChildren<Transform>();
 
-        minX = (int)groundChilds.Min(item => item.position.x);
-        maxX = (int)groundChilds.Max(item => item.position.x);
-        minY = (int)groundChilds.Min(item => item.position.y);
-        maxY = (int)objectChilds.Max(item => item.position.y) + gapY;
-        minZ = (int)groundChilds.Min(item => item.position.z);
-        maxZ = (int)groundChilds.Max(item => item.position.z);
+        minX = (int)Math.Min(groundChilds.Min(item => item.position.x), objectChilds.Min(item => item.position.x));
+        maxX = (int)Math.Max(groundChilds.Max(item => item.position.x), objectChilds.Max(item => item.position.x));
+        minY = (int)Math.Min(groundChilds.Min(item => item.position.y), objectChilds.Min(item => item.position.y));
+        maxY = (int)Math.Max(groundChilds.Max(item => item.position.y), objectChilds.Max(item => item.position.y)) + gapY;
+        minZ = (int)Math.Min(groundChilds.Min(item => item.position.z), objectChilds.Min(item => item.position.z));
+        maxZ = (int)Math.Max(groundChilds.Max(item => item.position.z), objectChilds.Max(item => item.position.z));
         
         totalX = maxX - minX + 1;
         totalY = maxY - minY + 1;
