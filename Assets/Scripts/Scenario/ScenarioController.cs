@@ -169,7 +169,6 @@ public class ScenarioController : MonoBehaviour
         else
         {
             isExist = GameDataManager.GetInstance.CustomLevelDataDic.Keys.Contains(GameManager.GetInstance.CustomLevel);
-            isNull = GameDataManager.GetInstance.CustomLevelDataDic[GameManager.GetInstance.CustomLevel].scenario.Count() == 0;
         }
         
         if (isExist && !isNull)
