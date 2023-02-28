@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using PlayerOwnedStates;
 using UnityEngine.Serialization;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class CardController : MonoBehaviour
 {
@@ -31,7 +32,10 @@ public class CardController : MonoBehaviour
     private void Start()
     {
         cr = this.gameObject.GetComponent<CardRotate>();
-        cardHolder = FindObjectOfType<CardManager>().gameObject;
+        if(SceneManager.GetActiveScene().name != "LevelEditor")
+        {
+            cardHolder = FindObjectOfType<CardManager>().gameObject;
+        }
         Encyclopedia = this.transform.GetChild(0).transform.GetChild(6).gameObject;
         SetUIText();
     }
@@ -99,7 +103,7 @@ public class CardController : MonoBehaviour
 
     }
     private void OnMouseDown()
-    { 
+    {
         if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "NamingCard"
             && !CardManager.GetInstance.isEncyclopedia) return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause
@@ -147,13 +151,13 @@ public class CardController : MonoBehaviour
         highlight.SetActive(false);
         cr.enabled = false;
         CardManager.GetInstance.isPickCard = false;
-        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
         CardManager.GetInstance.pickCard = null;
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
             Encyclopedia.SetActive(false);
             return;
         }
+        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
         UIManager.GetInstance.isShowNameKeyPressed = false;
     }
 

@@ -33,6 +33,7 @@ public class EncyclopediaController : MonoBehaviour
         gameDataManager = GameDataManager.GetInstance;
         EncyclopediaInit();
 
+        if (SceneManager.GetActiveScene().name == "LevelEditor") return;
         if (SceneManager.GetActiveScene().name != "MainScene")
         {
             canvasController = GameObject.Find("IngameCanvas").gameObject.GetComponent<IngameCanvasController>();
@@ -45,6 +46,10 @@ public class EncyclopediaController : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "MainScene")
         {
             pediaCards = GameDataManager.GetInstance.GetMainCardEncyclopedia();
+        }
+        else if (SceneManager.GetActiveScene().name == "LevelEditor")
+        {
+            pediaCards = GameDataManager.GetInstance.GetTotalCardEncyclopedia();
         }
         else
         {
