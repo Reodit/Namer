@@ -155,7 +155,7 @@ namespace PlayerOwnedStates
         public void Execute(PlayerEntity entity)
         {
             if (entity.pAnimator.GetCurrentAnimatorStateInfo(0).IsName("AddCard") &&
-                entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.2f &&
+                entity.pAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.2f ||
                 GameManager.GetInstance.localPlayerMovement.pInputVector.magnitude > 0.2f)
             {
                 entity.RevertToPreviousState();
