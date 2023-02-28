@@ -37,20 +37,18 @@ public class CardManager : Singleton<CardManager>
     {
         if (SceneManager.GetActiveScene().name == "MainScene")
         {
+            isCardDealingDone = false;
             CardStart();
+        }
+        else if (SceneManager.GetActiveScene().name == "LevelEditor")
+        {
+            isCardDealingDone = true;
         }
         else
         {
+            isCardDealingDone = false;
             CardStart();
-            if(GameManager.GetInstance.IsCustomLevel)
-            {
-                topButtons = GameObject.Find("IngameCanvas").transform.GetChild(12).gameObject;
-            }
-            else
-            {
-                topButtons = GameObject.Find("IngameCanvas").transform.GetChild(1).gameObject;
-            }
-
+            topButtons = GameObject.Find("IngameCanvas").transform.GetChild(1).gameObject;
             bottomButtons = GameObject.Find("IngameCanvas").transform.GetChild(2).gameObject;
         }
     }
@@ -66,9 +64,9 @@ public class CardManager : Singleton<CardManager>
         if (!isPickCard && CardManager.GetInstance.target == null ||
             CardManager.GetInstance.isCasting) return;
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.GetMouseButtonDown(0))
         {
-            Vector2 touchPos = Input.GetTouch(0).position;
+            Vector2 touchPos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(touchPos);
             RaycastHit hit;
 
@@ -124,15 +122,15 @@ public class CardManager : Singleton<CardManager>
         CardManager.GetInstance.target = null;
     }
 
-    public void CardStart()
+    public void CardStart(bool isCustomLevel = false)
     {
         if (dealCardCoroutine != null)
             StopCoroutine(dealCardCoroutine);
-        dealCardCoroutine = StartCoroutine(DealCard());
+        dealCardCoroutine = StartCoroutine(DealCard(isCustomLevel));
     }
 
     //시작 카드를 딜링해주는 메서드 
-    IEnumerator DealCard()
+    IEnumerator DealCard(bool isCustomLevel = false)
     {
         
         var scene = SceneManager.GetActiveScene();
@@ -157,19 +155,8 @@ public class CardManager : Singleton<CardManager>
             if (GameManager.GetInstance.CurrentState == GameStates.InGame)
             {
                 GameDataManager gameData = GameDataManager.GetInstance;
-                
-                SCardView cardView = new SCardView();
-                if (!GameManager.GetInstance.IsCustomLevel)
-                {
-                    int level = GameManager.GetInstance.Level;
-                    cardView = gameData.LevelDataDic[level].cardView;
-                }
-                else
-                {
-                    int level = GameManager.GetInstance.CustomLevel;
-                    cardView = gameData.CustomLevelDataDic[level].cardView;
-                }
-                GameObject[] cards = gameData.GetCardPrefabs(cardView);
+                int level = isCustomLevel ? GameManager.GetInstance.CustomLevel : GameManager.GetInstance.Level;
+                GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
 
                 if (cards != null)
                 {
@@ -200,7 +187,9 @@ public class CardManager : Singleton<CardManager>
             yield return new WaitForSeconds(1.5f);
             isCardDealingDone = true;
             topButtons.SetActive(true);
+#if UNITY_ANDROID
             bottomButtons.SetActive(true);
+#endif
         }
     }
 
@@ -338,13 +327,6 @@ public class CardManager : Singleton<CardManager>
             myCards[i].gameObject.transform.
                 DOLocalMove(new Vector3(myCards[i].transform.localPosition.x, -0.5f, myCards[i].transform.localPosition.z), 1f);
         }
-    }
-
-    public void DeleteCustomLevel()
-    {
-        GameDataManager.GetInstance.DeleteCustomLevelFile(GameManager.GetInstance.CustomLevel);
-        GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
-        SceneManager.LoadScene("MainScene");
     }
 }
 public class PRS

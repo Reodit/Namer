@@ -516,7 +516,15 @@ public class LevelEditor : MonoBehaviour
     public void ReturnLobby()
     {
         SoundManager.GetInstance.Play("BtnPress");
-        GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        if(SceneManager.GetActiveScene().name == "DemoPlay")
+        {
+            GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        }
+        else if (SceneManager.GetActiveScene().name == "LevelEditor" ||
+            SceneManager.GetActiveScene().name == "LevelDesign")
+        {
+            GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
+        }
         SceneManager.LoadScene("MainScene");
     }
 
