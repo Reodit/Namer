@@ -529,8 +529,17 @@ public partial class DetectManager : Singleton<DetectManager>
         int x = (int) block.x;
         int y = (int) block.y;
         int z = (int) block.z;
-
-        if (currentObjects[x, y, z] != curObject)
+        if (curObject.transform.position.y < 0)
+        {
+            curObject.SetActive(false);
+            Vector3 prevVect=FindObjectInArray(curObject);
+            var prevVectInInt=Vector3Int.RoundToInt(prevVect);
+            currentObjects[prevVectInInt.x, prevVectInInt.y, prevVectInInt.z] = null;
+            
+            Destroy(curObject);
+            return false;
+        }
+        else if (currentObjects[x, y, z] != curObject)
         {
             Vector3 preVec = FindObjectInArray(curObject);
             if (preVec.x == -1)
