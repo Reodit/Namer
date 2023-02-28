@@ -6,19 +6,6 @@ using UnityEditor.Build.Reporting;
 using System.IO;
 using UnityEngine;
 
-[InitializeOnLoad]
-public class PreloadSigningAlias
-{
-
-    static PreloadSigningAlias()
-    {
-        PlayerSettings.Android.keystorePass = "chemistry123";
-        PlayerSettings.Android.keyaliasName = "namer";
-        PlayerSettings.Android.keyaliasPass = "namer123";
-    }
-
-}
-
 class BuildScript {
 	static string[] SCENES = FindEnabledEditorScenes();
 
@@ -56,7 +43,11 @@ class BuildScript {
 
 	static void PerformAndroidBuild ()
 	{
-		string target_dir = "/Android/";
+        PlayerSettings.Android.keystorePass = "chemistry123";
+        PlayerSettings.Android.keyaliasName = "namer";
+        PlayerSettings.Android.keyaliasPass = "namer123";
+
+        string target_dir = "/Android/";
 		string target_exec = APP_NAME + ".apk";
 		GenericBuild(SCENES, TARGET_DIR + target_dir, target_exec, BuildTarget.Android,BuildOptions.None);
 	}
