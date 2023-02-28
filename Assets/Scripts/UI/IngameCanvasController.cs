@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -121,7 +118,16 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     {
         SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
-        GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        }
+        else
+        {
+            GameDataManager.GetInstance.DeleteCustomLevelData(GameManager.GetInstance.CustomLevel + 1);
+            GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
+        }
+        
         SceneManager.LoadScene("MainScene");
     }
 
@@ -165,12 +171,29 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     void StageNameSetUp()
     {
-        string currentName =
-            GameDataManager.GetInstance.GetLevelName(GameManager.GetInstance.Level);
+        int level = 0;
+        string defaultName = "";
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            level = GameManager.GetInstance.Level;
+            defaultName = " Stage";
+        }
+        else
+        {
+            level = GameManager.GetInstance.CustomLevel;
+            defaultName = " Star";
+        }
 
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode || GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        {
+            stageName.text = (level + 1) + defaultName;
+            return;
+        }
+        
+        string currentName = GameDataManager.GetInstance.GetLevelName(level);
         if (currentName == "")
         {
-            stageName.text = $"{(GameManager.GetInstance.Level)}" + " Stage";
+            stageName.text = $"{(level)}" + defaultName;
         }
         else if (currentName != "")
         {

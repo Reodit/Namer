@@ -26,6 +26,8 @@ public class StageNameController : MonoBehaviour
 
     string NameText()
     {
+        bool isCustomLevel = mainUIController.state == MainMenuState.Level ? false : true;
+        
         if (GameDataManager.GetInstance.GetLevelName(stageNum) == "")
         {
             return "???";
@@ -38,13 +40,27 @@ public class StageNameController : MonoBehaviour
 
     void NamePlateOnOff()
     {
-        if (stageNum <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel)
+        if (mainUIController.state == MainMenuState.Level)
         {
-            namePlate.SetActive(true);
+            if (stageNum <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel)
+            {
+                namePlate.SetActive(true);
+            }
+            else
+            {
+                namePlate.SetActive(false);
+            }
         }
         else
         {
-            namePlate.SetActive(false);
+            if (GameDataManager.GetInstance.GetLevelName(stageNum) == "")
+            {
+                namePlate.SetActive(false);
+            }
+            else
+            {
+                namePlate.SetActive(false);
+            }
         }
     }
 
@@ -58,7 +74,7 @@ public class StageNameController : MonoBehaviour
         }
         else
         {
-            nameAdjTxt.text = "Custom " + inputStageNum.ToString();
+            nameAdjTxt.text = "Star " + inputStageNum.ToString();
         }
 
         stageText.text = inputStageNum.ToString();

@@ -78,7 +78,7 @@ public class MainUIController : MonoBehaviour
             DirectLevelSelect();
         }
 
-        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
             DirectEditSelect();
         }
@@ -101,12 +101,15 @@ public class MainUIController : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(60, -90, 0);
 
         state = MainMenuState.Edit;
+        GameManager.GetInstance.IsCustomLevel = true;
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelEditCardHolder.SetActive(true);
         LevelEditBtnController();
         SettingBtnOn();
         CardManager.GetInstance.isMenuLevel = true;
+        
+        GameManager.GetInstance.ChangeGameState(GameStates.Lobby);
     }
 
     private void DirectLevelSelect()
@@ -121,11 +124,14 @@ public class MainUIController : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(60, 90, 0);
 
         state = MainMenuState.Level;
+        GameManager.GetInstance.IsCustomLevel = false;
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelSelectCardHolder.SetActive(true);
         SettingBtnOn();
         CardManager.GetInstance.isMenuLevel = true;
+        
+        GameManager.GetInstance.ChangeGameState(GameStates.Lobby);
     }
 
     void Update()
@@ -229,6 +235,7 @@ public class MainUIController : MonoBehaviour
             LevelEditPanelOn();
         }
         state = MainMenuState.Edit;
+        GameManager.GetInstance.IsCustomLevel = true;
         Camera.main.transform.DOMove(new Vector3(-10f, 7f, -3.17f), levelSelectMovingTime);
         Camera.main.transform.DORotate(new Vector3(60f, -90f, 0f), levelSelectMovingTime);
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
@@ -245,6 +252,7 @@ public class MainUIController : MonoBehaviour
             LevelSelectPanelOn();
         }
         state = MainMenuState.Level;
+        GameManager.GetInstance.IsCustomLevel = false;
         Camera.main.transform.DOMove(new Vector3(10f, 7f, -3.17f), levelSelectMovingTime);
         Camera.main.transform.DORotate(new Vector3(60f, 90f, 0f), levelSelectMovingTime);
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);

@@ -296,7 +296,7 @@ public class MainMenuCardController : MonoBehaviour
         }
 
         GameManager.GetInstance.SetCustomLevel(level);
-        LoadingSceneController.LoadScene("DemoPlay", true);
+        LoadingSceneController.LoadScene("DemoPlay");
     }
     
 }
