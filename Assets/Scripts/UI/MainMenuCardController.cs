@@ -178,9 +178,15 @@ public class MainMenuCardController : MonoBehaviour
     string CheckCardName(string cardName)
     {
         string stageCard = "StageCard";
+        string customCard = "CustomCard";
+        
         if (cardName.Contains(stageCard))
         {
             return stageCard;
+        }
+        else if (cardName.Contains(customCard))
+        {
+            return customCard;
         }
         else
         {
@@ -234,7 +240,12 @@ public class MainMenuCardController : MonoBehaviour
                 break;
             // LoadingSceneController.LoadScene("JSTESTER");
             //이부분 살짝 수정함
-            // GameManager.GetInstance.SetLevelFromCard(cardName);              
+            // GameManager.GetInstance.SetLevelFromCard(cardName); 
+            case "CustomCard":
+                // 1CustomCard
+                Debug.Log(cardName);
+                CheckCustomLevel(cardName);
+                break;
             default:
                 break;
         }
@@ -242,7 +253,6 @@ public class MainMenuCardController : MonoBehaviour
 
     private void CheckClearLevel(string cardName)
     {
-
         StringBuilder sb = new StringBuilder();
         foreach (var letter in cardName)
         {
@@ -274,4 +284,21 @@ public class MainMenuCardController : MonoBehaviour
             mainUIController.InfoStagePopUp();
         }
     }
+
+    void CheckCustomLevel(string cardName)
+    {
+        int level = 0;
+        foreach (var num in cardName)
+        {
+            if (num - '0' > 0 && num - '0' <= 9)
+            {
+                level = num - '0';
+                break;
+            }
+        }
+
+        GameManager.GetInstance.SetCustomLevel(level);
+        LoadingSceneController.LoadScene("DemoPlay", true);
+    }
+    
 }

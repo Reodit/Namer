@@ -110,14 +110,14 @@ public class InteractiveObject : MonoBehaviour
         {
             return;
         }
-        
         if (DetectManager.GetInstance.GetObjectsData() != null && objectPos != Vector3Int.RoundToInt(this.gameObject.transform.position))
         {
             DetectManager.GetInstance.CheckValueInMap(this.gameObject);
             objectPos = Vector3Int.RoundToInt(this.gameObject.transform.position);
 
             // 물체가 중력에 의해 떨어진 후 디텍팅 하는 로직, 급하게 짜느라 문제가 있을 수 있음
-            DetectManager.GetInstance.StartDetector(new[] { this.gameObject }.ToList());
+            if(this.gameObject.activeSelf)
+                DetectManager.GetInstance.StartDetector(new[] { this.gameObject }.ToList());
         }
 
         AllPopUpNameCtr();
