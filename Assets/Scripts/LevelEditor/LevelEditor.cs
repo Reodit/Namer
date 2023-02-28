@@ -305,7 +305,8 @@ public class LevelEditor : MonoBehaviour
         GameDataManager.GetInstance.ReadMapData();
 
         int level = GameManager.GetInstance.CustomLevel + 1;
-        SLevelData customLevelData = new SLevelData(level, "CustomLevel" + level, new SPosition(stageStartPoint), SetStartCards()); GameDataManager.GetInstance.AddCustomLevelData(level, customLevelData);
+        SLevelData customLevelData = new SLevelData(level, "CustomLevel" + level, new SPosition(stageStartPoint), SetStartCards()); 
+        GameDataManager.GetInstance.AddCustomLevelData(level, customLevelData);
         
         SceneBehaviorManager.LoadScene(Scenes.LevelDesign, LoadSceneMode.Single);
     }

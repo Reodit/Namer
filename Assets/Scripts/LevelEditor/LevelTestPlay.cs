@@ -4,23 +4,27 @@ using UnityEngine.UI;
 
 public class LevelTestPlay : MonoBehaviour
 {
-    [SerializeField]private Button levelDesignButton;
+    [SerializeField]private Button saveButton;
+    [SerializeField]private Button closeButton;
     [SerializeField]private Button cancelButton;
+    
     private int currentLevel;
 
     private SLevelData customLevelData;
     
     private void Awake()
     {
-        Debug.Log("Play");
         currentLevel = GameManager.GetInstance.CustomLevel;
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditorTestPlay);
+        
+        GameDataManager.GetInstance.CreateCustomLevelMap();
     }
 
     private void Start()
     {
-        GameDataManager.GetInstance.CreateCustomLevelMap();
         DetectManager.GetInstance.Init();
+        ScenarioController scenarioController = FindObjectOfType<ScenarioController>();
+        scenarioController.Init();
         
         UIManager.GetInstance.ingameCanvas = GameObject.Find("IngameCanvas");
         UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
@@ -33,10 +37,9 @@ public class LevelTestPlay : MonoBehaviour
 
     void SetButton()
     {
-        levelDesignButton = GameObject.Find("LevelDesignSaveButton").GetComponent<Button>();
-        levelDesignButton.onClick.AddListener(SaveCustomLevelMap);
+        saveButton.onClick.AddListener(SaveCustomLevelMap);
+        closeButton.onClick.AddListener(CancelCustomLevelMap);
         
-        cancelButton = GameObject.Find("LevelDesignCancelButton").GetComponent<Button>();
         cancelButton.onClick.AddListener(CancelCustomLevelMap);
     }
 
@@ -48,15 +51,16 @@ public class LevelTestPlay : MonoBehaviour
         }
         
         GameManager.GetInstance.SetCustomLevel(GameManager.GetInstance.CustomLevel + 1);
+        GameDataManager.GetInstance.UpdateCustomLevel();
         GameDataManager.GetInstance.CreateFile();
         
+        GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
         SceneManager.LoadScene("MainScene");
     }
 
     private void CancelCustomLevelMap()
     {
         GameDataManager.GetInstance.DeleteCustomLevelData(currentLevel + 1);
-
         SceneBehaviorManager.LoadScene(Scenes.LevelEditor, LoadSceneMode.Single);
     }
 }
