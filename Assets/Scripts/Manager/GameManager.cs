@@ -508,15 +508,15 @@ public class GameManager : Singleton<GameManager>
             {
                 curLevel=GetCurrentLevel();
             }
-            DetectManager.GetInstance.Init(curLevel, isCustomLevel);
+            DetectManager.GetInstance.Init(curLevel);
         }
         else
         {
             DetectManager.GetInstance.Init(customLevel, isCustomLevel);
         }
         
-        CardManager.GetInstance.CardStart(); // 여기서 문제네
-        scenarioController.Init();
+        CardManager.GetInstance.CardStart(isCustomLevel); // 여기서 문제네
+        scenarioController.Init(isCustomLevel);
         SoundManager.GetInstance.ChangeInGameLevelBGM();
     }
     //load scene with loading card -> get level data from level card

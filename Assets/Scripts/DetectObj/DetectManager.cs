@@ -103,7 +103,7 @@ public partial class DetectManager : Singleton<DetectManager>
         GameManager.GetInstance.localPlayerMovement.Init();
     }
     
-    public void Init(int level)
+    public void Init(int level, bool isCustomLevel = false)
     {
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
@@ -114,9 +114,19 @@ public partial class DetectManager : Singleton<DetectManager>
 
         scaleChangedObjects = new Dictionary<Vector3, GameObject>();
         gameDataManager = GameDataManager.GetInstance;
-        SPosition position = gameDataManager.LevelDataDic[level].playerPosition;
         
-        gameDataManager.CreateMap(level);
+        SPosition position;
+        if (!isCustomLevel)
+        {
+            position = gameDataManager.LevelDataDic[level].playerPosition;
+        }
+        else
+        {
+            position = gameDataManager.CustomLevelDataDic[level].playerPosition;
+        }
+        
+        gameDataManager.CreateMap(level, isCustomLevel);
+
         SetMapData();
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
         GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(position.x, position.y, position.z);

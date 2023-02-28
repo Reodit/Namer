@@ -67,17 +67,15 @@ public class InteractiveObject : MonoBehaviour
 
     private void Start()
     {
+        addNameText = gameData.Names[objectName].uiText;
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
-            addNameText = "???";
             return;
         }
         
         objectName = objectInfo.nameType;
         SetAdjectiveFromData(gameData.Names[objectName].adjectives, false);
         SetAdjectiveFromData(objectInfo.adjectives);
-        
-        addNameText = gameData.Names[objectName].uiText;
         
         // Test
         countAdj.CopyTo(initCountAdj, 0);

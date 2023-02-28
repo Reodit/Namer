@@ -130,7 +130,7 @@ public class ScenarioController : MonoBehaviour
 #endif
     }
 
-    public void Init()
+    public void Init(bool isCustomLevel = false)
     {
         curScenario = new Scenario();
         curScenario.type = ERequireType.Null;
@@ -155,12 +155,35 @@ public class ScenarioController : MonoBehaviour
         restartTime = 20f;
 
         cameraController = Camera.main.transform.parent.GetComponent<CameraController>();
-        bool isExist = GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level);
-        bool isNull = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.Count() == 0;
+
+        bool isExist = false, isNull = false;
+
+        if (!isCustomLevel)
+        {
+            isExist = GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level);
+            isNull = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.Count() == 0;
+        }
+        else
+        {
+            isExist = GameDataManager.GetInstance.CustomLevelDataDic.Keys.Contains(GameManager.GetInstance.CustomLevel);
+            isNull = GameDataManager.GetInstance.CustomLevelDataDic[GameManager.GetInstance.CustomLevel].scenario.Count() == 0;
+        }
+        
         if (isExist && !isNull)
         {
             bool existGoal = false;
-            foreach (Scenario scenario in GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario)
+            
+            List<Scenario> scenarioList = new List<Scenario>();
+            if (!isCustomLevel)
+            {
+                scenarioList = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.ToList();
+            }
+            else
+            {
+                scenarioList = GameDataManager.GetInstance.CustomLevelDataDic[GameManager.GetInstance.CustomLevel].scenario.ToList();
+            }
+            
+            foreach (Scenario scenario in scenarioList)
             {
                 if (!existGoal && scenario.type == ERequireType.Victory)
                 {

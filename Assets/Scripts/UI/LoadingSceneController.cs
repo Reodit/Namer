@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -13,12 +10,16 @@ public class LoadingSceneController : MonoBehaviour
     [SerializeField] Image progressBar;
     [SerializeField] float fakeLoadTime = 0.7f;
 
-    public static void LoadScene(string sceneName)
+    static bool isCustom = false;
+
+    public static void LoadScene(string sceneName, bool isCustomLevel = false)
     {
         SoundManager.GetInstance.Play("GameStart2");
         nextScene = sceneName;
         SoundManager.GetInstance.bgmSound.Stop();
         SceneManager.LoadScene("LoadingScene");
+        
+        isCustom = isCustomLevel;
     }
 
     void Start()
@@ -76,7 +77,7 @@ public class LoadingSceneController : MonoBehaviour
 
         UIManager.GetInstance.ingameCanvas = GameObject.Find("IngameCanvas");
         UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
-
-        GameManager.GetInstance.LoadMap();
+        
+        GameManager.GetInstance.LoadMap(isCustom);
     }
 }

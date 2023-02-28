@@ -116,15 +116,15 @@ public class CardManager : Singleton<CardManager>
         CardManager.GetInstance.target = null;
     }
 
-    public void CardStart()
+    public void CardStart(bool isCustomLevel = false)
     {
         if (dealCardCoroutine != null)
             StopCoroutine(dealCardCoroutine);
-        dealCardCoroutine = StartCoroutine(DealCard());
+        dealCardCoroutine = StartCoroutine(DealCard(isCustomLevel));
     }
 
     //시작 카드를 딜링해주는 메서드 
-    IEnumerator DealCard()
+    IEnumerator DealCard(bool isCustomLevel = false)
     {
         
         var scene = SceneManager.GetActiveScene();
@@ -149,7 +149,7 @@ public class CardManager : Singleton<CardManager>
             if (GameManager.GetInstance.CurrentState == GameStates.InGame)
             {
                 GameDataManager gameData = GameDataManager.GetInstance;
-                int level = GameManager.GetInstance.Level;
+                int level = isCustomLevel ? GameManager.GetInstance.CustomLevel : GameManager.GetInstance.Level;
                 GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
 
                 if (cards != null)

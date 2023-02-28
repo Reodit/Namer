@@ -47,7 +47,7 @@ public class LevelTestPlay : MonoBehaviour
             return;
         }
         
-        GameManager.GetInstance.PlusCustomLevel();
+        GameManager.GetInstance.SetCustomLevel(GameManager.GetInstance.CustomLevel + 1);
         GameDataManager.GetInstance.CreateFile();
         
         SceneManager.LoadScene("MainScene");
