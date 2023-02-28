@@ -1458,13 +1458,13 @@ MonoBehaviour:
   screen: {fileID: 9059064919889774834}
   title: {fileID: 5063851021742596670}
   clipPaths:
-  - Assets/StreamingAssets/Move.mov
-  - Assets/StreamingAssets/AddCard.mov
-  - Assets/StreamingAssets/Pinter1.mov
-  - Assets/StreamingAssets/PInter2.mov
-  - Assets/StreamingAssets/Ointer1.mov
-  - Assets/StreamingAssets/Ointer2.mov
-  - Assets/StreamingAssets/AddStarName.mov
+  - Assets/Resources/media/Move.mov
+  - Assets/Resources/media/AddCard.mov
+  - Assets/Resources/media/Pinter1.mov
+  - Assets/Resources/media/PInter2.mov
+  - Assets/Resources/media/Ointer1.mov
+  - Assets/Resources/media/Ointer2.mov
+  - Assets/Resources/media/AddStarName.mov
   arrows:
   - {fileID: 5063851022164629387}
   - {fileID: 5063851021392359578}

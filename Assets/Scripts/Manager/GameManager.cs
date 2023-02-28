@@ -318,7 +318,8 @@ public class GameManager : Singleton<GameManager>
     void HandleLobby()
     {
         // menu 
-        // start game 
+        // start game
+        LevelEditor.isSaved = false;
     }
     
     public void Reset()

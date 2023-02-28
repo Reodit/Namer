@@ -152,14 +152,18 @@ public class LevelEditor : MonoBehaviour
     GameObject parentGrounds;
     GameObject parentObjects;
     GameObject parentBlanks;
-    static bool isSaved = false;
+    public static bool isSaved = false;
     Transform sPoint = null;
     #endregion
 
     #region Init
     void Awake()
     {
-        Destroy(DetectManager.GetInstance);
+        Destroy(DetectManager.GetInstance.gameObject);
+        if (GameManager.GetInstance.CurrentState == GameStates.Lobby || GameManager.GetInstance.CurrentState == GameStates.LevelSelect)
+        {
+            LevelEditor.isSaved = false;
+        }
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
         
         SetAllBtnListener();
@@ -204,7 +208,7 @@ public class LevelEditor : MonoBehaviour
     {
         GameManager.GetInstance.SetCustomLevel(GameDataManager.GetInstance.CustomLevelDataDic.Count);
         
-        stageStartPoint = new Vector3(0, 2, 0);
+        if (!isSaved) stageStartPoint = new Vector3(0, 2, 0);
         startCards = new SCardView(new List<EName>(), new List<EAdjective>());
         tilePrefabs = new List<GameObject>();
         objPrefabs = new List<GameObject>();
@@ -1127,7 +1131,8 @@ public class LevelEditor : MonoBehaviour
                 curX = 0;
                 curY = 0;
                 curZ = 0;
-                stageStartPoint = new Vector3(0, 2, 0);
+                if (!isSaved)
+                    stageStartPoint = new Vector3(0, 2, 0);
                 ViewCurY();
                 pointer.position = new Vector3(curX, curY + 0.5f, curZ);
                 blocksPanel.SetActive(true);
