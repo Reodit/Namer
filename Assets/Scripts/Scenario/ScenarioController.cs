@@ -82,6 +82,7 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] GameObject skipBtn;
     [SerializeField] Camera uiCam;
     [SerializeField] RectTransform canvasRect;
+    [SerializeField] GameObject[] tutorialPanels;
 
     [Header("안드로이드 버전만 등록 (Q,E,R,Space,Esc,도감순)")]
     [SerializeField] Button[] MButtons;
@@ -388,6 +389,13 @@ public class ScenarioController : MonoBehaviour
 
         if (curScenario.funcName != null && curScenario.funcName != "")
         {
+            if (curScenario.funcName.Contains("PopUpTutorial"))
+            {
+                int value = int.Parse(curScenario.funcName.Split(" ")[1]);
+                PopUpTutorial(value);
+                return;
+            }
+
             try
             {
                 Invoke(curScenario.funcName, 0);
@@ -534,6 +542,11 @@ public class ScenarioController : MonoBehaviour
         target.transform.position = nextScenarioPos;
 
         NextScenario();
+    }
+
+    private void PopUpTutorial(int idx)
+    {
+        tutorialPanels[idx].SetActive(true);
     }
 
     private InteractiveObject GetIObj()
