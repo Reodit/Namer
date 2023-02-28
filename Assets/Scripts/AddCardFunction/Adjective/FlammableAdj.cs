@@ -92,7 +92,7 @@ public class FlammableAdj : IAdjective
         if (otherObject.GetComponent<InteractiveObject>().Adjectives[flameIdx] == null) yield break;
 
         fire.Play();
-        SoundManager.GetInstance.Play(EAdjective.Flammable, 2.5f);
+        //SoundManager.GetInstance.Play(EAdjective.Flammable, 2.5f);
         
         float startTime1 = Time.time;
         while (Time.time < startTime1 + 2.5f)
@@ -131,6 +131,7 @@ public class FlammableAdj : IAdjective
         effect.name = "FireEffect";
         fire = thisObject.gameObject.GetComponentInChildren<ParticleSystem>();
         fire.Stop();
+        SoundManager.GetInstance.Play(EAdjective.Flammable, 2.5f);
     }
 
 }

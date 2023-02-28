@@ -786,7 +786,7 @@ public class LevelEditor : MonoBehaviour
             Transform blockT = blocks[x, y, z].transform;
             DeleteBlockInArray((blockT));
 
-            if (blocks[x, y, z] != sPoint.gameObject)
+            if (sPoint == null || blocks[x, y, z] != sPoint.gameObject)
                 Destroy(blocks[x, y, z]);
         }
 
@@ -825,7 +825,7 @@ public class LevelEditor : MonoBehaviour
             Transform blockT = blocks[x, y, z].transform;
             DeleteBlockInArray((blockT));
 
-            if (blocks[x,y,z] != sPoint.gameObject)
+            if (sPoint == null || blocks[x, y, z] != sPoint.gameObject)
                 Destroy(blocks[x, y, z]);
         }
 
