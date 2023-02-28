@@ -51,6 +51,19 @@ public struct Block
     }
 }
 
+[System.Serializable]
+public struct StartCards
+{
+    public ECardType type;
+    public int idx;
+
+    public StartCards (ECardType type, int idx)
+    {
+        this.type = type;
+        this.idx = idx;
+    }
+}
+
 public class LevelEditor : MonoBehaviour
 {
     #region values
@@ -113,6 +126,7 @@ public class LevelEditor : MonoBehaviour
     private List<EditorBlock> setCards = new List<EditorBlock>();
     private SCardView startCards;
     [SerializeField] public static Block[,,] preBlocks;
+    [SerializeField] public static StartCards[] preStartCards;
     private int curY = 0;
     private int curX = 0;
     private int curZ = 0;
@@ -133,13 +147,13 @@ public class LevelEditor : MonoBehaviour
     GameObject[,,] blocks;
     List<Transform> tiles = new List<Transform>();
     List<InteractiveObject> objects = new List<InteractiveObject>();
-    Vector3 stageStartPoint;
+    static Vector3 stageStartPoint;
     EditState curState = EditState.SetSize;
     GameObject parentGrounds;
     GameObject parentObjects;
     GameObject parentBlanks;
     static bool isSaved = false;
-
+    Transform sPoint = null;
     #endregion
 
     #region Init
@@ -204,6 +218,7 @@ public class LevelEditor : MonoBehaviour
             curState = EditState.SetSize;
             UpdateValuesInNewState(curState);
             LoadPreMap();
+            LoadPreCards();
         }
         else
         {
@@ -216,8 +231,19 @@ public class LevelEditor : MonoBehaviour
     public void LoadPreMap()
     {
         LoadArray();
-
+        SetStartPoint(stageStartPoint);
         isSaved = false;
+    }
+
+    private void LoadPreCards()
+    {
+        for (int i = 0; i < preStartCards.Length; i++)
+        {
+            StartCards sCard = preStartCards[i];
+            ECardType type = sCard.type;
+            int cardIdx = type == ECardType.Name ? sCard.idx : sCard.idx - GetCount(EBlockType.NameCard);
+            AddStartCard(i, cardBtns[cardIdx]);
+        }
     }
 
     private void LoadArray()
@@ -245,6 +271,7 @@ public class LevelEditor : MonoBehaviour
                         GameObject block = GameObject.Instantiate(objPrefabs[idx]);
                         objects.Add(block.GetComponent<InteractiveObject>());
                         block.transform.position = new Vector3(x, y, z);
+                        Destroy(block.GetComponent<Rigidbody>());
                         block.SetActive(true);
                         block.transform.parent = parentObjects.transform;
                         blocks[x, y, z] = block;
@@ -745,8 +772,9 @@ public class LevelEditor : MonoBehaviour
         {
             Transform blockT = blocks[x, y, z].transform;
             DeleteBlockInArray((blockT));
-            
-            Destroy(blocks[x, y, z]);
+
+            if (blocks[x, y, z] != sPoint.gameObject)
+                Destroy(blocks[x, y, z]);
         }
 
         if (block != EName.Null)
@@ -783,8 +811,9 @@ public class LevelEditor : MonoBehaviour
         {
             Transform blockT = blocks[x, y, z].transform;
             DeleteBlockInArray((blockT));
-            
-            Destroy(blocks[x, y, z]);
+
+            if (blocks[x,y,z] != sPoint.gameObject)
+                Destroy(blocks[x, y, z]);
         }
 
         if (block != ETile.Null)
@@ -824,7 +853,10 @@ public class LevelEditor : MonoBehaviour
     public void SetStartPoint(Vector3 pos)
     {
         Vector3Int posInt = Vector3Int.RoundToInt(pos);
-        Transform sPoint = GameObject.Instantiate(playerPrefab).transform;
+        if (sPoint == null)
+        {
+            sPoint = GameObject.Instantiate(playerPrefab).transform;
+        }
         sPoint.gameObject.SetActive(true);
         sPoint.position = posInt;
         stageStartPoint = posInt;
@@ -925,6 +957,8 @@ public class LevelEditor : MonoBehaviour
         if (card != null) card.transform.GetChild(0).GetChild(0).TryGetComponent<Text>(out textComponent);
         string name = textComponent == null ? "???" : textComponent.text;
         startCardTexts[idx].text = name;
+        ECardType cardType = card.idx > nameCount ? ECardType.Adjective : ECardType.Name;
+        preStartCards[idx] = new StartCards(cardType, card.idx);
     }
 
     public SCardView SetStartCards()
@@ -1065,6 +1099,15 @@ public class LevelEditor : MonoBehaviour
                 blocksPanel.SetActive(false);
                 blockNum = 0;
                 ClearMap();
+                setCards = new List<EditorBlock>(4) { null, null, null, null };
+                if (!isSaved)
+                {
+                    preStartCards = new StartCards[4];
+                    for (int i = 0; i < preStartCards.Length; i++)
+                    {
+                        AddStartCard(i, cardBtns[0]);
+                    }
+                }
                 break;
             case (EditState.MakeStage):
                 // play values init
@@ -1079,7 +1122,6 @@ public class LevelEditor : MonoBehaviour
                 int preLine = blockLine;
                 blockLine = 0;
                 ShowBlockLine(preLine, blockLine);
-                setCards = new List<EditorBlock>(4) { null, null, null, null };
                 selectedStartCard = -1;
                 objects = new List<InteractiveObject>();
                 tiles = new List<Transform>();

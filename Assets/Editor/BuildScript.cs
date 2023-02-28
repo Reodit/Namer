@@ -5,6 +5,20 @@ using System.IO.Compression;
 using UnityEditor.Build.Reporting;
 using System.IO;
 using UnityEngine;
+
+[InitializeOnLoad]
+public class PreloadSigningAlias
+{
+
+    static PreloadSigningAlias()
+    {
+        PlayerSettings.Android.keystorePass = "chemistry123";
+        PlayerSettings.Android.keyaliasName = "namer";
+        PlayerSettings.Android.keyaliasPass = "namer123";
+    }
+
+}
+
 class BuildScript {
 	static string[] SCENES = FindEnabledEditorScenes();
 
