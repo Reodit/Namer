@@ -580,6 +580,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f6b6079af8484edfa0dee4e79e996df, type: 3}
+--- !u!1 &45432267 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1410691945977366807, guid: 6f6b6079af8484edfa0dee4e79e996df, type: 3}
+  m_PrefabInstance: {fileID: 45432266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &72757860 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6034957127307905669, guid: ea7f5161c68934efe8dcd139027a46f9, type: 3}
@@ -4131,7 +4136,6 @@ MonoBehaviour:
   encyclopedia: {fileID: 872287249}
   mainMenucards: {fileID: 1216206864}
   titlePanel: {fileID: 2046814367}
-  mainRose: {fileID: 129132252}
   optionPanel: {fileID: 1532420952}
   levelSelectBtnPanel: {fileID: 1612767814}
   levelSelectBtnPanelLeftBtn: {fileID: 971117022}
@@ -4142,6 +4146,9 @@ MonoBehaviour:
   levelEditBtnPanelRightBtn: {fileID: 1674321405}
   levelEditCards: {fileID: 1641241754}
   infoPopUp: {fileID: 317625714}
+  mainRose: {fileID: 129132252}
+  levelRose: {fileID: 5054107703247487414}
+  editRose: {fileID: 45432267}
   infoPopUpTxt: {fileID: 740098856}
   titleMovingTime: 3
   cameraMovingTime: 3
@@ -8360,6 +8367,7 @@ MonoBehaviour:
   - {fileID: 2625901015695942100, guid: 09c0184ae5229764f9de6e8bcbfef7e9, type: 3}
   - {fileID: 1763381806119774454, guid: 9adce53c6d0ef4c3a98f6b4a37ba52d4, type: 3}
   - {fileID: 5481165786977658627, guid: 70147e15044b94964979a2b2991a8d66, type: 3}
+  mainUI: {fileID: 0}
   userId: 000000
 --- !u!4 &1154774481
 Transform:
@@ -18323,6 +18331,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd60ea9399e9042bfa66ca2e55140543, type: 3}
+--- !u!1 &5054107703247487414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6345451260210922956, guid: dd60ea9399e9042bfa66ca2e55140543, type: 3}
+  m_PrefabInstance: {fileID: 5054107703247487413}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8979535684101040728
 PrefabInstance:
   m_ObjectHideFlags: 0

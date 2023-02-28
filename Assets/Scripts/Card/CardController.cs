@@ -103,7 +103,7 @@ public class CardController : MonoBehaviour
         if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "NamingCard"
             && !CardManager.GetInstance.isEncyclopedia) return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause
-            || CardManager.GetInstance.isCasting) return;
+            || CardManager.GetInstance.isCasting || GameManager.GetInstance.isPlayerDoAction) return;
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
 
         //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경 
@@ -117,7 +117,7 @@ public class CardController : MonoBehaviour
         {
             CardSelectOn();
         }
-        //카드를 선택후에 한번 더 누르면 하이라이트를 끄고 회전을 멈추고 처음 상태로 되돌
+        //카드를 선택후에 한번 더 누르면 하이라이트를 끄고 회전을 멈추고 처음 상태로 되돌림 
         else
         {
             CardSelectOff();

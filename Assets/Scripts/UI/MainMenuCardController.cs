@@ -54,6 +54,26 @@ public class MainMenuCardController : MonoBehaviour
     //카드 영역에서 마우스 누르면 카드 선택 커서로 변경, 카드를 숨김
     private void OnMouseDown()
     {
+        // 메인메뉴 카드 선택하면 바로 실행
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || CardManager.GetInstance.isCasting) return;
+        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
+        if (mainUIController.state == MainMenuState.Main)
+        {
+            CardManager.GetInstance.target = mainUIController.mainRose;
+        }
+        else if (mainUIController.state == MainMenuState.Level)
+        {
+            CardManager.GetInstance.target = mainUIController.levelRose;
+        }
+        else if (mainUIController.state == MainMenuState.Edit)
+        {
+            CardManager.GetInstance.target = mainUIController.editRose;
+        }
+
+        TouchInteractObj();
+
+        /* 메인메뉴 카드 선택후 장미 선택 실
         if (GameManager.GetInstance.CurrentState == GameStates.Pause
             || CardManager.GetInstance.isCasting) return;
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
@@ -73,6 +93,7 @@ public class MainMenuCardController : MonoBehaviour
             if (CardManager.GetInstance.pickCard != this.gameObject) return;
             CardSelectOff();
         }
+        */
     }
     void CardSelectOn()
     {
@@ -102,6 +123,7 @@ public class MainMenuCardController : MonoBehaviour
         if (isTouching) return;
         StartCoroutine(CastCardDealing());
     }
+
     IEnumerator CastCardDealing()
     {
         CardManager.GetInstance.isCasting = true;
@@ -201,7 +223,6 @@ public class MainMenuCardController : MonoBehaviour
             case "ComingSoonCard":
                 mainUIController.GameUpdateInfo();
                 break;
-
             case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
                 CheckClearLevel(cardName);
