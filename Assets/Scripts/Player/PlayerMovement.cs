@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Collections;
 public class PlayerMovement : MonoBehaviour
@@ -76,7 +75,6 @@ public class PlayerMovement : MonoBehaviour
             DetectManager.GetInstance.CheckCharacterCurrentTile(this.gameObject);
             DetectManager.GetInstance.CheckForwardObj(this.gameObject);
             interactObj = DetectManager.GetInstance.forwardObjectInfo;
-            Debug.Log(objscale);
         }
 
         else
