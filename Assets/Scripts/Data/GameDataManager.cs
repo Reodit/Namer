@@ -60,7 +60,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
         userDataFileName = "user.json";
         levelDataFileName = "levels.json";
-        customLevelDataFileName = "customLevels.json";
+        customLevelDataFileName = GameManager.GetInstance.userId + "Levels.json";
     }
 
 #region Map(tile, object) Data
@@ -105,11 +105,22 @@ public class GameDataManager : Singleton<GameDataManager>
         saveFile.CreateJsonFile(mapData.objectInfoData, "Assets/Resources/Data/" + sceneName, objectInfoFileName);
     }
 
-    public void CreateMap(int level)
+    public void CreateMap(int level, bool isCustomLevel = false)
     {
         FilePathInfo();
         
-        string sceneName = levelDataDic[GameManager.GetInstance.Level].sceneName;
+        string levelFilePath = "", sceneName = "";
+        if (!isCustomLevel)
+        {
+            levelFilePath = filePath;
+            sceneName = levelDataDic[level].sceneName;
+        }
+        else
+        {
+            levelFilePath = "Assets/Resources/Data/" + GameManager.GetInstance.userId + "/";
+            sceneName = customLevelDataDic[level].sceneName;
+        }
+        
         if (sceneName == null || sceneName == "")
         {
             Debug.LogError("Load Level를 입력해주세요");
@@ -117,9 +128,9 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         SaveLoadFile loadFile = new SaveLoadFile();
-        StringReader tileMapData = loadFile.ReadCsvFile(filePath + sceneName, tileMapFileName);
-        StringReader objectMapData = loadFile.ReadCsvFile(filePath + sceneName, objectMapFileName);
-        Dictionary<int, SObjectInfo> objectInfoDic = loadFile.ReadJsonFile<int, SObjectInfo>(filePath + sceneName, objectInfoFileName);
+        StringReader tileMapData = loadFile.ReadCsvFile(levelFilePath + sceneName, tileMapFileName);
+        StringReader objectMapData = loadFile.ReadCsvFile(levelFilePath + sceneName, objectMapFileName);
+        Dictionary<int, SObjectInfo> objectInfoDic = loadFile.ReadJsonFile<int, SObjectInfo>(levelFilePath + sceneName, objectInfoFileName);
 
         MapCreator mapCreator = FindObjectOfType<MapCreator>();
         if (!mapCreator)
@@ -128,8 +139,9 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         initTiles = mapCreator.CreateTileMap(tileMapData);
         initObjects = mapCreator.CreateObjectMap(objectMapData, objectInfoDic);
-        
-        SetCardEncyclopedia(levelDataDic[GameManager.GetInstance.Level].cardView);
+
+        SCardView cardView = isCustomLevel ? customLevelDataDic[level].cardView : levelDataDic[level].cardView;
+        SetCardEncyclopedia(cardView);
     }
 
     public void CreateCustomLevelMap()
@@ -156,6 +168,7 @@ public class GameDataManager : Singleton<GameDataManager>
         SaveLoadFile loadFile = new SaveLoadFile();
         userDataDic = loadFile.ReadJsonFile<string, SUserData>(filePath + "SaveLoad", userDataFileName);
         levelDataDic = loadFile.ReadJsonFile<int, SLevelData>(filePath + "SaveLoad", levelDataFileName);
+        customLevelDataDic = loadFile.ReadJsonFile<int, SLevelData>(filePath + "SaveLoad", customLevelDataFileName);
     }
 
     public void AddUserData(string userID)
@@ -298,7 +311,7 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         SaveLoadFile saveFile = new SaveLoadFile();
-        saveFile.UpdateDicDataToJsonFile(customLevelDataDic, "Assets/Resources/Data/" + "SaveLoad", customLevelDataFileName);
+        saveFile.UpdateDicDataToJsonFile(customLevelDataDic, filePath + "SaveLoad", customLevelDataFileName);
     }
 
     public void DeleteCustomLevelData(int level)

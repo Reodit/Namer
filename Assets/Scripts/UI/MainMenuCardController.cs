@@ -242,8 +242,6 @@ public class MainMenuCardController : MonoBehaviour
             //이부분 살짝 수정함
             // GameManager.GetInstance.SetLevelFromCard(cardName); 
             case "CustomCard":
-                // 1CustomCard
-                Debug.Log(cardName);
                 CheckCustomLevel(cardName);
                 break;
             default:
