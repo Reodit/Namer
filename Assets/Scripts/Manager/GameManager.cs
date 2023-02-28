@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using GooglePlayGames;
 
@@ -143,9 +144,14 @@ public class GameManager : Singleton<GameManager>
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
         GameDataManager.GetInstance.AddUserData(userId);
-
         GameDataManager.GetInstance.GetCardData();
+        
         customLevel = GameDataManager.GetInstance.CustomLevelDataDic.Count;
+        if (customLevel > 0)
+        {
+            customLevel = GameDataManager.GetInstance.CustomLevelDataDic.Keys.Max();
+        }
+
         #endregion
 
         SetTimeScale(1);
@@ -366,6 +372,10 @@ public class GameManager : Singleton<GameManager>
     GameObject player;
     
 #region LevelEditMode
+
+    private bool isCustomLevel = false;
+    public bool IsCustomLevel { get { return isCustomLevel; } set { isCustomLevel = value; } }
+    
     private int customLevel = 0;
     public int CustomLevel { get { return customLevel; }}
 
@@ -494,13 +504,13 @@ public class GameManager : Singleton<GameManager>
     //DemoScene에서 하면 왜됌?
     //근데 씬불러올때는 안되네;
     [ContextMenu("LoadMapTest")]
-    public void LoadMap(bool isCustomLevel = false)
+    public void LoadMap()
     {
-        if (CurrentState == GameStates.LevelEditMode)
-        {
-            DetectManager.GetInstance.Init();
-            return;
-        }
+        // if (CurrentState == GameStates.LevelEditMode)
+        // {
+        //     DetectManager.GetInstance.Init();
+        //     return;
+        // }
         
         if (!isCustomLevel)
         {
@@ -513,11 +523,11 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            DetectManager.GetInstance.Init(customLevel, isCustomLevel);
+            DetectManager.GetInstance.Init(customLevel);
         }
         
-        CardManager.GetInstance.CardStart(isCustomLevel); // 여기서 문제네
-        scenarioController.Init(isCustomLevel);
+        CardManager.GetInstance.CardStart(); // 여기서 문제네
+        scenarioController.Init();
         SoundManager.GetInstance.ChangeInGameLevelBGM();
     }
     //load scene with loading card -> get level data from level card

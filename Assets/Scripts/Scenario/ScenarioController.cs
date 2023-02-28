@@ -131,7 +131,7 @@ public class ScenarioController : MonoBehaviour
 #endif
     }
 
-    public void Init(bool isCustomLevel = false)
+    public void Init()
     {
         curScenario = new Scenario();
         curScenario.type = ERequireType.Null;
@@ -143,9 +143,11 @@ public class ScenarioController : MonoBehaviour
         ClearKeyPressed();
 
         skipBtn = dialogBox.transform.Find("SkipBtn").gameObject;
-        stageClearPanel =
-            GameObject.Find("IngameCanvas").transform.
-            Find("StageClearPanel").gameObject;
+
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            stageClearPanel = GameObject.Find("IngameCanvas").transform.Find("StageClearPanel").gameObject;
+        }
 
         isUI = false;
         isStart = false;
@@ -159,7 +161,7 @@ public class ScenarioController : MonoBehaviour
 
         bool isExist = false, isNull = false;
 
-        if (!isCustomLevel)
+        if (!GameManager.GetInstance.IsCustomLevel)
         {
             isExist = GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level);
             isNull = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.Count() == 0;
@@ -175,7 +177,7 @@ public class ScenarioController : MonoBehaviour
             bool existGoal = false;
             
             List<Scenario> scenarioList = new List<Scenario>();
-            if (!isCustomLevel)
+            if (!GameManager.GetInstance.IsCustomLevel)
             {
                 scenarioList = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.ToList();
             }
@@ -586,6 +588,7 @@ public class ScenarioController : MonoBehaviour
     {
         yield return new WaitForSeconds(delayWinUI);
         CardManager.GetInstance.CardsDown();
+        
         stageClearPanel.SetActive(true);
     }
 
@@ -729,7 +732,7 @@ public class ScenarioController : MonoBehaviour
     {
         if (!isStart) return;
         if (stageClearPanel.activeSelf) return;
-        if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
+        if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
         if (nextSenarioTime != -3f) nextSenarioTime -= Time.deltaTime;
         if (restartTime > 0) restartTime -= Time.deltaTime;
         else
