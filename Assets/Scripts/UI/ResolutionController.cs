@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ResolutionController : MonoBehaviour
 {
+#if UNITY_ANDROID
     Camera cameraView;
 
     private void Start()
@@ -62,4 +63,5 @@ public class ResolutionController : MonoBehaviour
             GL.Clear(true, true, Color.black);
         }
     }
+#endif
 }

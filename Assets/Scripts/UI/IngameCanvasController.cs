@@ -37,7 +37,10 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     void Update()
     {
+        CardToggleOnOff();
+#if UNITY_ANDROID
         CameraViewBtnOnOff();
+#endif
     }
 
     void Init()
@@ -86,10 +89,11 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
             GameManager.GetInstance.isPlayerCanInput = true;
         }
         encyclopedia.SetActive(false);
-        bottomButtons.SetActive(true);
+#if UNITY_ANDROID
         joyStick.SetActive(true);
-        topButtons.SetActive(true);
         bottomButtons.SetActive(true);
+#endif
+        topButtons.SetActive(true);
         topPanel.SetActive(true);
         GameManager.GetInstance.ChangeGameState(GameStates.InGame);
         CardManager.GetInstance.CardsUp();
@@ -193,7 +197,30 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         }
         Invoke("EncyclopediaOpen", 0.5f);
     }
+    private void CardToggleOnOff()
+    {
+        if (!CardManager.GetInstance.isCardDealingDone) return;
+        if (CardManager.GetInstance.isAligning) return;
 
+        if (Input.GetKeyDown(GameManager.GetInstance.cardToggleKey))
+        {
+            if (isCardVisible)
+            {
+                CardManager.GetInstance.CardsDown();
+                isCardVisible = false;
+                cardBtnImg.transform.localScale = new Vector3(1, -1, 1);
+
+            }
+            else
+            {
+                CardManager.GetInstance.CardsUp();
+                isCardVisible = true;
+                cardBtnImg.transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
+    }
+
+#if UNITY_ANDROID
     public void CardToggleButton()
     {
         if (isCardVisible)
@@ -243,4 +270,6 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
             cameraViewImg.gameObject.SetActive(true);
         }
     }
+#endif
+
 }

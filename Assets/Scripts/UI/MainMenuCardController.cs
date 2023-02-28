@@ -16,6 +16,7 @@ public class MainMenuCardController : MonoBehaviour
     GameObject levelSelectCardHolder;
     Vector3 originPos;
     Vector3 originRot;
+    bool isHover;
 
     bool isTouching;
     private void Start()
@@ -51,6 +52,8 @@ public class MainMenuCardController : MonoBehaviour
             transform.localScale = prs.scale;
         }
     }
+
+#if UNITY_ANDROID
     //카드 영역에서 마우스 누르면 카드 선택 커서로 변경, 카드를 숨김
     private void OnMouseDown()
     {
@@ -95,6 +98,83 @@ public class MainMenuCardController : MonoBehaviour
         }
         */
     }
+#else
+    private void OnMouseOver()
+    {
+        if (CardManager.GetInstance.isCasting) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || CardManager.GetInstance.isCasting) return;
+        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
+        highlight.SetActive(true);
+        cr.enabled = true;
+        if (!isHover)
+        {
+            SoundManager.GetInstance.Play("CardSelect");
+            isHover = true;
+        }
+    }
+
+    //마우스가 호버하다가 떠나면 하이라이트 표시를 끄고 카드 회전을 멈추고 처음 상태로 되돌린다
+    private void OnMouseExit()
+    {
+        if (CardManager.GetInstance.isCasting) return;
+        isHover = false;
+        if (!CardManager.GetInstance.ableCardCtr) return;
+        highlight.SetActive(false);
+        cr.enabled = false;
+        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
+    }
+
+    //카드 영역에서 마우스 누르면 카드 선택 커서로 변경, 카드를 숨김 
+    private void OnMouseDown()
+    {
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+        || CardManager.GetInstance.isCasting) return;
+        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
+        if (mainUIController.state == MainMenuState.Main)
+        {
+            CardManager.GetInstance.target = mainUIController.mainRose;
+        }
+        else if (mainUIController.state == MainMenuState.Level)
+        {
+            CardManager.GetInstance.target = mainUIController.levelRose;
+        }
+        else if (mainUIController.state == MainMenuState.Edit)
+        {
+            CardManager.GetInstance.target = mainUIController.editRose;
+        }
+
+        TouchInteractObj();
+        //if (GameManager.GetInstance.CurrentState == GameStates.Pause
+        //            || CardManager.GetInstance.isCasting) return;
+        //if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
+        //CardManager.GetInstance.isPickCard = true;
+        //bc.enabled = false;
+        //frontCover.SetActive(false);
+    }
+
+    //카드 선택 커서 상태에서 상호작용 오브젝트 위에서 마우스를 놓으면 속성 부여,
+    //오브젝트 아닌곳에서는 기본 커서로 다시 변경하고 카드를 다시 보이게,
+    //private void OnMouseUp()
+    //{
+    //    if (!CardManager.GetInstance.ableCardCtr) return;
+    //    CardManager.GetInstance.isPickCard = false;
+    //    if (CardManager.GetInstance.target != null)
+    //    {
+    //        MainCastCard(this.gameObject.name);
+    //        CardManager.GetInstance.target = null;
+
+    //        if (this.name != "OptionCard(Clone)")
+    //        {
+    //            Invoke("CardReturn", 1f);
+    //        }
+    //    }
+    //    else if (bc != null)
+    //    {
+    //        CardReturn();
+    //    }
+    //}
+#endif
     void CardSelectOn()
     {
         if (CardManager.GetInstance.pickCard != null) return;

@@ -31,24 +31,26 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerEntity = GetComponent<PlayerEntity>();
         GameObject vrJoystick = GameObject.Find("IngameCanvas").transform.Find("VirtualJoystick").gameObject;
+#if UNITY_ANDROID
         vrJoystick.SetActive(true);
+#endif
         virtualJoystick = vrJoystick.GetComponent<VirtualJoystick>();
-        #endregion
+#endregion
 
-        #region KeyAction Init
+#region KeyAction Init
         GameManager.GetInstance.KeyAction += MoveKeyInput;
         GameManager.GetInstance.KeyAction += PlayInteraction;
-        #if UNITY_ANDROID
+#if UNITY_ANDROID
         GameManager.GetInstance.KeyAction -= PlayInteraction;
-        #endif
-        #endregion
+#endif
+#endregion
         
-        #region Init Variable
+#region Init Variable
         GameManager.GetInstance.localPlayerMovement = this;
         rootmotionSpeed = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
-        #endregion
+#endregion
     }
     
     public void MoveKeyInput()
@@ -62,9 +64,9 @@ public class PlayerMovement : MonoBehaviour
         {
             CheckInteraction();
         }
-        #if UNITY_ANDROID
+#if UNITY_ANDROID
         CheckInteraction();
-        #endif
+#endif
     }
 
     private void Update()
@@ -80,8 +82,9 @@ public class PlayerMovement : MonoBehaviour
         {
             Init();
         }
-        
+
         // TODO 하드 코딩 제거
+#if UNITY_ANDROID
         if (UIManager.GetInstance.ingameCanvas)
         {
             if (GameManager.GetInstance.isPlayerCanInput &&
@@ -96,9 +99,9 @@ public class PlayerMovement : MonoBehaviour
                     io.Adjectives[(int)EAdjective.Climbable] != null ||
                     io.Adjectives[(int)EAdjective.Movable] != null)
                 {
-                    UIManager.GetInstance.ingameCanvas.TryGetComponent<IngameCanvasController>(
-                        out IngameCanvasController ic);
-                    ic.InteractionBtnOn();
+                    //UIManager.GetInstance.ingameCanvas.TryGetComponent<IngameCanvasController>(
+                    //    out IngameCanvasController ic);
+                    ////ic.InteractionBtnOn();
                 }
             }
 
@@ -110,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+#endif
     }
 
     private void FixedUpdate()
@@ -272,7 +276,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForFixedUpdate();
     }
 
-    #region Animation Rootmotion
+#region Animation Rootmotion
     public IEnumerator PushRootmotion()
     {
         yield return SetRotationBeforeInteraction();
@@ -412,9 +416,9 @@ public class PlayerMovement : MonoBehaviour
         
         rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
-    #endregion
+#endregion
 
-    #region AnimationEvent Function
+#region AnimationEvent Function
     public void PushRootmotionEvent()
     {
         StartCoroutine(PushRootmotion());    
@@ -424,5 +428,5 @@ public class PlayerMovement : MonoBehaviour
     {
         StartCoroutine(ClimbRootmotion());
     }
-    #endregion
+#endregion
 }

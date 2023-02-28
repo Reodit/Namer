@@ -58,9 +58,9 @@ public class CardManager : Singleton<CardManager>
         if (!isPickCard && CardManager.GetInstance.target == null ||
             CardManager.GetInstance.isCasting) return;
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.GetMouseButtonDown(0))
         {
-            Vector2 touchPos = Input.GetTouch(0).position;
+            Vector2 touchPos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(touchPos);
             RaycastHit hit;
 
@@ -181,7 +181,9 @@ public class CardManager : Singleton<CardManager>
             yield return new WaitForSeconds(1.5f);
             isCardDealingDone = true;
             topButtons.SetActive(true);
+#if UNITY_ANDROID
             bottomButtons.SetActive(true);
+#endif
         }
     }
 

@@ -11,16 +11,12 @@ public class EncyclopediaController : MonoBehaviour
     [SerializeField] UnityEngine.UI.Button returnBtn;
     GameObject[] pediaCards;
     IngameCanvasController canvasController;
-    GameDataManager gameDataManager;
 
-    Touch touch;
-    float wheelInput;
-    Vector2 startPos;
-    float scrollSpeed = 0.0003f;
+    GameDataManager gameDataManager;
 
     private void Start()
     {
-       Init();
+        Init();
     }
 
     void Update()
@@ -52,7 +48,7 @@ public class EncyclopediaController : MonoBehaviour
         }
 
         if (pediaCards == null) return;
-        maxHeight = 0.5f + (float) 0.6 * (pediaCards.Length / 4);
+        maxHeight = 0.5f + (float)0.5 * (pediaCards.Length / 4);
 
         for (int i = 0; i < pediaCards.Length; i++)
         {
@@ -61,7 +57,7 @@ public class EncyclopediaController : MonoBehaviour
             cardObject.transform.parent = GameObject.Find("LayoutCards").transform;
             cardObject.transform.localPosition =
                 new Vector3(-0.9f + (0.6f * (i % 4)),
-                -0.7f * (int) (i / 4), 0);
+                -0.7f * (int)(i / 4), 0);
             cardObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
 
         }
@@ -73,41 +69,16 @@ public class EncyclopediaController : MonoBehaviour
             new Vector3(0f, scrollbar.value * maxHeight, 0f);
     }
 
-   
     private void ScrollWheel()
     {
-
-        if (Input.touchCount > 0)
-        {
-            touch = Input.GetTouch(0);
-            wheelInput = -1 * touch.deltaPosition.y;
-            if (touch.phase == TouchPhase.Began)
-            {
-                startPos = touch.position;
-            }
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                float deltaY = touch.position.y - startPos.y;
-                wheelSpeed =  deltaY * scrollSpeed;
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                wheelSpeed = 0f;
-            }
-
-
-        }
+        float wheelInput = Input.GetAxis("Mouse ScrollWheel");
         if (wheelInput > 0)
         {
-            layoutGroup.transform.localPosition -= new Vector3(0, -1 * wheelSpeed, 0);
+            layoutGroup.transform.localPosition -= new Vector3(0, wheelSpeed, 0);
             scrollbar.value = layoutGroup.transform.localPosition.y / maxHeight;
             if (layoutGroup.transform.localPosition.y <= 0f)
             {
                 layoutGroup.transform.localPosition = new Vector3(0, 0, 0);
-            }
-            if (layoutGroup.transform.localPosition.y >= maxHeight)
-            {
-                layoutGroup.transform.localPosition = new Vector3(0, maxHeight, 0);
             }
         }
         else if (wheelInput < 0)
@@ -118,11 +89,6 @@ public class EncyclopediaController : MonoBehaviour
             {
                 layoutGroup.transform.localPosition = new Vector3(0, maxHeight, 0);
             }
-            if (layoutGroup.transform.localPosition.y <= 0f)
-            {
-                layoutGroup.transform.localPosition = new Vector3(0, 0, 0);
-            }
-
         }
     }
 }

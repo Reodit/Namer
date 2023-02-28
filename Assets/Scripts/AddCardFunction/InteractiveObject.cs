@@ -455,6 +455,40 @@ public class InteractiveObject : MonoBehaviour
     //카드를 선택한 상태에서 오브젝트를 호버링하면 카드의 타겟으로 설정
     //오브젝트의 이름을 화면에 띄움
 
+    bool isHoverling = false;
+    private void OnMouseOver()
+    {
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "PlanetObj") return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia
+            || CardManager.GetInstance.isCasting) return;
+
+        isHoverling = true;
+        if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
+        {
+            CardManager.GetInstance.target = this.gameObject;
+            if (CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()) >= maxAdjCount)
+            {
+                CardManager.GetInstance.ableAddCard = false;
+                return;
+            }
+        }
+        if (this.gameObject.CompareTag("InteractObj"))
+        {
+            PopUpNameOn();
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+        isHoverling = false;
+        if (this.gameObject.CompareTag("InteractObj") && name != "PlanetObj")
+        {
+            PopUpNameOff();
+            CardManager.GetInstance.ableAddCard = true;
+        }
+    }
 
     public bool isTouched = false;
     private void OnMouseDown()
@@ -465,55 +499,55 @@ public class InteractiveObject : MonoBehaviour
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode) return;
 
         //카드를 선택한 상황에서 오브젝트를 터치한 경우 
-        else if (UIManager.GetInstance.isShowNameKeyPressed && CardManager.GetInstance.pickCard != null
+        if (CardManager.GetInstance.pickCard != null
             && CardManager.GetInstance.isPickCard)
         {
             CardManager.GetInstance.target = this.gameObject;
             CardManager.GetInstance.pickCard.GetComponent<CardController>().TouchInteractObj();
         }
-        else if (!isTouched)
-        {
-            //카드를 선택하지 않은 상태에서 다른 오브젝트를 선택하고 있는데 이 오브젝트를 터치한 경우 
-            if (GameManager.GetInstance.CurrentState == GameStates.Victory && name == "PlanetObj") return;
-            if (CardManager.GetInstance.target != null && !CardManager.GetInstance.isPickCard)
-            {
-                CardManager.GetInstance.target.GetComponent<InteractiveObject>().isTouched = false;
-                CardManager.GetInstance.target = this.gameObject;
-            }
-            isTouched = true;
-            CardManager.GetInstance.target = this.gameObject;
-            if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
-            {
-                CardManager.GetInstance.target = this.gameObject;
+        //else if (!isTouched)
+        //{
+        //    //카드를 선택하지 않은 상태에서 다른 오브젝트를 선택하고 있는데 이 오브젝트를 터치한 경우 
+        //    if (GameManager.GetInstance.CurrentState == GameStates.Victory && name == "PlanetObj") return;
+        //    if (CardManager.GetInstance.target != null && !CardManager.GetInstance.isPickCard)
+        //    {
+        //        CardManager.GetInstance.target.GetComponent<InteractiveObject>().isTouched = false;
+        //        CardManager.GetInstance.target = this.gameObject;
+        //    }
+        //    isTouched = true;
+        //    CardManager.GetInstance.target = this.gameObject;
+        //    if (this.gameObject.CompareTag("InteractObj") && CardManager.GetInstance.isPickCard)
+        //    {
+        //        CardManager.GetInstance.target = this.gameObject;
 
-                if (CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()) >= maxAdjCount)
-                {
-                    CardManager.GetInstance.ableAddCard = false;
-                    return;
-                }
-            }
-            if (this.gameObject.CompareTag("InteractObj"))
-            {
-                PopUpNameOn();
-            }
+        //        if (CheckCountAdjective(CardManager.GetInstance.pickCard.GetComponent<CardController>().GetAdjectiveTypeOfCard()) >= maxAdjCount)
+        //        {
+        //            CardManager.GetInstance.ableAddCard = false;
+        //            return;
+        //        }
+        //    }
+        //    if (this.gameObject.CompareTag("InteractObj"))
+        //    {
+        //        PopUpNameOn();
+        //    }
 
-            if (CardManager.GetInstance.isPickCard)
-            {
-                CardManager.GetInstance.pickCard.GetComponent<CardController>().TouchInteractObj();
-            }
-        }
-        else
-        {
-            if (GameManager.GetInstance.CurrentState == GameStates.Victory && name == "PlanetObj") return;
-            isTouched = false;
-            CardManager.GetInstance.target = null;
-            popUpName.SetActive(false);
-            if (this.gameObject.CompareTag("InteractObj"))
-            {
-                PopUpNameOff();
-                CardManager.GetInstance.ableAddCard = true;
-            }
-        }
+        //    if (CardManager.GetInstance.isPickCard)
+        //    {
+        //        CardManager.GetInstance.pickCard.GetComponent<CardController>().TouchInteractObj();
+        //    }
+        //}
+        //else
+        //{
+        //    if (GameManager.GetInstance.CurrentState == GameStates.Victory && name == "PlanetObj") return;
+        //    isTouched = false;
+        //    CardManager.GetInstance.target = null;
+        //    popUpName.SetActive(false);
+        //    if (this.gameObject.CompareTag("InteractObj"))
+        //    {
+        //        PopUpNameOff();
+        //        CardManager.GetInstance.ableAddCard = true;
+        //    }
+        //}
     }
 
     //오브젝트 현재 이름 팝업을 띄움 
@@ -537,7 +571,7 @@ public class InteractiveObject : MonoBehaviour
          {
             PopUpNameOn();
          }
-         if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isTouched)
+         if (!UIManager.GetInstance.isShowNameKeyPressed && popUpName.activeSelf && !isHoverling)
          {
             if (GameManager.GetInstance.CurrentState != GameStates.LevelEditMode)
                 PopUpNameOff();

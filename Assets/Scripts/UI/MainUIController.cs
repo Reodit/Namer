@@ -157,7 +157,7 @@ public class MainUIController : MonoBehaviour
     //타이틀 화면을 터치3면 메인메뉴 화면으로 이동 
     void PressAnyKey()
     {
-        if (!isPressAnyKey && Input.touchCount > 0)
+        if (!isPressAnyKey && Input.anyKeyDown)
         {
             isPressAnyKey = true;
             TitleMove(titleMovingTime);

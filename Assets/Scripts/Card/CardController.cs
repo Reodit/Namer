@@ -22,6 +22,7 @@ public class CardController : MonoBehaviour
     [SerializeField] private Text priorityNum;
     GameObject Encyclopedia;
     CardRotate cr;
+    bool isHover;
     bool isTouching;
     public EAdjective GetAdjectiveTypeOfCard()
     {
@@ -98,30 +99,92 @@ public class CardController : MonoBehaviour
         }
 
     }
-    private void OnMouseDown()
-    { 
+
+    private void OnMouseOver()
+    {
         if (GameManager.GetInstance.CurrentState == GameStates.Victory && name != "NamingCard"
             && !CardManager.GetInstance.isEncyclopedia) return;
         if (GameManager.GetInstance.CurrentState == GameStates.Pause
             || CardManager.GetInstance.isCasting || GameManager.GetInstance.isPlayerDoAction) return;
-        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
+        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone
+            || isTouched || CardManager.GetInstance.pickCard != null
+            || CardManager.GetInstance.isCasting) return;
 
-        //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경 
-        if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
+        highlight.SetActive(true);
+        if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
+        {
+            Encyclopedia.SetActive(true);
+            return;
+        }
+        cr.enabled = true;
+        if (!isHover)
+        {
+            SoundManager.GetInstance.Play("CardSelect");
+            isHover = true;
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (!CardManager.GetInstance.ableCardCtr || isTouched
+            || CardManager.GetInstance.pickCard != null || CardManager.GetInstance.isCasting) return;
+        isHover = false;
+        highlight.SetActive(false);
+        cr.enabled = false;
+        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
+        if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
+        {
+            Encyclopedia.SetActive(false);
+            return;
+        }
+    }
+
+    bool isTouched;
+    private void OnMouseDown()
+    {
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory
+            && name != "NamingCard") return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause ||
+            GameManager.GetInstance.CurrentState == GameStates.Encyclopedia ||
+            CardManager.GetInstance.isEncyclopedia) return;
+        if (!CardManager.GetInstance.ableCardCtr ||
+            !CardManager.GetInstance.isCardDealingDone ||
+            CardManager.GetInstance.pickCard != null ||
+            CardManager.GetInstance.isCasting ||
+            GameManager.GetInstance.isPlayerDoAction) return;
+        if (CardManager.GetInstance.pickCard != null)
         {
             CardManager.GetInstance.pickCard.GetComponent<CardController>().CardSelectOff();
-            CardSelectOn();
         }
-        //카드를 터치하면 하이라이트 표시를하고 카트를 회전시킨다
-        else if (!CardManager.GetInstance.isPickCard)
+        else if (!isTouched)
         {
-            CardSelectOn();
+            isTouched = true;
+            CardManager.GetInstance.isPickCard = true;
+            cr.enabled = false;
+            CardManager.GetInstance.pickCard = gameObject;
+            gameObject.transform.DOLocalRotate(new Vector3(0, 180, 0), 0.3f);
+            gameObject.transform.DOScale(new Vector3(0.3f, 0.3f, 0.3f), 0.3f);
         }
-        //카드를 선택후에 한번 더 누르면 하이라이트를 끄고 회전을 멈추고 처음 상태로 되돌림 
         else
         {
             CardSelectOff();
         }
+        ////다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경 
+        //if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
+        //{
+        //    CardManager.GetInstance.pickCard.GetComponent<CardController>().CardSelectOff();
+        //    CardSelectOn();
+        //}
+        ////카드를 터치하면 하이라이트 표시를하고 카트를 회전시킨다
+        //else if (!CardManager.GetInstance.isPickCard)
+        //{
+        //    CardSelectOn();
+        //}
+        ////카드를 선택후에 한번 더 누르면 하이라이트를 끄고 회전을 멈추고 처음 상태로 되돌림 
+        //else
+        //{
+        //    CardSelectOff();
+        //}
     }
 
     void CardSelectOn()
@@ -143,20 +206,25 @@ public class CardController : MonoBehaviour
 
     public void CardSelectOff()
     {
+        bc.enabled = false;
         if (CardManager.GetInstance.pickCard != this.gameObject) return;
         highlight.SetActive(false);
-        cr.enabled = false;
         CardManager.GetInstance.isPickCard = false;
-        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
+        transform.DORotateQuaternion(cardHolder.transform.rotation, 0.3f);
         CardManager.GetInstance.pickCard = null;
+        gameObject.transform.DOScale(new Vector3(1f, 1f, 1f), 0.3f);
+        isTouched = false;
+        Invoke("CardColiderReturn", 0.5f);
         if (CardManager.GetInstance.isEncyclopedia || GameManager.GetInstance.CurrentState == GameStates.Encyclopedia)
         {
             Encyclopedia.SetActive(false);
             return;
         }
-        UIManager.GetInstance.isShowNameKeyPressed = false;
     }
-
+    void CardColiderReturn()
+    {
+        bc.enabled = true;
+    }
     //카드 선택 커서 상태에서 상호작용 오브젝트 위에서 마우스를 놓으면 속성 부여,
     //오브젝트 아닌곳에서는 기본 커서로 다시 변경하고 카드를 다시 보이게,
     public void TouchInteractObj()
@@ -173,8 +241,7 @@ public class CardController : MonoBehaviour
         bc.enabled = false;
         cr.enabled = false;
         CardManager.GetInstance.isPickCard = false;
-        gameObject.transform.DOLocalRotate(new Vector3(0, 180, 0), 0.3f);
-        yield return new WaitForSeconds(0.3f);
+        CardManager.GetInstance.pickCard = null;
         gameObject.transform.DOLocalRotate(new Vector3(300, 180, 0), 0.3f);
         if (name == "NamingCard")
         {

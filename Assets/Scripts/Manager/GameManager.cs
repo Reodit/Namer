@@ -75,32 +75,35 @@ public class GameManager : Singleton<GameManager>
             return;
         }
         DontDestroyOnLoad(this.gameObject);
-        
+
+#if UNITY_ANDROID
         GooglePlayConnect gc = GameObject.Find("GooglePlay").GetComponent<GooglePlayConnect>();
         userId = gc.userID;
         Debug.Log(userId);
         Destroy(gc);
-
+#else
+        userId = "111111";
+#endif
         Init();
     }
 
     private void Init()
     {
-        #region StateMachine Runner
+#region StateMachine Runner
         this.gameObject.AddComponent<StateMachineRunner>();
-        #endregion
+#endregion
 
-        #region GameStates
+#region GameStates
         CurrentState = GameStates.Lobby;
         previousState = CurrentState;
-        #endregion
+#endregion
         
-        #region Player variable
+#region Player variable
         isPlayerDoAction = false;
         isPlayerCanInput = true;
-        #endregion
+#endregion
 
-        #region Instantiate Managers
+#region Instantiate Managers
         if (managerPrefabs != null)
         {
             foreach (var var in managerPrefabs)
@@ -122,9 +125,9 @@ public class GameManager : Singleton<GameManager>
                 }
             }
         }
-        #endregion
+#endregion
         
-        #region InputKey & KeyAction Delegate Initialize 
+#region InputKey & KeyAction Delegate Initialize 
         restartKey = KeyCode.R;
         interactionKey = KeyCode.Space;
         showNameKey = KeyCode.Tab;
@@ -132,9 +135,9 @@ public class GameManager : Singleton<GameManager>
         cameraKey = KeyCode.Q;
         cardToggleKey = KeyCode.E;
         KeyAction = null;
-        #endregion
+#endregion
 
-        #region Get User, Level and Card Data & Set UserID "111111"
+#region Get User, Level and Card Data & Set UserID "111111"
         // Test
         //if (Directory.Exists(Application.persistentDataPath + "/Data"))
         //{
@@ -145,7 +148,7 @@ public class GameManager : Singleton<GameManager>
         GameDataManager.GetInstance.AddUserData(userId);
 
         GameDataManager.GetInstance.GetCardData();
-        #endregion
+#endregion
 
         SetTimeScale(1);
     }
@@ -206,22 +209,22 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = timeScale;
     }
 
-    #region ResetUIVariable
+#region ResetUIVariable
     private Coroutine loadingCoroutine;
     private Coroutine subLoadingCoroutine;
     private float resetLoadValue = 0f;
     [Range(0.1f,0.9f)] float fillSpeed = 0.5f;
-    #endregion
+#endregion
     
     private void Update()
     {
         DetectInputkey();
-        #region Exceptions
+#region Exceptions
         if ((int)(Time.timeScale * 10000) != (int)(CurTimeScale * 10000))
         {
             Debug.Log("GameManager의 SetTimeScale() 함수를 통해 TimeScale을 변경해주세요.");
         }
-        #endregion
+#endregion
     }
     
     public void DetectInputkey()
@@ -354,7 +357,7 @@ public class GameManager : Singleton<GameManager>
     {
         ChangeGameState(GameStates.Lose);
     }
-     #region JSCODE
+#region JSCODE
 
     int curLevel = -1;
     public int Level { get { return curLevel; } }
@@ -531,7 +534,7 @@ public class GameManager : Singleton<GameManager>
     //     player.name = "Player";
     // }
 
-    #region SceneTester
+#region SceneTester
 
     private GameObject levelInfos;
 
@@ -550,7 +553,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    #endregion
+#endregion
 
 
 
@@ -587,5 +590,5 @@ public class GameManager : Singleton<GameManager>
     
     
 
-    #endregion
+#endregion
 }
