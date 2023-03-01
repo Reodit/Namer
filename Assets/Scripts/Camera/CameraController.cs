@@ -288,11 +288,11 @@ public class CameraController : MonoBehaviour
             fDis = (m_touchDis - m_touchOldDis) * 0.01f;
             if (canZoom && fDis < -zoomDis)
             {
-                ZoomIn();
+                ZoomOut();
             }
             else if (canZoom && fDis > zoomDis)
             {
-                ZoomOut();
+                ZoomIn();
             }
 
             m_touchOldDis = m_touchDis;
