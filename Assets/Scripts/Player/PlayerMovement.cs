@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Dir targetDir;
     private int objscale;
     private Rigidbody climbRb;
+    private float duration = 0f;
 
     [SerializeField] [Range(0.1f, 5f)] private float rootmotionSpeed;
 
@@ -49,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
         rootmotionSpeed = 1f;
         moveSpeed = 3f;
         rotateSpeed = 10;
+        GameManager.GetInstance.isPlayerDoAction = false;
+        GameManager.GetInstance.isPlayerCanInput = true;
         #endregion
     }
     
@@ -70,6 +73,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.GetInstance.isPlayerDoAction)
+        { 
+            duration += Time.deltaTime;
+
+            if (duration > 4)
+            {
+                GameManager.GetInstance.isPlayerDoAction = false;
+            }
+        }
+        
+        else
+        {
+            duration = 0f;
+        }
+
         if (rb)
         {
             DetectManager.GetInstance.CheckCharacterCurrentTile(this.gameObject);
