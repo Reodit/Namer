@@ -84,13 +84,15 @@ public partial class DetectManager : Singleton<DetectManager>
         gameDataManager = GameDataManager.GetInstance;
 
         GameManager.GetInstance.cameraController.SetZoomInStart();
+
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
         {
             gameDataManager.ReadMapData();
         }
         SetMapData();
-        
+
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
+
         if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
         {
             SPosition position = GameDataManager.GetInstance.CustomLevelDataDic[GameManager.GetInstance.CustomLevel + 1].playerPosition;

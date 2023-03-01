@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class IngameCanvasController : MonoBehaviour
 {
     GameObject encyclopedia;
     [SerializeField] GameObject topButtons;
@@ -139,24 +139,6 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     public void GameOptionPanelOn()
     {
         gameOptionPanel.SetActive(true);
-    }
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        foreach (GameObject obj in eventData.hovered)
-        {
-            if (obj.name == "Dialog")
-            {
-                OnPointerExit(eventData);
-                return;
-            }
-        }
-
-        GameManager.GetInstance.scenarioController.isUI = true;
-    } 
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        GameManager.GetInstance.scenarioController.isUI = false;
     }
 
     public void SetLoadingImage(float fillValue)

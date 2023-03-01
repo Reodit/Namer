@@ -90,9 +90,9 @@ public class GameDataManager : Singleton<GameDataManager>
         }
 
         SaveLoadFile saveFile = new SaveLoadFile();
-        saveFile.CreateCsvFile(mapData.tileMapData, "Assets/Resources/Data/" + sceneName, tileMapFileName);
-        saveFile.CreateCsvFile(mapData.objectMapData, "Assets/Resources/Data/" + sceneName, objectMapFileName);
-        saveFile.CreateJsonFile(mapData.objectInfoData, "Assets/Resources/Data/" + sceneName, objectInfoFileName);
+        saveFile.CreateCsvFile(mapData.tileMapData, filePath + sceneName, tileMapFileName);
+        saveFile.CreateCsvFile(mapData.objectMapData, filePath + sceneName, objectMapFileName);
+        saveFile.CreateJsonFile(mapData.objectInfoData, filePath + sceneName, objectInfoFileName);
     }
 
     public void CreateMap(int level)
@@ -107,7 +107,7 @@ public class GameDataManager : Singleton<GameDataManager>
         }
         else
         {
-            levelFilePath = "Assets/Resources/Data/" + GameManager.GetInstance.userId + "/";
+            levelFilePath = filePath + GameManager.GetInstance.userId + "/";
             sceneName = customLevelDataDic[level].sceneName;
         }
         
@@ -334,9 +334,9 @@ public class GameDataManager : Singleton<GameDataManager>
 
     public void DeleteCustomLevelFile(int level)
     {
-        if (Directory.Exists("Assets/Resources/Data/"+ GameManager.GetInstance.userId + "/" + CustomLevelDataDic[level].sceneName))
+        if (Directory.Exists(filePath + GameManager.GetInstance.userId + "/" + CustomLevelDataDic[level].sceneName))
         {
-            Directory.Delete("Assets/Resources/Data/"+ GameManager.GetInstance.userId + "/" + CustomLevelDataDic[level].sceneName, true);
+            Directory.Delete(filePath + GameManager.GetInstance.userId + "/" + CustomLevelDataDic[level].sceneName, true);
         }
         DeleteCustomLevelData(level);
     }

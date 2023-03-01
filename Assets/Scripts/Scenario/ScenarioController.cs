@@ -89,7 +89,6 @@ public class ScenarioController : MonoBehaviour
 
     [System.NonSerialized] public bool logOpened = false;
     [System.NonSerialized] public bool dialogOpened = false;
-    [System.NonSerialized] public bool isUI = false;
     private bool[] keyPressed;
     private bool preVictory = false;
 
@@ -149,7 +148,6 @@ public class ScenarioController : MonoBehaviour
             stageClearPanel = GameObject.Find("IngameCanvas").transform.Find("StageClearPanel").gameObject;
         }
 
-        isUI = false;
         isStart = false;
         GameManager.GetInstance.isPlayerCanInput = false;
 
@@ -169,6 +167,7 @@ public class ScenarioController : MonoBehaviour
         else
         {
             isExist = GameDataManager.GetInstance.CustomLevelDataDic.Keys.Contains(GameManager.GetInstance.CustomLevel);
+            isNull = true;
         }
         
         if (isExist && !isNull)
@@ -509,7 +508,7 @@ public class ScenarioController : MonoBehaviour
                 }
                 break;
             case (ERequireType.MouseClick):
-                if (Input.GetMouseButtonDown(0) && !isUI)
+                if (Input.GetMouseButtonDown(0))
                 {
                     StartScenario();
                 }

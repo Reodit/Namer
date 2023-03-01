@@ -16,23 +16,28 @@ public class LevelTestPlay : MonoBehaviour
     {
         currentLevel = GameManager.GetInstance.CustomLevel;
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditorTestPlay);
-        
+
+        CardManager.GetInstance.startCards = GameDataManager.GetInstance.GetCardPrefabs(GameDataManager.GetInstance
+            .CustomLevelDataDic[currentLevel + 1].cardView);
+
         GameDataManager.GetInstance.CreateCustomLevelMap();
     }
 
     private void Start()
     {
+        GameManager.GetInstance.localPlayerMovement = GameObject.FindObjectOfType<PlayerMovement>();
+        
+        DetectManager.GetInstance.InitTilesObjects();
         DetectManager.GetInstance.Init();
+
         ScenarioController scenarioController = FindObjectOfType<ScenarioController>();
         scenarioController.Init();
-        
+
         UIManager.GetInstance.ingameCanvas = GameObject.Find("IngameCanvas");
         UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
-        
-        CardManager.GetInstance.startCards = GameDataManager.GetInstance.GetCardPrefabs(GameDataManager.GetInstance
-            .CustomLevelDataDic[currentLevel + 1].cardView);
 
         SetButton();
+
     }
 
     void SetButton()
