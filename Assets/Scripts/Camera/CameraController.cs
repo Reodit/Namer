@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera targetCam;
     [SerializeField] CinemachineVirtualCamera playerFocusCam;
 
-    CinemachineVirtualCamera curCam;
+    public CinemachineVirtualCamera curCam;
 
     [Header("Zoom settings")]
     [SerializeField][Range(0, 2)] int zoomValue = 1;
