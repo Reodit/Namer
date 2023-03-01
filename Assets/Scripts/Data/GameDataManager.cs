@@ -159,7 +159,7 @@ public class GameDataManager : Singleton<GameDataManager>
         userDataDic = loadFile.ReadJsonFile<string, SUserData>(filePath + "SaveLoad", userDataFileName);
         levelDataDic = loadFile.ReadJsonFile<int, SLevelData>(filePath + "SaveLoad", levelDataFileName);
         
-        loadFile.UpdateDicDataToJsonFile<int, SLevelData>(customLevelDataDic, filePath + "SaveLoad", customLevelDataFileName);
+        // loadFile.UpdateDicDataToJsonFile<int, SLevelData>(customLevelDataDic, filePath + "SaveLoad", customLevelDataFileName);
         customLevelDataDic = loadFile.ReadJsonFile<int, SLevelData>(filePath + "SaveLoad", customLevelDataFileName);
     }
 

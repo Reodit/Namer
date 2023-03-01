@@ -30,7 +30,7 @@ public class SaveLoadFile
     public Dictionary<TK, TV> ReadJsonFile<TK,TV> (string filePath, string fileName) where TV : struct
     {
         Dictionary<TK, TV> dataDic = new Dictionary<TK, TV>();
-        
+
         CheckFolderFile(filePath + "/JSON/", fileName);
         
         FileStream fileStream = new FileStream(filePath + "/JSON/" + fileName, FileMode.Open);
@@ -209,16 +209,23 @@ public class SaveLoadFile
 
         if (!File.Exists(filePath + fileName))
         {
-            string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
-            string[] resFileName = fileName.Split('.').ToArray();
-
-            if (!File.Exists("Assets/Resources/" + resFilePath + fileName))
+            if (fileName.Contains(GameManager.GetInstance.userId))
             {
-                Debug.LogError("Assets/Resources/" + resFilePath + fileName + "에 파일이 없어요ㅠ");
+                string jsonFilePath = filePath.Replace("/JSON/", "");
+                UpdateDicDataToJsonFile(GameDataManager.GetInstance.CustomLevelDataDic, jsonFilePath, fileName);
             }
-
-            TextAsset resData = Resources.Load(resFilePath + resFileName[0]) as TextAsset;
-            File.WriteAllText(filePath + fileName, resData.text);
+            else
+            {
+                string resFilePath = filePath.Replace(Application.persistentDataPath + "/", "");
+                string[] resFileName = fileName.Split('.').ToArray();
+                
+                if (!File.Exists("Assets/Resources/" + resFilePath + fileName))
+                {
+                    Debug.LogError("Assets/Resources/" + resFilePath + fileName + "에 파일이 없어요ㅠ");
+                }
+                TextAsset resData = Resources.Load(resFilePath + resFileName[0]) as TextAsset;
+                File.WriteAllText(filePath + fileName, resData.text);
+            }
         }
     }
 }
