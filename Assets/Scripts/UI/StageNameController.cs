@@ -10,21 +10,24 @@ public class StageNameController : MonoBehaviour
     [SerializeField] Text nameAdjTxt;
     [SerializeField] TextMeshProUGUI stageText;
     [SerializeField] GameObject namePlate;
+    MainUIController mainUIController;
     int stageNum = 1;
 
-    private void OnEnable()
+    private void Awake()
+    {
+        mainUIController = GameObject.Find("MainCanvas").GetComponent<MainUIController>();
+    }
+
+    private void Start()
     {
         nameTxt.text = NameText();
         NamePlateOnOff();
     }
 
-    private void Start()
-    {
-        NamePlateOnOff();
-    }
-
     string NameText()
     {
+        bool isCustomLevel = mainUIController.state == MainMenuState.Level ? false : true;
+        
         if (GameDataManager.GetInstance.GetLevelName(stageNum) == "")
         {
             return "???";
@@ -37,20 +40,43 @@ public class StageNameController : MonoBehaviour
 
     void NamePlateOnOff()
     {
-        if (stageNum <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel)
+        if (mainUIController.state == MainMenuState.Level)
         {
-            namePlate.SetActive(true);
+            if (stageNum <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel)
+            {
+                namePlate.SetActive(true);
+            }
+            else
+            {
+                namePlate.SetActive(false);
+            }
         }
         else
         {
-            namePlate.SetActive(false);
+            if (GameDataManager.GetInstance.GetLevelName(stageNum) == "")
+            {
+                namePlate.SetActive(false);
+            }
+            else
+            {
+                namePlate.SetActive(false);
+            }
         }
     }
 
     public void StageNumSetUp(int inputStageNum)
     {
         stageNum = inputStageNum;
-        nameAdjTxt.text = "Stage " + inputStageNum.ToString();
+
+        if (mainUIController.state == MainMenuState.Level)
+        {
+            nameAdjTxt.text = "Stage " + inputStageNum.ToString();
+        }
+        else
+        {
+            nameAdjTxt.text = "Star " + inputStageNum.ToString();
+        }
+
         stageText.text = inputStageNum.ToString();
     }
 }

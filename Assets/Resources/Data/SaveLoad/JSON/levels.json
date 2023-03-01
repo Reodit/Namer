@@ -222,42 +222,10 @@
                     "key": -1,
                     "time": 0.0,
                     "isDialog": true,
-                    "message": "장미:흠.. 설명하자면 긴데.. ",
-                    "funcName": "",
-                    "isFocus": true,
-                    "canSkip": true,
-                    "showArrow": false
-                },
-                {
-                    "type": 2,
-                    "destinationPos": {
-                        "x": 0.0,
-                        "y": 1.0,
-                        "z": 0.0
-                    },
-                    "targetPos": {
-                        "x": 2.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "prePos": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "nextPos": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "requiredName": "",
-                    "key": -1,
-                    "time": 0.0,
-                    "isDialog": true,
                     "message": "장미:얘기하기에 너무 머니까 일단 가까이 와줄래? ",
-                    "funcName": "",
-                    "isFocus": true,
-                    "canSkip": true,
+                    "funcName": "PopUpTutorial&0",
+                    "isFocus": false,
+                    "canSkip": false,
                     "showArrow": false
                 },
                 {
@@ -284,7 +252,7 @@
                     },
                     "requiredName": "",
                     "key": -1,
-                    "time": 0.10000000149011612,
+                    "time": 0.2,
                     "isDialog": true,
                     "message": "[System]조이스틱을 이용해서 화살표까지 가세요. ",
                     "funcName": "",
@@ -319,7 +287,7 @@
                     "time": 0.0,
                     "isDialog": true,
                     "message": "[System]인터렉션 버튼을 눌러서 장미와 대화하세요. ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&2",
                     "isFocus": false,
                     "canSkip": false,
                     "showArrow": true
@@ -354,7 +322,7 @@
                     "funcName": "",
                     "isFocus": true,
                     "canSkip": true,
-                    "showArrow": false
+                    "showArrow": true
                 },
                 {
                     "type": 2,
@@ -639,7 +607,7 @@
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:우선, 떠나기 전에 이 별부터 이름을 지어주겠니? ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&6",
                     "isFocus": true,
                     "canSkip": true,
                     "showArrow": false
@@ -684,10 +652,10 @@
             },
             "cardView": {
                 "nameRead": [
-                    
+
                 ],
                 "adjectiveRead": [
-                    
+
                 ]
             }
         },
@@ -818,7 +786,7 @@
                     "time": 0.20000000298023225,
                     "isDialog": true,
                     "message": "[System]카드 키를 통해 이름, 꾸밈 카드를 숨기거나 볼 수 있습니다. ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&1",
                     "isFocus": false,
                     "canSkip": false,
                     "showArrow": false
@@ -849,7 +817,7 @@
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
-                    "message": "[System]카드를 클릭하면, 모든 물체에 대한 이름을 볼 수 있습니다. ",
+                    "message": "[System]카드를 터치하면, 모든 물체에 대한 이름을 볼 수 있습니다. ",
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,
@@ -881,14 +849,14 @@
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
-                    "message": "[System]카드를 클릭 후 물체를 클릭하면, 꾸밈이나 이름을 붙일 수 있습니다. ",
+                    "message": "[System]카드를 터치 후 물체를 터치하면, 꾸밈이나 이름을 붙일 수 있습니다. ",
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,
                     "showArrow": false
                 },
                 {
-                    "type": 2,
+                    "type": 1,
                     "destinationPos": {
                         "x": 0.0,
                         "y": 1.0,
@@ -897,7 +865,7 @@
                     "targetPos": {
                         "x": 3.0,
                         "y": 1.0,
-                        "z": 2.0
+                        "z": 1.0
                     },
                     "prePos": {
                         "x": 3.0,
@@ -909,7 +877,7 @@
                         "y": 1.0,
                         "z": 2.0
                     },
-                    "requiredName": "",
+                    "requiredName": "타는",
                     "key": 1,
                     "time": 0.20000000298023225,
                     "isDialog": true,
@@ -917,7 +885,7 @@
                     "funcName": "",
                     "isFocus": false,
                     "canSkip": false,
-                    "showArrow": false
+                    "showArrow": true
                 },
                 {
                     "type": 5,
@@ -1013,7 +981,7 @@
                     "funcName": "",
                     "isFocus": true,
                     "canSkip": true,
-                    "showArrow": false
+                    "showArrow": true
                 },
                 {
                     "type": 2,
@@ -1247,7 +1215,7 @@
             },
             "cardView": {
                 "nameRead": [
-                    
+
                 ],
                 "adjectiveRead": [
                     4
@@ -1381,7 +1349,7 @@
                     "time": 0.0,
                     "isDialog": true,
                     "message": "장미:도감에서 설명을 잘 읽고 카드를 잘 사용해서 바위를 치워봐. ",
-                    "funcName": "",
+                    "funcName": "PopUpTutorial&4 5",
                     "isFocus": true,
                     "canSkip": true,
                     "showArrow": false
@@ -2663,8 +2631,8 @@
                 ],
                 "adjectiveRead": [
                     9,
-                    12
-                    ,13
+                    12,
+                    13
                 ]
             }
         },
@@ -2679,7 +2647,7 @@
             },
             "cardView": {
                 "nameRead": [
-                    
+
                 ],
                 "adjectiveRead": [
                     7,
@@ -2701,8 +2669,8 @@
                     8
                 ],
                 "adjectiveRead": [
-                    13,
-                    12,
+                    7,
+                    7,
                     9
                 ]
             }

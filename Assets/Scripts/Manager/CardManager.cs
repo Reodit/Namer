@@ -26,6 +26,8 @@ public class CardManager : Singleton<CardManager>
     public bool isCardDealingDone = false;
     public bool isCardsHide = false;
     public bool isMenuLevel = false;
+    public bool isCasting = false;
+    public bool isAligning = false;
 
     //선택한 카드
     public GameObject pickCard;
@@ -35,14 +37,28 @@ public class CardManager : Singleton<CardManager>
     {
         if (SceneManager.GetActiveScene().name == "MainScene")
         {
+            isCardDealingDone = false;
             CardStart();
+        }
+        else if (SceneManager.GetActiveScene().name == "LevelEditor")
+        {
+            isCardDealingDone = true;
         }
         else
         {
+            isCardDealingDone = false;
             CardStart();
-            topButtons = GameObject.Find("IngameCanvas").transform.GetChild(1).gameObject;
+            if (GameManager.GetInstance.IsCustomLevel)
+            {
+                topButtons = GameObject.Find("IngameCanvas").transform.GetChild(12).gameObject;
+            }
+            else
+            {
+                topButtons = GameObject.Find("IngameCanvas").transform.GetChild(1).gameObject;
+            }
             bottomButtons = GameObject.Find("IngameCanvas").transform.GetChild(2).gameObject;
         }
+        
     }
 
 
@@ -53,7 +69,8 @@ public class CardManager : Singleton<CardManager>
 
     private void ClearCheck()
     {
-        if (!isPickCard && CardManager.GetInstance.target == null) return;
+        if (!isPickCard && CardManager.GetInstance.target == null ||
+            CardManager.GetInstance.isCasting) return;
 
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
@@ -146,8 +163,18 @@ public class CardManager : Singleton<CardManager>
             if (GameManager.GetInstance.CurrentState == GameStates.InGame)
             {
                 GameDataManager gameData = GameDataManager.GetInstance;
-                int level = GameManager.GetInstance.Level;
-                GameObject[] cards = gameData.GetCardPrefabs(gameData.LevelDataDic[level].cardView);
+                SCardView cardView = new SCardView();
+                if (!GameManager.GetInstance.IsCustomLevel)
+                {
+                    int level = GameManager.GetInstance.Level;
+                    cardView = gameData.LevelDataDic[level].cardView;
+                }
+                else
+                {
+                    int level = GameManager.GetInstance.CustomLevel;
+                    cardView = gameData.CustomLevelDataDic[level].cardView;
+                }
+                GameObject[] cards = gameData.GetCardPrefabs(cardView);
 
                 if (cards != null)
                 {
@@ -163,21 +190,24 @@ public class CardManager : Singleton<CardManager>
                     }
                 }
             }
-            else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+            else if(GameManager.GetInstance.CurrentState == GameStates.LevelEditMode || GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
             {
-                // 테스트 시 위의 코드를 주석처리하고, 아래의 함수를 사용해주세요.
-                for (int i = 0; i < startCards.Length; i++)
+                if (startCards != null)
                 {
-                    AddCard(startCards[i]);
-                    yield return new WaitForSeconds(0.5f);
+                    for (int i = 0; i < startCards.Length; i++)
+                    {
+                        AddCard(startCards[i]);
+                        yield return new WaitForSeconds(0.5f);
+                    }
                 }
-
             }
 
             yield return new WaitForSeconds(1.5f);
             isCardDealingDone = true;
             topButtons.SetActive(true);
+#if UNITY_ANDROID
             bottomButtons.SetActive(true);
+#endif
         }
     }
 
@@ -206,13 +236,13 @@ public class CardManager : Singleton<CardManager>
         mainCards.Add(card);
         MainCardAlignment();
         if (isMenuLevel) return;
-
         SoundManager.GetInstance.Play("CardHover2");
     }
 
     //카드를 정렬하는 메서드 
     public void CardAlignment(float time = 2f)
     {
+        isAligning = true;
         List<PRS> originCardPRSs = new List<PRS>();
         originCardPRSs = RoundAlignment(cardHolderLeft, cardHolderRight, myCards.Count, new Vector3(1f, 1f, 1f));
 
@@ -224,6 +254,12 @@ public class CardManager : Singleton<CardManager>
             targetCard.originPRS.rot = cardHolderPoint.transform.rotation;
             targetCard.MoveTransform(targetCard.originPRS, true, time);
         }
+        Invoke("IsAligningDone", time);
+    }
+
+    void IsAligningDone()
+    {
+        isAligning = false;
     }
 
     public void SetInputTrue()
@@ -309,6 +345,13 @@ public class CardManager : Singleton<CardManager>
             myCards[i].gameObject.transform.
                 DOLocalMove(new Vector3(myCards[i].transform.localPosition.x, -0.5f, myCards[i].transform.localPosition.z), 1f);
         }
+    }
+    
+    public void DeleteCustomLevel()
+    {
+        GameDataManager.GetInstance.DeleteCustomLevelFile(GameManager.GetInstance.CustomLevel);
+        GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
+        SceneManager.LoadScene("MainScene");
     }
 }
 public class PRS

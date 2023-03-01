@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using System;
 
 public class StageClearPanelController : MonoBehaviour
 {
@@ -45,6 +46,17 @@ public class StageClearPanelController : MonoBehaviour
         topButtons.SetActive(false);
         bottomButtons.SetActive(false);
         joyButtons.SetActive(false);
+        
+        CheckRewardExist();
+    }
+
+    private void CheckRewardExist()
+    {
+        if (GameDataManager.GetInstance.GetRewardCardCount() <= 0)
+        {
+            isRewardDone = true;
+            rewardBtn.SetActive(false);
+        }
     }
 
     public void NamingProcess()
@@ -133,15 +145,25 @@ public class StageClearPanelController : MonoBehaviour
     {
         if (isNamingDone && isRewardDone)
         {
-            StageUIOKBtn();
+            stageClearOKBtn.SetActive(true);
+
+            if(GameManager.GetInstance.Level == GameDataManager.GetInstance.LevelDataDic.Count)
+            {
+                stageClearOKBtn.transform.GetChild(1).gameObject.SetActive(false);
+            }
         }
     }
 
     public void StageUIOKBtn()
     {
         GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
-        GameDataManager.GetInstance.UpdateUserData(true);
-        this.gameObject.SetActive(false);
+        GameManager.GetInstance.LevelClear();
+            this.gameObject.SetActive(false);
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void NextStageBtn()
+    {
+        GameManager.GetInstance.NextLevel();
     }
 }

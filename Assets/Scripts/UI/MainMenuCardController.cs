@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -53,7 +54,28 @@ public class MainMenuCardController : MonoBehaviour
     //카드 영역에서 마우스 누르면 카드 선택 커서로 변경, 카드를 숨김
     private void OnMouseDown()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Pause) return;
+        // 메인메뉴 카드 선택하면 바로 실행
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || CardManager.GetInstance.isCasting) return;
+        if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
+        if (mainUIController.state == MainMenuState.Main)
+        {
+            CardManager.GetInstance.target = mainUIController.mainRose;
+        }
+        else if (mainUIController.state == MainMenuState.Level)
+        {
+            CardManager.GetInstance.target = mainUIController.levelRose;
+        }
+        else if (mainUIController.state == MainMenuState.Edit)
+        {
+            CardManager.GetInstance.target = mainUIController.editRose;
+        }
+
+        TouchInteractObj();
+
+        /* 메인메뉴 카드 선택후 장미 선택 실
+        if (GameManager.GetInstance.CurrentState == GameStates.Pause
+            || CardManager.GetInstance.isCasting) return;
         if (!CardManager.GetInstance.ableCardCtr || !CardManager.GetInstance.isCardDealingDone) return;
         //다른 카드가 골라져 있다면 그 카드 선택을 취소하고 이 카드로 변경
         if (CardManager.GetInstance.isPickCard && CardManager.GetInstance.pickCard != this.gameObject)
@@ -71,6 +93,7 @@ public class MainMenuCardController : MonoBehaviour
             if (CardManager.GetInstance.pickCard != this.gameObject) return;
             CardSelectOff();
         }
+        */
     }
     void CardSelectOn()
     {
@@ -87,24 +110,29 @@ public class MainMenuCardController : MonoBehaviour
         highlight.SetActive(false);
         cr.enabled = false;
         transform.DORotateQuaternion(cardHolder.transform.rotation, 0.5f);
-        CardManager.GetInstance.isPickCard = false;
-        CardManager.GetInstance.pickCard = null;
-        UIManager.GetInstance.isShowNameKeyPressed = false;
+
+        if(CardManager.GetInstance.pickCard == gameObject)
+        {
+            CardManager.GetInstance.isPickCard = false;
+            CardManager.GetInstance.pickCard = null;
+            UIManager.GetInstance.isShowNameKeyPressed = false;
+        }
     }
     public void TouchInteractObj()
     {
         if (isTouching) return;
         StartCoroutine(CastCardDealing());
     }
+
     IEnumerator CastCardDealing()
     {
+        CardManager.GetInstance.isCasting = true;
         isTouching = true;
         originPos = gameObject.transform.position;
         originRot = gameObject.transform.localRotation.eulerAngles;
         highlight.SetActive(false);
         bc.enabled = false;
         cr.enabled = false;
-        CardManager.GetInstance.isPickCard = false;
         gameObject.transform.DOLocalRotate(new Vector3(originRot.x * -1, originRot.y + 180, 0), 0.3f);
         yield return new WaitForSeconds(0.3f);
         gameObject.transform.DOScale(new Vector3(0.5f, 0.5f, 0.5f), 0.3f);
@@ -119,13 +147,15 @@ public class MainMenuCardController : MonoBehaviour
         CardManager.GetInstance.myCards.Remove(gameObject.GetComponent<CardController>());
         CardManager.GetInstance.CardAlignment();
         yield return new WaitForSeconds(0.6f);
-        MainCastCard(gameObject.name);
         CardManager.GetInstance.target = null;
         CardManager.GetInstance.pickCard = null;
         Destroy(particleObj);
         AllPopUpNameOff();
-        yield return new WaitForSeconds(1f);
+        CardManager.GetInstance.isPickCard = false;
+        CardManager.GetInstance.isCasting = false;
+        MainCastCard(gameObject.name);
         isTouching = false;
+        yield return new WaitForSeconds(1.5f);
         if (this.name != "OptionCard(Clone)" && name != "EncyclopediaCard(Clone)")
         {
             CardReturn();
@@ -148,9 +178,15 @@ public class MainMenuCardController : MonoBehaviour
     string CheckCardName(string cardName)
     {
         string stageCard = "StageCard";
+        string customCard = "CustomCard";
+        
         if (cardName.Contains(stageCard))
         {
             return stageCard;
+        }
+        else if (cardName.Contains(customCard))
+        {
+            return customCard;
         }
         else
         {
@@ -184,13 +220,19 @@ public class MainMenuCardController : MonoBehaviour
             case "EditCard(Clone)":
                 mainUIController.LevelEditScene();
                 break;
+            case "MapEditCard(Clone)":
+                LoadingSceneController.LoadScene("LevelEditor");
+                break;
             case "GameOffCard(Clone)":
                 Application.Quit();
                 break;
+            case "ComingSoonCard":
+                mainUIController.GameUpdateInfo();
+                break;
             case "StageCard":
                 GameManager.GetInstance.SetLevelFromCard(cardName);
-                //CheckClearLevel(cardName);
-                LoadingSceneController.LoadScene("DemoPlay");
+                CheckClearLevel(cardName);
+                //LoadingSceneController.LoadScene("DemoPlay");
                 // 레벨 디자인 시 활성화
                 // DetectManager.GetInstance.InitTilesObjects();
                 // GameManager.GetInstance.SetLevelFromCard("LevelDesign");
@@ -198,7 +240,10 @@ public class MainMenuCardController : MonoBehaviour
                 break;
             // LoadingSceneController.LoadScene("JSTESTER");
             //이부분 살짝 수정함
-            // GameManager.GetInstance.SetLevelFromCard(cardName);              
+            // GameManager.GetInstance.SetLevelFromCard(cardName); 
+            case "CustomCard":
+                CheckCustomLevel(cardName);
+                break;
             default:
                 break;
         }
@@ -206,7 +251,16 @@ public class MainMenuCardController : MonoBehaviour
 
     private void CheckClearLevel(string cardName)
     {
-        if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -3)
+        StringBuilder sb = new StringBuilder();
+        foreach (var letter in cardName)
+        {
+            if (letter >= '0' && letter <= '9')
+            {
+                sb.Append(letter);
+            }
+        }
+        int level = int.Parse(sb.ToString());
+        if (GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel == -1)
         {
             if (cardName == "1StageCard")
             {
@@ -215,15 +269,34 @@ public class MainMenuCardController : MonoBehaviour
             else
             {
                 CardReturn();
+                mainUIController.InfoStagePopUp();
             }
         }
-        else if (int.Parse(cardName.Substring(0, 1)) <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel + 2)
+        else if (level <= GameDataManager.GetInstance.UserDataDic[GameManager.GetInstance.userId].clearLevel + 1)
         {
             LoadingSceneController.LoadScene("DemoPlay");
         }
         else
         {
             CardReturn();
+            mainUIController.InfoStagePopUp();
         }
     }
+
+    void CheckCustomLevel(string cardName)
+    {
+        int level = 0;
+        foreach (var num in cardName)
+        {
+            if (num - '0' > 0 && num - '0' <= 9)
+            {
+                level = num - '0';
+                break;
+            }
+        }
+
+        GameManager.GetInstance.SetCustomLevel(level);
+        LoadingSceneController.LoadScene("DemoPlay");
+    }
+    
 }

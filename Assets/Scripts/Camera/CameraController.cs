@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -48,6 +49,7 @@ public class CameraController : MonoBehaviour
 
     [Header("Zoom settings")]
     [SerializeField][Range(0, 2)] int zoomValue = 1;
+    int preZoomValue = 1;
     bool canZoom = true;
 
     void Awake()
@@ -81,8 +83,6 @@ public class CameraController : MonoBehaviour
         playerTopCams = new CinemachineVirtualCamera[] { playerTopViewCamZoomOut, playerTopViewCam, playerTopViewCamZoomIn };
         playerNormalCams = new CinemachineVirtualCamera[] { playerNormalViewCamZoomOut, playerNormalViewCam, playerNormalViewCamZoomIn };
 
-        SetPriority();
-
         // 모든 팔로우 캠이 플레이어를 따라다니도록 설정
         //player = GameObject.Find("Player").transform;
         //playerNormalViewCam.Follow = player;
@@ -91,7 +91,29 @@ public class CameraController : MonoBehaviour
         isTopView = false;
         canZoom = true;
 
+        SetPriorityBySize();
+
         FocusOff();
+    }
+
+    public void SetPriorityBySize()
+    {
+        int mapSize = DetectManager.GetInstance.GetMaxX;
+        if (mapSize > 12)
+        {
+            zoomValue = 2;
+            SetPriority();
+        }
+        else if (mapSize > 8)
+        {
+            zoomValue = 1;
+            SetPriority();
+        }
+        else
+        {
+            zoomValue = 0;
+            SetPriority();
+        }
     }
 
     public void FocusOn(bool canMove = true)
@@ -105,7 +127,7 @@ public class CameraController : MonoBehaviour
         if (!canMove)
         {
             GameManager.GetInstance.isPlayerCanInput = false;
-            GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Move);
+            GameManager.GetInstance.localPlayerEntity.pAnimator.SetFloat("scalar", 0f);
         }
 
         isFocused = true;
@@ -124,7 +146,7 @@ public class CameraController : MonoBehaviour
         if (!canMove)
         {
             GameManager.GetInstance.isPlayerCanInput = false;
-            GameManager.GetInstance.localPlayerEntity.ChangeState(PlayerStates.Move);
+            GameManager.GetInstance.localPlayerEntity.pAnimator.SetFloat("scalar", 0);
         }
 
         isFocused = true;
@@ -152,6 +174,24 @@ public class CameraController : MonoBehaviour
         curCam.Priority = (int)PriorityOrder.normal;
     }
 
+    public void SetZoomInStart()
+    {
+        int mapSize = DetectManager.GetInstance.GetMaxX;
+        if (mapSize > 15)
+        {
+            zoomValue = 0;
+        }
+        else if (mapSize > 10)
+        {
+            zoomValue = 1;
+        }
+        else
+        {
+            zoomValue = 2;
+        }
+        SetPriority();
+    }
+
     private void CheckCameraSwitch()
     {
         if (Input.GetKeyDown(GameManager.GetInstance.cameraKey) && GameManager.GetInstance.CurrentState != GameStates.Encyclopedia)
@@ -165,7 +205,8 @@ public class CameraController : MonoBehaviour
 
     private void M_SwitchCam()
     {
-        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia) return;
+        if (GameManager.GetInstance.CurrentState == GameStates.Encyclopedia ||
+            CardManager.GetInstance.isAligning) return;
         curCam.Priority = (int)PriorityOrder.BehingByNormal;
         isTopView = !isTopView;
         SetPriority();
@@ -180,11 +221,61 @@ public class CameraController : MonoBehaviour
         canZoom = true;
     }
 
+    bool CheckCanZoom()
+    {
+        if (Input.touchCount > 0) // 터치가 1개 이상
+        {
+            // UI요소를 터치하고 있는가?
+            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            {
+                Debug.Log("Touch ui");
+                return false;
+            }
+            if (Input.touchCount >= 2)
+            {
+                if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(1).fingerId))
+                {
+                    Debug.Log("Touch ui");
+                    return false;
+                }
+                else
+                {
+                    Debug.Log("not Touch ui");
+                    return true;
+                }
+            }
+
+            Debug.Log("Checking Touch");
+        }
+
+        return false;
+    }
+
+    public void ZoomOut()
+    {
+        zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
+        StartCoroutine(ZoomInOut());
+    }
+
+    public void ZoomIn()
+    {
+        zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
+        StartCoroutine(ZoomInOut());
+    }
+
     void Update()
     {
         if (GameManager.GetInstance.CurrentState != GameStates.InGame) return;
 
+#if UNITY_EDITOR
+        if (preZoomValue != zoomValue)
+        {
+            preZoomValue = zoomValue;
+            SetPriority();
+        }
+#endif
 #if UNITY_ANDROID
+        if (!CheckCanZoom()) return;
         int touchCount = Input.touchCount;
         if (touchCount == 2 && (Input.touches[0].phase == TouchPhase.Began || Input.touches[1].phase == TouchPhase.Began))
         {
@@ -197,15 +288,11 @@ public class CameraController : MonoBehaviour
             fDis = (m_touchDis - m_touchOldDis) * 0.01f;
             if (canZoom && fDis < -zoomDis)
             {
-                // zoom out
-                zoomValue = zoomValue <= 0 ? 0 : zoomValue - 1;
-                StartCoroutine(ZoomInOut());
+                ZoomIn();
             }
             else if (canZoom && fDis > zoomDis)
             {
-                // zoom in
-                zoomValue = zoomValue >= 2 ? 2 : zoomValue + 1;
-                StartCoroutine(ZoomInOut());
+                ZoomOut();
             }
 
             m_touchOldDis = m_touchDis;

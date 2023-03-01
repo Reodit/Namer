@@ -45,6 +45,9 @@ public class RewardRigController : MonoBehaviour
     {
 
         rewardCards = GameDataManager.GetInstance.GetRewardCardEncyclopedia();
+        print(GameManager.GetInstance.Level);
+        print(rewardCards);
+        print(rewardCards[0]);
         if (rewardCards == null) return;
         rewardPage = new bool[(rewardCards.Length / 5) + 1];
 

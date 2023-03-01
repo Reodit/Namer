@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -63,19 +60,20 @@ public class LoadingSceneController : MonoBehaviour
 
     private void OnDestroy()
     {
-        UIManager.GetInstance.ingameCanvas = GameObject.Find("IngameCanvas");
-        UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
-        
         var scene = SceneManager.GetActiveScene();
-
-        if (scene.name == "LevelDesign")
+        if (scene.name == "LevelEditor")
         {
             GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
+            DetectManager.GetInstance.InitTilesObjects();
+            return;
         }
-        else
+        else if (scene.name == "DemoPlay")
         {
             GameManager.GetInstance.ChangeGameState(GameStates.InGame);
         }
+
+        UIManager.GetInstance.ingameCanvas = GameObject.Find("IngameCanvas");
+        UIManager.GetInstance.pauseUIPanel = UIManager.GetInstance.ingameCanvas.transform.Find("PauseUI Panel").gameObject;
         
         GameManager.GetInstance.LoadMap();
     }

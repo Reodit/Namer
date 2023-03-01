@@ -83,11 +83,25 @@ public partial class DetectManager : Singleton<DetectManager>
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(false);
         gameDataManager = GameDataManager.GetInstance;
 
-        gameDataManager.ReadMapData();
+        GameManager.GetInstance.cameraController.SetZoomInStart();
+
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode)
+        {
+            gameDataManager.ReadMapData();
+        }
         SetMapData();
-        
+
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
-        GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(0, 3, 0);
+
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        {
+            SPosition position = GameDataManager.GetInstance.CustomLevelDataDic[GameManager.GetInstance.CustomLevel + 1].playerPosition;
+            GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(position.x, position.y, position.z);
+        }
+        else
+        {
+            GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(0, 3, 0);
+        }
         GameManager.GetInstance.localPlayerMovement.Init();
     }
     
@@ -102,13 +116,25 @@ public partial class DetectManager : Singleton<DetectManager>
 
         scaleChangedObjects = new Dictionary<Vector3, GameObject>();
         gameDataManager = GameDataManager.GetInstance;
-        SPosition position = gameDataManager.LevelDataDic[level].playerPosition;
+        
+        SPosition position;
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            position = gameDataManager.LevelDataDic[level].playerPosition;
+        }
+        else
+        {
+            position = gameDataManager.CustomLevelDataDic[level].playerPosition;
+        }
         
         gameDataManager.CreateMap(level);
+
         SetMapData();
         GameManager.GetInstance.localPlayerMovement.gameObject.SetActive(true);
         GameManager.GetInstance.localPlayerMovement.transform.position = new Vector3(position.x, position.y, position.z);
         GameManager.GetInstance.localPlayerMovement.Init();
+
+        GameManager.GetInstance.cameraController.SetZoomInStart();
     }
 
     // 맵을 로드할 때에 한 번 배열을 가져오는 메서드로 따로 사용하면 안 됨

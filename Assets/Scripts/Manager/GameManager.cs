@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using GooglePlayGames;
 
 public enum GameStates
 {
@@ -62,6 +64,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Manager Prefabs")]
     [SerializeField] private List<GameObject> managerPrefabs;
+    [SerializeField] private MainUIController mainUI;
 
     public float CurTimeScale { get; private set; }
 
@@ -73,6 +76,12 @@ public class GameManager : Singleton<GameManager>
             return;
         }
         DontDestroyOnLoad(this.gameObject);
+        
+        GooglePlayConnect gc = GameObject.Find("GooglePlay").GetComponent<GooglePlayConnect>();
+        userId = gc.userID;
+        // Debug.Log(userId);
+        Destroy(gc);
+
         Init();
     }
 
@@ -128,14 +137,21 @@ public class GameManager : Singleton<GameManager>
 
         #region Get User, Level and Card Data & Set UserID "111111"
         // Test
-        if (Directory.Exists(Application.persistentDataPath + "/Data"))
-        {
-            Directory.Delete(Application.persistentDataPath + "/Data", true);
-        }
+        // if (Directory.Exists(Application.persistentDataPath + "/Data"))
+        // {
+        //     Directory.Delete(Application.persistentDataPath + "/Data", true);
+        // }
         //
         GameDataManager.GetInstance.GetUserAndLevelData();
-        GameDataManager.GetInstance.AddUserData("111111");
+        GameDataManager.GetInstance.AddUserData(userId);
         GameDataManager.GetInstance.GetCardData();
+
+        customLevel = GameDataManager.GetInstance.CustomLevelDataDic.Count;
+        if (customLevel > 0)
+        {
+            customLevel = GameDataManager.GetInstance.CustomLevelDataDic.Keys.Max();
+        }
+        
         #endregion
 
         SetTimeScale(1);
@@ -243,6 +259,7 @@ public class GameManager : Singleton<GameManager>
                 HandleLost();
                 break;
             case GameStates.Encyclopedia:
+                UIManager.GetInstance.isShowNameKeyPressed = false;
                 HandleEncyclopedia();
                 break;
             case GameStates.LevelSelect:
@@ -260,7 +277,6 @@ public class GameManager : Singleton<GameManager>
         if (CurrentState == newState)
         {
             UpdateGameState();
-            Debug.Log("바꾸려는 State가 이전의 State와 같습니다. 의도하신 상황이 맞나요?");
             return;
         }
         
@@ -282,14 +298,12 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleLost()
     {
-        Debug.Log("You Lost");
         //menu for reset
         throw new NotImplementedException();
     }
 
     private void HandleVictory()
     {
-        Debug.Log("You win");
         // show viectory ui
         // menu for next lever or quit
     }
@@ -309,7 +323,8 @@ public class GameManager : Singleton<GameManager>
     void HandleLobby()
     {
         // menu 
-        // start game 
+        // start game
+        LevelEditor.isSaved = false;
     }
     
     public void Reset()
@@ -346,13 +361,30 @@ public class GameManager : Singleton<GameManager>
     }
      #region JSCODE
 
-    int curLevel = -3;
+    int curLevel = -1;
     public int Level { get { return curLevel; } }
     private GameObject groundObjs;
     private GameObject objcts;
     public string userId = "000000";
 
-     GameObject player;
+    GameObject player;
+    
+#region LevelEditMode
+
+    private bool isCustomLevel = false;
+    public bool IsCustomLevel { get { return isCustomLevel; } set { isCustomLevel = value; } }
+    
+    private int customLevel = 0;
+    public int CustomLevel { get { return customLevel; }}
+
+    public void SetCustomLevel(int level)
+    {
+        customLevel = level;
+    }
+    
+#endregion
+    
+    
     void LoadMap(int level)
     {
         // DetectManager.GetInstance.Init(level);
@@ -374,12 +406,6 @@ public class GameManager : Singleton<GameManager>
 
     public void SetLevelFromCard(string CardName)
     {
-        if (CardName == "LevelDesign")
-        {
-            ChangeGameState(GameStates.LevelEditMode);
-            return;
-        }
-
         StringBuilder sb = new StringBuilder();
         foreach (var letter in CardName)
         {
@@ -431,7 +457,7 @@ public class GameManager : Singleton<GameManager>
     [ContextMenu("ResetMap")]
     public void ResetCurrentLvl()
     {
-        if (curLevel == -3)
+        if (curLevel == -1)
         {
             Debug.LogError("There are no level Data!!!");
             return;
@@ -454,18 +480,27 @@ public class GameManager : Singleton<GameManager>
         // ChangeGameState(GameStates.NextLevelLoad);
         // var detectManager = GameObject.Find("DetectManager");
         // Destroy(detectManager);
+        LevelClear();
         GetCurrentLevel(curLevel + 1);
+        // SceneBehaviorManager.LoadScene((Scenes)SceneManager.GetActiveScene().buildIndex,LoadSceneMode.Single);
+        LoadingSceneController.LoadScene(SceneManager.GetActiveScene().name);
         // Debug.Log(curLevel);
-        DeleteCurrentMap();
-        DeleteCurrentCard();
-        LoadMap(curLevel);
-        GetNewCardDeck();
-        SoundManager.GetInstance.ChangeInGameLevelBGM();
-        cameraController.Init();
-        scenarioController.Init();
-        resetLoadValue = 0f;
+        // DeleteCurrentMap();
+        // DeleteCurrentCard();
+        // LoadMap(curLevel);
+        // GetNewCardDeck();
+        // SoundManager.GetInstance.ChangeInGameLevelBGM();
+        // cameraController.Init();
+        // scenarioController.Init();
+        // resetLoadValue = 0f;
         // ChangeGameState(GameStates.InGame);
-    }   
+    }
+
+    public void LevelClear()
+    {
+        bool isLevelClear = GameDataManager.GetInstance.UserDataDic[userId].clearLevel < curLevel;
+        GameDataManager.GetInstance.UpdateUserData(isLevelClear);
+    }
     
 
     
@@ -474,17 +509,26 @@ public class GameManager : Singleton<GameManager>
     [ContextMenu("LoadMapTest")]
     public void LoadMap()
     {
-        if (CurrentState == GameStates.LevelEditMode)
+        // if (CurrentState == GameStates.LevelEditMode)
+        // {
+        //     DetectManager.GetInstance.Init();
+        //     return;
+        // }
+        
+        if (!isCustomLevel)
         {
-            DetectManager.GetInstance.Init();
-            return;
+            // LoadPlayerPrefabs();
+            if (curLevel == -1)
+            {
+                curLevel=GetCurrentLevel();
+            }
+            DetectManager.GetInstance.Init(curLevel);
+        }
+        else
+        {
+            DetectManager.GetInstance.Init(customLevel);
         }
         
-        // LoadPlayerPrefabs();
-        if(curLevel == -3)
-            curLevel=GetCurrentLevel();
-
-        DetectManager.GetInstance.Init(curLevel);
         CardManager.GetInstance.CardStart(); // 여기서 문제네
         scenarioController.Init();
         SoundManager.GetInstance.ChangeInGameLevelBGM();
@@ -558,4 +602,5 @@ public class GameManager : Singleton<GameManager>
     
 
     #endregion
+
 }

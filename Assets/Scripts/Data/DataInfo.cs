@@ -72,16 +72,12 @@ public struct SObjectInfo
 [Serializable]
 public struct SMapData
 {
-    public readonly GameObject[,,] tiles;
-    public readonly GameObject[,,] objects;
     public readonly StringBuilder tileMapData;
     public readonly StringBuilder objectMapData;
     public readonly List<SObjectInfo> objectInfoData;
 
-    public SMapData(GameObject[,,] tiles, GameObject[,,] objects, StringBuilder tileMapData, StringBuilder objectMapData, List<SObjectInfo> objectInfoData)
+    public SMapData(StringBuilder tileMapData, StringBuilder objectMapData, List<SObjectInfo> objectInfoData)
     {
-        this.tiles = tiles;
-        this.objects = objects;
         this.tileMapData = tileMapData;
         this.objectMapData = objectMapData;
         this.objectInfoData = objectInfoData;
@@ -107,6 +103,7 @@ public struct SUserData
     public string nickName;
     public int clearLevel;
     public List<SLevelName> levelNames;
+    public List<SLevelName> customLevelNames;
     public SCardView cardView;
     public SGameSetting gameSetting;
 
@@ -116,6 +113,7 @@ public struct SUserData
         this.nickName = "";
         this.clearLevel = -1;
         this.levelNames = new List<SLevelName>();
+        this.customLevelNames = new List<SLevelName>();
         this.cardView = new SCardView(new[] { EName.Rose }.ToList(), new[] { EAdjective.Win }.ToList());
         this.gameSetting = new SGameSetting(0, 0, 
             0.5f, 0.5f, 0.5f, 
@@ -131,6 +129,15 @@ public struct SLevelData
     public Scenario[] scenario;
     public SPosition playerPosition;
     public SCardView cardView;
+
+    public SLevelData(int level, string sceneName, SPosition playerPosition, SCardView cardView)
+    {
+        this.level = level;
+        this.sceneName = sceneName;
+        this.scenario = null;
+        this.playerPosition = playerPosition;
+        this.cardView = cardView;
+    }
 }
 
 [Serializable]

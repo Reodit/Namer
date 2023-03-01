@@ -30,12 +30,12 @@ public class MapReader : MonoBehaviour
         Transform[] groundChilds = GameObject.Find("Grounds").transform.GetComponentsInChildren<Transform>();
         Transform[] objectChilds = GameObject.Find("Objects").transform.GetComponentsInChildren<Transform>();
 
-        minX = (int)groundChilds.Min(item => item.position.x);
-        maxX = (int)groundChilds.Max(item => item.position.x);
-        minY = (int)groundChilds.Min(item => item.position.y);
-        maxY = (int)objectChilds.Max(item => item.position.y) + gapY;
-        minZ = (int)groundChilds.Min(item => item.position.z);
-        maxZ = (int)groundChilds.Max(item => item.position.z);
+        minX = (int)Math.Min(groundChilds.Min(item => item.position.x), objectChilds.Min(item => item.position.x));
+        maxX = (int)Math.Max(groundChilds.Max(item => item.position.x), objectChilds.Max(item => item.position.x));
+        minY = (int)Math.Min(groundChilds.Min(item => item.position.y), objectChilds.Min(item => item.position.y));
+        maxY = (int)Math.Max(groundChilds.Max(item => item.position.y), objectChilds.Max(item => item.position.y)) + gapY;
+        minZ = (int)Math.Min(groundChilds.Min(item => item.position.z), objectChilds.Min(item => item.position.z));
+        maxZ = (int)Math.Max(groundChilds.Max(item => item.position.z), objectChilds.Max(item => item.position.z));
         
         totalX = maxX - minX + 1;
         totalY = maxY - minY + 1;
@@ -50,9 +50,6 @@ public class MapReader : MonoBehaviour
         string[,,] tileMapData = new string[totalX, totalY, totalZ];
         string[,,] objectMapData = new string[totalX, totalY, totalZ];
         List<SObjectInfo> objectInfos = new List<SObjectInfo>();
-
-        GameObject[,,] tiles = new GameObject[totalX, totalY, totalZ];
-        GameObject[,,] objects = new GameObject[totalX, totalY, totalZ];
 
         int id = 0;
         for (int y = minY; y <= maxY; y++)
@@ -70,20 +67,17 @@ public class MapReader : MonoBehaviour
                         {
                             objectMapData[x - minX, y - minY, z - minZ] = id.ToString();
                             objectInfos.Add(AddObjectInfo(hit.collider, id++, GetPrefabName(objectPredabs, hit.collider.name)));
-                            
-                            objects[x - minX, y - minY, z - minZ] = hit.collider.gameObject;
                         }
                         else if (!hit.collider.CompareTag("Player"))
                         {
                             tileMapData[x - minX, y - minY, z - minZ] = GetPrefabName(tilePrefabs, hit.collider.name);
-                            tiles[x - minX, y - minY, z - minZ] = hit.collider.gameObject;
                         }
                     }
                 }
             }
         }
         
-        return new SMapData(tiles, objects, CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
+        return new SMapData(CreateCsvData(tileMapData), CreateCsvData(objectMapData), objectInfos);
     }
 
     private string GetPrefabName(Transform[] prefabs, string colliderName)

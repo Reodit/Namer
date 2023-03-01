@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class IngameCanvasController : MonoBehaviour
 {
     GameObject encyclopedia;
     [SerializeField] GameObject topButtons;
@@ -19,6 +16,8 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     [SerializeField] GameObject cardBtnImg;
     [SerializeField] GameObject tutorialArrow;
     [SerializeField] Text stageName;
+    [SerializeField] Image interactionImg;
+    [SerializeField] Image cameraViewImg;
     PlayerMovement playerMovement;
     Canvas canvas;
 
@@ -33,6 +32,11 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         Init();
     }
 
+    void Update()
+    {
+        CameraViewBtnOnOff();
+    }
+
     void Init()
     {
         canvas = this.gameObject.GetComponent<Canvas>();
@@ -40,12 +44,21 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
             Camera.main.transform.Find("UICamera").gameObject.GetComponent<Camera>();
         StageNameSetUp();
         encyclopedia = Camera.main.gameObject.transform.GetChild(2).gameObject;
+        UIManager.GetInstance.isShowNameKeyPressed = false;
+        CardManager.GetInstance.pickCard = null;
+        CardManager.GetInstance.isPickCard = false;
+        CardManager.GetInstance.target = null;
     }
 
     bool isArrowOff;
     public void EncyclopediaOpen()
     {
-        if(tutorialArrow.activeInHierarchy)
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory ||
+            CardManager.GetInstance.isCasting)
+        {
+            EncyclopediaClose();
+        }
+        if (tutorialArrow.activeInHierarchy)
         {
             tutorialArrow.SetActive(false);
             isArrowOff = true;
@@ -77,6 +90,8 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         topPanel.SetActive(true);
         GameManager.GetInstance.ChangeGameState(GameStates.InGame);
         CardManager.GetInstance.CardsUp();
+        isCardVisible = true;
+        cardBtnImg.transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void OptionBtn()
@@ -94,6 +109,7 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     public void RestartBtn()
     {
         SoundManager.GetInstance.Play("BtnPress");
+        bottomButtons.SetActive(false);
         UIManager.GetInstance.UIOff();
         GameManager.GetInstance.ResetCurrentLvl();
     }
@@ -102,7 +118,16 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     {
         SoundManager.GetInstance.Play("BtnPress");
         UIManager.GetInstance.UIOff();
-        GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            GameManager.GetInstance.ChangeGameState(GameStates.LevelSelect);
+        }
+        else
+        {
+            GameDataManager.GetInstance.DeleteCustomLevelData(GameManager.GetInstance.CustomLevel + 1);
+            GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
+        }
+        
         SceneManager.LoadScene("MainScene");
     }
 
@@ -114,24 +139,6 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
     public void GameOptionPanelOn()
     {
         gameOptionPanel.SetActive(true);
-    }
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        foreach (GameObject obj in eventData.hovered)
-        {
-            if (obj.name == "Dialog")
-            {
-                OnPointerExit(eventData);
-                return;
-            }
-        }
-
-        GameManager.GetInstance.scenarioController.isUI = true;
-    } 
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        GameManager.GetInstance.scenarioController.isUI = false;
     }
 
     public void SetLoadingImage(float fillValue)
@@ -146,12 +153,29 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     void StageNameSetUp()
     {
-        string currentName =
-            GameDataManager.GetInstance.GetLevelName(GameManager.GetInstance.Level);
+        int level = 0;
+        string defaultName = "";
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            level = GameManager.GetInstance.Level;
+            defaultName = " Stage";
+        }
+        else
+        {
+            level = GameManager.GetInstance.CustomLevel;
+            defaultName = " Star";
+        }
 
+        if (GameManager.GetInstance.CurrentState == GameStates.LevelEditMode || GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay)
+        {
+            stageName.text = (level + 1) + defaultName;
+            return;
+        }
+        
+        string currentName = GameDataManager.GetInstance.GetLevelName(level);
         if (currentName == "")
         {
-            stageName.text = $"{(GameManager.GetInstance.Level)}" + " Stage";
+            stageName.text = $"{(level)}" + defaultName;
         }
         else if (currentName != "")
         {
@@ -161,9 +185,17 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void PediaButton()
     {
+        if (GameManager.GetInstance.CurrentState == GameStates.Victory ||
+        CardManager.GetInstance.isCasting)
+        return;
         GameManager.GetInstance.ChangeGameState(GameStates.Encyclopedia);
         SoundManager.GetInstance.Play("BtnPress");
-        CardManager.GetInstance.CardsDown();
+        if (isCardVisible)
+        {
+            CardManager.GetInstance.CardsDown();
+            isCardVisible = false;
+            cardBtnImg.transform.localScale = new Vector3(1, -1, 1);
+        }
         Invoke("EncyclopediaOpen", 0.5f);
     }
 
@@ -190,9 +222,30 @@ public class IngameCanvasController : MonoBehaviour, IPointerEnterHandler, IPoin
         playerMovement.PlayInteraction();
     }
 
+    public void InteractionBtnOn()
+    {
+        interactionImg.gameObject.SetActive(true);
+    }
+
+    public void InteractionBtnOff()
+    {
+        interactionImg.gameObject.SetActive(false);
+    }
+
     public void BtnPressedSound()
     {
         SoundManager.GetInstance.Play("BtnPress");
     }
 
+    void CameraViewBtnOnOff()
+    {
+        if (CardManager.GetInstance.isAligning)
+        {
+            cameraViewImg.gameObject.SetActive(false);
+        }
+        else
+        {
+            cameraViewImg.gameObject.SetActive(true);
+        }
+    }
 }

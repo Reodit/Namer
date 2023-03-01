@@ -182,8 +182,12 @@ public class FlowAdj : IAdjective
             iceShardEffects[i].Play();
         }
 
-        yield return new WaitForSeconds(.5f);
-
+        float startTime1 = Time.time;
+        while (Time.time < startTime1 + .5f)
+        {
+            yield return null;
+        }
+        
         obj.SubtractAdjectiveCard(EAdjective.Flow);
     }
 

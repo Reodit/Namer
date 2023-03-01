@@ -77,16 +77,18 @@ public class ScenarioController : MonoBehaviour
     [SerializeField] Text dialogText;
     [SerializeField] GameObject stageClearPanel;
     [SerializeField] Image arrow;
+    [SerializeField] GameObject questionMark;
+    [SerializeField] GameObject moveLight;
     [SerializeField] GameObject skipBtn;
     [SerializeField] Camera uiCam;
     [SerializeField] RectTransform canvasRect;
+    [SerializeField] TutorialVideoController videoController;
 
     [Header("안드로이드 버전만 등록 (Q,E,R,Space,Esc,도감순)")]
     [SerializeField] Button[] MButtons;
 
     [System.NonSerialized] public bool logOpened = false;
     [System.NonSerialized] public bool dialogOpened = false;
-    [System.NonSerialized] public bool isUI = false;
     private bool[] keyPressed;
     private bool preVictory = false;
 
@@ -140,11 +142,12 @@ public class ScenarioController : MonoBehaviour
         ClearKeyPressed();
 
         skipBtn = dialogBox.transform.Find("SkipBtn").gameObject;
-        stageClearPanel =
-            GameObject.Find("IngameCanvas").transform.
-            Find("StageClearPanel").gameObject;
 
-        isUI = false;
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            stageClearPanel = GameObject.Find("IngameCanvas").transform.Find("StageClearPanel").gameObject;
+        }
+
         isStart = false;
         GameManager.GetInstance.isPlayerCanInput = false;
 
@@ -153,12 +156,35 @@ public class ScenarioController : MonoBehaviour
         restartTime = 20f;
 
         cameraController = Camera.main.transform.parent.GetComponent<CameraController>();
-        bool isExist = GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level);
-        bool isNull = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.Count() == 0;
+
+        bool isExist = false, isNull = false;
+
+        if (!GameManager.GetInstance.IsCustomLevel)
+        {
+            isExist = GameDataManager.GetInstance.LevelDataDic.Keys.Contains(GameManager.GetInstance.Level);
+            isNull = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.Count() == 0;
+        }
+        else
+        {
+            isExist = GameDataManager.GetInstance.CustomLevelDataDic.Keys.Contains(GameManager.GetInstance.CustomLevel);
+            isNull = true;
+        }
+        
         if (isExist && !isNull)
         {
             bool existGoal = false;
-            foreach (Scenario scenario in GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario)
+            
+            List<Scenario> scenarioList = new List<Scenario>();
+            if (!GameManager.GetInstance.IsCustomLevel)
+            {
+                scenarioList = GameDataManager.GetInstance.LevelDataDic[GameManager.GetInstance.Level].scenario.ToList();
+            }
+            else
+            {
+                scenarioList = GameDataManager.GetInstance.CustomLevelDataDic[GameManager.GetInstance.CustomLevel].scenario.ToList();
+            }
+            
+            foreach (Scenario scenario in scenarioList)
             {
                 if (!existGoal && scenario.type == ERequireType.Victory)
                 {
@@ -386,6 +412,14 @@ public class ScenarioController : MonoBehaviour
 
         if (curScenario.funcName != null && curScenario.funcName != "")
         {
+            if (curScenario.funcName.Contains("PopUpTutorial"))
+            {
+                string s = curScenario.funcName.Split("&")[1];
+                int[] value = s.Split(" ").Select(v => int.Parse(v)).ToArray();
+                PopUpTutorial(value);
+                return;
+            }
+
             try
             {
                 Invoke(curScenario.funcName, 0);
@@ -410,17 +444,29 @@ public class ScenarioController : MonoBehaviour
         {
             // 승리 ui 실행 
             StartCoroutine(OpenClearPanel());
-            scenarioCount = -1;
+            
+            isStart = false;
         }
         // todo 시나리오가 진행이 안된 상태로 장미에게 말을 걸어도 깰 수 있도록 하기 
         else if (GameManager.GetInstance.CurrentState == GameStates.Victory && preVictory != true)
         {
             if (scenarioCount > goalScenarioCount)
             {
-                scenarioCount = goalScenarioCount;
+                while (scenarioCount > goalScenarioCount)
+                {
+                    Scenario scen = scenarios.Dequeue();
+                    scenarioCount = scenarios.Count;
+                    if (scenarioCount == goalScenarioCount)
+                    {
+                        curScenario = scen;
+                        break;
+                    }
+                }
+
+                DoScenario();
+                
                 // 승리 ui 실행 
-                StartCoroutine(OpenClearPanel());
-                scenarioCount = -1;
+                //StartCoroutine(OpenClearPanel());
             }
             preVictory = true;
         }
@@ -435,9 +481,10 @@ public class ScenarioController : MonoBehaviour
                 Vector3 playerPos = new Vector3(Mathf.Round(player.position.x), Mathf.Round(player.position.y), Mathf.Round(player.position.z));
                 Vector3 requireScenarioPos = new Vector3(curScenario.destinationPos.x, curScenario.destinationPos.y, curScenario.destinationPos.z);
                 if (curScenario.showArrow)
-                    SetArrowPos(requireScenarioPos + (Vector3.up * 0.5f));
+                    SetPointerOnGameObject(moveLight, requireScenarioPos + (Vector3.up * 0.5f));
                 if (playerPos == requireScenarioPos)
                 {
+                    effectOff(moveLight);
                     StartScenario();
                 }
                 break;
@@ -446,20 +493,34 @@ public class ScenarioController : MonoBehaviour
                 if (tarObj == null) return;
                 string objName = tarObj.GetCurrentName();
                 if (objName == null) return;
+                SetPointerOnGameObject(questionMark, tarObj.transform.position + (Vector3.up * 0.5f));
+                foreach (CardController card in CardManager.GetInstance.myCards)
+                {
+                    if (card.UIText.text.Contains(curScenario.requiredName))
+                    {
+                        SetArrowPos(card.gameObject.transform.position);
+                    }
+                }
                 if (objName.Contains(curScenario.requiredName))
                 {
+                    effectOff(questionMark);
                     StartScenario();
                 }
                 break;
             case (ERequireType.MouseClick):
-                if (Input.GetMouseButtonDown(0) && !isUI)
+                if (Input.GetMouseButtonDown(0))
                 {
                     StartScenario();
                 }
                 break;
             case (ERequireType.Victory):
+                if (curScenario.showArrow)
+                {
+                    SetArrowPos(MButtons[(int)EKeyType.Space].GetComponent<RectTransform>(), true);
+                }
                 if (GameManager.GetInstance.CurrentState == GameStates.Victory)
                 {
+                    ClearKeyPressed();
                     StartScenario();
                 }
                 break;
@@ -470,8 +531,8 @@ public class ScenarioController : MonoBehaviour
                 SetArrowPos(MButtons[idx].GetComponent<RectTransform>());
                 if (GetButton(curScenario.key))
                 {
-                    StartScenario();
                     ClearKeyPressed();
+                    StartScenario();
                 }
 #else
                 if (GetKeyCode(curScenario.key))
@@ -507,6 +568,13 @@ public class ScenarioController : MonoBehaviour
         NextScenario();
     }
 
+    private void PopUpTutorial(params int[] idx)
+    {
+        videoController.SetVideo(idx);
+
+        NextScenario();
+    }
+
     private InteractiveObject GetIObj()
     {
         Vector3 curScenarioPos = new Vector3(curScenario.targetPos.x, curScenario.targetPos.y, curScenario.targetPos.z);
@@ -520,15 +588,25 @@ public class ScenarioController : MonoBehaviour
     IEnumerator OpenClearPanel()
     {
         yield return new WaitForSeconds(delayWinUI);
+        CardManager.GetInstance.CardsDown();
+        
         stageClearPanel.SetActive(true);
     }
 
-    private void SetArrowPos(RectTransform targetUI)
+    private void SetArrowPos(RectTransform targetUI, bool isVictory = false)
     {
         arrow.gameObject.SetActive(true);
         arrow.rectTransform.position = targetUI.position;
-
         RectTransform childRect = arrow.transform.GetChild(0).GetComponent<RectTransform>();
+
+        if (isVictory)
+        {
+            childRect.localRotation = Quaternion.Euler(0, 0, -15);
+            childRect.anchorMin = new Vector2(0f, 2f);
+            childRect.anchorMax = new Vector2(0f, 2f);
+            return;
+        }
+
         switch (curScenario.key)
         {
             case (EKeyType.Q):
@@ -574,6 +652,17 @@ public class ScenarioController : MonoBehaviour
         ((ViewportPosition.y * canvasRect.sizeDelta.y) - (canvasRect.sizeDelta.y * 0.5f)));
 
         arrow.rectTransform.anchoredPosition = WorldObject_ScreenPosition;
+    }
+
+    private void SetPointerOnGameObject(GameObject effect, Vector3 pos)
+    {
+        effect.SetActive(true);
+        effect.transform.position = pos;
+    }
+
+    private void effectOff(GameObject effect)
+    {
+        effect.SetActive(false);
     }
 
     private bool GetKeyCode(EKeyType Ekey)
@@ -644,7 +733,7 @@ public class ScenarioController : MonoBehaviour
     {
         if (!isStart) return;
         if (stageClearPanel.activeSelf) return;
-        if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
+        if (!((GameManager.GetInstance.CurrentState == GameStates.InGame) || (GameManager.GetInstance.CurrentState == GameStates.LevelEditorTestPlay) || (GameManager.GetInstance.CurrentState == GameStates.Victory))) return;
         if (nextSenarioTime != -3f) nextSenarioTime -= Time.deltaTime;
         if (restartTime > 0) restartTime -= Time.deltaTime;
         else
