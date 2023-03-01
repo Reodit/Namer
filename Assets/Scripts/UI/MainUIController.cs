@@ -105,7 +105,6 @@ public class MainUIController : MonoBehaviour
         title.transform.DOMove(new Vector3(Screen.width / 12f, Screen.height / 1.08f, 0f), levelSelectMovingTime);
         title.transform.DOScale(new Vector3(0.2f, 0.2f, 1f), levelSelectMovingTime);
         levelEditCardHolder.SetActive(true);
-        LevelEditBtnController();
         SettingBtnOn();
         CardManager.GetInstance.isMenuLevel = true;
         
@@ -429,7 +428,7 @@ public class MainUIController : MonoBehaviour
     }
 
     int selectPageCount = 0;
-    int selectMaxPage = 0;
+    public int selectMaxPage = 1;
     public void LevelSelectPanelRightBtn()
     {
         levelSelectCards.transform.GetChild(selectPageCount).gameObject.SetActive(false);
@@ -448,7 +447,6 @@ public class MainUIController : MonoBehaviour
 
     void LevelSelectBtnController()
     {
-        selectMaxPage = levelSelectCards.transform.childCount;
 
         if (selectPageCount == 0 && selectMaxPage == 1)
         {
@@ -473,7 +471,7 @@ public class MainUIController : MonoBehaviour
     }
 
     int editPageCount = 0;
-    int editMaxPage = 0;
+    public int editMaxPage = 1;
     public void LevelEditPanelRightBtn()
     {
         levelEditCards.transform.GetChild(editPageCount).gameObject.SetActive(false);
@@ -490,9 +488,9 @@ public class MainUIController : MonoBehaviour
         LevelEditBtnController();
     }
 
-    void LevelEditBtnController()
+    public void LevelEditBtnController()
     {
-        editMaxPage = levelEditCards.transform.childCount;
+        
 
         if (editPageCount == 0 && editMaxPage == 1)
         {

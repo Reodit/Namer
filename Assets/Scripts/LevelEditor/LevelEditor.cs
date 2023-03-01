@@ -206,7 +206,7 @@ public class LevelEditor : MonoBehaviour
 
     void Init()
     {
-        GameManager.GetInstance.SetCustomLevel(GameDataManager.GetInstance.CustomLevelDataDic.Count);
+        GameManager.GetInstance.SetCustomLevel(GameDataManager.GetInstance.CustomLevelDataDic.Keys.Max());
         
         if (!isSaved) stageStartPoint = new Vector3(0, 2, 0);
         startCards = new SCardView(new List<EName>(), new List<EAdjective>());

@@ -91,10 +91,12 @@ public class LevelSelectCardController : MonoBehaviour
                 if (mainUIController.state == MainMenuState.Level)
                 {
                     levelLayoutGroup.transform.parent = GameObject.Find("LevelSelectCards").transform;
+                    mainUIController.selectMaxPage++;
                 }
                 else
                 {
                     levelLayoutGroup.transform.parent = GameObject.Find("LevelEditCards").transform;
+                    mainUIController.editMaxPage++;
                 }
                 levelLayoutGroups.Add(levelLayoutGroup);
                 levelLayoutGroup.SetActive(false);
@@ -152,6 +154,7 @@ public class LevelSelectCardController : MonoBehaviour
         else
         {
             mainUIController.LevelEditPanelOn();
+            mainUIController.LevelEditBtnController();
             mainUIController.isEditStart = true;
         }
     }

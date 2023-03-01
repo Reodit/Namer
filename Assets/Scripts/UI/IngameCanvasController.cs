@@ -48,6 +48,15 @@ public class IngameCanvasController : MonoBehaviour
         CardManager.GetInstance.pickCard = null;
         CardManager.GetInstance.isPickCard = false;
         CardManager.GetInstance.target = null;
+        
+        if (GameManager.GetInstance.IsCustomLevel)
+        {
+            topButtons = GameObject.Find("IngameCanvas").transform.GetChild(12).gameObject;
+        }
+        else
+        {
+            topButtons = GameObject.Find("IngameCanvas").transform.GetChild(1).gameObject;
+        }
     }
 
     bool isArrowOff;
@@ -124,7 +133,6 @@ public class IngameCanvasController : MonoBehaviour
         }
         else
         {
-            GameDataManager.GetInstance.DeleteCustomLevelData(GameManager.GetInstance.CustomLevel + 1);
             GameManager.GetInstance.ChangeGameState(GameStates.LevelEditMode);
         }
         

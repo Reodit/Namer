@@ -17,10 +17,10 @@ public class LevelTestPlay : MonoBehaviour
         currentLevel = GameManager.GetInstance.CustomLevel;
         GameManager.GetInstance.ChangeGameState(GameStates.LevelEditorTestPlay);
 
+        GameDataManager.GetInstance.CreateCustomLevelMap();
+        
         CardManager.GetInstance.startCards = GameDataManager.GetInstance.GetCardPrefabs(GameDataManager.GetInstance
             .CustomLevelDataDic[currentLevel + 1].cardView);
-
-        GameDataManager.GetInstance.CreateCustomLevelMap();
     }
 
     private void Start()

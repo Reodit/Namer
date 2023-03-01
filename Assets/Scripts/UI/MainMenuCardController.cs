@@ -295,6 +295,16 @@ public class MainMenuCardController : MonoBehaviour
             }
         }
 
+        int count = level;
+        foreach (var customLevel in GameDataManager.GetInstance.CustomLevelDataDic)
+        {
+            count--;
+            if (count == 0)
+            {
+                level = customLevel.Key;
+            }
+        }
+
         GameManager.GetInstance.SetCustomLevel(level);
         LoadingSceneController.LoadScene("DemoPlay");
     }
