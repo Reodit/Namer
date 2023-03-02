@@ -206,7 +206,14 @@ public class LevelEditor : MonoBehaviour
 
     void Init()
     {
-        GameManager.GetInstance.SetCustomLevel(GameDataManager.GetInstance.CustomLevelDataDic.Keys.Max());
+        if (GameDataManager.GetInstance.CustomLevelDataDic.Count == 0)
+        {
+            GameManager.GetInstance.SetCustomLevel(0);
+        }
+        else
+        {
+            GameManager.GetInstance.SetCustomLevel(GameDataManager.GetInstance.CustomLevelDataDic.Keys.Max());
+        }
         
         if (!isSaved) stageStartPoint = new Vector3(0, 2, 0);
         startCards = new SCardView(new List<EName>(), new List<EAdjective>());
@@ -1031,6 +1038,24 @@ public class LevelEditor : MonoBehaviour
     public void SwapBlockORCard()
     {
         isCard = !isCard;
+
+        if (isCard)
+        {
+            foreach (EditorBlock block in blockBtns)
+            {
+                block.transform.GetChild(0).gameObject.SetActive(true);
+                block.transform.GetChild(1).gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            foreach (EditorBlock block in blockBtns)
+            {
+                block.transform.GetChild(0).gameObject.SetActive(false);
+                block.transform.GetChild(1).gameObject.SetActive(true);
+            }
+        }
+
         blockLine = 0;
         selectedStartCard = -1;
         ShowBlockLine(blockLine);
