@@ -324,7 +324,15 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         CustomLevelDataDic.Remove(level);
         UpdateCustomLevel();
-        GameManager.GetInstance.SetCustomLevel(GameDataManager.GetInstance.CustomLevelDataDic.Keys.Max());
+
+        if (customLevelDataDic.Count == 0)
+        {
+            GameManager.GetInstance.SetCustomLevel(0);
+        }
+        else
+        {
+            GameManager.GetInstance.SetCustomLevel(customLevelDataDic.Keys.Max());
+        }
     }
 
     public void UpdateCustomLevel()
