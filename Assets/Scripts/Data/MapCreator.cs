@@ -81,6 +81,10 @@ public class MapCreator : MonoBehaviour
                     }
                     
                     GameObject tilePrefab = Resources.Load("Prefabs/GroundTiles/" + tileMap[x, y, z]) as GameObject;
+                    if (tilePrefab == null)
+                    {
+                        continue;
+                    }
                     initTiles[x, y, z] = Instantiate(tilePrefab, new Vector3(x, y, z), Quaternion.identity, Layer.transform);
                 }
             }
@@ -112,8 +116,12 @@ public class MapCreator : MonoBehaviour
                     
                     int id = int.Parse(objectMap[x, y, z]);
                     
-                    GameObject objectPrefabs = Resources.Load("Prefabs/Objects/" + objectInfoDic[id].prefabName) as GameObject;
-                    initObjects[x, y, z] = Instantiate(objectPrefabs, new Vector3(x, y, z), Quaternion.identity, parent.transform);
+                    GameObject objectPrefab = Resources.Load("Prefabs/Objects/" + objectInfoDic[id].prefabName) as GameObject;
+                    if (objectPrefab == null)
+                    {
+                        continue;
+                    }
+                    initObjects[x, y, z] = Instantiate(objectPrefab, new Vector3(x, y, z), Quaternion.identity, parent.transform);
                     initObjects[x, y, z].GetComponent<InteractiveObject>().objectInfo = objectInfoDic[id];
                     
                     SCardView cardView = new SCardView();
