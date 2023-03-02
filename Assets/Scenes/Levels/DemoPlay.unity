@@ -1067,12 +1067,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1630722970, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.38268346
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630722970, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000015896621
+      value: -0.000000015896623
       objectReference: {fileID: 0}
     - target: {fileID: 1630722970, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000006584597
+      value: 0.000000006584596
       objectReference: {fileID: 0}
     - target: {fileID: 1630722971, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
@@ -1092,7 +1096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2917080154686001765, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000065845964
+      value: 0.000000006584596
       objectReference: {fileID: 0}
     - target: {fileID: 3776172339434556567, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
@@ -1178,6 +1182,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -5.044673
       objectReference: {fileID: 0}
+    - target: {fileID: 7069369649635480213, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 12.000005
+      objectReference: {fileID: 0}
+    - target: {fileID: 7438852066466707285, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.8580756
+      objectReference: {fileID: 0}
+    - target: {fileID: 8490594217499486440, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.0000018
+      objectReference: {fileID: 0}
     - target: {fileID: 8778275761908025208, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
       propertyPath: m_Follow
       value: 
@@ -1204,6 +1220,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de2f36e9b27b14bbf8b7fc8849d43b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1101825861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4426741327379167430, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+  m_PrefabInstance: {fileID: 1101825858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1101825862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101825861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b92f1c47b9049b9aaf86a3fabbc382, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starFallWeatherEffect: {fileID: 704613154041614552, guid: 84c55e7b6e58b469099e6452524eef06, type: 3}
+  snowFallWeatherEffect: {fileID: 2174245067559485683, guid: f4e9606fda5b93b49b18e83042a0e07f, type: 3}
+  haloEffect: {fileID: 8823399360087048245, guid: 35f6c8831117d4b139c18183e7b05f29, type: 3}
+  defualtLight: {fileID: 0}
+  curLight: {fileID: 7151696572089265508, guid: 537a30a75086246e9a5c19786ed77722, type: 3}
+  cameras: {fileID: 0}
+--- !u!1 &1101825863 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6014788414723752973, guid: cf04884e10e114691a8e254f0ff75f96, type: 3}
+  m_PrefabInstance: {fileID: 1101825858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!124 &1101825864
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101825863}
+  m_Enabled: 1
 --- !u!1001 &1145747097
 PrefabInstance:
   m_ObjectHideFlags: 0
