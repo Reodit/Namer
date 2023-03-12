@@ -4,7 +4,9 @@ using UnityEngine;
 
 public partial class DetectManager : Singleton<DetectManager>
 {
-#region Check Adjacent region By.HS
+    #region Check Adjacent region By.HS
+
+    static Detector detector;
 
     // 오브젝트 데이터 배열 전체를 가져오는 메서드 
     public GameObject[,,] GetObjectsData()
@@ -195,36 +197,45 @@ public partial class DetectManager : Singleton<DetectManager>
     // 특정 오브젝트의 한 방향을 검출하는 로직 --> GameObject
     public GameObject GetAdjacentObjectWithDir(GameObject indicatedObj, Dir dir, int length = 1)
     {
-        // 예외처리 - 배열 갱신 실패 
-        if (!CheckValueInMap(indicatedObj))
-        {
-            return null;
-        }
+        //// 예외처리 - 배열 갱신 실패 
+        //if (!CheckValueInMap(indicatedObj))
+        //{
+        //    return null;
+        //}
 
-        GameObject returnObj = null;
-        switch (dir)
-        {
-            // 다른 맵 데이터에서 탐색하기 원한다면, GetObjectOrNull 네번째 파라미터로 3차원 배열 맵 데이터를 넣으세요
-            case (Dir.right):
-                returnObj = GetBlockOrNull(indicatedObj, "x", length);
-                break;
-            case (Dir.left):
-                returnObj = GetBlockOrNull(indicatedObj, "x", -length);
-                break;
-            case (Dir.up):
-                returnObj = GetBlockOrNull(indicatedObj, "y", length);
-                break;
-            case (Dir.down):
-                returnObj = GetBlockOrNull(indicatedObj, "y", -length);
-                break;
-            case (Dir.forward):
-                returnObj = GetBlockOrNull(indicatedObj, "z", length);
-                break;
-            case (Dir.back):
-                returnObj = GetBlockOrNull(indicatedObj, "z", -length);
-                break;
-        }
-        return returnObj;
+        //GameObject returnObj = null;
+        //switch (dir)
+        //{
+        //    // 다른 맵 데이터에서 탐색하기 원한다면, GetObjectOrNull 네번째 파라미터로 3차원 배열 맵 데이터를 넣으세요
+        //    case (Dir.right):
+        //        returnObj = GetBlockOrNull(indicatedObj, "x", length);
+        //        break;
+        //    case (Dir.left):
+        //        returnObj = GetBlockOrNull(indicatedObj, "x", -length);
+        //        break;
+        //    case (Dir.up):
+        //        returnObj = GetBlockOrNull(indicatedObj, "y", length);
+        //        break;
+        //    case (Dir.down):
+        //        returnObj = GetBlockOrNull(indicatedObj, "y", -length);
+        //        break;
+        //    case (Dir.forward):
+        //        returnObj = GetBlockOrNull(indicatedObj, "z", length);
+        //        break;
+        //    case (Dir.back):
+        //        returnObj = GetBlockOrNull(indicatedObj, "z", -length);
+        //        break;
+        //}
+        //return returnObj;
+
+        DetectorBuilder builder = new DetectorBuilder();
+        int dirN = (int)dir;
+        Vector3Int pos = Vector3Int.RoundToInt(indicatedObj.transform.position);
+        Vector3Int scale = Vector3Int.RoundToInt(indicatedObj.transform.lossyScale);
+        detector = builder.SetDir((DetectDir)dirN).SetLength(length).SetScale(scale).SetPosition(pos).BuildDetector();
+
+        Dictionary<DetectDir, List<GameObject>> dic = detector.GetAdjacentBlock();
+        return dic == null ? null : dic[(DetectDir)dirN][0];
     }
 
     // 특정 오브젝트의 한 방향을 검출하는 로직 --> GameObject
@@ -401,7 +412,7 @@ public partial class DetectManager : Singleton<DetectManager>
         int count = ((scaleX * scaleY) + (scaleY * scaleZ) + (scaleZ * scaleX)) * 2;
 
         Dictionary<Dir, List<GameObject>> returnObjects = new Dictionary<Dir, List<GameObject>>(6);
-
+        
         for (int i = 0; i < 2; i++)
         {
             for (int y = 0; y < scaleY; y++)

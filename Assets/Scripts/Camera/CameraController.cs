@@ -228,24 +228,19 @@ public class CameraController : MonoBehaviour
             // UI요소를 터치하고 있는가?
             if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
             {
-                Debug.Log("Touch ui");
                 return false;
             }
             if (Input.touchCount >= 2)
             {
                 if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(1).fingerId))
                 {
-                    Debug.Log("Touch ui");
                     return false;
                 }
                 else
                 {
-                    Debug.Log("not Touch ui");
                     return true;
                 }
             }
-
-            Debug.Log("Checking Touch");
         }
 
         return false;

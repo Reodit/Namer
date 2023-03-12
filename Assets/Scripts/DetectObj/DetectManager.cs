@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 // Partial class로 파일을 나눠서 관리하도록 했습니다.
 // DetectManager.cs & DetectManager.Detect.cs & DetectManager.GetAdjacent.cs
@@ -25,6 +26,7 @@ public partial class DetectManager : Singleton<DetectManager>
     GameDataManager gameDataManager;
     LevelInfos levelInfos;
     Dictionary<Vector3, GameObject> scaleChangedObjects = new Dictionary<Vector3, GameObject>();
+    public Dictionary<Vector3, GameObject> GetStretchedObjDic { get { return scaleChangedObjects; } }
 
     int maxX = 20;
     int maxY = 9;
@@ -36,6 +38,10 @@ public partial class DetectManager : Singleton<DetectManager>
     int tileMaxX = 20;
     int tileMaxY = 9;
     int tileMaxZ = 20;
+
+    public int GetTileMaxX { get { return tileMaxX; } }
+    public int GetTileMaxY { get { return tileMaxY; } }
+    public int GetTileMaxZ { get { return tileMaxZ; } }
 
     // test
     private GameObject target;
