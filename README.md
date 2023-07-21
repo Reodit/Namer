@@ -1,7 +1,7 @@
----
 ### Download Link
 
 - __[GooglePlay](https://play.google.com/store/apps/details?id=com.chemistry.namer&hl=ko-KR)__ - Namer Project
+
 ---
 ### Game Intro
 ![](https://drive.google.com/uc?id=1Px10rc5Cq_UPeQjOkZZ_a9MB3CgRbGfE)
@@ -17,5 +17,14 @@ if you want this project in unity, Please download the latest version. Using a n
 - Android : Beta_v18Android
 
 Please select the "GoogleLoginScene" from the Unity scene files and execute the scene.
+
+---
+### Development period
+- 2022.2.10 ~ 2022.3.3
+
+---
+
+### Links
+- [Class Diagram](https://reodit.github.io/NamerDocs)
 
 ---
