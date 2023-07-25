@@ -20,7 +20,7 @@ Please select the "GoogleLoginScene" from the Unity scene files and execute the 
 
 ---
 ### Development period
-- 2022.2.10 ~ 2022.3.3
+- 2022.1.9 ~ 2022.3.3
 
 ---
 
